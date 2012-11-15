@@ -40,7 +40,7 @@ html { overflow-y: scroll; } /*to prevent the loop when the scrollbar appear and
     padding: 5px 5px 10px 8px;
     text-align: left;
     opacity: 0;
-    filter:alpha(opacity=0); //IE8 or Earlier
+    filter:alpha(opacity=0); /* IE8 or Earlier */
 }
 .justifiedGallery .jg-loading-img{
     margin: auto;
