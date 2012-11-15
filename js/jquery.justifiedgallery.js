@@ -1,6 +1,6 @@
 /* 
 Justified Gallery
-Version: 1.0
+Version: 1.0.1
 Author: Miro Mannino
 Author URI: http://miromannino.it
 
@@ -33,8 +33,8 @@ __justifiedGallery_galleryID = 0;
 			'refreshTime' : 500
 		}, options);
 
-		function getErrorHtml(message){
-			return "<div style=\"font-size: 12px; border: 1px solid red; background-color: #faa; margin: 10px 0px 10px 0px; padding: 5px 0px 5px 5px;\">" + message + "</div>";
+		function getErrorHtml(message, classOfError){
+			return "<div class=\"" + classOfError + "\"style=\"font-size: 12px; border: 1px solid red; background-color: #faa; margin: 10px 0px 10px 0px; padding: 5px 0px 5px 5px;\">" + message + "</div>";
 		}
 
 		return this.each(function(index, cont){
@@ -60,8 +60,10 @@ __justifiedGallery_galleryID = 0;
 				images[index]["rel"] = "lightbox[gallery-" + __justifiedGallery_galleryID + "]";
 				
 				$(entry).remove(); //remove de image, we have its data
-
-				$("<img/>").attr("src", images[index]["src"]).load(function() {
+				
+				var img = new Image();
+  
+				$(img).load(function() {
 					if(images[index]["height"] != settings.rowHeight)
 						images[index]["width"] = Math.ceil(this.width / (this.height / settings.rowHeight));
 					else
@@ -69,17 +71,27 @@ __justifiedGallery_galleryID = 0;
 					images[index]["height"] = settings.rowHeight;
 					images[index]["src"] = images[index]["src"].slice(0, images[index]["src"].length 
 										 - (settings.sizeSuffixes[settings.usedSuffix] + settings.extension).length);
-		    		loaded++;
-		    		if(loaded == images.length){
-		    			//FadeOut the loading image and FadeIn the images after their loading-------------------
-						$(cont).find(".jg-loading").fadeOut(500, function(){
-							$(this).remove(); //remove the loading image
-		    				processesImages($, cont, images, 0, settings);
-		    			});
-		    		}
+		    		if(++loaded == images.length) startProcess(cont, images, settings);
 				});
+				
+				$(img).error(function() {
+					$(cont).prepend(getErrorHtml("The image can't be loaded: \"" + images[index]["src"] +"\"", "jg-usedPrefixImageNotFound"));
+					images[index] = null;
+					if(++loaded == images.length) startProcess(cont, images, settings);
+				});
+				
+				$(img).attr('src', images[index]["src"]);
+				
 			});
 		});
+		
+		function startProcess(cont, images, settings){
+			//FadeOut the loading image and FadeIn the images after their loading
+			$(cont).find(".jg-loading").fadeOut(500, function(){
+				$(this).remove(); //remove the loading image
+				processesImages($, cont, images, 0, settings);
+			});
+		}
 
 		function buildImage(image, suffix, nw, nh, l, minRowHeight, settings){
 			var ris;
@@ -163,6 +175,7 @@ __justifiedGallery_galleryID = 0;
 			var rowWidth = $(cont).width();
 
 			for(i = 0, row_i = 0; i < images.length; i++){
+				if(images[i] == null) continue;
 				if(partialRowWidth + images[i]["width"] + settings.margins <= rowWidth){
 					//we can add the image
 					partialRowWidth += images[i]["width"] + settings.margins;
@@ -197,7 +210,7 @@ __justifiedGallery_galleryID = 0;
 				try{
 					$(cont).find(".jg-image a").colorbox({maxWidth:"80%",maxHeight:"80%",opacity:0.8,transition:"elastic", current:""});
 				}catch(e){
-					$(cont).html(getErrorHtml("No Colorbox founded!"));
+					$(cont).html(getErrorHtml("No Colorbox founded!", "jg-noColorbox"));
 				}
 			}
 
@@ -213,9 +226,13 @@ __justifiedGallery_galleryID = 0;
 				});
 			}
 			
+			$(cont).find(".jg-resizedImageNotFound").remove();
+			
 			//fade in the images that we have changed and need to be reloaded
-			$(cont).find(".jg-image img").one('load', function(){
+			$(cont).find(".jg-image img").load(function(){
 					$(this).fadeTo(500, 1);
+			}).error(function(){
+				$(cont).prepend(getErrorHtml("The image can't be loaded: \"" +  $(this).attr("src") +"\"", "jg-resizedImageNotFound"));
 			}).each(function(){
 					if(this.complete) $(this).load();
 			});

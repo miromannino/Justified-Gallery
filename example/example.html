@@ -10,9 +10,14 @@
 <script type='text/javascript' src='../js/jquery.justifiedgallery.js'></script>
 </head>
 
+<style type="text/css">
+	.example-description { margin: 20px 0 20px 0;}
+</style>
+
 <body>
 	
 <h1>Example1</h1>
+<div class="example-description">no lightbox, rowHeight = 110, usedSuffix 'lt240', no fixed height, with caption, justify last row</div>
 <div id="myExample1" >
 	<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
 		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
@@ -85,8 +90,8 @@
 	});
 </script>
 
-
 <h1>Example2</h1>
+<div class="example-description">with lightbox, rowHeight = 70, usedSuffix 'lt100', no fixed height, with caption, no justify last row</div>
 <div id="myExample2" >
 	<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
 		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
@@ -161,6 +166,7 @@
 
 
 <h1>Example3</h1>
+<div class="example-description">no lightbox, rowHeight = 200, usedSuffix 'lt320', <strong>fixed height</strong>, <strong>no caption</strong>, justify last row</div>
 <div id="myExample3" >
 	<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
 		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
@@ -234,6 +240,10 @@
 </script>
 
 <h1>Example4</h1>
+<div class="example-description">
+	with lightbox, rowHeight = 80, usedSuffix 'lt240', no fixed height, no caption, justify last row.<br/>
+	three gallery created with a single call to the plugin <i>(foreach test)</i> 
+</div>
 <div class="myExample4" >
 	<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
 		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
@@ -306,7 +316,43 @@
 		'justifyLastRow':true, 
 		'rowHeight':80, 
 		'fixedHeight':false, 
-		'lightbox':false, 
+		'lightbox':true, 
+		'captions':false, 
+		'margins':1
+	});
+</script>
+
+
+<h1>Example5</h1>
+<div class="example-description">
+	with lightbox, rowHeight = 80, usedSuffix 'lt240', no fixed height, no caption, justify last row.<br/>
+	test with a gallery with 5 images, an image with a wrong name that can't be loaded, it will be ignored. 
+</div>
+<div id="myExample5" >
+	<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
+		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
+	</a>
+	<a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place">
+		<img alt="Just in a dream Place" src="photos/7948632554_WRONG_01f6ae6b6f_m.jpg" />
+	</a>
+	<a href="photos/7893834940_8fcbb47c14_b.jpg" title="Il Capo at Palermo">
+		<img alt="Il Capo at Palermo" src="photos/7893834940_8fcbb47c14_m.jpg" />
+	</a>
+	<a href="photos/7822678460_ee98ff1f69_b.jpg" title="Erice">
+		<img alt="Erice" src="photos/7822678460_ee98ff1f69_m.jpg" />
+	</a>
+	<a href="photos/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence">
+		<img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_m.jpg" />
+	</a>
+</div>
+
+<script type="text/javascript">
+	$("#myExample5").justifiedGallery({
+		'usedSuffix':'lt240', 
+		'justifyLastRow':true, 
+		'rowHeight':80, 
+		'fixedHeight':false, 
+		'lightbox':true, 
 		'captions':false, 
 		'margins':1
 	});
