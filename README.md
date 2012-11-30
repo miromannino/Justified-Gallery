@@ -1,11 +1,12 @@
 This is a JQuery plugin that allows you to create an high quality justified gallery of images. 
-
 A common problem, for people who create sites, is to create an elegant image gallery that manages the various sizes of images. Flickr and Google+ manage this situation in an excellent way, the purpose of this plugin is to give you the power of this solutions, with a new fast algorithm.
+
+Ideally, we want a disposition of the images without cropping. But, dispose all the images, minimizing the image cropping, can be reduced to the “Knapsack Problem”, that is an NP-complete problem. We can’t do miracles, but we can minimize the images cropping, if we maintain the original order of the images. Furthermore, we need a good appealing disposition: we need all the images of a row to have the same height. For these reason the algorithm works as you will read.
 
 Important configurations
 ------------------------
 
-An important configuration of the plugin is the row height. If you have an height of 100px, the algorithm resizes the images to have an height of 100px, for example: 
+An important configuration of the plugin is the row height. If you have an height of 70px, the algorithm resizes the images to have an height of 70px, for example: 
 
 <img src="http://miromannino.it/wp-content/uploads/2012/10/fig1.png" style="width: 100%; max-width:450px;" />
 
@@ -13,11 +14,11 @@ Then, if the row is full, the algorithm removes the images that can’t stay in 
 
 <img src="http://miromannino.it/wp-content/uploads/2012/10/fig2.png" style="width: 100%; max-width:374px;" />
 
-This increases the row height (or cuts the images if you have configured the plugin to have a <i>fixed height</i>).
+This increases the row height (or cuts the images if you have configured the plugin to have a *fixed height*). Notice that, despite you don’t have the “fixed height” option, an image can be cut to have the same height the other images in the same row. 
 
 <img src="http://miromannino.it/wp-content/uploads/2012/10/fig3.png" style="width: 100%; max-width:367px;" />
 
-All the images that can't stay in the same row are placed in the next row. This algorithm examines all rows until it reaches the last. But, the last row may not have enough images to fill the entire row. In this case you can decide to leave a blank space or to justify the images (<em>justified last row</em> in configuration). But note that, if you decide to justify the last row, and you don't have fixed height, the last images can be much larger than the others.
+All the images that can’t stay in the same row are placed in the next row. This algorithm examines all rows until it reaches the last. But, the last row may not have enough images to fill the entire row. In this case you can decide to leave a blank space or to justify the images (*justified last row* in configuration). But note that, if you decide to justify the last row, and you don’t have fixed height, the last images can be much larger than the others (see the red area of the latest images, it will be the visible area). 
 
 <img src="http://miromannino.it/wp-content/uploads/2012/10/fig4.png" style="width: 100%; max-width:323px;" />
 
