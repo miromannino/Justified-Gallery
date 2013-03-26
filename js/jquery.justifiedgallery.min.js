@@ -1,6 +1,6 @@
 /* 
 Justified Gallery
-Version: 1.0.2
+Version: 1.0.3
 Author: Miro Mannino
 Author URI: http://miromannino.it
 

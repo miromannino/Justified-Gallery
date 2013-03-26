@@ -3,14 +3,17 @@
     "title": "Justified Gallery",
     "description": "JQuery plugin that allows you to create an high quality justified gallery of images, like the Flickr or Google+ ones.",
     "keywords": [
-        "gallery",
-        "animation",
-        "image",
+        "jquery",
         "justified",
+        "gallery",
+        "image",
+        "animation",
         "Flickr",
-        "GooglePlus"
+        "GooglePlus",
+        "ui",
+        "ajax"
     ],
-    "version": "1.0.2",
+    "version": "1.0.3",
     "author": {
         "name": "Miro Mannino",
         "email": "miro.mannino@gmail.com",
@@ -31,6 +34,7 @@
     ],
     "bugs": "https://github.com/miromannino/Justified-Gallery/issues",
     "homepage": "http://miromannino.com/projects/justified-gallery/",
+    "demo": "http://miromannino.com/my-photos/",
     "docs": "http://miromannino.com/projects/justified-gallery/",
     "download": "https://github.com/miromannino/Justified-Gallery",
     "dependencies": {
