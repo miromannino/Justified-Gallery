@@ -59,7 +59,7 @@ __justifiedGallery_galleryID = 0;
 				images[index]["title"] = $(entry).attr("title");
 				images[index]["rel"] = "lightbox[gallery-" + __justifiedGallery_galleryID + "]";
 				
-				$(entry).remove(); //remove de image, we have its data
+				$(entry).remove(); //remove the image, we have its data
 				
 				var img = new Image();
   
@@ -81,7 +81,7 @@ __justifiedGallery_galleryID = 0;
 				});
 				
 				$(img).attr('src', images[index]["src"]);
-				
+
 			});
 		});
 		

@@ -7,17 +7,23 @@
 <link rel='stylesheet' href='jquery-colorbox/colorbox.css' type='text/css' media='screen' />
 <script type='text/javascript' src='jquery-colorbox/jquery.colorbox-min.js'></script>
 <link rel='stylesheet' href='../css/jquery.justifiedgallery.min.css' type='text/css' media='all' />
-<script type='text/javascript' src='../js/jquery.justifiedgallery.min.js'></script>
+<script type='text/javascript' src='../js/jquery.justifiedgallery.js'></script>
 </head>
 
 <style type="text/css">
+	body {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;}
 	.example-description { margin: 20px 0 20px 0;}
+	h1 {margin-top: 80px; }
+	h2 {font-size: 20px; }
 </style>
 
 <body>
 	
-<h1>Example1</h1>
-<div class="example-description">no lightbox, rowHeight = 110, usedSuffix 'lt240', no fixed height, with caption, justify last row</div>
+<h1>Simple example</h1>
+<div class="example-description">
+	A simple example.
+	<pre><code>Settings: no lightbox, rowHeight = 110, usedSuffix 'lt240', no fixed height, with caption, justify last row</code></pre>
+</div>
 <div id="myExample1" >
 	<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
 		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
@@ -90,8 +96,11 @@
 	});
 </script>
 
-<h1>Example2</h1>
-<div class="example-description">with lightbox, rowHeight = 70, usedSuffix 'lt100', no fixed height, with caption, no justify last row</div>
+<h1>Small gallery</h1>
+<div class="example-description">
+	A simple example that use smaller images. Look at the usedSuffix that is <code>lt100</code> because is very lickely that the used images are quite small.
+	<pre><code>Settings: with lightbox, rowHeight = 70, usedSuffix 'lt100', no fixed height, with caption, no justify last row</code></pre>
+</div>
 <div id="myExample2" >
 	<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
 		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
@@ -165,8 +174,11 @@
 </script>
 
 
-<h1>Example3</h1>
-<div class="example-description">no lightbox, rowHeight = 200, usedSuffix 'lt320', <strong>fixed height</strong>, <strong>no caption</strong>, justify last row</div>
+<h1>Fixed Height</h1>
+<div class="example-description">
+	To show the fixed height option. Look that the big images is cutted, because they have a maximum height that they need to respect.
+	<pre><code>Settings: no lightbox, rowHeight = 200, usedSuffix 'lt320', <strong>fixed height</strong>, <strong>no caption</strong>, justify last row</code></pre>
+</div>
 <div id="myExample3" >
 	<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
 		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
@@ -239,11 +251,12 @@
 	});
 </script>
 
-<h1>Example4</h1>
+<h1>Multiple gallery with one call.</h1>
 <div class="example-description">
-	with lightbox, rowHeight = 80, usedSuffix 'lt240', no fixed height, no caption, justify last row.<br/>
-	three gallery created with a single call to the plugin <i>(foreach test)</i> 
+	Three gallery created with a single call to the plugin <i>(foreach test)</i> 
+	<pre><code>Settings: with lightbox, rowHeight = 80, usedSuffix 'lt240', no fixed height, no caption, justify last row</code></pre>
 </div>
+<h2>Gallery 1</h2>
 <div class="myExample4" >
 	<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
 		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
@@ -262,6 +275,7 @@
 	</a>
 </div>
 <br/>
+<h2>Gallery 2</h2>
 <div class="myExample4" >
 	<a href="photos/7222046648_5bf70e893a_b.jpg" title="Simply my Brother">
 		<img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_m.jpg" />
@@ -283,6 +297,7 @@
 	</a>
 </div>
 <br/>
+<h2>Gallery 3</h2>
 <div class="myExample4" >
 	<a href="photos/6791628438_affaa19e10_b.jpg" title="This is the colors I love">
 		<img alt="This is the colors I love" src="photos/6791628438_affaa19e10_m.jpg" />
@@ -323,17 +338,17 @@
 </script>
 
 
-<h1>Example5</h1>
+<h1>Not Found images</h1>
 <div class="example-description">
-	with lightbox, rowHeight = 80, usedSuffix 'lt240', no fixed height, no caption, justify last row.<br/>
-	test with a gallery with 5 images, an image with a wrong name that can't be loaded, it will be ignored. 
+	Test with a gallery with 5 images, an image with a wrong name that can't be loaded, it will be ignored.
+	<pre><code>Settings: with lightbox, rowHeight = 80, usedSuffix 'lt240', no fixed height, no caption, justify last row</code></pre>
 </div>
 <div id="myExample5" >
 	<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
 		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
 	</a>
 	<a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place">
-		<img alt="Just in a dream Place" src="photos/7948632554_WRONG_01f6ae6b6f_m.jpg" />
+		<img alt="Just in a dream Place" src="photos/INEXISTENT_IMAGE.jpg" />
 	</a>
 	<a href="photos/7893834940_8fcbb47c14_b.jpg" title="Il Capo at Palermo">
 		<img alt="Il Capo at Palermo" src="photos/7893834940_8fcbb47c14_m.jpg" />
@@ -357,5 +372,91 @@
 		'margins':1
 	});
 </script>
+
+<h1>One Size Images</h1>
+<div class="example-description">
+	To show ho to use the Justified Gallery with only one type of images. In this case it use only the '_t' images that is very small, and this creates a low quality gallery. This can be done modifying the <code>sizeSuffixes</code> setting and setting all the prefixes to the same. If you have images without prefixes, you can set all the prefixes to the empty string <code>'sizeSuffixes' : { 'lt100':'', 'lt240':'', 'lt320':'', 'lt500':'', 'lt640':'', 'lt1024':''}</code>
+	<pre><code>Settings: no lightbox, rowHeight = 250, no fixed height, justify last row</code></pre>
+</div>
+<div id="myExample6" >
+	<a href="photos/8083451788_552becfbc7_t.jpg" title="What's your destination?">
+		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_t.jpg" />
+	</a>
+	<a href="photos/7948632554_01f6ae6b6f_t.jpg" title="Just in a dream Place">
+		<img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_t.jpg" />
+	</a>
+	<a href="photos/7893834940_8fcbb47c14_t.jpg" title="Il Capo at Palermo">
+		<img alt="Il Capo at Palermo" src="photos/7893834940_8fcbb47c14_t.jpg" />
+	</a>
+	<a href="photos/7822678460_ee98ff1f69_t.jpg" title="Erice">
+		<img alt="Erice" src="photos/7822678460_ee98ff1f69_t.jpg" />
+	</a>
+	<a href="photos/7302459122_19fa1d8223_t.jpg" title="Truthful Innocence">
+		<img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_t.jpg" />
+	</a>
+	<a href="photos/7222046648_5bf70e893a_t.jpg" title="Simply my Brother">
+		<img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_t.jpg" />
+	</a>
+	<a href="photos/7002395006_29fdc85f7a_t.jpg" title="Freedom">
+		<img alt="Freedom" src="photos/7002395006_29fdc85f7a_t.jpg" />
+	</a>
+	<a href="photos/7062575651_b23918b11a_t.jpg" title="Maybe spring">
+		<img alt="Maybe spring" src="photos/7062575651_b23918b11a_t.jpg" />
+	</a>
+	<a href="photos/6883704844_1580a8c3b7_t.jpg" title="Black & White">
+		<img alt="Black & White" src="photos/6883704844_1580a8c3b7_t.jpg" />
+	</a>
+	<a href="photos/6841267340_855273fd7e_t.jpg" title="Love">
+		<img alt="Love" src="photos/6841267340_855273fd7e_t.jpg" />
+	</a>
+	<a href="photos/6958456697_e56a37bb5f_t.jpg" title="Young Lovers' Wall and the Old Rain">
+		<img alt="Young Lovers' Wall and the Old Rain" src="photos/6958456697_e56a37bb5f_t.jpg" />
+	</a>
+	<a href="photos/6791628438_affaa19e10_t.jpg" title="This is the colors I love">
+		<img alt="This is the colors I love" src="photos/6791628438_affaa19e10_t.jpg" />
+	</a>
+	<a href="photos/6916180091_9c9559e463_t.jpg" title="The Hope">
+		<img alt="The Hope" src="photos/6916180091_9c9559e463_t.jpg" />
+	</a>
+	<a href="photos/6880502467_d4b3c4b2a8_t.jpg" title="Florence streets. Florence people.">
+		<img alt="Florence streets. Florence people." src="photos/6880502467_d4b3c4b2a8_t.jpg" />
+	</a>
+	<a href="photos/6876412479_6268c6e2aa_t.jpg" title="I Love You">
+		<img alt="I Love You" src="photos/6876412479_6268c6e2aa_t.jpg" />
+	</a>
+	<a href="photos/6840627709_92ed52fb41_t.jpg" title="The painter in Florence">
+		<img alt="The painter in Florence" src="photos/6840627709_92ed52fb41_t.jpg" />
+	</a>
+	<a href="photos/6812090617_5fd5bbdda0_t.jpg" title="Me and My Belover">
+		<img alt="Me and My Belover" src="photos/6812090617_5fd5bbdda0_t.jpg" />
+	</a>
+	<a href="photos/6806687375_07d2b7a1f9_t.jpg" title="Fiocco">
+		<img alt="Fiocco" src="photos/6806687375_07d2b7a1f9_t.jpg" />
+	</a>
+	<a href="photos/6798453217_72dea2d06e_t.jpg" title="My first clothespin">
+		<img alt="My first clothespin" src="photos/6798453217_72dea2d06e_t.jpg" />
+	</a>
+</div>
+
+<script type="text/javascript">
+	$("#myExample6").justifiedGallery({
+		'sizeSuffixes' : {
+            'lt100':'_t', 
+            'lt240':'_t', 
+            'lt320':'_t', 
+            'lt500':'_t', 
+            'lt640':'_t', 
+            'lt1024':'_t'
+  		},
+		'usedSuffix':'lt240', 
+		'justifyLastRow':true, 
+		'rowHeight':250, 
+		'fixedHeight':false, 
+		'lightbox':false, 
+		'captions':false, 
+		'margins':1
+	});
+</script>
+
 </body>
 </html>
