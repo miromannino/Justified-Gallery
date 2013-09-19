@@ -25,6 +25,8 @@ html { overflow-y: scroll; } /*to prevent the loop when the scrollbar appear and
 }
 .justifiedGallery .jg-image img {
     border: none;
+    margin: 0;
+    padding: 0;
     display: none;
 }
 .justifiedGallery .jg-image a { text-decoration: none; }
