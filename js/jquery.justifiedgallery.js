@@ -30,7 +30,8 @@ __justifiedGallery_galleryID = 0;
 			'captions' : true,
 			'margins' : 1,
 			'extension' : '.jpg',
-			'refreshTime' : 500
+			'refreshTime' : 500,
+			'complete' : null
 		}, options);
 
 		function getErrorHtml(message, classOfError){
@@ -90,6 +91,7 @@ __justifiedGallery_galleryID = 0;
 			$(cont).find(".jg-loading").fadeOut(500, function(){
 				$(this).remove(); //remove the loading image
 				processesImages($, cont, images, 0, settings);
+				$.isFunction(settings.complete) && settings.complete.call(this);
 			});
 		}
 
