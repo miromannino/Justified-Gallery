@@ -1,5 +1,7 @@
 <div align="center">
-<img src="https://raw.github.com/miromannino/Justified-Gallery/gh-imgs/jgcover.png" />
+  <a href="http://miromannino.com/projects/justified-gallery/" target="_blank">
+    <img src="https://raw.github.com/miromannino/Justified-Gallery/gh-imgs/jgcover.png" />
+  </a>
 </div>
 
 This is a JQuery plugin that allows you to create an high quality justified gallery of images. 
