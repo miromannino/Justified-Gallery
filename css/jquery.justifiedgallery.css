@@ -1,6 +1,6 @@
 /* 
 Justified Gallery
-Version: 1.0.4
+Version: 2.0
 Author: Miro Mannino
 Author URI: http://miromannino.it
 
@@ -63,4 +63,12 @@ html { overflow-y: scroll; } /*to prevent the loop when the scrollbar appear and
     white-space: nowrap;    
     overflow:hidden;
     margin-bottom: 4px;
+}
+
+.justifiedGallery .jg-error {
+    font-size: 12px; 
+    border: 1px solid red; 
+    background-color: #faa; 
+    margin: 10px 0px 10px 0px; 
+    padding: 5px 0px 5px 5px;
 }

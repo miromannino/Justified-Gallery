@@ -1,6 +1,6 @@
 /* 
 Justified Gallery
-Version: 1.0.4
+Version: 2.0
 Author: Miro Mannino
 Author URI: http://miromannino.it
 
@@ -14,28 +14,29 @@ To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0
 or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
 */
 
-__justifiedGallery_galleryID = 0;
-
 (function($){
  
    $.fn.justifiedGallery = function(options){
 
+   		//TODO fare impostazione 'rel' che sostituisce tutti i link con il rel specificato
+
 		var settings = $.extend( {
-			'sizeSuffixes' : {'lt100':'_t', 'lt240':'_m', 'lt320':'_n', 'lt500':'', 'lt640':'_z', 'lt1024':'_b'},
-			'usedSuffix' : 'lt240',
-			'justifyLastRow' : true,
+			'sizeRangeSuffixes' : {'lt100':'_t', 'lt240':'_m', 'lt320':'_n', 'lt500':'', 'lt640':'_z', 'lt1024':'_b'},
 			'rowHeight' : 120,
-			'fixedHeight' : false,
-			'lightbox' : false,
-			'captions' : true,
+			'usedSizeRange' : 'lt240',
 			'margins' : 1,
+			'justifyLastRow' : true,
+			'fixedHeight' : false,
+			'captions' : true,
+			'rel' : null, //rewrite the rel of each analyzed links
+			'target' : null, //rewrite the target of all links
 			'extension' : '.jpg',
 			'refreshTime' : 500,
-			'complete' : null
+			'onComplete' : null
 		}, options);
 
 		function getErrorHtml(message, classOfError){
-			return "<div class=\"" + classOfError + "\"style=\"font-size: 12px; border: 1px solid red; background-color: #faa; margin: 10px 0px 10px 0px; padding: 5px 0px 5px 5px;\">" + message + "</div>";
+			return "<div class=\"jg-error " + classOfError + "\"style=\"\">" + message + "</div>";
 		}
 
 		return this.each(function(index, cont){
@@ -43,8 +44,6 @@ __justifiedGallery_galleryID = 0;
 
 			var loaded = 0;
 			var images = new Array($(cont).find("img").length);
-
-			__justifiedGallery_galleryID++;
 
 			if(images.length == 0) return;
 			
@@ -58,7 +57,8 @@ __justifiedGallery_galleryID = 0;
 				images[index]["alt"] = $(img).attr("alt");
 				images[index]["href"] = $(entry).attr("href");
 				images[index]["title"] = $(entry).attr("title");
-				images[index]["rel"] = "lightbox[gallery-" + __justifiedGallery_galleryID + "]";
+				images[index]["rel"] = (settings.rel != null) ? settings.rel : $(entry).attr("rel");
+				images[index]["target"] = (settings.target != null) ? settings.target : $(entry).attr("target");
 				
 				$(entry).remove(); //remove the image, we have its data
 				
@@ -71,7 +71,7 @@ __justifiedGallery_galleryID = 0;
 						images[index]["width"] = this.width;
 					images[index]["height"] = settings.rowHeight;
 					images[index]["src"] = images[index]["src"].slice(0, images[index]["src"].length 
-										 - (settings.sizeSuffixes[settings.usedSuffix] + settings.extension).length);
+										 - (settings.sizeRangeSuffixes[settings.usedSizeRange] + settings.extension).length);
 		    		if(++loaded == images.length) startProcess(cont, images, settings);
 				});
 				
@@ -91,7 +91,7 @@ __justifiedGallery_galleryID = 0;
 			$(cont).find(".jg-loading").fadeOut(500, function(){
 				$(this).remove(); //remove the loading image
 				processesImages($, cont, images, 0, settings);
-				$.isFunction(settings.complete) && settings.complete.call(this);
+				if($.isFunction(settings.onComplete)) settings.onComplete.call(this, cont);
 			});
 		}
 
@@ -100,10 +100,8 @@ __justifiedGallery_galleryID = 0;
 			ris =  "<div class=\"jg-image\" style=\"left:" + l + "px\">";
 			ris += " <a href=\"" + image["href"] + "\" ";
 
-			if(settings.lightbox == true)
-				ris += "rel=\"" + image["rel"] + "\"";
-			else
-				ris +=     "target=\"_blank\"";
+			if (typeof image["rel"] != 'undefined') ris += "rel=\"" + image["rel"] + "\"";
+			if (typeof image["target"] != 'undefined') ris += "target=\"" + image["target"] + "\"";
 
 			ris +=     "title=\"" + image["title"] + "\">";
 			ris += "  <img alt=\"" + image["alt"] + "\" src=\"" + image["src"] + suffix + settings.extension + "\"";
@@ -155,17 +153,17 @@ __justifiedGallery_galleryID = 0;
 			var n;
 			if(nw > nh) n = nw; else n = nh;
 			if(n <= 100){
-				return settings.sizeSuffixes.lt100; //thumbnail (longest side:100)
+				return settings.sizeRangeSuffixes.lt100; //thumbnail (longest side:100)
 			}else if(n <= 240){
-				return settings.sizeSuffixes.lt240; //small (longest side:240)
+				return settings.sizeRangeSuffixes.lt240; //small (longest side:240)
 			}else if(n <= 320){
-				return settings.sizeSuffixes.lt320; //small (longest side:320)
+				return settings.sizeRangeSuffixes.lt320; //small (longest side:320)
 			}else if(n <= 500){
-				return settings.sizeSuffixes.lt500; //small (longest side:320)
+				return settings.sizeRangeSuffixes.lt500; //small (longest side:320)
 			}else if(n <= 640){
-				return settings.sizeSuffixes.lt640; //medium (longest side:640)
+				return settings.sizeRangeSuffixes.lt640; //medium (longest side:640)
 			}else{
-				return settings.sizeSuffixes.lt1024; //large (longest side:1024)
+				return settings.sizeRangeSuffixes.lt1024; //large (longest side:1024)
 			}
 		}
 
@@ -206,15 +204,6 @@ __justifiedGallery_galleryID = 0;
 			}
 			$(cont).append(buildContRow(row, images, extraW, settings));
 			//---------------------------
-
-			//lightbox-------------------
-			if(settings.lightbox){
-				try{
-					$(cont).find(".jg-image a").colorbox({maxWidth:"80%",maxHeight:"80%",opacity:0.8,transition:"elastic", current:""});
-				}catch(e){
-					$(cont).html(getErrorHtml("No Colorbox founded!", "jg-noColorbox"));
-				}
-			}
 
 			//Captions---------------------
 			if(settings.captions){
