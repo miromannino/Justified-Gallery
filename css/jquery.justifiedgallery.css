@@ -53,7 +53,6 @@ html { overflow-y: scroll; } /*to prevent the loop when the scrollbar appear and
     margin: auto;
     width: 50px;
     height: 50px;
-    background-color: white;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
