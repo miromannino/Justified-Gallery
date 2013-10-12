@@ -50,11 +50,11 @@ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain Vie
 			$(cont).append("<div class=\"jg-loading\"><div class=\"jg-loading-img\"></div></div>");
 
 			$(cont).find("a").each(function(index, entry){
-				var img = $(entry).find("img");
+				var imgEntry = $(entry).find("img");
 
 				images[index] = new Array(5);
-				images[index]["src"] = $(img).attr("src");
-				images[index]["alt"] = $(img).attr("alt");
+				images[index]["src"] = $(imgEntry).attr("src");
+				images[index]["alt"] = $(imgEntry).attr("alt");
 				images[index]["href"] = $(entry).attr("href");
 				images[index]["title"] = $(entry).attr("title");
 				images[index]["rel"] = (settings.rel != null) ? settings.rel : $(entry).attr("rel");
@@ -241,6 +241,7 @@ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain Vie
 					processesImages($, cont, images, lastRowWidth, settings);
 					return;
 				}
+
 			}, settings.refreshTime);
 		}
 
