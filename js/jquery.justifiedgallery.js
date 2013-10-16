@@ -15,7 +15,6 @@ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain Vie
 */
 
 (function($){
- 
    $.fn.justifiedGallery = function(options){
 
    		//TODO fare impostazione 'rel' che sostituisce tutti i link con il rel specificato
@@ -30,9 +29,9 @@ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain Vie
 			'captions' : true,
 			'rel' : null, //rewrite the rel of each analyzed links
 			'target' : null, //rewrite the target of all links
-			'extension' : '.jpg',
 			'refreshTime' : 500,
-			'onComplete' : null
+			'onComplete' : null,
+			'extensionRegEx' : /\.[^/.]+$/
 		}, options);
 
 		function getErrorHtml(message, classOfError){
@@ -59,6 +58,7 @@ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain Vie
 				images[index]["title"] = $(entry).attr("title");
 				images[index]["rel"] = (settings.rel != null) ? settings.rel : $(entry).attr("rel");
 				images[index]["target"] = (settings.target != null) ? settings.target : $(entry).attr("target");
+				images[index]["extension"] = images[index]["src"].match(settings.extensionRegEx)[0];
 				
 				$(entry).remove(); //remove the image, we have its data
 				
@@ -71,7 +71,7 @@ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain Vie
 						images[index]["width"] = this.width;
 					images[index]["height"] = settings.rowHeight;
 					images[index]["src"] = images[index]["src"].slice(0, images[index]["src"].length 
-										 - (settings.sizeRangeSuffixes[settings.usedSizeRange] + settings.extension).length);
+										 - (settings.sizeRangeSuffixes[settings.usedSizeRange] + images[index].extension).length);
 		    		if(++loaded == images.length) startProcess(cont, images, settings);
 				});
 				
@@ -104,7 +104,7 @@ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain Vie
 			if (typeof image["target"] != 'undefined') ris += "target=\"" + image["target"] + "\"";
 
 			ris +=     "title=\"" + image["title"] + "\">";
-			ris += "  <img alt=\"" + image["alt"] + "\" src=\"" + image["src"] + suffix + settings.extension + "\"";
+			ris += "  <img alt=\"" + image["alt"] + "\" src=\"" + image["src"] + suffix + image.extension + "\"";
 			ris +=        "style=\"width: " + nw + "px; height: " + nh + "px;\">";
 			
 			if(settings.captions)
