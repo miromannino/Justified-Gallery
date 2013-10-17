@@ -1,6 +1,6 @@
 /* 
 Justified Gallery
-Version: 2.0
+Version: 2.1
 Author: Miro Mannino
 Author URI: http://miromannino.it
 
@@ -23,14 +23,13 @@ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain Vie
 		var settings = $.extend( {
 			'sizeRangeSuffixes' : {'lt100':'_t', 'lt240':'_m', 'lt320':'_n', 'lt500':'', 'lt640':'_z', 'lt1024':'_b'},
 			'rowHeight' : 120,
-			'usedSizeRange' : 'lt240',
 			'margins' : 1,
 			'justifyLastRow' : true,
 			'fixedHeight' : false,
 			'captions' : true,
 			'rel' : null, //rewrite the rel of each analyzed links
 			'target' : null, //rewrite the target of all links
-			'extension' : '.jpg',
+			'extension' : /\.[^.]+$/,
 			'refreshTime' : 500,
 			'onComplete' : null
 		}, options);
@@ -53,12 +52,13 @@ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain Vie
 				var imgEntry = $(entry).find("img");
 
 				images[index] = new Array(5);
-				images[index]["src"] = $(imgEntry).attr("src");
+				images[index]["src"] = (typeof $(imgEntry).data("safe-src") != 'undefined') ? $(imgEntry).data("safe-src") : $(imgEntry).attr("src");
 				images[index]["alt"] = $(imgEntry).attr("alt");
 				images[index]["href"] = $(entry).attr("href");
 				images[index]["title"] = $(entry).attr("title");
 				images[index]["rel"] = (settings.rel != null) ? settings.rel : $(entry).attr("rel");
 				images[index]["target"] = (settings.target != null) ? settings.target : $(entry).attr("target");
+				images[index]["extension"] = images[index]["src"].match(settings.extension)[0];
 				
 				$(entry).remove(); //remove the image, we have its data
 				
@@ -70,8 +70,16 @@ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain Vie
 					else
 						images[index]["width"] = this.width;
 					images[index]["height"] = settings.rowHeight;
-					images[index]["src"] = images[index]["src"].slice(0, images[index]["src"].length 
-										 - (settings.sizeRangeSuffixes[settings.usedSizeRange] + settings.extension).length);
+
+					var usedSizeRangeRegExp = new RegExp("(" + settings.sizeRangeSuffixes.lt100 + "|" 
+														 + settings.sizeRangeSuffixes.lt240 + "|"  
+														 + settings.sizeRangeSuffixes.lt320 + "|" 
+														 + settings.sizeRangeSuffixes.lt500 + "|" 
+														 + settings.sizeRangeSuffixes.lt640 + "|" 
+														 + settings.sizeRangeSuffixes.lt1024 + ")$");
+					
+					images[index]["src"] = images[index]["src"].replace(settings.extension, "").replace(usedSizeRangeRegExp, "");
+
 		    		if(++loaded == images.length) startProcess(cont, images, settings);
 				});
 				
@@ -104,7 +112,7 @@ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain Vie
 			if (typeof image["target"] != 'undefined') ris += "target=\"" + image["target"] + "\"";
 
 			ris +=     "title=\"" + image["title"] + "\">";
-			ris += "  <img alt=\"" + image["alt"] + "\" src=\"" + image["src"] + suffix + settings.extension + "\"";
+			ris += "  <img alt=\"" + image["alt"] + "\" src=\"" + image["src"] + suffix + image.extension + "\"";
 			ris +=        "style=\"width: " + nw + "px; height: " + nh + "px;\">";
 			
 			if(settings.captions)
