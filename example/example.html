@@ -25,7 +25,6 @@
 		font-size: 12px;
 		line-height: 22px;
 		color: #333;
-		font-family: Monaco, Andale Mono, Courier New, monospace;
 		margin-bottom: 1.5em;
 		overflow-x: auto;
 	}
@@ -37,24 +36,20 @@
 	
 <h2 style="margin-top:10px;">Simple example</h2>
 <div class="example-description">
-	<pre>&lt;div id="myExample1"&gt;
+	Here we have a <code>div</code>, with the id <code>myExample0</code>, that has a list of links that point to some images (big images), where each link has a thumbnail. Calling it, these thumbnail can be changed, and bigger or smaller thumbnails can be loaded, to have always an high quality. Remember that the default value for the rowHeight is 120, and the thumbnails with the longest side of 240px (i.e. '_m' suffix) is a good choice to have speed and low bandwidth.
+	<pre>&lt;div id="myExample0"&gt;
 	&lt;a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?"&gt;
-		&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" /&gt;
+		&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7<strong>_m</strong>.jpg" /&gt;
 	&lt;/a&gt;
 	&lt;a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place"&gt;
-		&lt;img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_m.jpg" /&gt;
+		&lt;img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f<strong>_m</strong>.jpg" /&gt;
 	&lt;/a&gt;
 	...
 &lt;/div&gt;
 
-$("#myExample1").justifiedGallery({
-	'rowHeight' : 110, 
-	'usedSizeRange' : 'lt240', 
-	'margins' : 5,
-	<strong>'target' : '_blank'</strong> //replace all links targets, to open images in another page
-});</pre>
+$("#myExample0").justifiedGallery();</pre>
 </div>
-<div id="myExample1" >
+<div id="myExample0" >
 	<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
 		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
 	</a>
@@ -112,34 +107,115 @@ $("#myExample1").justifiedGallery({
 </div>
 
 <script type="text/javascript">
-	$("#myExample1").justifiedGallery({
-		'rowHeight' : 110, 
-		'usedSizeRange' : 'lt240', 
-		'margins' : 5,
-		'target' : '_blank'
-	});
+	$("#myExample0").justifiedGallery();
 </script>
 
-<h2>Small gallery, no justify last row, lightbox</h2>
+<h2>Small gallery, no justify last row, margins</h2>
 <div class="example-description">
-	An example where we use smaller images, and we don't justify the last row. Look at the usedSizeRange that is <code>lt100</code> because is very lickely that the used images are quite small. Now we use also the callback onComplete to set the colorbox.
-	<pre>&lt;div id="myExample2"&gt;
+	This is an example where we use smaller images. Look that the thumbnails are small images (i.e. use the '_t' suffix, that corresponds to images with a longest side less than 100px), because is very lickely that, with a <code>rowHeight = 110</code>, the used images will be quite small. In this way the plugin probably will not load other images, with a huge performance improvement.
+	<br/>
+	Furthermore, note that we don't justify the last row, and that we are using a <code>margin = 5px</code>.
+	<pre>&lt;div id="myExample1"&gt;
 	&lt;a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?"&gt;
-		&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" /&gt;
+		&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7<strong>_t</strong>.jpg" /&gt;
 	&lt;/a&gt;
 	&lt;a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place"&gt;
-		&lt;img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_m.jpg" /&gt;
+		&lt;img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f<strong>_t</strong>.jpg" /&gt;
 	&lt;/a&gt;
 	...
 &lt;/div&gt;
 
-$("#myExample2").justifiedGallery({
-	'usedSizeRange':'lt100', 
+$("#myExample1").justifiedGallery({
+	'rowHeight':70,
+	'justifyLastRow':false, 
+	'margins':3
+});</pre>
+</div>
+</div>
+<div id="myExample1" >
+	<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
+		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_t.jpg" />
+	</a>
+	<a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place">
+		<img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_t.jpg" />
+	</a>
+	<a href="photos/7893834940_8fcbb47c14_b.jpg" title="Il Capo at Palermo">
+		<img alt="Il Capo at Palermo" src="photos/7893834940_8fcbb47c14_t.jpg" />
+	</a>
+	<a href="photos/7822678460_ee98ff1f69_b.jpg" title="Erice">
+		<img alt="Erice" src="photos/7822678460_ee98ff1f69_t.jpg" />
+	</a>
+	<a href="photos/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence">
+		<img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_t.jpg" />
+	</a>
+	<a href="photos/7222046648_5bf70e893a_b.jpg" title="Simply my Brother">
+		<img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_t.jpg" />
+	</a>
+	<a href="photos/7002395006_29fdc85f7a_b.jpg" title="Freedom">
+		<img alt="Freedom" src="photos/7002395006_29fdc85f7a_t.jpg" />
+	</a>
+	<a href="photos/7062575651_b23918b11a_b.jpg" title="Maybe spring">
+		<img alt="Maybe spring" src="photos/7062575651_b23918b11a_t.jpg" />
+	</a>
+	<a href="photos/6841267340_855273fd7e_b.jpg" title="Love">
+		<img alt="Love" src="photos/6841267340_855273fd7e_t.jpg" />
+	</a>
+	<a href="photos/6958456697_e56a37bb5f_b.jpg" title="Young Lovers' Wall and the Old Rain">
+		<img alt="Young Lovers' Wall and the Old Rain" src="photos/6958456697_e56a37bb5f_t.jpg" />
+	</a>
+	<a href="photos/6791628438_affaa19e10_b.jpg" title="This is the colors I love">
+		<img alt="This is the colors I love" src="photos/6791628438_affaa19e10_t.jpg" />
+	</a>
+	<a href="photos/6916180091_9c9559e463_b.jpg" title="The Hope">
+		<img alt="The Hope" src="photos/6916180091_9c9559e463_t.jpg" />
+	</a>
+	<a href="photos/6880502467_d4b3c4b2a8_b.jpg" title="Florence streets. Florence people.">
+		<img alt="Florence streets. Florence people." src="photos/6880502467_d4b3c4b2a8_t.jpg" />
+	</a>
+	<a href="photos/6876412479_6268c6e2aa_b.jpg" title="I Love You">
+		<img alt="I Love You" src="photos/6876412479_6268c6e2aa_t.jpg" />
+	</a>
+	<a href="photos/6840627709_92ed52fb41_b.jpg" title="The painter in Florence">
+		<img alt="The painter in Florence" src="photos/6840627709_92ed52fb41_t.jpg" />
+	</a>
+	<a href="photos/6812090617_5fd5bbdda0_b.jpg" title="Me and My Belover">
+		<img alt="Me and My Belover" src="photos/6812090617_5fd5bbdda0_t.jpg" />
+	</a>
+	<a href="photos/6806687375_07d2b7a1f9_b.jpg" title="Fiocco">
+		<img alt="Fiocco" src="photos/6806687375_07d2b7a1f9_t.jpg" />
+	</a>
+	<a href="photos/6798453217_72dea2d06e_b.jpg" title="My first clothespin">
+		<img alt="My first clothespin" src="photos/6798453217_72dea2d06e_t.jpg" />
+	</a>
+</div>
+
+<script type="text/javascript">
+	$("#myExample1").justifiedGallery({
+		'rowHeight':70, 
+		'justifyLastRow':false, 
+		'margins':3
+	});
+</script>
+
+<h2>Lightbox</h2>
+<div class="example-description">
+	In this example we use the Colorbox lightbox. To do this we define the <code>onComplete</code> callback function, and in this function we call Callbox. Note that we also are using the <code>rel = 'gallery2'</code> setting, that set to 'gallery2' all the links <code>rel</code> attribute value. In this way Colorbox can create the gallery, showing them as a group.
+	<pre>&lt;div id="myExample2"&gt;
+	&lt;a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?"&gt;
+		&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7_t.jpg" /&gt;
+	&lt;/a&gt;
+	&lt;a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place"&gt;
+		&lt;img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_t.jpg" /&gt;
+	&lt;/a&gt;
+	...
+&lt;/div&gt;
+
+$("#myExample2").justifiedGallery({ 
 	'justifyLastRow':false, 
 	'rowHeight':70, 
-	<strong>'rel':'gallery2',</strong> //replace the rel of all the links, in this way colorbox consider it as a group.
+	<strong>'rel':'gallery2',</strong> //replace the rel of all the links with the value 'gallery2'
 	'margins':1,
-	'onComplete': function(gal) {
+	<strong>'onComplete': function(gal) { //callback function, the gal parameter is the gallery that has been built.
 		$(gal).find("a").colorbox({
 			maxWidth : "80%",
 			maxHeight : "80%",
@@ -147,70 +223,69 @@ $("#myExample2").justifiedGallery({
 			transition : "elastic",
 			current : ""
 		});		
-	}
+	}</strong>
 });</pre>
 </div>
 </div>
 <div id="myExample2" >
 	<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
-		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
+		<img alt="What's your destination?" src="photos/8083451788_552becfbc7_t.jpg" />
 	</a>
 	<a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place">
-		<img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_m.jpg" />
+		<img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_t.jpg" />
 	</a>
 	<a href="photos/7893834940_8fcbb47c14_b.jpg" title="Il Capo at Palermo">
-		<img alt="Il Capo at Palermo" src="photos/7893834940_8fcbb47c14_m.jpg" />
+		<img alt="Il Capo at Palermo" src="photos/7893834940_8fcbb47c14_t.jpg" />
 	</a>
 	<a href="photos/7822678460_ee98ff1f69_b.jpg" title="Erice">
-		<img alt="Erice" src="photos/7822678460_ee98ff1f69_m.jpg" />
+		<img alt="Erice" src="photos/7822678460_ee98ff1f69_t.jpg" />
 	</a>
 	<a href="photos/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence">
-		<img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_m.jpg" />
+		<img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_t.jpg" />
 	</a>
 	<a href="photos/7222046648_5bf70e893a_b.jpg" title="Simply my Brother">
-		<img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_m.jpg" />
+		<img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_t.jpg" />
 	</a>
 	<a href="photos/7002395006_29fdc85f7a_b.jpg" title="Freedom">
-		<img alt="Freedom" src="photos/7002395006_29fdc85f7a_m.jpg" />
+		<img alt="Freedom" src="photos/7002395006_29fdc85f7a_t.jpg" />
 	</a>
 	<a href="photos/7062575651_b23918b11a_b.jpg" title="Maybe spring">
-		<img alt="Maybe spring" src="photos/7062575651_b23918b11a_m.jpg" />
+		<img alt="Maybe spring" src="photos/7062575651_b23918b11a_t.jpg" />
 	</a>
 	<a href="photos/6841267340_855273fd7e_b.jpg" title="Love">
-		<img alt="Love" src="photos/6841267340_855273fd7e_m.jpg" />
+		<img alt="Love" src="photos/6841267340_855273fd7e_t.jpg" />
 	</a>
 	<a href="photos/6958456697_e56a37bb5f_b.jpg" title="Young Lovers' Wall and the Old Rain">
-		<img alt="Young Lovers' Wall and the Old Rain" src="photos/6958456697_e56a37bb5f_m.jpg" />
+		<img alt="Young Lovers' Wall and the Old Rain" src="photos/6958456697_e56a37bb5f_t.jpg" />
 	</a>
 	<a href="photos/6791628438_affaa19e10_b.jpg" title="This is the colors I love">
-		<img alt="This is the colors I love" src="photos/6791628438_affaa19e10_m.jpg" />
+		<img alt="This is the colors I love" src="photos/6791628438_affaa19e10_t.jpg" />
 	</a>
 	<a href="photos/6916180091_9c9559e463_b.jpg" title="The Hope">
-		<img alt="The Hope" src="photos/6916180091_9c9559e463_m.jpg" />
+		<img alt="The Hope" src="photos/6916180091_9c9559e463_t.jpg" />
 	</a>
 	<a href="photos/6880502467_d4b3c4b2a8_b.jpg" title="Florence streets. Florence people.">
-		<img alt="Florence streets. Florence people." src="photos/6880502467_d4b3c4b2a8_m.jpg" />
+		<img alt="Florence streets. Florence people." src="photos/6880502467_d4b3c4b2a8_t.jpg" />
 	</a>
 	<a href="photos/6876412479_6268c6e2aa_b.jpg" title="I Love You">
-		<img alt="I Love You" src="photos/6876412479_6268c6e2aa_m.jpg" />
+		<img alt="I Love You" src="photos/6876412479_6268c6e2aa_t.jpg" />
 	</a>
 	<a href="photos/6840627709_92ed52fb41_b.jpg" title="The painter in Florence">
-		<img alt="The painter in Florence" src="photos/6840627709_92ed52fb41_m.jpg" />
+		<img alt="The painter in Florence" src="photos/6840627709_92ed52fb41_t.jpg" />
 	</a>
 	<a href="photos/6812090617_5fd5bbdda0_b.jpg" title="Me and My Belover">
-		<img alt="Me and My Belover" src="photos/6812090617_5fd5bbdda0_m.jpg" />
+		<img alt="Me and My Belover" src="photos/6812090617_5fd5bbdda0_t.jpg" />
 	</a>
 	<a href="photos/6806687375_07d2b7a1f9_b.jpg" title="Fiocco">
-		<img alt="Fiocco" src="photos/6806687375_07d2b7a1f9_m.jpg" />
+		<img alt="Fiocco" src="photos/6806687375_07d2b7a1f9_t.jpg" />
 	</a>
 	<a href="photos/6798453217_72dea2d06e_b.jpg" title="My first clothespin">
-		<img alt="My first clothespin" src="photos/6798453217_72dea2d06e_m.jpg" />
+		<img alt="My first clothespin" src="photos/6798453217_72dea2d06e_t.jpg" />
 	</a>
 </div>
 
 <script type="text/javascript">
 	$("#myExample2").justifiedGallery({
-		'usedSizeRange':'lt100', 
 		'justifyLastRow':false, 
 		'rowHeight':70, 
 		'rel':'gallery2',
@@ -227,10 +302,9 @@ $("#myExample2").justifiedGallery({
 	});
 </script>
 
-
-<h2>Fixed Height, no caption</h2>
+<h2>Fixed Height, no caption, target _blank</h2>
 <div class="example-description">
-	To show the fixed height option. Look that the big images is cutted, because they have a maximum height that they need to respect.
+	In this example you can see how the fixed height option works. Note that the big images is cutted, because they have a maximum height that they need to respect. Also, we disable the captions, and then we set the images to be opened in a new page (i.e. each link target is set to '_blank').
 	<pre>&lt;div id="myExample3"&gt;
 	&lt;a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?"&gt;
 		&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" /&gt;
@@ -243,9 +317,9 @@ $("#myExample2").justifiedGallery({
 
 $("#myExample3").justifiedGallery({
 	'rowHeight' : 200, 
-	'usedSizeRange' : 'lt320', 
-	'fixedHeight' : true, 
-	'captions' : false, 
+	<strong>'fixedHeight' : true</strong>,
+	<strong>'captions' : false</strong>,
+	<strong>'target' : '_blank'</strong>,
 	'margins' : 2
 });</pre>
 </div>
@@ -308,10 +382,10 @@ $("#myExample3").justifiedGallery({
 
 <script type="text/javascript">
 	$("#myExample3").justifiedGallery({
-		'rowHeight' : 200, 
-		'usedSizeRange' : 'lt320', 
+		'rowHeight' : 200,
 		'fixedHeight' : true, 
 		'captions' : false, 
+		'target' : '_blank',
 		'margins' : 2
 	});
 </script>
@@ -349,11 +423,17 @@ $("#myExample3").justifiedGallery({
 
 $(".myExample4").justifiedGallery({
 	'rowHeight':80, 
-	'usedSizeRange':'lt240', 
 	'onComplete': function(gal) {
-		$(gal).find("a").colorbox({maxWidth:"80%",maxHeight:"80%",opacity:0.8,transition:"elastic", current:""});		
+		$(gal).find("a").colorbox({
+			maxWidth:"80%",
+			maxHeight:"80%",
+			opacity:0.8,
+			transition:"elastic",
+			current:""
+		});	
+
 		//we can also can do:
-		//$(".myExample4 a").colorbox({maxWidth:"80%",maxHeight:"80%",opacity:0.8,transition:"elastic", current:""});		
+		//$(".myExample4 a").colorbox(...);		
 	}
 });</pre>
 </div>
@@ -425,12 +505,18 @@ $(".myExample4").justifiedGallery({
 
 <script type="text/javascript">
 	$(".myExample4").justifiedGallery({
-		'rowHeight':80, 
-		'usedSizeRange':'lt240', 
+		'rowHeight':80,
 		'onComplete': function(gal) {
-			$(gal).find("a").colorbox({maxWidth:"80%",maxHeight:"80%",opacity:0.8,transition:"elastic", current:""});		
+			$(gal).find("a").colorbox({
+				maxWidth:"80%",
+				maxHeight:"80%",
+				opacity:0.8,
+				transition:"elastic",
+				current:""
+			});
+
 			//we can also can do:
-			//$(".myExample4 a").colorbox({maxWidth:"80%",maxHeight:"80%",opacity:0.8,transition:"elastic", current:""});		
+			//$(".myExample4 a").colorbox(...);			
 		}
 	});
 </script>
@@ -444,15 +530,12 @@ $(".myExample4").justifiedGallery({
 		&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" /&gt;
 	&lt;/a&gt;
 	&lt;a href="photos/INEXISTENT_IMAGE.jpg" title="INEXISTENT_IMAGE"&gt;
-		&lt;img alt="Just in a dream Place" src="photos/INEXISTENT_IMAGE.jpg" /&gt;
+		&lt;img alt="Just in a dream Place" src="photos/INEXISTENT_IMAGE_t.jpg" /&gt;
 	&lt;/a&gt;
 	...
 &lt;/div&gt;
 
-$("#myExample5").justifiedGallery({
-	'rowHeight':80, 
-	'usedSizeRange':'lt240', 
-});</pre>
+$("#myExample5").justifiedGallery();</pre>
 </div>
 <div id="myExample5" >
 	<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
@@ -473,10 +556,7 @@ $("#myExample5").justifiedGallery({
 </div>
 
 <script type="text/javascript">
-	$("#myExample5").justifiedGallery({
-		'rowHeight':80, 
-		'usedSizeRange':'lt240', 
-	});
+	$("#myExample5").justifiedGallery();
 </script>
 
 <h2>One Size Images</h2>
@@ -493,16 +573,15 @@ $("#myExample5").justifiedGallery({
 &lt;/div&gt;
 
 $("#myExample6").justifiedGallery({
-	'sizeRangeSuffixes' : {
+	<strong>'sizeRangeSuffixes' : {
 		'lt100':'_t', 
 		'lt240':'_t', 
 		'lt320':'_t', 
 		'lt500':'_t', 
 		'lt640':'_t', 
 		'lt1024':'_t'
-	},
-	'rowHeight':250, 
-	'usedSizeRange':'lt240', 
+	},</strong>
+	'rowHeight':250
 });</pre>
 </div>
 <div id="myExample6" >
@@ -572,8 +651,7 @@ $("#myExample6").justifiedGallery({
 			'lt640':'_t', 
 			'lt1024':'_t'
 		},
-		'rowHeight':250, 
-		'usedSizeRange':'lt240', 
+		'rowHeight':250
 	});
 </script>
 
