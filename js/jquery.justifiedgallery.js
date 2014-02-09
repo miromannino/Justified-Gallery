@@ -33,11 +33,11 @@ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain Vie
 			refreshTime : 500,
 			onComplete : null,
 			onArrange : null,
-			silentErrors : null
+			suppressErrors : null
 		}, options);
 
 		function getErrorHtml(message, classOfError){
-			if( silentErrors ) return '';
+			if( suppressErrors ) return '';
 			return "<div class=\"jg-error " + classOfError + "\"style=\"\">" + message + "</div>";
 		}
 
