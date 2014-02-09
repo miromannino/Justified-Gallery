@@ -160,13 +160,18 @@ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain Vie
 		function getSuffix(nw, nh, settings){
 			var n;
 			if(nw > nh) n = nw; else n = nh;
-
-			if(n <= 100){				 return settings.sizeRangeSuffixes.lt100; //thumbnail (longest side:100)
-			}else if(n <= 240){	 return settings.sizeRangeSuffixes.lt240; //small (longest side:240)
-			}else if(n <= 320){	 return settings.sizeRangeSuffixes.lt320; //small (longest side:320)
-			}else if(n <= 500){	 return settings.sizeRangeSuffixes.lt500; //small (longest side:320)
-			}else if(n <= 640){	 return settings.sizeRangeSuffixes.lt640; //medium (longest side:640)
-			}else{							 return settings.sizeRangeSuffixes.lt1024; //large (longest side:1024)
+			if(n <= 100){
+				return settings.sizeRangeSuffixes.lt100; //thumbnail (longest side:100)
+			}else if(n <= 240){
+				return settings.sizeRangeSuffixes.lt240; //small (longest side:240)
+			}else if(n <= 320){
+				return settings.sizeRangeSuffixes.lt320; //small (longest side:320)
+			}else if(n <= 500){
+				return settings.sizeRangeSuffixes.lt500; //small (longest side:320)
+			}else if(n <= 640){
+				return settings.sizeRangeSuffixes.lt640; //medium (longest side:640)
+			}else{
+				return settings.sizeRangeSuffixes.lt1024; //large (longest side:1024)
 			}
 		}
 
