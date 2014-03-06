@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src='../../libs/jquery/jquery.min.js'></script>
+	<link rel='stylesheet' href='../../dist/css/justifiedgallery.css' type='text/css' media='all' />
+	<script src='../../src/js/justifiedgallery.js'></script>
+	<script>
+		$(document).ready(function () {
+			$("#customcaptiontest").justifiedGallery();
+		});
+	</script>
+</head>
+<body>
+	<h1>Captions test</h1>
+
+	<p>look at the first caption!</p>
+	<div id="customcaptiontest" style="background-color: red;">
+		<div class="spinner"><span></span><span></span><span></span></div>
+		
+		<a href="../../docs/photos/8083451788_552becfbc7_b.jpg">
+			<img src="../../docs/photos/8083451788_552becfbc7_m.jpg" />
+			<div class="caption">I'm <span style="color: red">a</span> <strong>custom</strong> caption!<div>I'm a div</div></div>
+		</a>
+		<a href="../../docs/photos/7948632554_01f6ae6b6f_b.jpg">
+			<img src="../../docs/photos/7948632554_01f6ae6b6f_m.jpg" />
+		</a>
+		<a href="../../docs/photos/7002395006_29fdc85f7a_b.jpg" title="ONLY LINK TITLE">
+			<img src="../../docs/photos/7002395006_29fdc85f7a_m.jpg" />
+		</a>
+		<a href="../../docs/photos/6880502467_d4b3c4b2a8_b.jpg">
+			<img alt="ONLY ALT TITLE" src="../../docs/photos/6880502467_d4b3c4b2a8_m.jpg" />
+		</a>
+		<a href="../../docs/photos/7302459122_19fa1d8223_b.jpg" title="LINK TITLE">
+			<img alt="ALT TITLE" src="../../docs/photos/7302459122_19fa1d8223_m.jpg" />
+		</a>
+	</div>
+
+</body>
+</html>

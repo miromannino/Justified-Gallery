@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src='../../libs/jquery/jquery.min.js'></script>
+	<link rel='stylesheet' href='../../dist/css/justifiedgallery.css' type='text/css' media='all' />
+	<script src='../../src/js/justifiedgallery.js'></script>
+	<script>
+		$(document).ready(function () {
+			$("#extratags").justifiedGallery();
+		});
+	</script>
+</head>
+<body>
+	<h1>Extra tags remains in the elements test</h1>
+	<div id="extratags" style="background-color: red;">
+		<a role="link" data-extratags="I'm a tag, and I'm still here" href="../../docs/photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
+			<img role="image" data-extratags="I'm a tag, and I'm still here" src="../../docs/photos/8083451788_552becfbc7_m.jpg" />
+		</a>
+		<a href="../../docs/photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place">
+			<img src="../../docs/photos/7948632554_01f6ae6b6f_m.jpg" />
+		</a>
+		<a href="../../docs/photos/7002395006_29fdc85f7a_b.jpg" title="Freedom">
+			<img alt="Freedom" src="../../docs/photos/7002395006_29fdc85f7a_m.jpg" />
+		</a>
+	</div>
+
+
+</body>
+</html>

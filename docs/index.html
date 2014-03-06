@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Justified Gallery documentation</title>
+
+<script src='../libs/jquery/jquery.min.js'></script>
+<script src='../libs/bootstrap/js/bootstrap.min.js'></script>
+<link rel='stylesheet' href='../libs/bootstrap/css/bootstrap.min.css' type='text/css' media='screen' />
+<link rel='stylesheet' href='../libs/jquery-colorbox/colorbox.css' type='text/css' media='screen' />
+<script src='../libs/jquery-colorbox/jquery.colorbox-min.js'></script>
+<link rel='stylesheet' href='../dist/css/justifiedgallery.css' type='text/css' media='all' />
+<script src='../dist/js/jquery.justifiedgallery.js'></script>
+<style>
+</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+  			<div class="col-md-12">
+  				<h1>Justified Gallery <small>documentation</small></h1>
+  				<hr>
+ 				<h2>Basic example</h2>
+ 				<p>
+					Here we have a <code>div</code>, with the id <code>myExample0</code>, that has a list of links that point to some images (original size images), and where inside of each link there is a thumbnail. Calling Justified Gallery, the disposition of all the thumbnails is changed to fill all the spaces (<i>justification</i>). The images can be changed: bigger or smaller thumbnails can be loaded to always have an high quality.
+				</p><p>
+					The plugin knows the path of the other thumbnails of the same image changing the filenames suffix. For example, if in a link there is the thumbnail <code>path/to/image1_t.jpg</code>, the plugin can be load the thumbnails <code>path/to/image1_b.jpg</code>. The default suffixes are the same of <a href="http://www.flickr.com/services/api/misc.urls.html">Flickr</a> (and this permits a smooth integration with this service).
+				</p><p>
+					Remember that the default value for the rowHeight is <code>120</code>. For this example the thumbnails with a longest side of 240px (i.e. <code>_m</code> suffix) is a good choice to have be fast (i.e. the plugin doesn't need to reload the majority of all thumbnails).
+
+	<pre>&lt;div id="basicExample"&gt;
+&lt;a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?"&gt;
+	&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7<strong>_m</strong>.jpg" /&gt;
+&lt;/a&gt;
+&lt;a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place"&gt;
+	&lt;img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f<strong>_m</strong>.jpg" /&gt;
+&lt;/a&gt;
+...
+&lt;/div&gt;
+
+<strong>$("#basicExample").justifiedGallery();</strong></pre>
+					<div id="basicExample" >
+						<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
+							<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
+						</a>
+						<a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place">
+							<img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_m.jpg" />
+						</a>
+						<a href="photos/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence">
+							<img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_m.jpg" />
+						</a>
+						<a href="photos/7222046648_5bf70e893a_b.jpg" title="Simply my Brother">
+							<img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_m.jpg" />
+						</a>
+						<a href="photos/7002395006_29fdc85f7a_b.jpg" title="Freedom">
+							<img alt="Freedom" src="photos/7002395006_29fdc85f7a_m.jpg" />
+						</a>
+						<a href="photos/7062575651_b23918b11a_b.jpg" title="Maybe spring">
+							<img alt="Maybe spring" src="photos/7062575651_b23918b11a_m.jpg" />
+						</a>
+						<a href="photos/6841267340_855273fd7e_b.jpg" title="Love">
+							<img alt="Love" src="photos/6841267340_855273fd7e_m.jpg" />
+						</a>
+						<a href="photos/6958456697_e56a37bb5f_b.jpg" title="Young Lovers' Wall and the Old Rain">
+							<img alt="Young Lovers' Wall and the Old Rain" src="photos/6958456697_e56a37bb5f_m.jpg" />
+						</a>
+						<a href="photos/6791628438_affaa19e10_b.jpg" title="This is the colors I love">
+							<img alt="This is the colors I love" src="photos/6791628438_affaa19e10_m.jpg" />
+						</a>
+						<a href="photos/6916180091_9c9559e463_b.jpg" title="The Hope">
+							<img alt="The Hope" src="photos/6916180091_9c9559e463_m.jpg" />
+						</a>
+						<a href="photos/6880502467_d4b3c4b2a8_b.jpg" title="Florence streets. Florence people.">
+							<img alt="Florence streets. Florence people." src="photos/6880502467_d4b3c4b2a8_m.jpg" />
+						</a>
+						<a href="photos/6876412479_6268c6e2aa_b.jpg" title="I Love You">
+							<img alt="I Love You" src="photos/6876412479_6268c6e2aa_m.jpg" />
+						</a>
+						<a href="photos/6840627709_92ed52fb41_b.jpg" title="The painter in Florence">
+							<img alt="The painter in Florence" src="photos/6840627709_92ed52fb41_m.jpg" />
+						</a>
+						<a href="photos/6812090617_5fd5bbdda0_b.jpg" title="Me and My Belover">
+							<img alt="Me and My Belover" src="photos/6812090617_5fd5bbdda0_m.jpg" />
+						</a>
+						<a href="photos/6806687375_07d2b7a1f9_b.jpg" title="Fiocco">
+							<img alt="Fiocco" src="photos/6806687375_07d2b7a1f9_m.jpg" />
+						</a>
+						<a href="photos/6798453217_72dea2d06e_b.jpg" title="My first clothespin">
+							<img alt="My first clothespin" src="photos/6798453217_72dea2d06e_m.jpg" />
+						</a>
+					</div>
+					<script>
+						$('#basicExample').justifiedGallery();
+					</script>
+				</p>
+
+				<h2>Row heights, not justify last row, margins</h2>
+				<p>
+					This is an example where we use smaller images (<code>rowHeight : 70</code>). To be faster, in this case we use smaller thumbnails (i.e. the <code>_t</code> suffix, longest side of images is less than 100px). In this way the plugin probably will not load other thumbnails.
+				</p><p>
+					Remember that the <code>rowHeight</code> is an approximation for the row heights. The row heights can be higher to reduce the image crops. You can also set a maximum value for the height, using the option <code>maxRowHeight</code>.
+				</p><p>
+					Furthermore, note that in this example we don't justify the last row (<code>justifyLastRow : false</code>), and also that we are using a margin of 5px (<code>margins : 5px</code>).
+					<pre>&lt;div id="myExample1"&gt;
+	&lt;a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?"&gt;
+		&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7<strong>_t</strong>.jpg" /&gt;
+	&lt;/a&gt;
+	&lt;a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place"&gt;
+		&lt;img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f<strong>_t</strong>.jpg" /&gt;
+	&lt;/a&gt;
+	...
+&lt;/div&gt;
+
+$('#myExample1').justifiedGallery({
+	rowHeight : 70,
+	justifyLastRow : false, 
+	margins : 3
+});</pre>
+					<div id="myExample1" >
+						<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
+							<img alt="What's your destination?" src="photos/8083451788_552becfbc7_t.jpg" />
+						</a>
+						<a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place">
+							<img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_t.jpg" />
+						</a>
+						<a href="photos/7893834940_8fcbb47c14_b.jpg" title="Il Capo at Palermo">
+							<img alt="Il Capo at Palermo" src="photos/7893834940_8fcbb47c14_t.jpg" />
+						</a>
+						<a href="photos/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence">
+							<img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_t.jpg" />
+						</a>
+						<a href="photos/7222046648_5bf70e893a_b.jpg" title="Simply my Brother">
+							<img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_t.jpg" />
+						</a>
+						<a href="photos/7002395006_29fdc85f7a_b.jpg" title="Freedom">
+							<img alt="Freedom" src="photos/7002395006_29fdc85f7a_t.jpg" />
+						</a>
+						<a href="photos/7062575651_b23918b11a_b.jpg" title="Maybe spring">
+							<img alt="Maybe spring" src="photos/7062575651_b23918b11a_t.jpg" />
+						</a>
+						<a href="photos/6841267340_855273fd7e_b.jpg" title="Love">
+							<img alt="Love" src="photos/6841267340_855273fd7e_t.jpg" />
+						</a>
+						<a href="photos/6958456697_e56a37bb5f_b.jpg" title="Young Lovers' Wall and the Old Rain">
+							<img alt="Young Lovers' Wall and the Old Rain" src="photos/6958456697_e56a37bb5f_t.jpg" />
+						</a>
+						<a href="photos/6791628438_affaa19e10_b.jpg" title="This is the colors I love">
+							<img alt="This is the colors I love" src="photos/6791628438_affaa19e10_t.jpg" />
+						</a>
+						<a href="photos/6916180091_9c9559e463_b.jpg" title="The Hope">
+							<img alt="The Hope" src="photos/6916180091_9c9559e463_t.jpg" />
+						</a>
+						<a href="photos/6880502467_d4b3c4b2a8_b.jpg" title="Florence streets. Florence people.">
+							<img alt="Florence streets. Florence people." src="photos/6880502467_d4b3c4b2a8_t.jpg" />
+						</a>
+						<a href="photos/6876412479_6268c6e2aa_b.jpg" title="I Love You">
+							<img alt="I Love You" src="photos/6876412479_6268c6e2aa_t.jpg" />
+						</a>
+						<a href="photos/6840627709_92ed52fb41_b.jpg" title="The painter in Florence">
+							<img alt="The painter in Florence" src="photos/6840627709_92ed52fb41_t.jpg" />
+						</a>
+						<a href="photos/6812090617_5fd5bbdda0_b.jpg" title="Me and My Belover">
+							<img alt="Me and My Belover" src="photos/6812090617_5fd5bbdda0_t.jpg" />
+						</a>
+						<a href="photos/6806687375_07d2b7a1f9_b.jpg" title="Fiocco">
+							<img alt="Fiocco" src="photos/6806687375_07d2b7a1f9_t.jpg" />
+						</a>
+						<a href="photos/6798453217_72dea2d06e_b.jpg" title="My first clothespin">
+							<img alt="My first clothespin" src="photos/6798453217_72dea2d06e_t.jpg" />
+						</a>
+					</div>
+
+					<script>
+						$('#myExample1').justifiedGallery({
+							rowHeight : 70, 
+							justifyLastRow : false, 
+							margins : 3
+						});
+					</script>
+				</p>
+
+				<h2>Lightbox</h2>
+				<p>
+					In this example we use the Colorbox lightbox. To do this we create a listener for the callback <code>jg.complete</code> callback function where we initialize Colorbox. Note that we are also using the <code>rel = 'gallery2'</code> option, that sets to 'gallery2' the <code>rel</code> attribute for all the links. In this way Colorbox can create a group of images.
+					<pre>&lt;div id="lightboxExample"&gt;
+	&lt;a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?"&gt;
+		&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7_t.jpg" /&gt;
+	&lt;/a&gt;
+	&lt;a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place"&gt;
+		&lt;img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_t.jpg" /&gt;
+	&lt;/a&gt;
+	...
+&lt;/div&gt;
+
+$('#lightboxExample').justifiedGallery({
+	justifyLastRow : false, 
+	rowHeight : 70, 
+	<strong>rel : 'gallery2',</strong> //replace with 'gallery2' the rel attribute of each link
+	margins : 1
+<strong>}).on('jg.complete', function () { //callback function when the gallery has been created
+	$(this).find('a').colorbox({
+		maxWidth : '80%',
+		maxHeight : '80%',
+		opacity : 0.8,
+		transition : 'elastic',
+		current : ''
+	});</strong>
+});</pre>
+					<div id="lightboxExample" >
+						<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
+							<img alt="What's your destination?" src="photos/8083451788_552becfbc7_t.jpg" />
+						</a>
+						<a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place">
+							<img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_t.jpg" />
+						</a>
+						<a href="photos/7893834940_8fcbb47c14_b.jpg" title="Il Capo at Palermo">
+							<img alt="Il Capo at Palermo" src="photos/7893834940_8fcbb47c14_t.jpg" />
+						</a>
+						<a href="photos/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence">
+							<img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_t.jpg" />
+						</a>
+						<a href="photos/7222046648_5bf70e893a_b.jpg" title="Simply my Brother">
+							<img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_t.jpg" />
+						</a>
+						<a href="photos/7002395006_29fdc85f7a_b.jpg" title="Freedom">
+							<img alt="Freedom" src="photos/7002395006_29fdc85f7a_t.jpg" />
+						</a>
+						<a href="photos/7062575651_b23918b11a_b.jpg" title="Maybe spring">
+							<img alt="Maybe spring" src="photos/7062575651_b23918b11a_t.jpg" />
+						</a>
+						<a href="photos/6841267340_855273fd7e_b.jpg" title="Love">
+							<img alt="Love" src="photos/6841267340_855273fd7e_t.jpg" />
+						</a>
+						<a href="photos/6958456697_e56a37bb5f_b.jpg" title="Young Lovers' Wall and the Old Rain">
+							<img alt="Young Lovers' Wall and the Old Rain" src="photos/6958456697_e56a37bb5f_t.jpg" />
+						</a>
+						<a href="photos/6791628438_affaa19e10_b.jpg" title="This is the colors I love">
+							<img alt="This is the colors I love" src="photos/6791628438_affaa19e10_t.jpg" />
+						</a>
+						<a href="photos/6916180091_9c9559e463_b.jpg" title="The Hope">
+							<img alt="The Hope" src="photos/6916180091_9c9559e463_t.jpg" />
+						</a>
+						<a href="photos/6880502467_d4b3c4b2a8_b.jpg" title="Florence streets. Florence people.">
+							<img alt="Florence streets. Florence people." src="photos/6880502467_d4b3c4b2a8_t.jpg" />
+						</a>
+						<a href="photos/6876412479_6268c6e2aa_b.jpg" title="I Love You">
+							<img alt="I Love You" src="photos/6876412479_6268c6e2aa_t.jpg" />
+						</a>
+						<a href="photos/6840627709_92ed52fb41_b.jpg" title="The painter in Florence">
+							<img alt="The painter in Florence" src="photos/6840627709_92ed52fb41_t.jpg" />
+						</a>
+						<a href="photos/6812090617_5fd5bbdda0_b.jpg" title="Me and My Belover">
+							<img alt="Me and My Belover" src="photos/6812090617_5fd5bbdda0_t.jpg" />
+						</a>
+						<a href="photos/6806687375_07d2b7a1f9_b.jpg" title="Fiocco">
+							<img alt="Fiocco" src="photos/6806687375_07d2b7a1f9_t.jpg" />
+						</a>
+						<a href="photos/6798453217_72dea2d06e_b.jpg" title="My first clothespin">
+							<img alt="My first clothespin" src="photos/6798453217_72dea2d06e_t.jpg" />
+						</a>
+					</div>
+
+					<script>
+						$('#lightboxExample').justifiedGallery({
+							justifyLastRow : false, 
+							rowHeight : 70, 
+							rel : 'gallery2',
+							margins : 1
+						}).on('jg.complete', function () {
+							$(this).find('a').colorbox({
+								maxWidth : '80%',
+								maxHeight : '80%',
+								opacity : 0.8,
+								transition : 'elastic',
+								current : ''
+							});
+						});
+					</script>
+				</p>
+
+				<h2>Captions</h2>
+				<p>
+					The captions are automatically created using the <code>alt</code> attribute of images and, if it doesn't exist, the <code>title</code> attribute of links. To have custom captions you can create a div attribute after the <code>img</code> tag. This one must have the class <code>caption</code> to be valid.
+	<pre>&lt;div id="captionsExample"&gt;
+	&lt;a href="photos/8083451788_552becfbc7_b.jpg"&gt;
+		&lt;img src="photos/8083451788_552becfbc7_m.jpg" /&gt;
+		<strong>&lt;div class="caption"&gt;
+			I'm &lt;span style="color: red"&gt;a&lt;/span&gt; &lt;strong&gt;custom&lt;/strong&gt; caption!&lt;div&gt;I'm a div&lt;/div&gt;
+		&lt;/div&gt;</strong>
+	&lt;/a&gt;
+	&lt;a href="photos/8083451788_552becfbc7_b.jpg" title="I'm in the title"&gt;
+		&lt;img alt="I'm in the alt" src="photos/8083451788_552becfbc7_m.jpg" /&gt;
+	&lt;/a&gt;
+	...
+&lt;/div&gt;
+
+$('#captionsExample').justifiedGallery();</pre>
+					<div id="captionsExample" >
+						<a href="photos/8083451788_552becfbc7_b.jpg">
+							<img src="photos/8083451788_552becfbc7_m.jpg" />
+							<div class="caption">
+								I'm <span style="color: red">a</span> <strong>custom</strong> caption!<div>I'm a div</div>
+							</div>
+						</a>
+						<a href="photos/8083451788_552becfbc7_b.jpg" title="I'm in the title">
+							<img alt="I'm in the alt" src="photos/8083451788_552becfbc7_m.jpg" />
+						</a>
+						<a href="photos/7948632554_01f6ae6b6f_b.jpg" title="I'm only in the title">
+							<img src="photos/7948632554_01f6ae6b6f_m.jpg" />
+						</a>
+						<a href="photos/7302459122_19fa1d8223_b.jpg">
+							<img alt="I'm only in the alt" src="photos/7302459122_19fa1d8223_m.jpg" />
+						</a>
+					</div>
+
+					<script>
+						$('#captionsExample').justifiedGallery();
+					</script>
+				</p>
+
+				<h2>Fixed Height, no caption, target _blank</h2>
+				<p>
+					In this example you can see how the fixed height option works (<code>fixedHeight : true</code>). Note that the big images is cutted, because they have a fixed height that they need to respect. Also, we disable the captions (<code>captions : false</code>), and then we set the images to be opened in a new page (i.e. each link target is set to '_blank' using the option <code>target : '_blank'</code>).
+	<pre>&lt;div id="myExample2"&gt;
+	&lt;a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?"&gt;
+		&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" /&gt;
+	&lt;/a&gt;
+	&lt;a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place"&gt;
+		&lt;img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_m.jpg" /&gt;
+	&lt;/a&gt;
+	...
+&lt;/div&gt;
+
+$('#myExample2').justifiedGallery({
+	rowHeight : 200, 
+	<strong>fixedHeight : true</strong>,
+	<strong>captions : false</strong>,
+	<strong>target : '_blank'</strong>,
+	margins : 2
+});</pre>
+					<div id="myExample2" >
+						<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
+							<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
+						</a>
+						<a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place">
+							<img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_m.jpg" />
+						</a>
+						<a href="photos/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence">
+							<img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_m.jpg" />
+						</a>
+						<a href="photos/7222046648_5bf70e893a_b.jpg" title="Simply my Brother">
+							<img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_m.jpg" />
+						</a>
+						<a href="photos/7002395006_29fdc85f7a_b.jpg" title="Freedom">
+							<img alt="Freedom" src="photos/7002395006_29fdc85f7a_m.jpg" />
+						</a>
+						<a href="photos/7062575651_b23918b11a_b.jpg" title="Maybe spring">
+							<img alt="Maybe spring" src="photos/7062575651_b23918b11a_m.jpg" />
+						</a>
+						<a href="photos/6841267340_855273fd7e_b.jpg" title="Love">
+							<img alt="Love" src="photos/6841267340_855273fd7e_m.jpg" />
+						</a>
+						<a href="photos/6958456697_e56a37bb5f_b.jpg" title="Young Lovers' Wall and the Old Rain">
+							<img alt="Young Lovers' Wall and the Old Rain" src="photos/6958456697_e56a37bb5f_m.jpg" />
+						</a>
+						<a href="photos/6791628438_affaa19e10_b.jpg" title="This is the colors I love">
+							<img alt="This is the colors I love" src="photos/6791628438_affaa19e10_m.jpg" />
+						</a>
+						<a href="photos/6916180091_9c9559e463_b.jpg" title="The Hope">
+							<img alt="The Hope" src="photos/6916180091_9c9559e463_m.jpg" />
+						</a>
+						<a href="photos/6880502467_d4b3c4b2a8_b.jpg" title="Florence streets. Florence people.">
+							<img alt="Florence streets. Florence people." src="photos/6880502467_d4b3c4b2a8_m.jpg" />
+						</a>
+						<a href="photos/6876412479_6268c6e2aa_b.jpg" title="I Love You">
+							<img alt="I Love You" src="photos/6876412479_6268c6e2aa_m.jpg" />
+						</a>
+						<a href="photos/6840627709_92ed52fb41_b.jpg" title="The painter in Florence">
+							<img alt="The painter in Florence" src="photos/6840627709_92ed52fb41_m.jpg" />
+						</a>
+						<a href="photos/6812090617_5fd5bbdda0_b.jpg" title="Me and My Belover">
+							<img alt="Me and My Belover" src="photos/6812090617_5fd5bbdda0_m.jpg" />
+						</a>
+						<a href="photos/6806687375_07d2b7a1f9_b.jpg" title="Fiocco">
+							<img alt="Fiocco" src="photos/6806687375_07d2b7a1f9_m.jpg" />
+						</a>
+						<a href="photos/6798453217_72dea2d06e_b.jpg" title="My first clothespin">
+							<img alt="My first clothespin" src="photos/6798453217_72dea2d06e_m.jpg" />
+						</a>
+					</div>
+
+					<script>
+						$('#myExample2').justifiedGallery({
+							rowHeight : 100,
+							fixedHeight : true, 
+							captions : false, 
+							target : '_blank'
+						});
+					</script>
+				</p>
+
+				<h2>Multiple gallery with one call, colorbox.</h2>
+				<p>
+					Three gallery created with a single call to the plugin <i>(foreach test)</i>. Note that, to create the colorbox groups, the images have differents <code>rel</code> tags. 
+					<pre>&lt;div class="myExMul" &gt;
+	&lt;a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?" <strong>rel="myExMul-1"</strong>&gt;
+		&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" /&gt;
+	&lt;/a&gt;
+	&lt;a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place" <strong>rel="myExMul-1"</strong>&gt;
+		&lt;img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_m.jpg" /&gt;
+	&lt;/a&gt;
+	...
+&lt;/div&gt;
+&lt;div class="myExMul" &gt;
+	&lt;a href="photos/7222046648_5bf70e893a_b.jpg" title="Simply my Brother" <strong>rel="myExMul-2"</strong>&gt;
+		&lt;img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_m.jpg" /&gt;
+	&lt;/a&gt;
+	&lt;a href="photos/7002395006_29fdc85f7a_b.jpg" title="Freedom" <strong>rel="myExMul-2"</strong>&gt;
+		&lt;img alt="Freedom" src="photos/7002395006_29fdc85f7a_m.jpg" /&gt;
+	&lt;/a&gt;
+	...
+&lt;/div&gt;
+&lt;div class="myExMul" &gt;
+	&lt;a href="photos/6791628438_affaa19e10_b.jpg" title="This is the colors I love" <strong>rel="myExMul-3"</strong>&gt;
+		&lt;img alt="This is the colors I love" src="photos/6791628438_affaa19e10_m.jpg" /&gt;
+	&lt;/a&gt;
+	&lt;a href="photos/6916180091_9c9559e463_b.jpg" title="The Hope" <strong>rel="myExMul-3"</strong>&gt;
+		&lt;img alt="The Hope" src="photos/6916180091_9c9559e463_m.jpg" /&gt;
+	&lt;/a&gt;
+	...
+&lt;/div&gt;
+
+$('.myExMul').justifiedGallery({
+	rowHeight : 50 
+}).on('jg.complete', function () {
+	$(this).find('a').colorbox({
+		maxWidth : '80%',
+		maxHeight : '80%',
+		opacity : 0.8,
+		transition : 'elastic',
+		current : ''
+	});
+
+	//we can also can do:
+	//$('.myExMul a').colorbox(...);
+});</pre>
+					<h3>Gallery 1</h3>
+					<div class="myExMul" >
+						<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?" rel="myExMul-1">
+							<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
+						</a>
+						<a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place" rel="myExMul-1">
+							<img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_m.jpg" />
+						</a>
+						<a href="photos/6880502467_d4b3c4b2a8_b.jpg" title="Florence streets. Florence people." rel="myExMul-1">
+							<img alt="Florence streets. Florence people." src="photos/6880502467_d4b3c4b2a8_m.jpg" />
+						</a>
+						<a href="photos/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence" rel="myExMul-1">
+							<img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_m.jpg" />
+						</a>
+						<a href="photos/6840627709_92ed52fb41_b.jpg" title="The painter in Florence" rel="myExMul-1">
+							<img alt="The painter in Florence" src="photos/6840627709_92ed52fb41_m.jpg" />
+						</a>
+					</div>
+					<br/>
+					<h3>Gallery 2</h3>
+					<div class="myExample4" >
+						<a href="photos/7222046648_5bf70e893a_b.jpg" title="Simply my Brother" rel="myExMul-2">
+							<img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_m.jpg" />
+						</a>
+						<a href="photos/7002395006_29fdc85f7a_b.jpg" title="Freedom" rel="myExMul-2">
+							<img alt="Freedom" src="photos/7002395006_29fdc85f7a_m.jpg" />
+						</a>
+						<a href="photos/7062575651_b23918b11a_b.jpg" title="Maybe spring" rel="myExMul-2">
+							<img alt="Maybe spring" src="photos/7062575651_b23918b11a_m.jpg" />
+						</a>
+						<a href="photos/6841267340_855273fd7e_b.jpg" title="Love" rel="myExMul-2">
+							<img alt="Love" src="photos/6841267340_855273fd7e_m.jpg" />
+						</a>
+						<a href="photos/6958456697_e56a37bb5f_b.jpg" title="Young Lovers' Wall and the Old Rain" rel="myExMul-2">
+							<img alt="Young Lovers' Wall and the Old Rain" src="photos/6958456697_e56a37bb5f_m.jpg" />
+						</a>
+					</div>
+					<br/>
+					<h3>Gallery 3</h3>
+					<div class="myExample4" >
+						<a href="photos/6791628438_affaa19e10_b.jpg" title="This is the colors I love" rel="myExMul-3">
+							<img alt="This is the colors I love" src="photos/6791628438_affaa19e10_m.jpg" />
+						</a>
+						<a href="photos/6916180091_9c9559e463_b.jpg" title="The Hope" rel="myExMul-3">
+							<img alt="The Hope" src="photos/6916180091_9c9559e463_m.jpg" />
+						</a>
+						<a href="photos/6876412479_6268c6e2aa_b.jpg" title="I Love You" rel="myExMul-3">
+							<img alt="I Love You" src="photos/6876412479_6268c6e2aa_m.jpg" />
+						</a>
+						<a href="photos/6812090617_5fd5bbdda0_b.jpg" title="Me and My Belover" rel="myExMul-3">
+							<img alt="Me and My Belover" src="photos/6812090617_5fd5bbdda0_m.jpg" />
+						</a>
+						<a href="photos/6806687375_07d2b7a1f9_b.jpg" title="Fiocco" rel="myExMul-3">
+							<img alt="Fiocco" src="photos/6806687375_07d2b7a1f9_m.jpg" />
+						</a>
+						<a href="photos/6798453217_72dea2d06e_b.jpg" title="My first clothespin" rel="myExMul-3">
+							<img alt="My first clothespin" src="photos/6798453217_72dea2d06e_m.jpg" />
+						</a>
+					</div>
+
+					<script>
+						$('.myExMul').justifiedGallery({
+							rowHeight : 80 
+						}).on('jg.complete', function () {
+							$(this).find('a').colorbox({
+								maxWidth : '80%',
+								maxHeight : '80%',
+								opacity : 0.8,
+								transition : 'elastic',
+								current : ''
+							});
+						});
+					</script>
+				</p>
+
+				<h2>Not Found images</h2>
+				<p>
+					Test with a gallery of 5 images, where one of them is inexistent. This image is ignored and is not shown in the gallery. Furthermore here we have a thumbnail, but in the server we don't have the other thumbnails. In this case the plugin doesn't load the other thubmnails and the image is shown with its low quality. This permits a very clean and silent way to manage errors without hurting the user (the errors are shown in the console).
+					<pre>&lt;div id="notFoundExample" &gt;
+	&lt;a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?"&gt;
+		&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" /&gt;
+	&lt;/a&gt;
+	&lt;a href="photos/INEXISTENT_IMAGE.jpg" title="INEXISTENT_IMAGE"&gt;
+		&lt;img alt="Just in a dream Place" src="photos/INEXISTENT_IMAGE_t.jpg" /&gt;
+	&lt;/a&gt;
+	&lt;a href="photos/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence"&gt;
+		&lt;img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_m.jpg" /&gt;
+	&lt;/a&gt;
+	&lt;a href="photos/onlythethumbnail_t.jpg" title="This is the colors I love"&gt;
+		&lt;img alt="This is the colors I love" src="photos/onlythethumbnail_t.jpg" /&gt;
+	&lt;/a&gt;
+&lt;/div&gt;
+
+$('#notFoundExample').justifiedGallery();</pre>
+					<div id="notFoundExample" >
+						<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
+							<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
+						</a>
+						<a href="photos/INEXISTENT_IMAGE.jpg" title="INEXISTENT_IMAGE">
+							<img alt="Just in a dream Place" src="photos/INEXISTENT_IMAGE.jpg" />
+						</a>
+						<a href="photos/7062575651_b23918b11a_b.jpg" title="Maybe spring">
+							<img alt="Maybe spring" src="photos/7062575651_b23918b11a_m.jpg" />
+						</a>
+						<a href="photos/onlythethumbnail_t.jpg" title="This is the colors I love">
+							<img alt="This is the colors I love" src="photos/onlythethumbnail_t.jpg" />
+						</a>
+						<a href="photos/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence">
+							<img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_m.jpg" />
+						</a>
+					</div>
+					<script type="text/javascript">
+						$('#notFoundExample').justifiedGallery();
+					</script>
+				</p>
+
+				<h2>One Size Images</h2>
+				<p>
+					<strong>You need to have six thumbnails for all image? It' not mandatory!</strong> For example you may have only one type of thumbnail (e.g. "myimage_t.jpg") and its original image (e.g. "myimage_b.jpg").
+				</p><p>
+					This example show you how to use the Justified Gallery with only one thumbnail (in this case only the one with <code>_t</code> as suffix). This can be done modifying the <code>sizeRangeSuffixes</code> option to be the same for all the sizes.
+					<pre>&lt;div id="oneSizeExample" &gt;
+	&lt;a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?"&gt;
+		&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7_t.jpg" /&gt;
+	&lt;/a&gt;
+	&lt;a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place"&gt;
+		&lt;img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_t.jpg" /&gt;
+	&lt;/a&gt;
+	...
+&lt;/div&gt;
+
+$('#oneSizeExample').justifiedGallery({
+	<strong>sizeRangeSuffixes : {
+		lt100 : '_t', 
+		lt240 : '_t', 
+		lt320 : '_t', 
+		lt500 : '_t', 
+		lt640 : '_t', 
+		lt1024 : '_t'
+	},</strong>
+	rowHeight : 250
+});</pre>
+					<div id="oneSizeExample" >
+						<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
+							<img alt="What's your destination?" src="photos/8083451788_552becfbc7_t.jpg" />
+						</a>
+						<a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place">
+							<img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_t.jpg" />
+						</a>
+						<a href="photos/7893834940_8fcbb47c14_b.jpg" title="Il Capo at Palermo">
+							<img alt="Il Capo at Palermo" src="photos/7893834940_8fcbb47c14_t.jpg" />
+						</a>
+						<a href="photos/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence">
+							<img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_t.jpg" />
+						</a>
+						<a href="photos/7222046648_5bf70e893a_b.jpg" title="Simply my Brother">
+							<img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_t.jpg" />
+						</a>
+					</div>
+
+					<script type="text/javascript">
+						$('#oneSizeExample').justifiedGallery({
+							sizeRangeSuffixes : {
+								lt100 : '_t', 
+								lt240 : '_t', 
+								lt320 : '_t', 
+								lt500 : '_t', 
+								lt640 : '_t', 
+								lt1024 : '_t'
+							},
+							rowHeight : 250
+						});
+					</script>
+				</p>
+
+				<h2>Randomize</h2>
+				<p>
+					Always the same order is boring? Let's randomize the images! To do this set <code>randomize : true</code>.
+	<pre>&lt;div id="randomizeExample"&gt;
+	&lt;a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?"&gt;
+		&lt;img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" /&gt;
+	&lt;/a&gt;
+	&lt;a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place"&gt;
+		&lt;img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_m.jpg" /&gt;
+	&lt;/a&gt;
+	...
+&lt;/div&gt;
+
+$('#randomizeExample').justifiedGallery({
+	<strong>randomise : true</strong>,
+});</pre>
+					<div id="randomizeExample" >
+						<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
+							<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
+						</a>
+						<a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place">
+							<img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_m.jpg" />
+						</a>
+						<a href="photos/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence">
+							<img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_m.jpg" />
+						</a>
+						<a href="photos/7222046648_5bf70e893a_b.jpg" title="Simply my Brother">
+							<img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_m.jpg" />
+						</a>
+						<a href="photos/7002395006_29fdc85f7a_b.jpg" title="Freedom">
+							<img alt="Freedom" src="photos/7002395006_29fdc85f7a_m.jpg" />
+						</a>
+						<a href="photos/7062575651_b23918b11a_b.jpg" title="Maybe spring">
+							<img alt="Maybe spring" src="photos/7062575651_b23918b11a_m.jpg" />
+						</a>
+						<a href="photos/6841267340_855273fd7e_b.jpg" title="Love">
+							<img alt="Love" src="photos/6841267340_855273fd7e_m.jpg" />
+						</a>
+						<a href="photos/6958456697_e56a37bb5f_b.jpg" title="Young Lovers' Wall and the Old Rain">
+							<img alt="Young Lovers' Wall and the Old Rain" src="photos/6958456697_e56a37bb5f_m.jpg" />
+						</a>
+						<a href="photos/6876412479_6268c6e2aa_b.jpg" title="I Love You">
+							<img alt="I Love You" src="photos/6876412479_6268c6e2aa_m.jpg" />
+						</a>
+						<a href="photos/6840627709_92ed52fb41_b.jpg" title="The painter in Florence">
+							<img alt="The painter in Florence" src="photos/6840627709_92ed52fb41_m.jpg" />
+						</a>
+						<a href="photos/6812090617_5fd5bbdda0_b.jpg" title="Me and My Belover">
+							<img alt="Me and My Belover" src="photos/6812090617_5fd5bbdda0_m.jpg" />
+						</a>
+						<a href="photos/6806687375_07d2b7a1f9_b.jpg" title="Fiocco">
+							<img alt="Fiocco" src="photos/6806687375_07d2b7a1f9_m.jpg" />
+						</a>
+						<a href="photos/6798453217_72dea2d06e_b.jpg" title="My first clothespin">
+							<img alt="My first clothespin" src="photos/6798453217_72dea2d06e_m.jpg" />
+						</a>
+					</div>
+
+					<script>
+						$('#randomizeExample').justifiedGallery({
+							randomize : true
+						});
+					</script>
+				</p>
+
+				<p>&nbsp;</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src='../../libs/jquery/jquery.min.js'></script>
+	<link rel='stylesheet' href='../../dist/css/justifiedgallery.css' type='text/css' media='all' />
+	<script src='../../src/js/justifiedgallery.js'></script>
+	<script>
+
+		$(document).ready(function () {
+			$("#smallerreplacementtest").justifiedGallery({				
+				rowHeight: 400,
+				fixedHeight: false
+			});
+		});
+	</script>
+</head>
+<body>
+	<h1>Smaller image replacement test</h1>
+	<p>Inspect that the big images has a low quality, and then that they are replaced with a better one, without leaving white spaces in the layout.</p>
+	<div id="smallerreplacementtest">
+		<a
+			href="http://farm8.staticflickr.com/7154/6840627709_92ed52fb41_b.jpg"
+			title="The painter in Florence"><img class="colorbox-165"
+			alt="The painter in Florence"
+			src="http://farm8.staticflickr.com/7154/6840627709_92ed52fb41_m.jpg" />
+		</a>
+		<a
+			href="http://farm8.staticflickr.com/7144/6812090617_5fd5bbdda0_b.jpg"
+			title="Me and My Belover"><img class="colorbox-165"
+			alt="Me and My Belover"
+			src="http://farm8.staticflickr.com/7144/6812090617_5fd5bbdda0_m.jpg" />
+		</a>
+		<a
+			href="http://farm8.staticflickr.com/7142/6806687375_07d2b7a1f9_b.jpg"
+			title="Fiocco"><img class="colorbox-165" alt="Fiocco"
+			src="http://farm8.staticflickr.com/7142/6806687375_07d2b7a1f9_m.jpg" />
+		</a>
+		<a
+			href="http://farm8.staticflickr.com/7175/6798453217_72dea2d06e_b.jpg"
+			title="My first clothespin"><img class="colorbox-165"
+			alt="My first clothespin"
+			src="http://farm8.staticflickr.com/7175/6798453217_72dea2d06e_m.jpg" />
+		</a>
+	</div>
+
+
+</body>
+</html>

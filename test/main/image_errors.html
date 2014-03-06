@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src='../../libs/jquery/jquery.min.js'></script>
+	<link rel='stylesheet' href='../../dist/css/justifiedgallery.css' type='text/css' media='all' />
+	<script src='../../src/js/justifiedgallery.js'></script>
+	<script>
+		$(document).ready(function () {
+			$("#incorrectimages").justifiedGallery({
+				rowHeight: 300
+			});
+		});
+	</script>
+</head>
+<body>
+	<h1>Image errors test</h1>
+
+	<p>With some errors</p>
+	<div id="incorrectimages" style="background-color: red;">
+		<a href="../../docs/photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
+			<img alt="What's your destination?" src="../../docs/photos/8083451788_552becfbc7_m.jpg" />
+		</a>
+		<a href="IDONTEXISTS" title="IDONTEXISTS">
+			<img alt="IDONTEXISTS" src="IDONTEXISTS" />
+		</a>
+		<a href="../../docs/photos/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence">
+			<img alt="Truthful Innocence" src="../../docs/photos/7302459122_19fa1d8223_m.jpg" />
+		</a>
+		<a href="../../docs/photos/7222046648_5bf70e893a_b.jpg" title="Simply my Brother">
+			<img alt="Simply my Brother" src="../../docs/photos/7222046648_5bf70e893a_m.jpg" />
+		</a>
+		<a href="../../docs/photos/onlythethumbnail_t.jpg" title="Only the thumbnail image">
+			<img alt="Only the thumbnail image" src="../../docs/photos/onlythethumbnail_t.jpg" />
+		</a>
+		<a href="../../docs/photos/7062575651_b23918b11a_b.jpg" title="Maybe spring">
+			<img alt="Maybe spring" src="../../docs/photos/7062575651_b23918b11a_m.jpg" />
+		</a>
+	</div>
+
+</body>
+</html>
