@@ -1,8 +1,8 @@
 {
-  "name": "justifiedGallery",
+  "name": "justified-gallery",
   "title": "Justified Gallery",
   "description": "This is a JQuery plugin that allows you to create an high quality justified gallery of images. Fill all the spaces!",
-  "version": "3.0.0-RC1",
+  "version": "3.0.0",
   "homepage": "http://miromannino.com/projects/justified-gallery/",
   "author": {
     "name": "Miro Mannino",
@@ -17,7 +17,7 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://raw.github.com/miro/Justified-Gallery/master/LICENSE-MIT"
+      "url": "https://raw.github.com/miro/Justified-Gallery/master/LICENSE"
     }
   ],
   "dependencies": {

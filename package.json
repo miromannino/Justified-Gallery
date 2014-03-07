@@ -1,6 +1,6 @@
 {
-  "name": "jquery-plugin",
-  "version": "0.0.0-ignored",
+  "name": "justified-gallery",
+  "version": "3.0.0",
   "engines": {
     "node": ">= 0.8.0"
   },
