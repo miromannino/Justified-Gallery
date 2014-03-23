@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Justified Gallery - Infinite scroll</title>
+
+<script src='../libs/jquery/jquery.min.js'></script>
+<script src='../libs/bootstrap/js/bootstrap.min.js'></script>
+<link rel='stylesheet' href='../libs/bootstrap/css/bootstrap.min.css' type='text/css' media='screen' />
+<link rel='stylesheet' href='../dist/css/justifiedgallery.css' type='text/css' media='all' />
+<script src='../libs/infinite-scroll/jquery.infinitescroll.min.js'></script>
+<script src='../dist/js/jquery.justifiedgallery.js'></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-offset-1 col-sm-10">
+				<h1>Justified Gallery <small>infinite scroll</small></h1>
+				<hr>
+ 				<p>
+					In this example you can see how to obtain an <a href="https://github.com/paulirish/infinite-scroll">infinite scroll</a> using the JQuery plugin made by <a href="http://www.paulirish.com/">Paul Irish</a>.
+				</p><p>
+					The first thing to do is to initialize the gallery as usually.
+					<pre>$('#gallery').justifiedGallery({rowHeight:180});</pre>
+					Then you need to initialize the infinite scroll as you want. But is necessary to implement its finish callback to recall Justified Gallery again.
+				</p><pre>$('#gallery').infinitescroll({
+		navSelector : "#next:last",
+		nextSelector : "a#next:last",
+		itemSelector : "#gallery a",
+		dataType : 'html',
+		maxPage : 3,
+		path: function(index) {
+			return "infinite_scroll_pag" + index + ".html";
+		}
+	}, function(newElements, data, url) {
+		$('#gallery').justifiedGallery('norewind');
+	}
+);</pre>
+				You can notice that we call Justified Gallery using the special parameter <code>'norewind'</code>. In this way the plugin don't re-analyzes all the images, but only the new. This parameter increases the performance, but also prevents the page to have strange behaviours with the scrollbars.
+				</p>
+				<div class="alert alert-warning">
+					Note that the Infinite Scroll plugin may have problems loading the next pages when this demo is executed as a local file in your disk. You can notice those errors in the console. Execute this demo using a Web server (e.g. your local web server).
+				</div>
+				<p>
+					<div id="gallery" >
+						<a href="photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
+							<img alt="What's your destination?" src="photos/8083451788_552becfbc7_m.jpg" />
+						</a>
+						<a href="photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place">
+							<img alt="Just in a dream Place" src="photos/7948632554_01f6ae6b6f_m.jpg" />
+						</a>
+						<a href="photos/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence">
+							<img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_m.jpg" />
+						</a>
+						<a href="photos/7222046648_5bf70e893a_b.jpg" title="Simply my Brother">
+							<img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_m.jpg" />
+						</a>
+						<a href="photos/7002395006_29fdc85f7a_b.jpg" title="Freedom">
+							<img alt="Freedom" src="photos/7002395006_29fdc85f7a_m.jpg" />
+						</a>
+						<a href="photos/7062575651_b23918b11a_b.jpg" title="Maybe spring">
+							<img alt="Maybe spring" src="photos/7062575651_b23918b11a_m.jpg" />
+						</a>
+						<a href="photos/6841267340_855273fd7e_b.jpg" title="Love">
+							<img alt="Love" src="photos/6841267340_855273fd7e_m.jpg" />
+						</a>
+						<a href="photos/6958456697_e56a37bb5f_b.jpg" title="Young Lovers' Wall and the Old Rain">
+							<img alt="Young Lovers' Wall and the Old Rain" src="photos/6958456697_e56a37bb5f_m.jpg" />
+						</a>
+						<a href="photos/6791628438_affaa19e10_b.jpg" title="This is the colors I love">
+							<img alt="This is the colors I love" src="photos/6791628438_affaa19e10_m.jpg" />
+						</a>
+						<a href="photos/6916180091_9c9559e463_b.jpg" title="The Hope">
+							<img alt="The Hope" src="photos/6916180091_9c9559e463_m.jpg" />
+						</a>
+						<a href="photos/6880502467_d4b3c4b2a8_b.jpg" title="Florence streets. Florence people.">
+							<img alt="Florence streets. Florence people." src="photos/6880502467_d4b3c4b2a8_m.jpg" />
+						</a>
+						<a href="photos/6876412479_6268c6e2aa_b.jpg" title="I Love You">
+							<img alt="I Love You" src="photos/6876412479_6268c6e2aa_m.jpg" />
+						</a>
+						<a href="photos/6840627709_92ed52fb41_b.jpg" title="The painter in Florence">
+							<img alt="The painter in Florence" src="photos/6840627709_92ed52fb41_m.jpg" />
+						</a>
+						<a href="photos/6812090617_5fd5bbdda0_b.jpg" title="Me and My Belover">
+							<img alt="Me and My Belover" src="photos/6812090617_5fd5bbdda0_m.jpg" />
+						</a>
+						<a href="photos/6806687375_07d2b7a1f9_b.jpg" title="Fiocco">
+							<img alt="Fiocco" src="photos/6806687375_07d2b7a1f9_m.jpg" />
+						</a>
+						<a href="photos/6798453217_72dea2d06e_b.jpg" title="My first clothespin">
+							<img alt="My first clothespin" src="photos/6798453217_72dea2d06e_m.jpg" />
+						</a>
+					</div>
+
+					<a id="next" href="infinite_scroll_pag2.html">next page --></a>
+
+				</p>
+				<script>
+					$('#gallery').justifiedGallery({rowHeight:180});
+
+					$('#gallery').infinitescroll({
+							navSelector : "#next:last",
+							nextSelector : "a#next:last",
+							itemSelector : "#gallery a",
+							dataType : 'html',
+							maxPage : 3,
+							path: function(index) {
+								return "infinite_scroll_pag" + index + ".html";
+							}
+						}, function(newElements, data, url) {
+							$('#gallery').justifiedGallery('norewind');
+						}
+					);
+				</script>
+				<p>&nbsp;</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
