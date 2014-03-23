@@ -1,5 +1,5 @@
 {
-  "name": "justified-gallery",
+  "name": "justifiedGallery",
   "version": "3.0.0",
   "engines": {
     "node": ">= 0.8.0"

@@ -37,38 +37,49 @@ _(Coming soon)_
 = 3.0 =
 
 * Totally rewritten!
-* No more white spaces (If the gallery needs to load a bigger image, it first show smaller that it has and then replace it with the new)
-* Row by row printing
-	* The row will be printed when the images are available 
-	* It don't wait that all the gallery images is loaded
-	* This is the first step to do the infinite scroll
-* Improved the algorithm for a better result. 
-	* No more white pixels at the end of a row (bugfix
-	* Reduced the crop of images 
+* Row by row loading
+ 	* The plugin doesn't wait that all the gallery thumbnails are loaded
+	* A row is printed when the its thumbnails are available 
+	* Non-blocking layout creation
+* No more white spaces (If the gallery needs to load a bigger image, it first show the smaller and then replace it with the bigger)
+* Improved the algorithm for a better result
+	* No more white pixels at the end of a row (bugfix)
+	* Reduced a lot the image crops
 		* Vertical centering
 		* Proportional images enlargment looking the image aspect ratio
-* Improved the algorithm efficiency and efficacy
+* Improved the algorithm efficiency
 	* No more extra tags or new elements added to create the layout
-	* All the images remain in the DOM
-	* Hence, each link tags or image tags remain in the link and in the image
-* Improved the gallery size check to be less invasive
-* CSS filename changed to be more standard
+	* All the images remain in the DOM, they aren't deleted or created
+		* Hence, each tag remains in the links and in the images
 * Added maxRowHeight option
 * Custom captions
-* Randomize
+* Thumbnails randomization (`randomize` option)
+* Statefulness
+	* can be called again changing only some settings
+	* can be called again to update the layout (after add or remove of images)
+* Improved last row behaviour
+	* Last row option changed
+		* `justifyLastRow` setting has been renamed with `lastRow`, and it accepts: 'justify', 'nojustify', 'hide'.
+	* Option to hide the row if it is incomplete and cannot be justifyied 
+	* The plugin can justify also with `lastRow = 'nojustify'`, if the free space is small.
 * Silent error handling
-	* If the image not exists it is ignored in the layout
-	* If it needs an other image, and it does'nt exist, it maintain the previous one
-* Fixed lightbox removal when the page is resized
-* Javascript loading spinner
+	* If a thumbnail doesn't exists, it is ignored in the layout (hided)
+	* If the plugin needs an inexistent thumbnail, it maintains the previous one
+	* Errors are still visible in the console
+* Loading spinner
 	* Visible when a new row needs to be loaded
-	* Configurable in colors changing the CSS/Less
+	* Pure CSS spinner
+	* Configurable changing the CSS/Less
 * Project structure
 	* Grunt to manage the build
 	* Less
 	* Tests
 	* Javascript and CSS validation
+	* CSS filename changed to be more standard
 * License changed to MIT
+* Improved the gallery size check to be less invasive
+* Fixed lightbox removal when the page is resized
+
 
 = 2.1 = 
 
