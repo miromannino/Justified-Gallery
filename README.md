@@ -51,15 +51,16 @@ _(Coming soon)_
 	* No more extra tags or new elements added to create the layout
 	* All the images remain in the DOM, they aren't deleted or created
 		* Hence, each tag remains in the links and in the images
-* Added maxRowHeight option
+* Added `maxRowHeight` option
 * Custom captions
 * Thumbnails randomization (`randomize` option)
 * Statefulness
 	* can be called again changing only some settings
 	* can be called again to update the layout (after add or remove of images)
+* Infinite scroll capable
 * Improved last row behaviour
 	* Last row option changed
-		* `justifyLastRow` setting has been renamed with `lastRow`, and it accepts: 'justify', 'nojustify', 'hide'.
+		* `justifyLastRow` setting has been renamed to `lastRow`, and it accepts: `'justify'`, `'nojustify'`, `'hide'`.
 	* Option to hide the row if it is incomplete and cannot be justifyied 
 	* The plugin can justify also with `lastRow = 'nojustify'`, if the free space is small.
 * Silent error handling
