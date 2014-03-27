@@ -25,7 +25,6 @@ module.exports = function(grunt) {
       dist: {
         files: {
           'dist/js/jquery.<%= pkg.name %>.js': ['src/js/<%= pkg.name %>.js'],
-          'dist/js/jquery.<%= pkg.name %>.min.js': ['dist/js/<%= pkg.name %>.min.js'],
           'dist/css/<%= pkg.name %>.css': ['dist/css/<%= pkg.name %>.css'],
           'dist/css/<%= pkg.name %>.min.css': ['dist/css/<%= pkg.name %>.min.css']
         }
@@ -37,8 +36,8 @@ module.exports = function(grunt) {
         banner: '<%= banner %>'
       },
       dist: {
-        src: ['dist/js/<%= pkg.name %>.js'],
-        dest: 'dist/js/<%= pkg.name %>.min.js'
+        src: ['dist/js/jquery.<%= pkg.name %>.js'],
+        dest: 'dist/js/jquery.<%= pkg.name %>.min.js'
       }
     },
 
