@@ -404,7 +404,6 @@
 			$.each(context.entries, function (index, entry) {
 				var $entry = $(entry);
 				var $image = $entry.find('img');
-				var image = $image.get(0);
 
 				if ($image.data('jg.loaded') !== true) {
 					$image.data('jg.loaded', false);
@@ -441,8 +440,8 @@
 					$loadImg.one('load', function imgLoaded () {
 						//console.log('img load (alt: ' + $image.attr('alt') + ')');
 						$image.off('load error');
-						$image.data('jg.imgw', image.width);
-						$image.data('jg.imgh', image.height);
+						$image.data('jg.imgw', loadImg.width);
+						$image.data('jg.imgh', loadImg.height);
 						$image.data('jg.loaded', true);
 						startImgAnalyzer(context, false);
 					});
