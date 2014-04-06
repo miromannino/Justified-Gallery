@@ -1,5 +1,5 @@
 /*
- * Justified Gallery - v3.0.0
+ * Justified Gallery - v3.0.1
  * http://miromannino.com/projects/justified-gallery/
  * Copyright (c) 2014 Miro Mannino
  * Licensed under the MIT license.
@@ -404,6 +404,7 @@
 			$.each(context.entries, function (index, entry) {
 				var $entry = $(entry);
 				var $image = $entry.find('img');
+				var image = $image.get(0);
 
 				if ($image.data('jg.loaded') !== true) {
 					$image.data('jg.loaded', false);
@@ -426,26 +427,33 @@
 					// Link Target global overwrite
 					if (context.settings.target !== null) $entry.attr('target', context.settings.target);
 
-					// Loading callbacks
-					$image.one('load', function () {
-						//DEBUG// console.log('img load (alt: ' + $image.attr('alt') + ')');
-						$image.off('error');
-						$image.data('jg.imgw', $image.get(0).width);
-						$image.data('jg.imgh', $image.get(0).height);
-						$image.data('jg.loaded', true);
-						startImgAnalyzer(context, false);
-					});
-					$image.one('error', function () {
-						//DEBUG// console.log('img error (alt: ' + $image.attr('alt') + ')');
-						$image.off('load');
-						$image.data('jg.loaded', 'error');
-						startImgAnalyzer(context, false);
-					});
-
 					// Image src
 					var imageSrc = (typeof $image.data('safe-src') !== 'undefined') ? $image.data('safe-src') : $image.attr('src');
 					$image.data('jg.originalSrc', imageSrc);
-					$image.attr('src', imageSrc); //always necessary, even if we are assigning the same value
+					$image.attr('src', imageSrc);
+
+					/* Check if the image is loaded or not using another image object.
+							We cannot use the 'complete' image property, because some browsers, 
+							with a 404 set complete = true
+					*/
+					var loadImg = new Image();
+					var $loadImg = $(loadImg);
+					$loadImg.one('load', function imgLoaded () {
+						//console.log('img load (alt: ' + $image.attr('alt') + ')');
+						$image.off('load error');
+						$image.data('jg.imgw', image.width);
+						$image.data('jg.imgh', image.height);
+						$image.data('jg.loaded', true);
+						startImgAnalyzer(context, false);
+					});
+					$loadImg.one('error', function imgLoadError () {
+						//console.log('img error (alt: ' + $image.attr('alt') + ')');
+						$image.off('load error');
+						$image.data('jg.loaded', 'error');
+						startImgAnalyzer(context, false);
+					});
+					loadImg.src = imageSrc;
+
 				}
 
 			});
