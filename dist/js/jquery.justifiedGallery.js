@@ -1,5 +1,5 @@
 /*!
- * Justified Gallery - v3.0.1
+ * Justified Gallery - v3.1.0
  * http://miromannino.com/projects/justified-gallery/
  * Copyright (c) 2014 Miro Mannino
  * Licensed under the MIT license.
@@ -65,12 +65,16 @@
 		function displayEntry($entry, x, y, imgWidth, imgHeight, rowHeight, context) {
 			var $image = $entry.find('img');
 
+			$image.css('width', imgWidth);
+			$image.css('height', imgHeight);
 			$image.css('margin-left', - imgWidth / 2);
 			$image.css('margin-top', - imgHeight / 2);
 			$entry.width(imgWidth);
 			$entry.height(rowHeight);
 			$entry.css('top', y);
 			$entry.css('left', x);
+
+			//DEBUG// console.log('displayEntry: $image.width() = ' + $image.width() + ' $image.height() = ' + $image.height());
 
 			// Image reloading for an high quality of thumbnails
 			var imageSrc = $image.attr('src');
@@ -139,9 +143,10 @@
 				return -1;
 			}
 
+			// With lastRow = nojustify, justify if (extraW / availableWidth <= 0.35)
 			if (isLastRow && context.settings.lastRow === 'nojustify' && (extraW / availableWidth > 0.35)) justify = false;
 
-			//DEBUG// console.log('availableWidth: ' + availableWidth + ' extraW: ' + extraW);
+			//DEBUG// console.log('prepareBuildingRow: availableWidth: ' + availableWidth + ' extraW: ' + extraW);
 
 			for (i = 0; i < context.buildingRow.entriesBuff.length; i++) {
 				$image = context.buildingRow.entriesBuff[i].find('img');
@@ -169,13 +174,17 @@
 					newImgH = context.settings.rowHeight;
 				}
 
-				$image.width(newImgW);
-				$image.height(newImgH);
+				$image.data('jg.imgw', newImgW);
+				$image.data('jg.imgh', newImgH);
+
+				//DEBUG// console.log($image.attr('alt') + ' new jq.imgw = ' + $image.data('jg.imgw') + ' new jg.imgh = ' + $image.data('jg.imgh'));
 				
 				availableWidth -= newImgW + ((i < context.buildingRow.entriesBuff.length - 1) ? context.settings.margins : 0);
 
 				if (i === 0 || minHeight > newImgH) minHeight = newImgH;
 			}
+
+			//DEBUG// console.log('availableWidth: ' + availableWidth + ' extraW: ' + extraW);
 
 			if (context.settings.fixedHeight) minHeight = context.settings.rowHeight;
 			return minHeight;
@@ -192,7 +201,7 @@
 		function flushRow(context, isLastRow) {
 			var $entry, $image, minHeight, offX = 0;
 
-			//DEBUG //console.log('flush (width: ' + context.buildingRow.width + ', galleryWidth: ' + context.galleryWidth + ', ' + 'isLastRow: ' + isLastRow + ')');
+			//DEBUG// console.log('flush (width: ' + context.buildingRow.width + ', galleryWidth: ' + context.galleryWidth + ', ' + 'isLastRow: ' + isLastRow + ')');
 
 			minHeight = prepareBuildingRow(context, isLastRow);
 			if (isLastRow && context.settings.lastRow === 'hide' && minHeight === -1) {
@@ -209,8 +218,8 @@
 			for (var i = 0; i < context.buildingRow.entriesBuff.length; i++) {
 				$entry = context.buildingRow.entriesBuff[i];
 				$image = $entry.find('img');
-				displayEntry($entry, offX, context.offY, $image.width(), $image.height(), minHeight, context);
-				offX += $image.width() + context.settings.margins;
+				displayEntry($entry, offX, context.offY, $image.data('jg.imgw'), $image.data('jg.imgh'), minHeight, context);
+				offX += $image.data('jg.imgw') + context.settings.margins;
 			}
 
 			//Gallery Height
@@ -222,7 +231,7 @@
 				//Ready for a new row
 				context.offY += minHeight + context.settings.margins;
 
-				// DEBUG // console.log('minHeight: ' + minHeight + ' offY: ' + context.offY);
+				//DEBUG// console.log('minHeight: ' + minHeight + ' offY: ' + context.offY);
 
 				context.buildingRow.entriesBuff = []; //clear the array creating a new one
 				context.buildingRow.width = 0;
@@ -261,47 +270,65 @@
 			spinnerContext.intervalId = null;
 		}
 
-		function startImgAnalyzer(context, isForResize) {
+		function stopImgAnalyzerStarter(context) {
 			context.yield.flushed = 0;
 			if (context.imgAnalyzerTimeout !== null) clearTimeout(context.imgAnalyzerTimeout);
+		}
+
+		function startImgAnalyzer(context, isForResize) {
+			stopImgAnalyzerStarter(context);
 			context.imgAnalyzerTimeout = setTimeout(function () { analyzeImages(context, isForResize); }, 0.001);
+			analyzeImages(context, isForResize);
 		}
 
 		function analyzeImages(context, isForResize) {
 			
-			/* //DEBUG// 
-			var rnd = parseInt(Math.random() * 10000, 10);
-			console.log('analyzeImages ' + rnd + ' start');
-			console.log('images status: ');
+			//DEBUG// 
+			/*var rnd = parseInt(Math.random() * 10000, 10);
+			//DEBUG// console.log('analyzeImages ' + rnd + ' start');
+			//DEBUG// console.log('images status: ');
 			for (var i = 0; i < context.entries.length; i++) {
 				var $entry = $(context.entries[i]);
 				var $image = $entry.find('img');
-				console.log(i + ' (alt: ' + $image.attr('alt') + 'loaded: ' + $image.data('jg.loaded') + ')');
+				//DEBUG// console.log(i + ' (alt: ' + $image.attr('alt') + 'loaded: ' + $image.data('jg.loaded') + ')');
 			}*/
+
+			/* The first row */
+			var isLastRow = context.firstRowFlushed;
 			
 			for (var i = context.lastAnalyzedIndex + 1; i < context.entries.length; i++) {
 				var $entry = $(context.entries[i]);
 				var $image = $entry.find('img');
+
 
 				//DEBUG// console.log('checking: ' + i + ' (loaded: ' + $image.data('jg.loaded') + ')');
 
 				if ($image.data('jg.loaded') === true) {
 					var newImgW = Math.ceil($image.data('jg.imgw') / ($image.data('jg.imgh') / context.settings.rowHeight));
 
-					context.buildingRow.entriesBuff.push($entry);
-					context.buildingRow.width += newImgW;
-					context.lastAnalyzedIndex = i;
+					//DEBUG// console.log('analyzed img ' + $image.attr('alt') + ', imgW: ' + $image.data('jg.imgw') + ', imgH: ' + $image.data('jg.imgh') + ', rowWidth: ' + context.buildingRow.width);
 
-					//DEBUG// console.log('analyzed img ' + $image.attr('alt') + ', imgW: ' + image.width + ', imgH: ' + image.height + ', rowWidth: ' + context.buildingRow.width);
+					isLastRow = context.firstRowFlushed && (i >= context.entries.length - 1);
 
-					if (context.buildingRow.width + newImgW + 
-								(context.buildingRow.entriesBuff.length - 1) * context.settings.margins > context.galleryWidth) {
-						flushRow(context, context.firstRowFlushed && (i >= context.entries.length - 1));
+					// NOTE: If we have fixed height we need to never have a negative extraW, else some images can be hided.
+					//				This is because the images need to have a smaller height, but fixed height doesn't allow it
+					if (context.buildingRow.width + (context.settings.fixedHeight ? newImgW : newImgW / 2) + 
+								(context.buildingRow.entriesBuff.length - 1) * 
+								context.settings.margins > context.galleryWidth) {
+
+						flushRow(context, isLastRow);
+
 						if(++context.yield.flushed >= context.yield.every) {
+							//DEBUG// console.log("yield");
 							startImgAnalyzer(context, isForResize);
 							return;
 						}
+
 					}
+
+					context.buildingRow.entriesBuff.push($entry);
+					context.buildingRow.width += newImgW;
+					context.lastAnalyzedIndex = i;
 
 				} else if ($image.data('jg.loaded') !== 'error') {
 					return;
@@ -309,8 +336,7 @@
 			}
 
 			// Last row flush (the row is not full)
-			if (context.buildingRow.entriesBuff.length > 0) 
-				flushRow(context, context.firstRowFlushed);
+			if (context.buildingRow.entriesBuff.length > 0) flushRow(context, isLastRow);
 
 			if (context.spinner.active) {
 				context.spinner.active = false;
@@ -319,10 +345,70 @@
 				stopLoadingSpinnerAnimation(context.spinner);
 			}
 
+			/* Stop, if there is, the timeout to start the analyzeImages.
+					This is because an image can be set loaded, and the timeout can be set,
+					but this image can be analyzed yet. 
+			*/
+			stopImgAnalyzerStarter(context);
+
 			//On complete callback
 			if (!isForResize) context.$gallery.trigger('jg.complete'); else context.$gallery.trigger('jg.resize');
 
 			//DEBUG// console.log('analyzeImages ' + rnd +  ' end');
+		}
+
+		function checkSettings (context) {
+
+			function checkSuffixesRange(range) {
+				if (typeof context.settings.sizeRangeSuffixes[range] !== 'string')
+					throw 'sizeRangeSuffixes.' + range + ' must be a string';
+			}
+
+			function checkOrConvertNumber(setting) {
+				if (typeof context.settings[setting] === 'string') {
+					context.settings[setting] = parseInt(context.settings[setting], 10);
+					if (isNaN(context.settings[setting])) throw 'invalid number for ' + setting;
+				} else if (typeof context.settings[setting] === 'number') {
+					if (isNaN(context.settings[setting])) throw 'invalid number for ' + setting;
+				} else {
+					throw setting + ' must be a number';
+				}
+			}
+
+			if (typeof context.settings.sizeRangeSuffixes !== 'object')
+				throw 'sizeRangeSuffixes must be defined and must be an object';
+
+			checkSuffixesRange('lt100');
+			checkSuffixesRange('lt240');
+			checkSuffixesRange('lt320');
+			checkSuffixesRange('lt500');
+			checkSuffixesRange('lt640');
+			checkSuffixesRange('lt1024');
+
+			checkOrConvertNumber('rowHeight');
+			checkOrConvertNumber('maxRowHeight');
+			checkOrConvertNumber('margins');
+
+			if (context.settings.lastRow !== 'nojustify' &&
+					context.settings.lastRow !== 'justify' &&
+					context.settings.lastRow !== 'hide') {
+				throw 'lastRow must be "nojustify", "justify" or "hide"';
+			}
+
+			if (typeof context.settings.fixedHeight !== 'boolean') {
+				throw 'fixedHeight must be a boolean';	
+			}
+
+			if (typeof context.settings.captions !== 'boolean') {
+				throw 'captions must be a boolean';	
+			}
+
+			checkOrConvertNumber('refreshTime');
+
+			if (typeof context.settings.randomize !== 'boolean') {
+				throw 'randomize must be a boolean';	
+			}
+
 		}
 
 		return this.each(function (index, gallery) {
@@ -351,8 +437,9 @@
 					lastAnalyzedIndex : -1,
 					firstRowFlushed : false,
 					yield : {
-						every : 2,
-						flushed : 0
+						every : 2, /* do a flush every context.yield.every flushes (
+												* must be greater than 1, else the analyzeImages will loop */
+						flushed : 0 //flushed rows without a yield
 					},
 					offY : 0,
 					spinner : {
@@ -377,6 +464,8 @@
 				rewind(context);
 			}
 			
+			checkSettings(context);
+
 			context.entries = $gallery.find('a').toArray();
 			if (context.entries.length === 0) return;
 
@@ -438,7 +527,7 @@
 					var loadImg = new Image();
 					var $loadImg = $(loadImg);
 					$loadImg.one('load', function imgLoaded () {
-						//console.log('img load (alt: ' + $image.attr('alt') + ')');
+						//DEBUG// console.log('img load (alt: ' + $image.attr('alt') + ')');
 						$image.off('load error');
 						$image.data('jg.imgw', loadImg.width);
 						$image.data('jg.imgh', loadImg.height);
@@ -446,7 +535,7 @@
 						startImgAnalyzer(context, false);
 					});
 					$loadImg.one('error', function imgLoadError () {
-						//console.log('img error (alt: ' + $image.attr('alt') + ')');
+						//DEBUG// console.log('img error (alt: ' + $image.attr('alt') + ')');
 						$image.off('load error');
 						$image.data('jg.loaded', 'error');
 						startImgAnalyzer(context, false);

@@ -15,6 +15,13 @@ in the <a href="http://miromannino.com/projects/justified-gallery/">official pro
 
 ## Release History
 
+= 3.1 = 
+
+* Improved the algoritm to reduce the image crops
+* Fixed errors with some jquery versions
+* Fixed errors with fixed height
+* Settings checks and parsing
+
 = 3.0 =
 
 * Totally rewritten!
