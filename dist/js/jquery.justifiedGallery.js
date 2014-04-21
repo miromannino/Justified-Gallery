@@ -228,6 +228,7 @@
 			);
 
 			if(!isLastRow) {
+
 				//Ready for a new row
 				context.offY += minHeight + context.settings.margins;
 
@@ -236,6 +237,8 @@
 				context.buildingRow.entriesBuff = []; //clear the array creating a new one
 				context.buildingRow.width = 0;
 				context.firstRowFlushed = true;
+
+				context.$gallery.trigger('jg.rowflush');
 			}
 		}
 

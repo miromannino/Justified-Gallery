@@ -17,10 +17,11 @@ in the <a href="http://miromannino.com/projects/justified-gallery/">official pro
 
 = 3.1 = 
 
-* Improved the algoritm to reduce the image crops
-* Fixed errors with some jquery versions
+* Improved the algorithm to reduce the image crops
+* Fixed errors with some jQuery versions
 * Fixed errors with fixed height
 * Settings checks and parsing
+* Added event jg.rowflush
 
 = 3.0 =
 
@@ -34,7 +35,7 @@ in the <a href="http://miromannino.com/projects/justified-gallery/">official pro
 	* No more white pixels at the end of a row (bugfix)
 	* Reduced a lot the image crops
 		* Vertical centering
-		* Proportional images enlargment looking the image aspect ratio
+		* Proportional images enlargement looking the image aspect ratio
 * Improved the algorithm efficiency
 	* No more extra tags or new elements added to create the layout
 	* All the images remain in the DOM, they aren't deleted or created
@@ -46,10 +47,10 @@ in the <a href="http://miromannino.com/projects/justified-gallery/">official pro
 	* can be called again changing only some settings
 	* can be called again to update the layout (after add or remove of images)
 * Infinite scroll capable
-* Improved last row behaviour
+* Improved last row behavior
 	* Last row option changed
 		* `justifyLastRow` setting has been renamed to `lastRow`, and it accepts: `'justify'`, `'nojustify'`, `'hide'`.
-	* Option to hide the row if it is incomplete and cannot be justifyied 
+	* Option to hide the row if it is incomplete and cannot be justified 
 	* The plugin can justify also with `lastRow = 'nojustify'`, if the free space is small.
 * Silent error handling
 	* If a thumbnail doesn't exists, it is ignored in the layout (hided)
@@ -84,7 +85,7 @@ in the <a href="http://miromannino.com/projects/justified-gallery/">official pro
 * Setting name changed: 'complete' to 'onComplete'.
 * Setting name changed: 'sizeSuffixes' to 'sizeRangeSuffixes'.
 * Setting name changed: 'usedSuffix' to 'usedSizeRange'.
-* Added the css for the div that shows the Justified Gallery errors. Now can be changed, or hided.
+* Added the CSS for the div that shows the Justified Gallery errors. Now can be changed, or hided.
 
 ## Contributing
 

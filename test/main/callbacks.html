@@ -15,6 +15,10 @@
 				console.log(e.target);
 				console.log(this);
 				alert('on resize');
+			}).on('jg.rowflush', function (e) {
+				console.log(e.target);
+				console.log(this);
+				alert('on rowflush');
 			});
 		});
 	</script>
