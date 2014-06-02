@@ -303,7 +303,6 @@
 				var $entry = $(context.entries[i]);
 				var $image = $entry.find('img');
 
-
 				//DEBUG// console.log('checking: ' + i + ' (loaded: ' + $image.data('jg.loaded') + ')');
 
 				if ($image.data('jg.loaded') === true) {
