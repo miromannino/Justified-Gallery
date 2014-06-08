@@ -570,7 +570,7 @@
 						$image.data('jg.imgw', loadImg.width);
 						$image.data('jg.imgh', loadImg.height);
 						$image.data('jg.loaded', true);
-						//startImgAnalyzer(context, false);
+						startImgAnalyzer(context, false);
 					});
 					$loadImg.one('error', function imgLoadError () {
 						//DEBUG// console.log('img error (alt: ' + $image.attr('alt') + ')');
