@@ -15,7 +15,7 @@ in the <a href="http://miromannino.com/projects/justified-gallery/">official pro
 
 ## Release History
 
-= 3.2 =
+### 3.2
 
 * A gallery of `div` can be used instead of `a`
 * Fixed errors for the last rows
@@ -26,7 +26,7 @@ in the <a href="http://miromannino.com/projects/justified-gallery/">official pro
 	* Configurable images fadein time (i.e. `imagesAnimationDuration`)
 * Configurable treshold that decides to justify the row also in presence of nojustify (i.e. `justifyThreshold`)
 
-= 3.1 = 
+### 3.1
 
 * Improved the algorithm to reduce the image crops
 * Fixed errors with some jQuery versions
@@ -34,7 +34,7 @@ in the <a href="http://miromannino.com/projects/justified-gallery/">official pro
 * Settings checks and parsing
 * Added event jg.rowflush
 
-= 3.0 =
+### 3.0
 
 * Totally rewritten!
 * Row by row loading
@@ -81,14 +81,13 @@ in the <a href="http://miromannino.com/projects/justified-gallery/">official pro
 * Improved the gallery size check to be less invasive
 * Fixed lightbox removal when the page is resized
 
-
-= 2.1 = 
+### 2.1
 
 * Setting removed: 'usedSizeRange', now the plugin do it automatically
 * Setting behavior changed: 'extension', now it accept a regular expression. The old behavior still works, but is not safe.
 * New behavior: if an image defines the attribute `data-safe-src`, this is choice, no matter what the src attribute is. This can be used to avoid the problems with Photon or other services that resize the images, changing the image `src`s.
 
-= 2.0 =
+### 2.0
 
 * Setting removed: 'lightbox', now can be done simply with the onComplete callback.
 * Added Setting: 'rel' to change all the links `rel` attribute.
