@@ -1,22 +1,48 @@
 /*
- * Justified Gallery - v3.0.1
+ * Justified Gallery - v3.2.0
  * http://miromannino.com/projects/justified-gallery/
  * Copyright (c) 2014 Miro Mannino
  * Licensed under the MIT license.
  */
+.animation (@name, @duration: 300ms, @delay: 0, @ease: ease) {
+	-webkit-animation: @name @duration @delay @ease;
+	-moz-animation:    @name @duration @delay @ease;
+	-ms-animation:     @name @duration @delay @ease;
+}
+
+.show-caption-frame () {
+	from {opacity: 0;}
+	to {opacity: 0.7;}
+}
+
+.show-entry-frame () {
+	from {opacity: 0;}
+	to {opacity: 1.0;}
+}
+
+@-webkit-keyframes justified-gallery-show-caption-animation {.show-caption-frame};
+@-moz-keyframes justified-gallery-show-caption-animation {.show-caption-frame};
+@-o-keyframes justified-gallery-show-caption-animation {.show-caption-frame};
+@keyframes justified-gallery-show-caption-animation {.show-caption-frame};
+
+@-webkit-keyframes justified-gallery-show-entry-animation {.show-entry-frame};
+@-moz-keyframes justified-gallery-show-entry-animation {.show-entry-frame};
+@-o-keyframes justified-gallery-show-entry-animation {.show-entry-frame};
+@keyframes justified-gallery-show-entry-animation {.show-entry-frame};
+
 .justified-gallery { 
 	width: 100%;
 	position: relative;
 	overflow: hidden;
 
-	a {
+	> a, > div {
 		position: absolute;
 		display: inline-block;
 		overflow: hidden;
 		opacity: 0;
-		filter:alpha(opacity=0); /* IE8 or Earlier */
+		filter: e("alpha(opacity=0)"); /* IE8 or Earlier */
 
-		img {
+		> img {
 			position: absolute;
 			top: 50%; 
 			left: 50%; 
@@ -25,7 +51,7 @@
 			border: none;
 		}
 
-		.caption {
+		> .caption {
 			display: none;
 			position: absolute;
 			bottom: 0;
@@ -39,9 +65,23 @@
 			font-weight: 300;
 			font-family: sans-serif;
 		}
+
+		> .caption.caption-visible {
+				display: initial;
+				opacity: 0.7;
+				filter: e("alpha(opacity=70)"); /* IE8 or Earlier */
+				.animation(justified-gallery-show-caption-animation, 500ms);
+		}
+
 	}
 
-	.spinner {
+	> .entry-visible {
+		opacity: 1.0;
+		filter: e("alpha(opacity=1)"); /* IE8 or Earlier */
+		.animation(justified-gallery-show-entry-animation);
+	}
+
+	> .spinner {
 
 		@spinnerDotWeight: 8px;
 		@spinnerDotNum: 3;
@@ -51,8 +91,11 @@
 		margin-left: -(@spinnerDotWeight * 2) * @spinnerDotNum / 2;
 		padding: 10px 0 10px 0;
 		left: 50%;
+		opacity: initial;
+		filter: initial;
+		overflow: initial;
 
-		span {
+		> span {
 			display: inline-block;
 			opacity: 0;
 			filter:alpha(opacity=0); /* IE8 or Earlier */

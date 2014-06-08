@@ -15,6 +15,17 @@ in the <a href="http://miromannino.com/projects/justified-gallery/">official pro
 
 ## Release History
 
+= 3.2 =
+
+* A gallery of `div` can be used instead of `a`
+* Fixed errors for the last rows
+* Option to use only css animations (i.e `cssAnimation`)
+* Without css animations
+	* Configurable caption fadein/fadeout time (i.e. `captionsAnimationDuration`)
+	* Configurable caption final opacity (i.e. `captionsVisibleOpacity`)
+	* Configurable images fadein time (i.e. `imagesAnimationDuration`)
+* Configurable treshold that decides to justify the row also in presence of nojustify (i.e. `justifyThreshold`)
+
 = 3.1 = 
 
 * Improved the algorithm to reduce the image crops

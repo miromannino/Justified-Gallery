@@ -1,5 +1,5 @@
 /*
- * Justified Gallery - v3.1.0
+ * Justified Gallery - v3.2.0
  * http://miromannino.com/projects/justified-gallery/
  * Copyright (c) 2014 Miro Mannino
  * Licensed under the MIT license.
@@ -27,6 +27,12 @@
 			maxRowHeight : 0, //negative value = no limits, 0 = 1.5 * rowHeight
 			margins : 1,
 			lastRow : 'nojustify', // or can be 'justify' or 'hide'
+			justifyThreshold: 0.35, // if available space / row width <= 0.35 it will be always justified 
+															// (lastRow setting is not considered)
+			cssAnimation: false,
+			captionsAnimationDuration : 500,
+			captionsVisibleOpacity : 0.7, 
+			imagesAnimationDuration : 300,
 			fixedHeight : false,
 			captions : true,
 			rel : null, //rewrite the rel of each analyzed links
@@ -54,17 +60,26 @@
 			}
 		}
 
-		function onEntryMouseEnterForCaption (sender) {
-			$(sender.currentTarget).find('.caption').stop().fadeTo(500, 0.7);
+		function onEntryMouseEnterForCaption (ev) {
+			var $caption = $(ev.currentTarget).find('.caption');
+			if (ev.data.settings.cssAnimation) {
+				$caption.addClass('caption-visible').removeClass('caption-hidden');
+			} else {
+				$caption.stop().fadeTo(ev.data.settings.captionsAnimationDuration, ev.data.settings.captionsVisibleOpacity);
+			}
 		}
 
-		function onEntryMouseLeaveForCaption (sender) {
-			$(sender.currentTarget).find('.caption').stop().fadeTo(500, 0.0);
+		function onEntryMouseLeaveForCaption (ev) {
+			var $caption = $(ev.currentTarget).find('.caption');
+			if (ev.data.settings.cssAnimation) {
+				$caption.removeClass('caption-visible').removeClass('caption-hidden');
+			} else {
+				$caption.stop().fadeTo(ev.data.settings.captionsAnimationDuration, 0.0);
+			}
 		}
 
 		function displayEntry($entry, x, y, imgWidth, imgHeight, rowHeight, context) {
 			var $image = $entry.find('img');
-
 			$image.css('width', imgWidth);
 			$image.css('height', imgHeight);
 			$image.css('margin-left', - imgWidth / 2);
@@ -87,11 +102,18 @@
 				$image.attr('src', $image.data('jg.originalSrc')); //revert to the original thumbnail, we got it.
 			});
 
-			$entry.stop().fadeTo(300, 1, function () {
+			var loadNewImage = function () {
 				if (imageSrc !== newImageSrc) { //load the new image after the fadeIn
 					$image.attr('src', newImageSrc);
-				}	
-			});
+				}
+			};
+
+			if (context.settings.cssAnimation) {
+				$entry.addClass('entry-visible');
+				loadNewImage();
+			} else {
+				$entry.stop().fadeTo(context.settings.imagesAnimationDuration, 1.0, loadNewImage);
+			}
 
 			// Captions ------------------------------
 			//TODO option for caption always visible
@@ -113,14 +135,14 @@
 						mouseenter: onEntryMouseEnterForCaption,
 						mouseleave: onEntryMouseLeaveForCaption
 					};
-					$entry.on('mouseenter', captionMouseEvents.mouseenter);
-					$entry.on('mouseleave', captionMouseEvents.mouseleave);
+					$entry.on('mouseenter', undefined, context, captionMouseEvents.mouseenter);
+					$entry.on('mouseleave', undefined, context, captionMouseEvents.mouseleave);
 					$entry.data('jg.captionMouseEvents', captionMouseEvents);
 				}
 			} else {
 				if (typeof captionMouseEvents !== 'undefined') {
-					$entry.off('mouseenter', captionMouseEvents.mouseenter);
-					$entry.off('mouseleave', captionMouseEvents.mouseleave);
+					$entry.off('mouseenter', undefined, context, captionMouseEvents.mouseenter);
+					$entry.off('mouseleave', undefined, context, captionMouseEvents.mouseleave);
 					$entry.removeData('jg.captionMouseEvents');
 				}
 			}
@@ -135,22 +157,25 @@
 							((context.buildingRow.entriesBuff.length - 1) * context.settings.margins);
 
 			//Skip the last row if we can't justify it and the lastRow == 'hide'
-			if (isLastRow && context.settings.lastRow === 'hide' && (extraW / availableWidth > 0.35)) {
+			if (isLastRow && context.settings.lastRow === 'hide' && (extraW / availableWidth > context.settings.justifyThreshold)) {
 				for (i = 0; i < context.buildingRow.entriesBuff.length; i++) {
 					$entry = context.buildingRow.entriesBuff[i];
-					$entry.stop().fadeTo(0);
+					if (context.settings.cssAnimation) 
+						$entry.removeClass('entry-visible');						
+					else
+						$entry.stop().fadeTo(0, 0);
 				}
 				return -1;
 			}
 
-			// With lastRow = nojustify, justify if (extraW / availableWidth <= 0.35)
-			if (isLastRow && context.settings.lastRow === 'nojustify' && (extraW / availableWidth > 0.35)) justify = false;
+			// With lastRow = nojustify, justify if (extraW / availableWidth <= context.settings.justifyThreshold)
+			if (isLastRow && context.settings.lastRow === 'nojustify' && (extraW / availableWidth > context.settings.justifyThreshold)) 
+				justify = false;
 
 			//DEBUG// console.log('prepareBuildingRow: availableWidth: ' + availableWidth + ' extraW: ' + extraW);
 
 			for (i = 0; i < context.buildingRow.entriesBuff.length; i++) {
 				$image = context.buildingRow.entriesBuff[i].find('img');
-
 				stdImgW = Math.ceil($image.data('jg.imgw') / ($image.data('jg.imgh') / context.settings.rowHeight));
 
 				if (justify) {
@@ -180,7 +205,6 @@
 				//DEBUG// console.log($image.attr('alt') + ' new jq.imgw = ' + $image.data('jg.imgw') + ' new jg.imgh = ' + $image.data('jg.imgh'));
 				
 				availableWidth -= newImgW + ((i < context.buildingRow.entriesBuff.length - 1) ? context.settings.margins : 0);
-
 				if (i === 0 || minHeight > newImgH) minHeight = newImgH;
 			}
 
@@ -228,7 +252,6 @@
 			);
 
 			if(!isLastRow) {
-
 				//Ready for a new row
 				context.offY += minHeight + context.settings.margins;
 
@@ -237,7 +260,6 @@
 				context.buildingRow.entriesBuff = []; //clear the array creating a new one
 				context.buildingRow.width = 0;
 				context.firstRowFlushed = true;
-
 				context.$gallery.trigger('jg.rowflush');
 			}
 		}
@@ -297,7 +319,7 @@
 			}*/
 
 			/* The first row */
-			var isLastRow = context.firstRowFlushed;
+			var isLastRow;
 			
 			for (var i = context.lastAnalyzedIndex + 1; i < context.entries.length; i++) {
 				var $entry = $(context.entries[i]);
@@ -338,7 +360,7 @@
 			}
 
 			// Last row flush (the row is not full)
-			if (context.buildingRow.entriesBuff.length > 0) flushRow(context, isLastRow);
+			if (context.buildingRow.entriesBuff.length > 0) flushRow(context, context.firstRowFlushed);
 
 			if (context.spinner.active) {
 				context.spinner.active = false;
@@ -368,7 +390,7 @@
 
 			function checkOrConvertNumber(setting) {
 				if (typeof context.settings[setting] === 'string') {
-					context.settings[setting] = parseInt(context.settings[setting], 10);
+					context.settings[setting] = parseFloat(context.settings[setting], 10);
 					if (isNaN(context.settings[setting])) throw 'invalid number for ' + setting;
 				} else if (typeof context.settings[setting] === 'number') {
 					if (isNaN(context.settings[setting])) throw 'invalid number for ' + setting;
@@ -396,6 +418,20 @@
 					context.settings.lastRow !== 'hide') {
 				throw 'lastRow must be "nojustify", "justify" or "hide"';
 			}
+
+			checkOrConvertNumber('justifyThreshold');
+			if (context.settings.justifyThreshold < 0 || context.settings.justifyThreshold > 1)
+				throw 'justifyThreshold must be in the interval [0,1]';
+			if (typeof context.settings.cssAnimation !== 'boolean') {
+				throw 'cssAnimation must be a boolean';	
+			}
+			
+			checkOrConvertNumber('captionsAnimationDuration');
+			checkOrConvertNumber('imagesAnimationDuration');
+
+			checkOrConvertNumber('captionsVisibleOpacity');
+			if (context.settings.captionsVisibleOpacity < 0 || context.settings.captionsVisibleOpacity > 1)
+				throw 'captionsVisibleOpacity must be in the interval [0,1]';
 
 			if (typeof context.settings.fixedHeight !== 'boolean') {
 				throw 'fixedHeight must be a boolean';	
@@ -468,7 +504,7 @@
 			
 			checkSettings(context);
 
-			context.entries = $gallery.find('a').toArray();
+			context.entries = $gallery.find('> a, > div').toArray();
 			if (context.entries.length === 0) return;
 
 			// Randomize
