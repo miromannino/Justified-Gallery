@@ -332,8 +332,8 @@
 
 					//DEBUG// console.log('analyzed img ' + $image.attr('alt') + ', imgW: ' + $image.data('jg.imgw') + ', imgH: ' + $image.data('jg.imgh') + ', rowWidth: ' + context.buildingRow.width);
 
-					isLastRow = context.firstRowFlushed && (i >= context.entries.length - 1);
-
+					isLastRow = i >= context.entries.length - 1;
+					
 					// NOTE: If we have fixed height we need to never have a negative extraW, else some images can be hided.
 					//				This is because the images need to have a smaller height, but fixed height doesn't allow it
 					if (context.buildingRow.width + (context.settings.fixedHeight ? newImgW : newImgW / 2) + 
