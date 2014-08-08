@@ -176,18 +176,18 @@
 
 			for (i = 0; i < context.buildingRow.entriesBuff.length; i++) {
 				$image = context.buildingRow.entriesBuff[i].find('img');
-				stdImgW = Math.ceil($image.data('jg.imgw') / ($image.data('jg.imgh') / context.settings.rowHeight));
+				stdImgW = $image.data('jg.imgw') / ($image.data('jg.imgh') / context.settings.rowHeight);
 
 				if (justify) {
 					if (i < context.buildingRow.entriesBuff.length - 1) {
 						// Scale proportionally of the image aspect ratio (the more is long, the more can be extended)
-						newImgW = stdImgW + Math.ceil(stdImgW / context.buildingRow.width * extraW);
+						newImgW = stdImgW + stdImgW / context.buildingRow.width * extraW;
 					} else {
 						newImgW = availableWidth;
 					}
 
 					// Scale factor for the new width is (newImgW / stdImgW), hence:
-					newImgH = Math.ceil(context.settings.rowHeight * (newImgW / stdImgW));
+					newImgH = context.settings.rowHeight * (newImgW / stdImgW);
 
 					// With fixedHeight the newImgH >= rowHeight. In some cases here this is not satisfied (due to the justification)
 					if (context.settings.fixedHeight && newImgH < context.settings.rowHeight) {
@@ -199,8 +199,8 @@
 					newImgH = context.settings.rowHeight;
 				}
 
-				$image.data('jg.imgw', newImgW);
-				$image.data('jg.imgh', newImgH);
+				$image.data('jg.imgw', Math.ceil(newImgW));
+				$image.data('jg.imgh', Math.ceil(newImgH));
 
 				//DEBUG// console.log($image.attr('alt') + ' new jq.imgw = ' + $image.data('jg.imgw') + ' new jg.imgh = ' + $image.data('jg.imgh'));
 				
