@@ -27,14 +27,17 @@
 			maxRowHeight : 0, //negative value = no limits, 0 = 1.5 * rowHeight
 			margins : 1,
 			lastRow : 'nojustify', // or can be 'justify' or 'hide'
-			justifyThreshold: 0.35, // if available space / row width <= 0.35 it will be always justified 
-															// (lastRow setting is not considered)
-			cssAnimation: false,
-			captionsAnimationDuration : 500,
-			captionsVisibleOpacity : 0.7, 
-			imagesAnimationDuration : 300,
+			justifyThreshold: 0.75, /* if row width / available space > 0.75 it will be always justified 
+										(i.e. lastRow setting is not considered) */
 			fixedHeight : false,
 			captions : true,
+			cssAnimation: false,
+			imagesAnimationDuration : 300, //ignored with css animations
+			captionSettings : { //ignored with css animations
+				animationDuration : 500,
+				visibleOpacity : 0.7, 
+				nonVisibleOpacity : 0.0 
+			},
 			rel : null, //rewrite the rel of each analyzed links
 			target : null, //rewrite the target of all links
 			extension : /\.[^.]+$/,
@@ -65,7 +68,7 @@
 			if (ev.data.settings.cssAnimation) {
 				$caption.addClass('caption-visible').removeClass('caption-hidden');
 			} else {
-				$caption.stop().fadeTo(ev.data.settings.captionsAnimationDuration, ev.data.settings.captionsVisibleOpacity);
+				$caption.stop().fadeTo(ev.data.settings.captionSettings.animationDuration, ev.data.settings.captionSettings.visibleOpacity);
 			}
 		}
 
@@ -74,7 +77,7 @@
 			if (ev.data.settings.cssAnimation) {
 				$caption.removeClass('caption-visible').removeClass('caption-hidden');
 			} else {
-				$caption.stop().fadeTo(ev.data.settings.captionsAnimationDuration, 0.0);
+				$caption.stop().fadeTo(ev.data.settings.captionSettings.animationDuration, ev.data.settings.captionSettings.nonVisibleOpacity);
 			}
 		}
 
@@ -116,7 +119,6 @@
 			}
 
 			// Captions ------------------------------
-			//TODO option for caption always visible
 			var captionMouseEvents = $entry.data('jg.captionMouseEvents');
 			if (context.settings.captions === true) {
 				var $imgCaption = $entry.find('.caption');
@@ -130,14 +132,19 @@
 				}
 			
 				// Create events (we check again the $imgCaption because it can be still inexistent)
-				if ($imgCaption.length !== 0 && typeof captionMouseEvents === 'undefined') { 
-					captionMouseEvents = {
-						mouseenter: onEntryMouseEnterForCaption,
-						mouseleave: onEntryMouseLeaveForCaption
-					};
-					$entry.on('mouseenter', undefined, context, captionMouseEvents.mouseenter);
-					$entry.on('mouseleave', undefined, context, captionMouseEvents.mouseleave);
-					$entry.data('jg.captionMouseEvents', captionMouseEvents);
+				if ($imgCaption.length !== 0) {
+					if (!context.settings.cssAnimation) {
+						$imgCaption.stop().fadeTo(context.settings.imagesAnimationDuration, context.settings.captionSettings.nonVisibleOpacity); 
+					}
+					if (typeof captionMouseEvents === 'undefined') {
+						captionMouseEvents = {
+							mouseenter: onEntryMouseEnterForCaption,
+							mouseleave: onEntryMouseLeaveForCaption
+						};
+						$entry.on('mouseenter', undefined, context, captionMouseEvents.mouseenter);
+						$entry.on('mouseleave', undefined, context, captionMouseEvents.mouseleave);
+						$entry.data('jg.captionMouseEvents', captionMouseEvents);
+					}
 				}
 			} else {
 				if (typeof captionMouseEvents !== 'undefined') {
@@ -150,14 +157,14 @@
 		}
 
 		function prepareBuildingRow(context, isLastRow) {
-			var i, $entry, $image, stdImgW, newImgW, newImgH, justify = true;
+			var i, $entry, $image, imgAspectRatio, newImgW, newImgH, justify = true;
 			var minHeight = 0;
-			var availableWidth = context.galleryWidth;
-			var extraW = availableWidth - context.buildingRow.width - 
-							((context.buildingRow.entriesBuff.length - 1) * context.settings.margins);
+			var availableWidth = context.galleryWidth - ((context.buildingRow.entriesBuff.length - 1) * context.settings.margins);
+			var rowHeight = availableWidth / context.buildingRow.aspectRatio;
+			var justificable = context.buildingRow.width / availableWidth > context.settings.justifyThreshold;
 
 			//Skip the last row if we can't justify it and the lastRow == 'hide'
-			if (isLastRow && context.settings.lastRow === 'hide' && (extraW / availableWidth > context.settings.justifyThreshold)) {
+			if (isLastRow && context.settings.lastRow === 'hide' && !justificable) {
 				for (i = 0; i < context.buildingRow.entriesBuff.length; i++) {
 					$entry = context.buildingRow.entriesBuff[i];
 					if (context.settings.cssAnimation) 
@@ -168,55 +175,45 @@
 				return -1;
 			}
 
-			// With lastRow = nojustify, justify if (extraW / availableWidth <= context.settings.justifyThreshold)
-			if (isLastRow && context.settings.lastRow === 'nojustify' && (extraW / availableWidth > context.settings.justifyThreshold)) 
-				justify = false;
-
-			//DEBUG// console.log('prepareBuildingRow: availableWidth: ' + availableWidth + ' extraW: ' + extraW);
+			// With lastRow = nojustify, justify if is justificable (the images will not become too big)
+			if (isLastRow && context.settings.lastRow === 'nojustify' && !justificable) justify = false;
 
 			for (i = 0; i < context.buildingRow.entriesBuff.length; i++) {
 				$image = context.buildingRow.entriesBuff[i].find('img');
-				stdImgW = Math.ceil($image.data('jg.imgw') / ($image.data('jg.imgh') / context.settings.rowHeight));
+				imgAspectRatio = $image.data('jg.imgw') / $image.data('jg.imgh');
 
 				if (justify) {
-					if (i < context.buildingRow.entriesBuff.length - 1) {
-						// Scale proportionally of the image aspect ratio (the more is long, the more can be extended)
-						newImgW = stdImgW + Math.ceil(stdImgW / context.buildingRow.width * extraW);
-					} else {
-						newImgW = availableWidth;
-					}
+					newImgW = rowHeight * imgAspectRatio;
+					newImgH = rowHeight;
 
-					// Scale factor for the new width is (newImgW / stdImgW), hence:
-					newImgH = Math.ceil(context.settings.rowHeight * (newImgW / stdImgW));
-
-					// With fixedHeight the newImgH >= rowHeight. In some cases here this is not satisfied (due to the justification)
-					if (context.settings.fixedHeight && newImgH < context.settings.rowHeight) {
-						newImgW = stdImgW;
+					/* With fixedHeight the newImgH must be greater than rowHeight. 
+					In some cases here this is not satisfied (due to the justification).
+					But we comment it, because is better to have a shorter but justified row instead 
+					to have a cropped image at the end. */
+					/*if (context.settings.fixedHeight && newImgH < context.settings.rowHeight) {
+						newImgW = context.settings.rowHeight * imgAspectRatio;
 						newImgH = context.settings.rowHeight;
-					}
+					}*/
 				} else {
-					newImgW = stdImgW;
+					newImgW = context.settings.rowHeight * imgAspectRatio;
 					newImgH = context.settings.rowHeight;
 				}
 
-				$image.data('jg.imgw', newImgW);
-				$image.data('jg.imgh', newImgH);
-
-				//DEBUG// console.log($image.attr('alt') + ' new jq.imgw = ' + $image.data('jg.imgw') + ' new jg.imgh = ' + $image.data('jg.imgh'));
-				
-				availableWidth -= newImgW + ((i < context.buildingRow.entriesBuff.length - 1) ? context.settings.margins : 0);
+				$image.data('jg.imgw', Math.ceil(newImgW));
+				$image.data('jg.imgh', Math.ceil(newImgH));
 				if (i === 0 || minHeight > newImgH) minHeight = newImgH;
 			}
 
-			//DEBUG// console.log('availableWidth: ' + availableWidth + ' extraW: ' + extraW);
+			if (context.settings.fixedHeight && minHeight > context.settings.rowHeight) 
+				minHeight = context.settings.rowHeight;
 
-			if (context.settings.fixedHeight) minHeight = context.settings.rowHeight;
 			return minHeight;
 		}
 
 		function rewind(context) {
 			context.lastAnalyzedIndex = -1;
 			context.buildingRow.entriesBuff = [];
+			context.buildingRow.aspectRatio = 0;
 			context.buildingRow.width = 0;
 			context.offY = 0;
 			context.firstRowFlushed = false;
@@ -230,6 +227,7 @@
 			minHeight = prepareBuildingRow(context, isLastRow);
 			if (isLastRow && context.settings.lastRow === 'hide' && minHeight === -1) {
 				context.buildingRow.entriesBuff = [];
+				context.buildingRow.aspectRatio = 0;
 				context.buildingRow.width = 0;
 				return;
 			}
@@ -258,6 +256,7 @@
 				//DEBUG// console.log('minHeight: ' + minHeight + ' offY: ' + context.offY);
 
 				context.buildingRow.entriesBuff = []; //clear the array creating a new one
+				context.buildingRow.aspectRatio = 0;
 				context.buildingRow.width = 0;
 				context.firstRowFlushed = true;
 				context.$gallery.trigger('jg.rowflush');
@@ -325,21 +324,12 @@
 				var $entry = $(context.entries[i]);
 				var $image = $entry.find('img');
 
-				//DEBUG// console.log('checking: ' + i + ' (loaded: ' + $image.data('jg.loaded') + ')');
-
 				if ($image.data('jg.loaded') === true) {
-					var newImgW = Math.ceil($image.data('jg.imgw') / ($image.data('jg.imgh') / context.settings.rowHeight));
-
-					//DEBUG// console.log('analyzed img ' + $image.attr('alt') + ', imgW: ' + $image.data('jg.imgw') + ', imgH: ' + $image.data('jg.imgh') + ', rowWidth: ' + context.buildingRow.width);
-
 					isLastRow = context.firstRowFlushed && (i >= context.entries.length - 1);
 
-					// NOTE: If we have fixed height we need to never have a negative extraW, else some images can be hided.
-					//				This is because the images need to have a smaller height, but fixed height doesn't allow it
-					if (context.buildingRow.width + (context.settings.fixedHeight ? newImgW : newImgW / 2) + 
-								(context.buildingRow.entriesBuff.length - 1) * 
-								context.settings.margins > context.galleryWidth) {
-
+					var availableWidth = context.galleryWidth - ((context.buildingRow.entriesBuff.length - 1) * context.settings.margins);
+					var imgAspectRatio = $image.data('jg.imgw') / $image.data('jg.imgh');
+					if (availableWidth / (context.buildingRow.aspectRatio + imgAspectRatio) < context.settings.rowHeight) {
 						flushRow(context, isLastRow);
 
 						if(++context.yield.flushed >= context.yield.every) {
@@ -347,11 +337,11 @@
 							startImgAnalyzer(context, isForResize);
 							return;
 						}
-
 					}
 
 					context.buildingRow.entriesBuff.push($entry);
-					context.buildingRow.width += newImgW;
+					context.buildingRow.aspectRatio += imgAspectRatio;
+					context.buildingRow.width += imgAspectRatio * context.settings.rowHeight;
 					context.lastAnalyzedIndex = i;
 
 				} else if ($image.data('jg.loaded') !== 'error') {
@@ -388,14 +378,14 @@
 					throw 'sizeRangeSuffixes.' + range + ' must be a string';
 			}
 
-			function checkOrConvertNumber(setting) {
-				if (typeof context.settings[setting] === 'string') {
-					context.settings[setting] = parseFloat(context.settings[setting], 10);
-					if (isNaN(context.settings[setting])) throw 'invalid number for ' + setting;
-				} else if (typeof context.settings[setting] === 'number') {
-					if (isNaN(context.settings[setting])) throw 'invalid number for ' + setting;
+			function checkOrConvertNumber(parent, settingName) {
+				if (typeof parent[settingName] === 'string') {
+					parent[settingName] = parseFloat(parent[settingName], 10);
+					if (isNaN(parent[settingName])) throw 'invalid number for ' + settingName;
+				} else if (typeof parent[settingName] === 'number') {
+					if (isNaN(parent[settingName])) throw 'invalid number for ' + settingName;
 				} else {
-					throw setting + ' must be a number';
+					throw settingName + ' must be a number';
 				}
 			}
 
@@ -409,9 +399,9 @@
 			checkSuffixesRange('lt640');
 			checkSuffixesRange('lt1024');
 
-			checkOrConvertNumber('rowHeight');
-			checkOrConvertNumber('maxRowHeight');
-			checkOrConvertNumber('margins');
+			checkOrConvertNumber(context.settings, 'rowHeight');
+			checkOrConvertNumber(context.settings, 'maxRowHeight');
+			checkOrConvertNumber(context.settings, 'margins');
 
 			if (context.settings.lastRow !== 'nojustify' &&
 					context.settings.lastRow !== 'justify' &&
@@ -419,19 +409,23 @@
 				throw 'lastRow must be "nojustify", "justify" or "hide"';
 			}
 
-			checkOrConvertNumber('justifyThreshold');
+			checkOrConvertNumber(context.settings, 'justifyThreshold');
 			if (context.settings.justifyThreshold < 0 || context.settings.justifyThreshold > 1)
 				throw 'justifyThreshold must be in the interval [0,1]';
 			if (typeof context.settings.cssAnimation !== 'boolean') {
 				throw 'cssAnimation must be a boolean';	
 			}
 			
-			checkOrConvertNumber('captionsAnimationDuration');
-			checkOrConvertNumber('imagesAnimationDuration');
+			checkOrConvertNumber(context.settings.captionSettings, 'animationDuration');
+			checkOrConvertNumber(context.settings, 'imagesAnimationDuration');
 
-			checkOrConvertNumber('captionsVisibleOpacity');
-			if (context.settings.captionsVisibleOpacity < 0 || context.settings.captionsVisibleOpacity > 1)
-				throw 'captionsVisibleOpacity must be in the interval [0,1]';
+			checkOrConvertNumber(context.settings.captionSettings, 'visibleOpacity');
+			if (context.settings.captionSettings.visibleOpacity < 0 || context.settings.captionSettings.visibleOpacity > 1)
+				throw 'captionSettings.visibleOpacity must be in the interval [0, 1]';
+
+			checkOrConvertNumber(context.settings.captionSettings, 'nonVisibleOpacity');
+			if (context.settings.captionSettings.visibleOpacity < 0 || context.settings.captionSettings.visibleOpacity > 1)
+				throw 'captionSettings.nonVisibleOpacity must be in the interval [0, 1]';
 
 			if (typeof context.settings.fixedHeight !== 'boolean') {
 				throw 'fixedHeight must be a boolean';	
@@ -441,7 +435,7 @@
 				throw 'captions must be a boolean';	
 			}
 
-			checkOrConvertNumber('refreshTime');
+			checkOrConvertNumber(context.settings, 'refreshTime');
 
 			if (typeof context.settings.randomize !== 'boolean') {
 				throw 'randomize must be a boolean';	
@@ -470,13 +464,14 @@
 					entries : null,
 					buildingRow : {
 						entriesBuff : [],
-						width : 0
+						width : 0,
+						aspectRatio : 0
 					},
 					lastAnalyzedIndex : -1,
 					firstRowFlushed : false,
 					yield : {
 						every : 2, /* do a flush every context.yield.every flushes (
-												* must be greater than 1, else the analyzeImages will loop */
+									* must be greater than 1, else the analyzeImages will loop */
 						flushed : 0 //flushed rows without a yield
 					},
 					offY : 0,
@@ -559,9 +554,8 @@
 					$image.attr('src', imageSrc);
 
 					/* Check if the image is loaded or not using another image object.
-							We cannot use the 'complete' image property, because some browsers, 
-							with a 404 set complete = true
-					*/
+						We cannot use the 'complete' image property, because some browsers, 
+						with a 404 set complete = true */
 					var loadImg = new Image();
 					var $loadImg = $(loadImg);
 					$loadImg.one('load', function imgLoaded () {

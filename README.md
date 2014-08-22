@@ -15,6 +15,20 @@ in the <a href="http://miromannino.com/projects/justified-gallery/">official pro
 
 ## Release History
 
+### 3.3
+
+* No more crops
+	* Removed some floating point approximations that caused some small crops
+* Initial opacity settings for the caption to allow them to be always visible
+	* Can be also configured changing the less file, if one prefers CSS animations
+* All caption settings in a single object to be more compact
+	captionSettings : { //ignored with css animations
+		animationDuration : 500,
+		visibleOpacity : 0.7, 
+		nonVisibleOpacity : 0.0 
+	},
+* Justification formulas refactoring to be more maintainable
+
 ### 3.2
 
 * A gallery of `div` can be used instead of `a`

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src='../../libs/jquery/jquery.min.js'></script>
+	<link rel='stylesheet' href='../../dist/css/justifiedGallery.css' type='text/css' media='all' />
+	<script src='../../src/js/justifiedGallery.js'></script>
+	<script>
+		$(document).ready(function () {
+			$("#customImages").justifiedGallery({rowHeight: 150, maxRowHeight : -1});
+		});
+	</script>
+</head>
+<body>
+	<h1>Configurable sizes test</h1>
+	<div id="customImages" style="background-color: red;">
+		<div><img src="http://lorempixel.com/400/210" /></div>
+		<div><img src="http://lorempixel.com/600/200" /></div>
+		<div><img src="http://lorempixel.com/200/600" /></div>
+		<div><img src="http://lorempixel.com/500/600" /></div>
+		<div><img src="http://lorempixel.com/500/200" /></div>
+		<div><img src="http://lorempixel.com/200/400" /></div>
+	</div>
+
+
+</body>
+</html>
