@@ -553,26 +553,38 @@
 					$image.data('jg.originalSrc', imageSrc);
 					$image.attr('src', imageSrc);
 
-					/* Check if the image is loaded or not using another image object.
-						We cannot use the 'complete' image property, because some browsers, 
-						with a 404 set complete = true */
-					var loadImg = new Image();
-					var $loadImg = $(loadImg);
-					$loadImg.one('load', function imgLoaded () {
-						//DEBUG// console.log('img load (alt: ' + $image.attr('alt') + ')');
+
+					var w = $image.attr('width'), h = $image.attr('height');
+
+					if (w && h) {
 						$image.off('load error');
-						$image.data('jg.imgw', loadImg.width);
-						$image.data('jg.imgh', loadImg.height);
+						$image.data('jg.imgw', w);
+						$image.data('jg.imgh', h);
 						$image.data('jg.loaded', true);
 						startImgAnalyzer(context, false);
-					});
-					$loadImg.one('error', function imgLoadError () {
-						//DEBUG// console.log('img error (alt: ' + $image.attr('alt') + ')');
-						$image.off('load error');
-						$image.data('jg.loaded', 'error');
-						startImgAnalyzer(context, false);
-					});
-					loadImg.src = imageSrc;
+					}
+					else {
+						/* Check if the image is loaded or not using another image object.
+							We cannot use the 'complete' image property, because some browsers, 
+							with a 404 set complete = true */
+						var loadImg = new Image();
+						var $loadImg = $(loadImg);
+						$loadImg.one('load', function imgLoaded () {
+							//DEBUG// console.log('img load (alt: ' + $image.attr('alt') + ')');
+							$image.off('load error');
+							$image.data('jg.imgw', loadImg.width);
+							$image.data('jg.imgh', loadImg.height);
+							$image.data('jg.loaded', true);
+							startImgAnalyzer(context, false);
+						});
+						$loadImg.one('error', function imgLoadError () {
+							//DEBUG// console.log('img error (alt: ' + $image.attr('alt') + ')');
+							$image.off('load error');
+							$image.data('jg.loaded', 'error');
+							startImgAnalyzer(context, false);
+						});
+						loadImg.src = imageSrc;
+					}
 
 				}
 
