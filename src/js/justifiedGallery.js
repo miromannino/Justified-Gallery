@@ -42,7 +42,8 @@
 			target : null, //rewrite the target of all links
 			extension : /\.[^.]+$/,
 			refreshTime : 250,
-			randomize : false
+			randomize : false,
+			waitFullImages : true
 		};
 
 		function getSuffix(width, height, context) {
@@ -531,17 +532,7 @@
 					$image.data('jg.loaded', false);
 
 					//DEBUG// console.log('listed ' + $image.attr('alt'));
-
-					imagesToLoad = true;
-
-					// Spinner start
-					if (context.spinner.active === false) {
-						context.spinner.active = true;
-						$gallery.append(context.spinner.$el);
-						$gallery.height(context.offY + context.spinner.$el.innerHeight());
-						startLoadingSpinnerAnimation(context.spinner);
-					}
-
+					
 					// Link Rel global overwrite
 					if (context.settings.rel !== null) $entry.attr('rel', context.settings.rel);
 
@@ -552,6 +543,25 @@
 					var imageSrc = (typeof $image.data('safe-src') !== 'undefined') ? $image.data('safe-src') : $image.attr('src');
 					$image.data('jg.originalSrc', imageSrc);
 					$image.attr('src', imageSrc);
+
+					var width = parseInt($image.attr('width'), 10);
+					var height = parseInt($image.attr('height'), 10);
+					if(context.settings.waitFullImages !== true && !isNaN(width) && !isNaN(height)) {
+						$image.data('jg.imgw', width);
+						$image.data('jg.imgh', height);
+						$image.data('jg.loaded', true);
+						return true;
+					}
+
+					imagesToLoad = true;
+
+					// Spinner start
+					if (context.spinner.active === false) {
+						context.spinner.active = true;
+						$gallery.append(context.spinner.$el);
+						$gallery.height(context.offY + context.spinner.$el.innerHeight());
+						startLoadingSpinnerAnimation(context.spinner);
+					}
 
 					/* Check if the image is loaded or not using another image object.
 						We cannot use the 'complete' image property, because some browsers, 
