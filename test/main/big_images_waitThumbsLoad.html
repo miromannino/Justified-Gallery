@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src='../../libs/jquery/jquery.min.js'></script>
+	<link rel='stylesheet' href='../../dist/css/justifiedGallery.css' type='text/css' media='all' />
+	<script src='../../src/js/justifiedGallery.js'></script>
+	<script>
+
+		$(document).ready(function () {
+			$("#bigimages").justifiedGallery({				
+				rowHeight: 1000,
+				fixedHeight: false,
+				waitThumbnailsLoad : false
+			});
+		});
+	</script>
+</head>
+<body>
+	<h1>Big images test</h1>
+	<div id="bigimages">
+		<a href="http://farm9.staticflickr.com/8332/8083451788_552becfbc7_b.jpg" title="What's your destination?">
+			<img width="928px" height="619px" src="http://farm9.staticflickr.com/8332/8083451788_552becfbc7_m.jpg" />
+		</a>
+		<a href="http://farm9.staticflickr.com/8179/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place">
+			<img width="975px" height="805px" src="http://farm9.staticflickr.com/8179/7948632554_01f6ae6b6f_m.jpg" />
+		</a>
+		<a href="http://farm8.staticflickr.com/7221/7302459122_19fa1d8223_b.jpg" title="Truthful Innocence">
+			<img width="975px" height="650px" alt="Truthful Innocence" src="http://farm8.staticflickr.com/7221/7302459122_19fa1d8223_m.jpg" />
+		</a>
+		<a href="http://farm8.staticflickr.com/7100/7222046648_5bf70e893a_b.jpg" title="Simply my Brother">
+			<img width="975px" height="508px" alt="Simply my Brother" src="http://farm8.staticflickr.com/7100/7222046648_5bf70e893a_m.jpg" />
+		</a>
+		<a href="http://farm6.staticflickr.com/5072/7002395006_29fdc85f7a_b.jpg" title="Freedom">
+			<img width="487px" height="267px" alt="Freedom" src="http://farm6.staticflickr.com/5072/7002395006_29fdc85f7a_m.jpg" />
+		</a>
+		<a href="http://farm8.staticflickr.com/7177/7062575651_b23918b11a_b.jpg" title="Maybe spring">
+			<img width="487px" height="267px" alt="Maybe spring" src="http://farm8.staticflickr.com/7177/7062575651_b23918b11a_m.jpg" />
+		</a>
+	</div>
+
+
+</body>
+</html>
