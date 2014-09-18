@@ -15,7 +15,7 @@ in the <a href="http://miromannino.com/projects/justified-gallery/">official pro
 
 ## Release History
 
-### 3.4
+### 3.4 (alpha)
 
 * Performance improvements
 	* In presence of width and height attributes in thumbnails, and with the option 
