@@ -15,19 +15,16 @@ in the <a href="http://miromannino.com/projects/justified-gallery/">official pro
 
 ## Release History
 
-### 3.4 (alpha)
+### 3.4
 
 * Performance improvements
 	* In presence of width and height attributes in thumbnails, and with the option 
-	  'waitThumbnailsLoad', the layout is immediately built, and the thumbnails will appear
-	  on after they are loaded.
+	  'waitThumbnailsLoad', the layout is immediately built, and the thumbnails will appear randomly
+	  while they are loaded.
 	* Other code refactorings to be more performant
-
 * With nojustify, if there is only a row, it doesn't justify anything. The previous behaviour seems
 too like a bug than a feature.
-
 * Infinite scroll example with plain javascript to be more understandable.
-
 * Fixes some bugs with infinite scroll
 
 ### 3.3
