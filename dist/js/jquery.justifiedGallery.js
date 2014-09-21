@@ -119,6 +119,23 @@
       }
     }
 
+    function showImg($entry, callback, context) {
+      if (context.settings.cssAnimation) {
+        $entry.addClass('entry-visible');
+        callback();
+      } else {
+        $entry.stop().fadeTo(context.settings.imagesAnimationDuration, 1.0, callback);
+      }
+    }
+
+    function hideImgImmediately($entry, context) {
+      if (context.settings.cssAnimation) {
+        $entry.removeClass('entry-visible');
+      } else {
+        $entry.stop().fadeTo(0, 0);
+      }
+    }
+
     function displayEntry($entry, x, y, imgWidth, imgHeight, rowHeight, context) {
       var $image = $entry.find('img');
       $image.css('width', imgWidth);
@@ -147,19 +164,13 @@
         }
       }
 
-      function imgLoaded() {
-        if (context.settings.cssAnimation) {
-          $entry.addClass('entry-visible');
-          loadNewImage();
-        } else {
-          $entry.stop().fadeTo(context.settings.imagesAnimationDuration, 1.0, loadNewImage);
-        }
-      }
-
       if ($image.data('jg.loaded') === 'skipped') {
-        $image.one('load', imgLoaded);
+        $image.one('load', function() {
+          showImg($entry, loadNewImage, context);
+          $image.data('jg.loaded', 'loaded');
+        });
       } else {
-        imgLoaded();
+        showImg($entry, loadNewImage, context);
       }
 
       // Captions ------------------------------
@@ -254,7 +265,7 @@
       if (settings.fixedHeight && minHeight > settings.rowHeight) 
         minHeight = settings.rowHeight;
 
-      return minHeight;
+      return {minHeight: minHeight, justify: justify};
     }
 
     function rewind(context) {
@@ -267,11 +278,12 @@
 
     function flushRow(context, isLastRow) {
       var settings = context.settings;
-      var $entry, $image, minHeight, offX = 0;
+      var $entry, $image, minHeight, buildingRowRes, offX = 0;
 
       //DEBUG// console.log('flush (isLastRow: ' + isLastRow + ')');
 
-      minHeight = prepareBuildingRow(context, isLastRow);
+      buildingRowRes = prepareBuildingRow(context, isLastRow);
+      minHeight = buildingRowRes.minHeight;
       if (isLastRow && settings.lastRow === 'hide' && minHeight === -1) {
         context.buildingRow.entriesBuff = [];
         context.buildingRow.aspectRatio = 0;
@@ -297,7 +309,7 @@
         (context.spinner.active ? context.spinner.$el.innerHeight() : 0)
       );
 
-      if (!isLastRow || minHeight <= context.settings.rowHeight) {
+      if (!isLastRow || (minHeight <= context.settings.rowHeight && buildingRowRes.justify)) {
         //Ready for a new row
         context.offY += minHeight + context.settings.margins;
 
@@ -551,6 +563,11 @@
         $gallery.data('jg.context', context);
 
       } else if (arg === 'norewind') {
+        /* Hide the image of the buildingRow to prevent strange effects when the row will be
+           re-justified again */
+        for (var i = 0; i < context.buildingRow.entriesBuff.length; i++) {
+          hideImgImmediately(context.buildingRow.entriesBuff[i], context);
+        }
         // In this case we don't rewind, and analyze all the images
       } else {
         context.settings = $.extend({}, context.settings, arg);
