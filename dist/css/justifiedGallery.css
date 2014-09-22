@@ -1,5 +1,5 @@
 /*!
- * Justified Gallery - v3.2.0
+ * Justified Gallery - v3.4.0
  * http://miromannino.com/projects/justified-gallery/
  * Copyright (c) 2014 Miro Mannino
  * Licensed under the MIT license.
