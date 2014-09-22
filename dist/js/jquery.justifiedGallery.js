@@ -257,8 +257,8 @@
           newImgH = settings.rowHeight;
         }
 
-        $image.data('jg.imgw', Math.ceil(newImgW));
-        $image.data('jg.imgh', Math.ceil(newImgH));
+        $image.data('jg.jimgw', Math.ceil(newImgW));
+        $image.data('jg.jimgh', Math.ceil(newImgH));
         if (i === 0 || minHeight > newImgH) minHeight = newImgH;
       }
 
@@ -299,9 +299,9 @@
       for (var i = 0; i < context.buildingRow.entriesBuff.length; i++) {
         $entry = context.buildingRow.entriesBuff[i];
         $image = $entry.find('img');
-        displayEntry($entry, offX, context.offY, $image.data('jg.imgw'), 
-                     $image.data('jg.imgh'), minHeight, context);
-        offX += $image.data('jg.imgw') + settings.margins;
+        displayEntry($entry, offX, context.offY, $image.data('jg.jimgw'), 
+                     $image.data('jg.jimgh'), minHeight, context);
+        offX += $image.data('jg.jimgw') + settings.margins;
       }
 
       //Gallery Height
