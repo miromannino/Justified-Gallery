@@ -79,12 +79,53 @@ module.exports = function(grunt) {
       ]
     },
 
+    compress: {
+      main: {
+        options: {
+          archive: 'dist/<%= pkg.name %>.zip'
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/css/',
+            src: ['<%= pkg.name %>.css'],
+            dest: '/'
+          },
+          {
+            expand: true,
+            cwd: 'dist/js/',
+            src: ['jquery.<%= pkg.name %>.js'],
+            dest: '/'
+          }
+        ]
+      },
+      minified: {
+        options: {
+          archive: 'dist/<%= pkg.name %>.min.zip'
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/css/',
+            src: ['<%= pkg.name %>.min.css'],
+            dest: '/'
+          },
+          {
+            expand: true,
+            cwd: 'dist/js/',
+            src: ['jquery.<%= pkg.name %>.min.js'],
+            dest: '/'
+          }
+        ]
+      }
+    }
+
   });
 
   // These plugins provide necessary tasks.
   require('load-grunt-tasks')(grunt);
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'less', 'csslint', 'concat', 'uglify']);
+  grunt.registerTask('default', ['jshint', 'less', 'csslint', 'concat', 'uglify', 'compress']);
 
 };
