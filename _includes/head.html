@@ -1,0 +1,71 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
+    <meta name="description" content="{{ site.description }}">
+
+	<script src="{{ '/libs/jquery/jquery.min.js' | prepend: site.baseurl }}"></script>
+	<script src="{{ '/libs/bootstrap/js/bootstrap.min.js' | prepend: site.baseurl }}"></script>
+	<link rel="stylesheet" href="{{ '/libs/bootstrap/css/bootstrap.min.css' | prepend: site.baseurl }}" type="text/css" media="screen" />
+	<link rel="stylesheet" href="{{ '/libs/jquery-colorbox/colorbox.css' | prepend: site.baseurl }}" type="text/css" media="screen" />
+	<script src="{{ '/libs/jquery-colorbox/jquery.colorbox-min.js' | prepend: site.baseurl }}"></script>
+	<link rel="stylesheet" href="{{ '/dist/css/justifiedGallery.min.css' | prepend: site.baseurl }}" type="text/css" media="all" />
+	<script src="{{ '/dist/js/jquery.justifiedGallery.min.js' | prepend: site.baseurl }}"></script>
+	<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="{{ '/css/syntax.css' | prepend: site.baseurl }}" type="text/css" media="screen" />
+	<style type="text/css">
+		.container-fluid > .row{
+			margin-top: 50px;
+		}
+		h1.jg-h1 {
+			text-align: center;
+			font-family: 'Lobster', cursive;
+			font-size: 55px;
+		}
+		h1.jg-h1 > small {
+			margin-top: 10px;
+			display: block;
+		}
+		h2 {
+			text-align: center;
+		}
+		h3 {
+			font-size: 20px;
+		}
+		h2, h3, h4 {
+			font-family: 'Lobster', cursive;
+		}
+		.navbar-inverse a.navbar-brand {
+			font-family: 'Lobster', cursive;
+			color: white;
+		}
+		.navbar-inverse a.navbar-brand:hover {
+			color: #aaa;
+		}
+		.feature-title {
+			margin-top: 20px;
+			font-weight: bold;
+			font-size: 140%;
+			font-family: 'Lobster', cursive;
+		}
+		.feature-body {
+
+		}
+		.feature-container {
+			text-align: center;
+		}
+		.getting-started-section {
+			margin-top: 20px;
+		}
+		.list-group-item:hover {
+			background-color: #428bca !important;
+		}
+		.list-group-item:hover .list-group-item-text, .list-group-item:hover small {
+			color: black;
+		}
+
+	</style>
+
+</head>
