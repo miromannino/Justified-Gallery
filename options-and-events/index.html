@@ -1,0 +1,281 @@
+---
+layout: default
+---
+
+<h1 class="jg-h1-secondary">
+	Options &amp; Events
+</h1>
+
+<hr/>
+
+<div>
+	<p>
+		This configurable demo is a fast way to explore the visual settings of Justified Gallery. 
+		Moreover, ti is also a good example that uses Justified Gallery as a stateful entity. 
+		In fact, in this example, the plugin is called when the page is loaded using some settings, and
+		then it is called again only to change a specific setting, leaving the old ones remains unchanged.
+	</p>
+	<div style="margin-top: 20px;">
+		<form id="jgs-form" class="form-horizontal" role="form" >
+			<div class="col-sm-8">
+
+				<div class="form-group" id="jgs-rowHeight-container">
+					<label class="col-sm-4 control-label" for="jgs-rowHeight">Row Height</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control input-sm" id="jgs-rowHeight" value="120" />
+					</div>
+				</div>
+
+				<div class="form-group" id="jgs-maxRowHeight-container">
+					<label class="col-sm-4 control-label" for="jgs-maxRowHeight">Max Row Height</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control input-sm" id="jgs-maxRowHeight" value="0" />
+					</div>
+				</div>
+
+				<div class="form-group" id="jgs-margin-container">
+					<label class="col-sm-4 control-label" for="jgs-margin">Margin</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control input-sm" id="jgs-margin" value="1" />
+					</div>
+				</div>
+
+				<div class="form-group" id="jgs-lastRowOpt-container">
+					<label class="col-sm-4 control-label" for="jgs-margin">Last row</label>
+					<div class="col-sm-8"> 
+						<div class="radio-inline">
+							<label>
+								<input type="radio" name="jgs-lastRow" id="jgs-lastRowOpt1" value="nojustify" checked>
+								No Justify
+							</label>
+						</div>
+						<div class="radio-inline">
+							<label>
+								<input type="radio" name="jgs-lastRow" id="jgs-lastRowOpt2" value="justify">
+								Justify
+							</label>
+						</div>
+						<div class="radio-inline">
+							<label>
+								<input type="radio" name="jgs-lastRow" id="jgs-lastRowOpt3" value="hide">
+								Hide
+							</label>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group" id="jgs-fixedHeight-container">
+				<label class="col-sm-8 control-label" for="jgs-fixedHeight">Fixed Height</label>
+				<div class="col-sm-4">
+					<div class="checkbox">
+						<input type="checkbox" id="jgs-fixedHeight"/>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group" id="jgs-captions-container">
+				<label class="col-sm-8 control-label" for="jgs-captions">Captions</label>
+				<div class="col-sm-4">
+					<div class="checkbox">
+						<input type="checkbox" id="jgs-captions" checked="checked" />
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group" id="jgs-randomize-container">
+				<label class="col-sm-8 control-label" for="jgs-randomize">Randomize</label>
+				<div class="col-sm-4">
+					<div class="checkbox">
+						<input type="checkbox" id="jgs-randomize" />
+					</div>
+				</div>
+			</div>
+
+			</div>
+		</form>
+	</div>
+	<div id="liveDemo" >
+		{% for en in site.images %}
+			<a href="{{ en.url }}_b.jpg">
+				<img alt="{{ en.desc }}" src="{{ en.url }}_m.jpg" />
+			</a>
+		{% endfor %}
+	</div>
+	<script>
+		$(document).ready(function () {
+			$('#jgs-form').submit(false);
+
+			$('#liveDemo').justifiedGallery({
+				rowHeight: 120,
+				maxRowHeight: 0,
+				margins: 1,
+				rel : 'liveDemo',
+				lastRow: 'nojustify',
+				fixedHeight: false,
+				captions: true,
+				randomize: false
+			}).on('jg.complete', function () {
+				$(this).find('a').colorbox({
+					maxWidth : '80%',
+					maxHeight : '80%',
+					opacity : 0.8,
+					transition : 'elastic',
+					current : ''
+				});
+			});
+
+			$('#jgs-form #jgs-rowHeight').on('keyup', function () {
+				var m = parseInt($(this).val(), 10);
+				if (!isNaN(m) && m > 0) {
+					$('#liveDemo').justifiedGallery({rowHeight: m});
+					$('#jgs-form #jgs-rowHeight-container').removeClass('has-error');
+				} else {
+					$('#jgs-form #jgs-rowHeight-container').addClass('has-error');
+				}
+			});
+
+			$('#jgs-form #jgs-maxRowHeight').on('keyup', function () {
+				var m = parseInt($(this).val(), 10);
+				if (!isNaN(m) && m >= 0) {
+					$('#liveDemo').justifiedGallery({maxRowHeight: m});
+					$('#jgs-form #jgs-maxRowHeight-container').removeClass('has-error');
+				} else {
+					$('#jgs-form #jgs-maxRowHeight-container').addClass('has-error');
+				}
+			});
+
+			$('#jgs-form #jgs-margin').on('keyup', function () {
+				var m = parseInt($(this).val(), 10);
+				if (!isNaN(m) && m >= 0) {
+					$('#liveDemo').justifiedGallery({margins: m});
+					$('#jgs-form #jgs-margin-container').removeClass('has-error');
+				} else {
+					$('#jgs-form #jgs-margin-container').addClass('has-error');
+				}
+			});
+
+			$('#jgs-form input[name="jgs-lastRow"]').on('change', function (e) {
+				$('#liveDemo').justifiedGallery({lastRow: $(this).val()});
+			});
+
+			$('#jgs-form #jgs-fixedHeight').on('change', function (e) {
+				$('#liveDemo').justifiedGallery({fixedHeight: $(this).prop('checked')});
+			});
+
+			$('#jgs-form #jgs-captions').on('change', function (e) {
+				if (!$(this).prop('checked')) $('#liveDemo .caption').remove();	
+				$('#liveDemo').justifiedGallery({captions: $(this).prop('checked')});
+			});
+
+			$('#jgs-form #jgs-randomize').on('change', function (e) {
+				$('#liveDemo').justifiedGallery({randomize: $(this).prop('checked')});
+			});
+
+		});
+	</script>
+</div>
+
+<hr/>
+
+<h2>Options</h2>
+
+<div style="margin-top: 20px;">
+	<table class="table">
+		<tr>
+			<th>option</th><th>default value</th><th>description</th>
+		</tr>
+		<tr>
+			<td><code>rowHeight</code></td><td><code>120</code></td><td>The approximately height of rows.</td>
+		</tr>
+		<tr>
+			<td><code>maxRowHeight</code></td><td><code>0</code></td><td>Negative value to haven't limits. Zero to have a limit of <code>1.5 * rowHeight</code></td>
+		</tr>
+		<tr>
+			<td><code>sizeRangeSuffixes</code></td><td>
+			<code style="white-space: nowrap;">{'lt100':'_t', <br/> 
+				'lt240':'_m', <br/>
+				'lt320':'_n', <br/>
+				'lt500':'', <br/>
+				'lt640':'_z', <br/>
+				'lt1024':'_b'}</code></td><td>Describes the suffix for each size range. By default the Flickr suffixes are used.</td>
+			</tr>
+			<tr>
+				<td><code>lastRow</code></td><td><code>'nojustify'</code></td><td>Decide if you want to justify the last row (i.e. <code>'justify'</code>) or not (i.e. <code>'nojustify'</code>), or to hide the row if it can't be justified (i.e. <code>'hide'</code>)</td>
+			</tr>
+			<tr>
+				<td><code>fixedHeight</code></td><td><code>false</code></td><td>Decide if you want to have a fixed height. This mean that all the rows will be exactly with the specified <code>rowHeight</code>.</td>
+			</tr>
+			<tr>
+				<td><code>captions</code></td><td><code>true</code></td><td>Decide if you want to show the caption or not, that appears when your mouse is over the image.
+			</td>
+		</tr>
+		<tr>
+			<td><code>margins</code></td><td><code>1</code></td><td>Decide the margins between the images</td>
+		</tr>
+		<tr>
+			<td><code>randomize</code></td><td><code>false</code></td><td>Automatically randomize or not the order of photos.</td>
+		</tr>
+		<tr>
+			<td><code>extension</code></td><td><code>/.[^.]+$/</code></td><td>Specify the extension for the images with a regex. Is used to reconstruct the filename of the images, change it if you need. For example <code>/.jpg$/</code> is to detect only the ".jpg" extension and no more.</td>
+		</tr>
+		<tr>
+			<td><code>refreshTime</code></td><td><code>250</code></td><td>The time that the plugin waits before checking the page size, and if it is changed it recreates the gallery layout</td>
+		</tr>
+		<tr>
+			<td><code>waitThumbnailsLoad</code></td><td><code>true</code></td><td>In presence of width and height attributes in thumbnails, the layout is immediately built, and the thumbnails will appear randomly while they are loaded.</td>
+		</tr>
+		<tr>
+			<td><code>rel</code></td><td></td><td>To rewrite all the links <code>rel</code> attribute with the specified value. For example can be 'gallery1', and is usually used to create gallery group for the lightbox (e.g. Colorbox)</td>
+		</tr>
+		<tr>
+			<td><code>target</code></td><td></td><td>To rewrite all the links <code>target</code> attribute with the specified value. For example, if you don't use a lightbox, specifying <code>'_blank'</code>, all the images will be opened to another page.</td>
+		</tr>
+		<tr>
+			<td><code>justifyThreshold</code></td><td>0.35</td><td>If available space / row width < 0.35 the last row is justified, without considering the lastRow setting.</td>
+		</tr>
+		<tr>
+			<td><code>cssAnimation</code></td><td>false</td><td>Use or not css animations. Using css animations you can change the behavior changing the justified gallery CSS file, or rewriting that rules.</td>
+		</tr>
+		<tr>
+			<td><code>imagesAnimationDuration</code></td><td>300</td><td>Image fadeIn duration.</td>
+		</tr>
+		<tr>
+			<td><code>captionSettings</code></td>
+			<td>
+				<code style="white-space: nowrap;">{ animationDuration: 500,<br/>
+				&nbsp;&nbsp;visibleOpacity: 0.7,<br/>
+				&nbsp;&nbsp;nonVisibleOpacity: 0.0 }</code>
+			</td>
+			<td>Caption settings</td>
+		</tr>
+	</table>
+</div>
+
+
+<h2>Events</h2>
+
+<div style="margin-top: 20px;">
+	<table class="table">
+		<tr>
+			<th>Event</th><th>Description</th>
+		</tr>
+		<tr>
+			<td><code>jg.complete</code></td><td>When the algorithm finished to create the gallery layout.</td>
+		</tr>
+		<tr>
+			<td><code>jg.resize</code></td><td>When the algorithm finished to resize the gallery.</td>
+		</tr>
+		<tr>
+			<td><code>jg.rowflush</code></td><td>When the a new row is ready.</td>
+		</tr>
+	</table>
+
+	<h3>Example</h3>
+	{% highlight javascript %}
+$("#callbacktest").justifiedGallery().on('jg.complete', function (e) {
+	alert('on complete');
+});
+{% endhighlight %}
+</div>

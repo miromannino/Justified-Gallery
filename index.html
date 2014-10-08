@@ -13,7 +13,7 @@ layout: default
 	<div id="liveDemo" >
 		{% for en in site.images %}
 			<div>
-				<img alt="{{ en.desc }}" src="{{ en.url }}_m.jpg" />
+				<img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg" />
 			</div>
 		{% endfor %}
 	</div>
@@ -36,11 +36,11 @@ layout: default
 	<div class="feature-container col-xs-12 col-sm-6">
 		<h2 class="text-center">Download</h2>
 		<div class="list-group">
-			<a class="list-group-item" href="https://github.com/miromannino/Justified-Gallery/archive/3.3.0.zip">
-				<h4 class="list-group-item-heading">Justified Gallery <small>v3.3</small></h4>
+			<a class="list-group-item" href="https://raw.githubusercontent.com/miromannino/Justified-Gallery/{{ site.completeCurrJGVer }}/dist/justifiedGallery.min.zip">
+				<h4 class="list-group-item-heading">Justified Gallery <small>{{ site.currJGVer }}</small></h4>
 				<p class="list-group-item-text">Compiled and minified CSS, JavaScript. No original source files are included.</p>
 			</a>
-			<a class="list-group-item" href="https://github.com/miromannino/Justified-Gallery/archive/3.3.0.zip">
+			<a class="list-group-item" href="https://github.com/miromannino/Justified-Gallery/archive/{{ site.completeCurrJGVer }}.zip">
 				<h4 class="list-group-item-heading">Source code</h4>
 				<p class="list-group-item-text">Source Javascript and Less.</p>
 			</a>
@@ -100,20 +100,20 @@ layout: default
 	</div>
 	<div class="clearfix visible-sm-block"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Responsiveness</div>
-		<p class="feature-body">The gallery resizes itself as the browser.</p>
+		<div class="feature-title">Captions</div>
+		<p class="feature-body">Fully configurable awesome captions to your images.</p>
 		<div><a href="linktutorial">See the tutorial...</a></div>
 	</div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Captions</div>
-		<p class="feature-body">Fully configurable awesome captions to your images.</p>
+		<div class="feature-title">Responsiveness</div>
+		<p class="feature-body">The gallery resizes itself as the browser.</p>
 		<div><a href="linktutorial">See the tutorial...</a></div>
 	</div>
 	<div class="clearfix hidden-xs"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">Highly Configurable</div>
 		<p class="feature-body">A lot of options to build the gallery you want.</p>
-		<div><a href="linktutorial">Explore the options...</a></div>
+		<div><a href="{{ '/options-and-events' | prepend: site.baseurl }}">Explore the options...</a></div>
 	</div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">Easy Lightboxes Integration</div>
@@ -152,7 +152,7 @@ where each link leads to the original image.
 
 <p>
 If you don't need links on photos, or if you want the links only in your captions, you can also use 
-<code>div</code> instead of anchors <code>a</code>.
+<code>&lt;div&gt;</code> instead of <code>&lt;a&gt;</code>.
 
 {% highlight html %}
 <div id="mygallery">

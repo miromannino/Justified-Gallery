@@ -5,60 +5,65 @@ description: > # this means to ignore newlines until "baseurl:"
   Write an awesome description for your new site here. You can edit this
   line in _config.yml. It will appear in your document head meta (for
   Google search results) and in your feed.xml site description.
-baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://yourdomain.com" # the base hostname & protocol for your site
+#baseurl: "/Justified-Gallery/" # the subpath of your site, e.g. /blog/
+#url: "http://miromannino.github.io" # the base hostname & protocol for your site
+baseurl: ""
+url: "http://localhost:4000/"
 github_username:  miromanninno
+
+currJGVer: 3.4
+completeCurrJGVer: 3.4.0
 
 # Build settings
 markdown: kramdown
 
 images:
   - 
-    url: photos/8083451788_552becfbc7
+    url: /photos/8083451788_552becfbc7
     desc: What's your destination?
   - 
-    url: photos/7948632554_01f6ae6b6f
+    url: /photos/7948632554_01f6ae6b6f
     desc: Just in a dream Place
   - 
-    url: photos/7302459122_19fa1d8223
+    url: /photos/7302459122_19fa1d8223
     desc: Truthful Innocence
   - 
-    url: photos/7222046648_5bf70e893a
+    url: /photos/7222046648_5bf70e893a
     desc: Simply my Brother
   - 
-    url: photos/7002395006_29fdc85f7a
+    url: /photos/7002395006_29fdc85f7a
     desc: Freedom
   - 
-    url: photos/7062575651_b23918b11a
+    url: /photos/7062575651_b23918b11a
     desc: Maybe spring
   - 
-    url: photos/6841267340_855273fd7e
+    url: /photos/6841267340_855273fd7e
     desc: Love
   - 
-    url: photos/6958456697_e56a37bb5f
+    url: /photos/6958456697_e56a37bb5f
     desc: Young Lovers' Wall and the Old Rain
   - 
-    url: photos/6791628438_affaa19e10
+    url: /photos/6791628438_affaa19e10
     desc: These are the colors I love
   - 
-    url: photos/6916180091_9c9559e463
+    url: /photos/6916180091_9c9559e463
     desc: The Hope
   - 
-    url: photos/6880502467_d4b3c4b2a8
+    url: /photos/6880502467_d4b3c4b2a8
     desc: Florence streets. Florence people.
   - 
-    url: photos/6876412479_6268c6e2aa
+    url: /photos/6876412479_6268c6e2aa
     desc: I Love You
   - 
-    url: photos/6840627709_92ed52fb41
+    url: /photos/6840627709_92ed52fb41
     desc: The painter in Florence
   - 
-    url: photos/6812090617_5fd5bbdda0
+    url: /photos/6812090617_5fd5bbdda0
     desc: Me and My Belover
   - 
-    url: photos/6806687375_07d2b7a1f9
+    url: /photos/6806687375_07d2b7a1f9
     desc: Fiocco
   - 
-    url: photos/6798453217_72dea2d06e
+    url: /photos/6798453217_72dea2d06e
     desc: My first clothespin
 
