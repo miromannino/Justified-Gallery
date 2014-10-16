@@ -47,8 +47,8 @@ $('#colorboxExample').justifiedGallery({
 
 	<div id="colorboxExample" >
 		{% for en in site.images %}
-		<a href="{{ en.url }}_b.jpg">
-			<img alt="{{ en.desc }}" src="{{ en.url }}_m.jpg" />
+		<a href="{{ en.url | prepend: site.baseurl }}_b.jpg">
+			<img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg" />
 		</a>
 		{% endfor %}
 	</div>
@@ -112,8 +112,8 @@ $('#swipeboxExample').justifiedGallery({
 
 	<div id="swipeboxExample" >
 		{% for en in site.images %}
-		<a href="{{ en.url }}_b.jpg">
-			<img alt="{{ en.desc }}" src="{{ en.url }}_m.jpg" />
+		<a href="{{ en.url | prepend: site.baseurl }}_b.jpg">
+			<img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg" />
 		</a>
 		{% endfor %}
 	</div>
@@ -195,14 +195,14 @@ $('.myExMul').each(function (i, el) {
 	<h3>Gallery 1</h3>
 	<p>
 		<div class="myExMul">
-			<a href="{{ site.images[0].url }}_b.jpg">
-				<img alt="{{ site.images[0].desc }}" src="{{ site.images[0].url }}_m.jpg" />
+			<a href="{{ site.images[0].url | prepend: site.baseurl }}_b.jpg">
+				<img alt="{{ site.images[0].desc }}" src="{{ site.images[0].url | prepend: site.baseurl }}_m.jpg" />
 			</a>
-			<a href="{{ site.images[1].url }}_b.jpg">
-				<img alt="{{ site.images[1].desc }}" src="{{ site.images[1].url }}_m.jpg" />
+			<a href="{{ site.images[1].url | prepend: site.baseurl }}_b.jpg">
+				<img alt="{{ site.images[1].desc }}" src="{{ site.images[1].url | prepend: site.baseurl }}_m.jpg" />
 			</a>
-			<a href="{{ site.images[2].url }}_b.jpg">
-				<img alt="{{ site.images[2].desc }}" src="{{ site.images[2].url }}_m.jpg" />
+			<a href="{{ site.images[2].url | prepend: site.baseurl }}_b.jpg">
+				<img alt="{{ site.images[2].desc }}" src="{{ site.images[2].url | prepend: site.baseurl }}_m.jpg" />
 			</a>
 		</div>
 	</p>
@@ -210,14 +210,14 @@ $('.myExMul').each(function (i, el) {
 	<h3>Gallery 2</h3>
 	<p>
 		<div class="myExMul">
-			<a href="{{ site.images[3].url }}_b.jpg">
-				<img alt="{{ site.images[3].desc }}" src="{{ site.images[3].url }}_m.jpg" />
+			<a href="{{ site.images[3].url | prepend: site.baseurl }}_b.jpg">
+				<img alt="{{ site.images[3].desc }}" src="{{ site.images[3].url | prepend: site.baseurl }}_m.jpg" />
 			</a>
-			<a href="{{ site.images[4].url }}_b.jpg">
-				<img alt="{{ site.images[4].desc }}" src="{{ site.images[4].url }}_m.jpg" />
+			<a href="{{ site.images[4].url | prepend: site.baseurl }}_b.jpg">
+				<img alt="{{ site.images[4].desc }}" src="{{ site.images[4].url | prepend: site.baseurl }}_m.jpg" />
 			</a>
-			<a href="{{ site.images[5].url }}_b.jpg">
-				<img alt="{{ site.images[5].desc }}" src="{{ site.images[5].url }}_m.jpg" />
+			<a href="{{ site.images[5].url | prepend: site.baseurl }}_b.jpg">
+				<img alt="{{ site.images[5].desc }}" src="{{ site.images[5].url | prepend: site.baseurl }}_m.jpg" />
 			</a>
 		</div>
 	</p>
@@ -225,14 +225,14 @@ $('.myExMul').each(function (i, el) {
 	<h3>Gallery 3</h3>
 	<p>
 		<div class="myExMul">
-			<a href="{{ site.images[6].url }}_b.jpg">
-				<img alt="{{ site.images[6].desc }}" src="{{ site.images[6].url }}_m.jpg" />
+			<a href="{{ site.images[6].url | prepend: site.baseurl }}_b.jpg">
+				<img alt="{{ site.images[6].desc }}" src="{{ site.images[6].url | prepend: site.baseurl }}_m.jpg" />
 			</a>
-			<a href="{{ site.images[7].url }}_b.jpg">
-				<img alt="{{ site.images[7].desc }}" src="{{ site.images[7].url }}_m.jpg" />
+			<a href="{{ site.images[7].url | prepend: site.baseurl }}_b.jpg">
+				<img alt="{{ site.images[7].desc }}" src="{{ site.images[7].url | prepend: site.baseurl }}_m.jpg" />
 			</a>
-			<a href="{{ site.images[8].url }}_b.jpg">
-				<img alt="{{ site.images[8].desc }}" src="{{ site.images[8].url }}_m.jpg" />
+			<a href="{{ site.images[8].url | prepend: site.baseurl }}_b.jpg">
+				<img alt="{{ site.images[8].desc }}" src="{{ site.images[8].url | prepend: site.baseurl }}_m.jpg" />
 			</a>
 		</div>
 	</p>

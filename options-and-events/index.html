@@ -98,8 +98,8 @@ layout: default
 	</div>
 	<div id="liveDemo" >
 		{% for en in site.images %}
-			<a href="{{ en.url }}_b.jpg">
-				<img alt="{{ en.desc }}" src="{{ en.url }}_m.jpg" />
+			<a href="{{ en.url | prepend: site.baseurl }}_b.jpg">
+				<img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg" />
 			</a>
 		{% endfor %}
 	</div>

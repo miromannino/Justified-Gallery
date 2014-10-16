@@ -46,17 +46,17 @@ $('#oneSizeExample').justifiedGallery({
 	{% endhighlight %}
 
 	<div id="oneSizeExample">
-		<a href="{{ site.images[0].url }}_b.jpg">
-			<img src="{{ site.images[0].url }}_t.jpg" />
+		<a href="{{ site.images[0].url | prepend: site.baseurl }}_b.jpg">
+			<img src="{{ site.images[0].url | prepend: site.baseurl }}_t.jpg" />
 		</a>
-		<a href="{{ site.images[1].url }}_b.jpg">
-			<img src="{{ site.images[1].url }}_t.jpg" />
+		<a href="{{ site.images[1].url | prepend: site.baseurl }}_b.jpg">
+			<img src="{{ site.images[1].url | prepend: site.baseurl }}_t.jpg" />
 		</a>
-		<a href="{{ site.images[2].url }}_b.jpg">
-			<img src="{{ site.images[2].url }}_t.jpg" />
+		<a href="{{ site.images[2].url | prepend: site.baseurl }}_b.jpg">
+			<img src="{{ site.images[2].url | prepend: site.baseurl }}_t.jpg" />
 		</a>
-		<a href="{{ site.images[3].url }}_b.jpg">
-			<img src="{{ site.images[3].url }}_t.jpg" />
+		<a href="{{ site.images[3].url | prepend: site.baseurl }}_b.jpg">
+			<img src="{{ site.images[3].url | prepend: site.baseurl }}_t.jpg" />
 		</a>
 	</div>
 	<script type="text/javascript">
