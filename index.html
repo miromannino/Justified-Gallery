@@ -63,7 +63,7 @@ layout: default
 	<div class="feature-container col-xs-12 col-sm-6">
 		<h2 class="text-center">Install</h2>
 		{% highlight bash %}
-		bower install Justified-Gallery
+bower install Justified-Gallery
 		{% endhighlight %}
 	</div>
 </div>
@@ -77,55 +77,54 @@ layout: default
 		<div class="feature-title">Don't Miss a Pixel</div>
 		<p class="feature-body">An advanced algorithm to justify your images without cropping
 		them.</p>
-		<div><a href="linktutorial">See the tutorial...</a></div>
+		<div><a href="{{ '/getting-started' | prepend: site.baseurl }}">Getting started tutorial...</a></div>
 	</div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">Infinite scroll ready</div>
 		<p class="feature-body">Ready to realize an infinite wall of images. Append the images
 		to your gallery and only notify that to Justified Gallery.</p>
-		<div><a href="linktutorial">See the tutorial...</a></div>
+		<div><a href="{{ '/endless-scroll' | prepend: site.baseurl }}">Endless scroll tutorial...</a></div>
 	</div>
 	<div class="clearfix visible-sm-block"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">High Quality</div>
 		<p class="feature-body">Ready for any device and screen resolution. Up to six thumbnails to
 		always guarantee the best quality of your images.</p>
-		<div><a href="linktutorial">See the tutorial...</a></div>
+		<div><a href="{{ '/getting-started' | prepend: site.baseurl }}">Getting started tutorial...</a></div>
+		<div><a href="{{ '/single-thumbnail' | prepend: site.baseurl }}">Use only a thumbnail tutorial...</a></div>
 	</div>
 	<div class="clearfix visible-md-block visible-lg-block"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Fast by Design</div>
-		<p class="feature-body">Born to be fast, with a smart thumbnails load.</p>
-		<div><a href="linktutorial">See the tutorial...</a></div>
+		<div class="feature-title">Easy Lightboxes Integration</div>
+		<p class="feature-body">Use existing lightboxes such as Colorbox or Swipebox.</p>
+		<div><a href="{{ '/lightbox' | prepend: site.baseurl }}">See the tutorial...</a></div>
 	</div>
 	<div class="clearfix visible-sm-block"></div>
-	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Captions</div>
-		<p class="feature-body">Fully configurable awesome captions to your images.</p>
-		<div><a href="linktutorial">See the tutorial...</a></div>
-	</div>
-	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Responsiveness</div>
-		<p class="feature-body">The gallery resizes itself as the browser.</p>
-		<div><a href="linktutorial">See the tutorial...</a></div>
-	</div>
-	<div class="clearfix hidden-xs"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">Highly Configurable</div>
 		<p class="feature-body">A lot of options to build the gallery you want.</p>
 		<div><a href="{{ '/options-and-events' | prepend: site.baseurl }}">Explore the options...</a></div>
 	</div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Easy Lightboxes Integration</div>
-		<p class="feature-body">Use existing lightboxes such as Colorbox or Swipebox.</p>
-		<div><a href="linktutorial">See the tutorial...</a></div>
+		<div class="feature-title">Captions</div>
+		<p class="feature-body">Fully configurable awesome captions to your images.</p>
+		<div><a href="{{ '/captions' | prepend: site.baseurl }}">See the tutorial...</a></div>
+	</div>	
+	<div class="clearfix hidden-xs"></div>
+	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
+		<div class="feature-title">Responsiveness</div>
+		<p class="feature-body">The gallery resizes itself as the browser.</p>
+	</div>
+	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
+		<div class="feature-title">Fast by Design</div>
+		<p class="feature-body">Born to be fast, with a smart thumbnails load.</p>
 	</div>
 	<div class="clearfix visible-sm-block"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">Silent Error Handling</div>
 		<p class="feature-body">Manage the server errors skipping the temporarily unavailable images,
 		and notifying that just only in the console.</p>
-		<div><a href="linktutorial">See the tutorial...</a></div>
+		<div><a href="{{ '/errors-handling' | prepend: site.baseurl }}">See the tutorial...</a></div>
 	</div>
 </div>
 
@@ -189,4 +188,72 @@ $("#mygallery").justifiedGallery();
 
 </p>
 
+<p>
+	Start to learn how to use the plugin better starting from the <a href="{{ '/getting-started' | prepend: site.baseurl }}">getting started</a> tutorial.
+	<div class="text-center">
+		<a href="{{ '/getting-started' | prepend: site.baseurl }}" class="btn btn-default">
+			Getting started tutorial
+		</a>
+	</div>
+</p>
+
 <hr/>
+
+<h2>Who uses it?</h2>
+<div class="text-center" style="margin-bottom: 10px;">
+	Some example of uses of this plugin
+</div>
+<div class="row central">
+	<div class="feature-container col-xs-12 col-sm-offset-3 col-sm-6">
+		<div class="list-group">
+			<a class="list-group-item" href="http://wordpress.org/extend/plugins/flickr-photostream">
+				<h4 class="list-group-item-heading">Flickr Photostream plugin for Wordpress</h4>
+				<p class="list-group-item-text">Plugin that allows you to show your Flickr Photostream, Photosets, Galleries, Group Pools, or Tags in your blog, with a very elegant and awesome layout.</p>
+			</a>
+			<a class="list-group-item" href="http://fotoarabia.com">
+				<h4 class="list-group-item-heading">Fotoarabia.com</h4>
+				<p class="list-group-item-text">Royalty-free Middle Eastern &amp; Arabic themed images</p>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="text-center small">Send me an email if you would to add your site in the showcase.</div>
+
+<hr/>
+
+<h2>Help the project!</h2>
+
+<p class="text-center">
+This is an open source project, and I don't earn anything from it. You can help the project to grow in various way:
+
+<ul>
+<li>Talking about it (in blogs, social network, ...)</li>
+<li>Writing your personal features, and making a pull request, as someone did. If you want to do this, go to the <a href="https://github.com/miromannino/Justified-Gallery" title="Justified Gallery Github Project Page" target="_blank">github project page</a>.</li>
+<li>Donate! I will be more motivated to implement your requested features.
+<div class="text-center" style="margin-top: 20px;">
+<form action="https://www.paypal.com/<cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypalobjects.com/it_IT/i/scr/pixel.gif" width="1" height="1">
+</form>
+</div>
+</li>
+</ul>
+</p>
+
+<hr/>
+
+<h2>Any Issue?</h2>
+
+<p class="text-center">
+If you have any issue, please send me your question to the <a href="https://github.com/miromannino/Justified-Gallery/issues" title="Justified Gallery Issues Page" target="_blank">github issues page</a>. In this page you can find your answers.
+
+If you don't have a github account, and if you don't want, write me an email at 
+<script type="text/javascript">
+	var a="miro.mannino";
+	var b="gmail.com";
+	document.write('<b>'+a+'@'+b+'</b>');
+</script>
+</p>

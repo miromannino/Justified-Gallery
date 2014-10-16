@@ -11,10 +11,21 @@
 	<link rel="stylesheet" href="{{ '/libs/bootstrap/css/bootstrap.min.css' | prepend: site.baseurl }}" type="text/css" media="screen" />
 	<link rel="stylesheet" href="{{ '/libs/jquery-colorbox/colorbox.css' | prepend: site.baseurl }}" type="text/css" media="screen" />
 	<script src="{{ '/libs/jquery-colorbox/jquery.colorbox-min.js' | prepend: site.baseurl }}"></script>
+	<link rel='stylesheet' href="{{ '/libs/swipebox/swipebox.css' | prepend: site.baseurl }}" media='screen' />
+	<script src='../libs/swipebox/jquery.swipebox.min.js'></script>
 	<link rel="stylesheet" href="{{ '/dist/css/justifiedGallery.min.css' | prepend: site.baseurl }}" type="text/css" media="all" />
 	<script src="{{ '/dist/js/jquery.justifiedGallery.min.js' | prepend: site.baseurl }}"></script>
 	<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="{{ '/css/syntax.css' | prepend: site.baseurl }}" type="text/css" media="screen" />
+	<script>
+		colorboxConf = {
+			maxWidth : '80%',
+			maxHeight : '80%',
+			opacity : 0.8,
+			transition : 'elastic',
+			current : ''
+		};
+	</script>
 	<style type="text/css">
 		.container-fluid > .row{
 			margin-top: 50px;
@@ -69,6 +80,12 @@
 		}
 		.list-group-item:hover .list-group-item-text, .list-group-item:hover small {
 			color: black;
+		}
+		.navbar-inverse .navbar-nav>li>a {
+			color: #EEE !important;
+		}
+		.navbar-inverse .navbar-nav>li>a:hover {
+			color: #AAA !important;
 		}
 
 	</style>

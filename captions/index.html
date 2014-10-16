@@ -1,0 +1,79 @@
+---
+layout: default
+---
+
+<h1 class="jg-h1-secondary">
+	Captions
+</h1>
+
+<hr/>
+
+<div>
+	<p>
+		The captions are automatically created using the <code>alt</code> attribute of images.
+		Moreover, if it doesn't exist, it is created using the <code>title</code> attribute of the links. 
+	</p>
+	<p>
+		For example, the following entry have <i>"I'm only in the alt"</i> as caption.
+{% highlight html %}
+<a href="imageurl.jpg">
+  <img alt="I'm only in the alt" src="thumbnailurl.jpg" />
+</a>
+{% endhighlight %}
+	</p>
+	<p>
+		The following entry hasn't an <code>alt</code>, but it has a <code>title</code>. 
+		In this case the plugin will set <i>"I'm only in the title"</i> as caption.
+		{% highlight html %}
+<a href="imageurl.jpg" title="I'm only in the title">
+  <img src="thumbnailurl.jpg" />
+</a>
+		{% endhighlight %}
+	</p>
+	<p>
+		In this last example, we have both the <code>title</code> and the <code>alt</code>. 
+		In this case the plugin brings the text from the <code>alt</code>, and the caption 
+		will be <i>"I'm in the alt"</i>.
+		{% highlight html %}
+<a href="imageurl.jpg" title="I'm in the title">
+  <img alt="I'm in the alt" src="thumbnailurl.jpg" />
+</a>
+		{% endhighlight %}
+	</p>
+	<p>
+		The plugin creates the captions inserting, for each entry, an extra <code>div</code> element just after the <code>img</code> element. 
+		The latter is build to have the class <code>caption</code>.
+		To have custom captions you need only to insert this element on your own, 
+		with the content that you want. The plugin will skip the creation of the captions
+		for the entries that already have a caption in the entry.
+		{% highlight html %}
+<a href="imageurl.jpg">
+  <img src="thumbnailurl.jpg" />
+  <div class="caption">
+    I'm <span style="color:red">a</span> <strong>custom</strong> caption!
+	<div>I'm a div</div>
+  </div>
+</a>
+		{% endhighlight %}		
+	</p>
+	<div id="captionsExample" >
+		<a href="{{ site.images[0].url | prepend: site.baseurl }}_b.jpg">
+			<img src="{{ site.images[0].url | prepend: site.baseurl }}_m.jpg" />
+			<div class="caption">
+				I'm <span style="color: red">a</span> <strong>custom</strong> caption!<div>I'm a div</div>
+			</div>
+		</a>
+		<a href="{{ site.images[1].url | prepend: site.baseurl }}_b.jpg" title="I'm in the title">
+			<img alt="I'm in the alt" src="{{ site.images[1].url | prepend: site.baseurl }}_m.jpg" />
+		</a>
+		<a href="{{ site.images[2].url | prepend: site.baseurl }}_b.jpg" title="I'm only in the title">
+			<img src="{{ site.images[2].url | prepend: site.baseurl }}_m.jpg" />
+		</a>
+		<a href="{{ site.images[3].url | prepend: site.baseurl }}_b.jpg">
+			<img alt="I'm only in the alt" src="{{ site.images[3].url | prepend: site.baseurl }}_m.jpg" />
+		</a>
+	</div>
+	<script>
+		$('#captionsExample').justifiedGallery();
+	</script>
+</div>

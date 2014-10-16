@@ -17,6 +17,8 @@ completeCurrJGVer: 3.4.0
 # Build settings
 markdown: kramdown
 
+photosPath: /photos
+
 images:
   - 
     url: /photos/8083451788_552becfbc7
@@ -67,3 +69,4 @@ images:
     url: /photos/6798453217_72dea2d06e
     desc: My first clothespin
 
+onlyTheThumbnailImg : /photos/onlythethumbnail_t

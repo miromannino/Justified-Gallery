@@ -1,0 +1,78 @@
+---
+layout: default
+---
+
+<h1 class="jg-h1-secondary">
+	Errors Handling
+</h1>
+
+<hr/>
+
+<div>
+	<p>
+		In the new version of Justified Gallery the errors are handled in a very smart way, without hurting the user with strange messages. 
+	</p>
+	<p>
+		The rules are simple:
+		<ul>
+			<li>The plugin try to load the given thumbnail. In case of an error the plugin ignores the thumbnail, and continue to build the layout with the other thumbnails.</li>
+			<li>If the plugin needs a different thumbnail (e.g. a bigger one) that can't be loaded, it simply leaves the old one.</li>
+		</ul>
+	</p>
+	<p>
+		Note that the errors are still visible in the console.
+	</p>
+	<div class="alert alert-warning">
+		Remember: it is not the best way to manage galleries with only one kind of thumbnail.
+	</div>
+	<p>
+		In the following example we have a gallery with 5 thumbnails, where one of them is inexistent. This thumbnail is ignored and is not shown in the gallery. Furthermore, the plugin requests a bigger thumbnail for the image <code>onlythethumbnail_t.jpg</code>, but this is the only existent thumbnail. Hence, the plugin leaves the original one (the low quality image in the example). You can see that the
+		console will show you some errors about the inexistent images.
+	</p>
+	{% highlight html %}
+<div id="notFoundExample" >
+	<a href="photo1_b.jpg">
+		<img alt="What's your destination?" src="photo1_m.jpg" />
+	</a>
+	<a href="INEXISTENT_IMAGE.jpg">
+		<img alt="Just in a dream Place" src="INEXISTENT_THUMBNAIL.jpg" />
+	</a>
+	<a href="photo3_b.jpg">
+		<img alt="Truthful Innocence" src="photo3_m.jpg" />
+	</a>
+	<a href="onlythethumbnail_t.jpg">
+		<img alt="Simply my Brother" src="onlythethumbnail_t.jpg"/>
+	</a>
+	<a href="photo5_b.jpg">
+		<img alt="Freedom" src="photo5_m.jpg" />
+	</a>
+</div>
+
+$('#notFoundExample').justifiedGallery({
+  lastRow: 'justify',
+  rowHeight: 160
+});
+	{% endhighlight %}
+	<p>
+</div>
+
+<div id="notFoundExample" >
+	<a href="{{ site.images[0].url | prepend: site.baseurl }}_b.jpg">
+		<img alt="{{ site.images[0].desc }}" src="{{ site.images[0].url | prepend: site.baseurl }}_m.jpg" />
+	</a>
+	<a href="INEXISTENT_IMAGE.jpg">
+		<img alt="{{ site.images[1].desc }}" src="INEXISTENT_THUMBNAIL.jpg" />
+	</a>
+	<a href="{{ site.images[2].url | prepend: site.baseurl }}_b.jpg">
+		<img alt="{{ site.images[2].desc }}" src="{{ site.images[2].url | prepend: site.baseurl }}_m.jpg" />
+	</a>
+	<a href="{{ site.onlyTheThumbnailImg | prepend: site.baseurl }}.jpg">
+		<img alt="{{ site.images[3].desc }}" src="{{ site.onlyTheThumbnailImg | prepend: site.baseurl }}.jpg" />
+	</a>
+	<a href="{{ site.images[4].url | prepend: site.baseurl }}_b.jpg">
+		<img alt="{{ site.images[4].desc }}" src="{{ site.images[4].url | prepend: site.baseurl }}_m.jpg" />
+	</a>
+</div>
+<script>
+	$('#notFoundExample').justifiedGallery({lastRow: 'justify', rowHeight: 160});
+</script>

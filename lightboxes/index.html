@@ -1,0 +1,266 @@
+---
+layout: default
+---
+
+<h1 class="jg-h1-secondary">
+	Lightboxes
+</h1>
+
+<hr/>
+
+<div>
+	<h2>Colorbox</h2>
+	<p>
+		You can use Justified Gallery with any lightbox in the way you prefer. In this tutorial you
+		can see how to use Colorbox and Swipebox, but the same principles can be applied to use any other lightbox.
+	</p>
+	<p>
+		To use Colorbox you need to create a listener for the <a href="{{ '/options-and-events' | prepend: site.baseurl }}"><code>jg.complete</code></a> callback to initialize Colorbox. Note that we are also using the <a href="{{ '/options-and-events' | prepend: site.baseurl }}"><code>rel = 'gallery2'</code></a> option, that sets to 'gallery1' the <code>rel</code> attribute for all the links. In this way Colorbox can create a group of images.
+	</p>
+	{% highlight html %}
+<div id="colorboxExample">
+	<a href="image1.jpg">
+		<img alt="title 1" src="image1_t.jpg" />
+	</a>
+	<a href="image2.jpg">
+		<img alt="title 2" src="image2_t.jpg" />
+	</a>
+	...
+</div>
+	{% endhighlight %}
+	{% highlight javascript %}
+$('#colorboxExample').justifiedGallery({
+	lastRow : 'nojustify', 
+	rowHeight : 100, 
+	rel : 'gallery1', //replace with 'gallery1' the rel attribute of each link
+	margins : 1
+}).on('jg.complete', function () {
+	$(this).find('a').colorbox({
+		maxWidth : '80%',
+		maxHeight : '80%',
+		opacity : 0.8,
+		transition : 'elastic',
+		current : ''
+	});
+});
+	{% endhighlight %}
+
+	<div id="colorboxExample" >
+		{% for en in site.images %}
+		<a href="{{ en.url }}_b.jpg">
+			<img alt="{{ en.desc }}" src="{{ en.url }}_m.jpg" />
+		</a>
+		{% endfor %}
+	</div>
+	<script>
+		$('#colorboxExample').justifiedGallery({
+			lastRow : 'nojustify', 
+			rowHeight : 100, 
+			rel : 'gallery1',
+			margins : 1
+		}).on('jg.complete', function () {
+			$(this).find('a').colorbox({
+				maxWidth : '80%',
+				maxHeight : '80%',
+				opacity : 0.8,
+				transition : 'elastic',
+				current : ''
+			});
+		});
+	</script>
+
+	<hr/>
+
+	<h2>Swipebox</h2>
+	<p>
+		To use Swipebox you need to use again a listener for the <a href="{{ '/options-and-events' | prepend: site.baseurl }}"><code>jg.complete</code></a> callback.
+		Unfortunately, due to a Swipebox's misteriousely bug, the simple code: 
+	</p>
+		{% highlight javascript %}	
+$(this).find('a').swipebox();
+		{% endhighlight %}	
+	<p>
+		doesn't work properly. In this way Swipebox activate itself for all photos in the same page. To fix that, one needs to select the gallery using a complete selector like the following:
+	</p>
+		{% highlight javascript %}	
+$('#swipeboxExample a').swipebox();
+		{% endhighlight %}	
+	<p>
+		Look at the following code for a complete example:
+	</p>
+	{% highlight html %}
+<div id="swipeboxExample">
+	<a href="image1.jpg">
+		<img alt="title 1" src="image1_t.jpg" />
+	</a>
+	<a href="image2.jpg">
+		<img alt="title 2" src="image2_t.jpg" />
+	</a>
+	...
+</div>
+	{% endhighlight %}
+	{% highlight javascript %}
+$('#swipeboxExample').justifiedGallery({
+	lastRow : 'nojustify', 
+	rowHeight : 100, 
+	rel : 'gallery2',
+	margins : 1
+}).on('jg.complete', function () {
+	$('#swipeboxExample a').swipebox();
+});
+	{% endhighlight %}
+
+	<div id="swipeboxExample" >
+		{% for en in site.images %}
+		<a href="{{ en.url }}_b.jpg">
+			<img alt="{{ en.desc }}" src="{{ en.url }}_m.jpg" />
+		</a>
+		{% endfor %}
+	</div>
+	<script>
+		$('#swipeboxExample').justifiedGallery({
+			lastRow : 'nojustify', 
+			rowHeight : 100, 
+			rel : 'gallery2',
+			margins : 1
+		}).on('jg.complete', function () {
+			//$(this).find('a').swipebox(); //doesn't work
+			$('#swipeboxExample a').swipebox();
+		});
+	</script>
+
+	<h2>Multiple gallery with one call <small>Colorbox</small></h2>
+	<p>
+		The three galleries are created with a single call to the plugin. Note that, to create the Colorbox groups, the images have different <code>rel</code> tags.
+	</p>
+	{% highlight html %}
+<div class="myExMul" >
+	<a href="image1_b.jpg" rel="myExMul-1">
+		<img alt="title 1" src="image1_m.jpg" />
+	</a>
+	<a href="image2_b.jpg" rel="myExMul-1">
+		<img alt="title 2" src="image1_m.jpg" />
+	</a>
+	...
+</div>
+<div class="myExMul" >
+	<a href="image3_b.jpg" rel="myExMul-2">
+		<img alt="title 3" src="image3_m.jpg" />
+	</a>
+	<a href="image4_b.jpg" rel="myExMul-2">
+		<img alt="title 4" src="image4_m.jpg" />
+	</a>
+	...
+</div>
+<div class="myExMul" >
+	<a href="image5_b.jpg" rel="myExMul-3">
+		<img alt="title 5" src="image5_m.jpg" />
+	</a>
+	<a href="image6_b.jpg" rel="myExMul-3">
+		<img alt="title 6" src="image6_m.jpg" />
+	</a>
+	...
+</div>
+	{% endhighlight %}
+	{% highlight javascript %}
+$('.myExMul').justifiedGallery({
+	rowHeight : 50 
+}).on('jg.complete', function () {
+	$(this).find('a').colorbox({
+		maxWidth : '80%',
+		maxHeight : '80%',
+		opacity : 0.8,
+		transition : 'elastic',
+		current : ''
+	});
+});
+	{% endhighlight %}
+	<p>
+		To set the rel automatically, just call the Justified Gallery inside a foreach.
+	</p>
+	{% highlight javascript %}
+$('.myExMul').each(function (i, el) {
+	$(el).justifiedGallery({rel: 'myExMul-' + i}).on('jg.complete', function () {
+		$(this).find('a').colorbox({
+			maxWidth : '80%',
+			maxHeight : '80%',
+			opacity : 0.8,
+			transition : 'elastic',
+			current : ''
+		});
+	});
+});
+	{% endhighlight %}
+
+	<h3>Gallery 1</h3>
+	<p>
+		<div class="myExMul">
+			<a href="{{ site.images[0].url }}_b.jpg">
+				<img alt="{{ site.images[0].desc }}" src="{{ site.images[0].url }}_m.jpg" />
+			</a>
+			<a href="{{ site.images[1].url }}_b.jpg">
+				<img alt="{{ site.images[1].desc }}" src="{{ site.images[1].url }}_m.jpg" />
+			</a>
+			<a href="{{ site.images[2].url }}_b.jpg">
+				<img alt="{{ site.images[2].desc }}" src="{{ site.images[2].url }}_m.jpg" />
+			</a>
+		</div>
+	</p>
+
+	<h3>Gallery 2</h3>
+	<p>
+		<div class="myExMul">
+			<a href="{{ site.images[3].url }}_b.jpg">
+				<img alt="{{ site.images[3].desc }}" src="{{ site.images[3].url }}_m.jpg" />
+			</a>
+			<a href="{{ site.images[4].url }}_b.jpg">
+				<img alt="{{ site.images[4].desc }}" src="{{ site.images[4].url }}_m.jpg" />
+			</a>
+			<a href="{{ site.images[5].url }}_b.jpg">
+				<img alt="{{ site.images[5].desc }}" src="{{ site.images[5].url }}_m.jpg" />
+			</a>
+		</div>
+	</p>
+	
+	<h3>Gallery 3</h3>
+	<p>
+		<div class="myExMul">
+			<a href="{{ site.images[6].url }}_b.jpg">
+				<img alt="{{ site.images[6].desc }}" src="{{ site.images[6].url }}_m.jpg" />
+			</a>
+			<a href="{{ site.images[7].url }}_b.jpg">
+				<img alt="{{ site.images[7].desc }}" src="{{ site.images[7].url }}_m.jpg" />
+			</a>
+			<a href="{{ site.images[8].url }}_b.jpg">
+				<img alt="{{ site.images[8].desc }}" src="{{ site.images[8].url }}_m.jpg" />
+			</a>
+		</div>
+	</p>
+
+	<script>
+		$('.myExMul').each(function (i, el) {
+			$(el).justifiedGallery({rel: 'myExMul-' + i}).on('jg.complete', function () {
+				$(this).find('a').colorbox({
+					maxWidth : '80%',
+					maxHeight : '80%',
+					opacity : 0.8,
+					transition : 'elastic',
+					current : ''
+				});
+			});	
+		});
+	</script>
+
+	<h2>Multiple gallery with one call <small>swipebox</small></h2>
+	<p>
+		To use the Swipebox it's a little hard again due to the same bug. You need to call it once, and to select all the images in one selector.
+	</p>
+	{% highlight javascript %}
+$('.myExMul').each(function (i, el) {
+	$(el).justifiedGallery({rel: 'myExMul-' + i}).on('jg.complete', function () {
+		if (i == 1) $('.myExMul a').swipebox();
+	});
+});
+	{% endhighlight %}
+
+</div>
