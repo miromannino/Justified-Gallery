@@ -9,25 +9,29 @@ layout: default
 
 <hr/>
 
-<p>
-	<div id="liveDemo" >
-		{% for en in site.images %}
-			<div>
-				<img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg" />
-			</div>
-		{% endfor %}
-	</div>
-	<script>
-		jQuery(document).ready(function() { 
-			jQuery("#liveDemo").justifiedGallery({
-				'lastRow' : 'justify', 
-				'rowHeight' : 120, 
-				'fixedHeight' : false, 
-				'captions' : false, 
-				'margins' : 1
-			}); 
-		});
-	</script>
+<div id="liveDemo" >
+	{% for en in site.images %}
+		<div>
+			<img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg" />
+		</div>
+	{% endfor %}
+</div>
+<script>
+	jQuery(document).ready(function() { 
+		jQuery("#liveDemo").justifiedGallery({
+			'lastRow' : 'justify', 
+			'rowHeight' : 120, 
+			'fixedHeight' : false, 
+			'captions' : false, 
+			'margins' : 1
+		}); 
+	});
+</script>
+
+<p style="margin-top: 20px;" class="text-center">
+This is a <strong>JQuery plugin</strong> that allows you to create an <strong>high quality justified gallery</strong> of images. Fill all the spaces!
+<br/>
+A common problem, for people who create sites, is to create an elegant image gallery that manages the various sizes of images. <strong>Flickr and Google+</strong> manage this situation in an excellent way, the purpose of this plugin is to give you the power of these solutions, with a new fast algorithm.
 </p>
 
 <hr/>
@@ -118,6 +122,7 @@ bower install Justified-Gallery
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">Fast by Design</div>
 		<p class="feature-body">Born to be fast, with a smart thumbnails load.</p>
+		<div><a href="{{ '/performance-tips' | prepend: site.baseurl }}">See the tutorial...</a></div>
 	</div>
 	<div class="clearfix visible-sm-block"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">

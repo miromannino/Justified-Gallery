@@ -26,10 +26,10 @@ layout: default
   </a>
   ...
 </div>
-
+	{% endhighlight %}
+	{% highlight javascript %}
 $("#basicExample").justifiedGallery();
 	{% endhighlight %}
-</div>
 
 <div id="basicExample" >
 {% for en in site.images %}
@@ -50,7 +50,7 @@ $("#basicExample").justifiedGallery();
 </p>
 
 <figure class="text-center" style="margin: 10px 10px 20px 0;">
-	<img src="{{ '/photos/important_configurations.png' | prepend: site.baseurl }}">
+	<img style="max-width: 100%" src="{{ '/photos/important_configurations.png' | prepend: site.baseurl }}">
 </figure>
 
 <p>
@@ -100,3 +100,5 @@ $('#basicExample2').justifiedGallery({
 <p style="margin-top: 15px;">
 	<a href="{{ '/options-and-events' | prepend: site.baseurl }}">Explore all the options</a> available for Justified Gallery
 </p>
+
+</div>
