@@ -16,6 +16,24 @@ the purpose of this plugin is to give you the power of this solutions, with a ne
 
 ## Release History
 
+### 3.5
+
+* The default suffixes are all empty, to be simpler to understand. To have the previous suffixes,
+the following settings can be used:
+
+	sizeRangeSuffixes : { 'lt100': '_t', 'lt240': '_m', 'lt320': '_n', 'lt500': '', 'lt640': '_z', 'lt1024': '_b' }
+
+* Now is possible to have entries with the structure: 
+
+	<div>
+		<a href="...">
+			<img src="..." />
+		</a>
+		<div class="caption">...</div>
+	</div>
+	
+* Corrected bugs for the callbacks when waitThumbnailsLoad = false
+
 ### 3.4
 
 * Performance improvements

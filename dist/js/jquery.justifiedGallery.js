@@ -1,6 +1,6 @@
 /*!
- * Justified Gallery - v3.4.0
- * http://miromannino.com/projects/justified-gallery/
+ * Justified Gallery - v3.5.0
+ * http://miromannino.github.io/Justified-Gallery/
  * Copyright (c) 2014 Miro Mannino
  * Licensed under the MIT license.
  */
@@ -16,31 +16,31 @@
     // Default options
     var defaults = {
       sizeRangeSuffixes : {
-        'lt100': '_t', 
-        'lt240': '_m', 
-        'lt320': '_n', 
-        'lt500': '', 
-        'lt640': '_z', 
-        'lt1024': '_b'
+        'lt100': '',  // e.g. Flickr uses '_t'
+        'lt240': '',  // e.g. Flickr uses '_m' 
+        'lt320': '',  // e.g. Flickr uses '_n' 
+        'lt500': '',  // e.g. Flickr uses '' 
+        'lt640': '',  // e.g. Flickr uses '_z'
+        'lt1024': '', // e.g. Flickr uses '_b'
       },
       rowHeight : 120,
-      maxRowHeight : 0, //negative value = no limits, 0 = 1.5 * rowHeight
+      maxRowHeight : 0, // negative value = no limits, 0 = 1.5 * rowHeight
       margins : 1,
       lastRow : 'nojustify', // or can be 'justify' or 'hide'
       justifyThreshold: 0.75, /* if row width / available space > 0.75 it will be always justified 
-                    (i.e. lastRow setting is not considered) */
+                                  (i.e. lastRow setting is not considered) */
       fixedHeight : false,
       waitThumbnailsLoad : true,
       captions : true,
       cssAnimation: false,
-      imagesAnimationDuration : 500, //ignored with css animations
-      captionSettings : { //ignored with css animations
+      imagesAnimationDuration : 500, // ignored with css animations
+      captionSettings : { // ignored with css animations
         animationDuration : 500,
         visibleOpacity : 0.7, 
         nonVisibleOpacity : 0.0 
       },
-      rel : null, //rewrite the rel of each analyzed links
-      target : null, //rewrite the target of all links
+      rel : null, // rewrite the rel of each analyzed links
+      target : null, // rewrite the target of all links
       extension : /\.[^.\\/]+$/,
       refreshTime : 100,
       randomize : false
@@ -136,12 +136,20 @@
       }
     }
 
+    function imgFromEntry($entry) {
+      var $img = $entry.find('> img');
+      if ($img.length === 0) $img = $entry.find('> a > img');    
+      return $img;
+    }
+
     function displayEntry($entry, x, y, imgWidth, imgHeight, rowHeight, context) {
-      var $image = $entry.find('img');
+      var $image = imgFromEntry($entry);
       $image.css('width', imgWidth);
       $image.css('height', imgHeight);
-      $image.css('margin-left', - imgWidth / 2);
-      $image.css('margin-top', - imgHeight / 2);
+      if ($entry.get(0) === $image.parent().get(0)) {
+        $image.css('margin-left', - imgWidth / 2);
+        $image.css('margin-top', - imgHeight / 2);
+      }
       $entry.width(imgWidth);
       $entry.height(rowHeight);
       $entry.css('top', y);
@@ -167,7 +175,7 @@
       if ($image.data('jg.loaded') === 'skipped') {
         $image.one('load', function() {
           showImg($entry, loadNewImage, context);
-          $image.data('jg.loaded', 'loaded');
+          $image.data('jg.loaded', true);
         });
       } else {
         showImg($entry, loadNewImage, context);
@@ -237,7 +245,7 @@
       if (isLastRow && !justificable && settings.lastRow === 'nojustify') justify = false;
 
       for (i = 0; i < context.buildingRow.entriesBuff.length; i++) {
-        $image = context.buildingRow.entriesBuff[i].find('img');
+        $image = imgFromEntry(context.buildingRow.entriesBuff[i]);
         imgAspectRatio = $image.data('jg.imgw') / $image.data('jg.imgh');
 
         if (justify) {
@@ -298,7 +306,7 @@
 
       for (var i = 0; i < context.buildingRow.entriesBuff.length; i++) {
         $entry = context.buildingRow.entriesBuff[i];
-        $image = $entry.find('img');
+        $image = imgFromEntry($entry);
         displayEntry($entry, offX, context.offY, $image.data('jg.jimgw'), 
                      $image.data('jg.jimgh'), minHeight, context);
         offX += $image.data('jg.jimgw') + settings.margins;
@@ -375,7 +383,7 @@
       console.log('images status: ');
       for (var i = 0; i < context.entries.length; i++) {
         var $entry = $(context.entries[i]);
-        var $image = $entry.find('img');
+        var $image = imgFromEntry($entry);
         console.log(i + ' (alt: ' + $image.attr('alt') + 'loaded: ' + $image.data('jg.loaded') + ')');
       }*/
 
@@ -385,7 +393,7 @@
       
       for (var i = context.lastAnalyzedIndex + 1; i < context.entries.length; i++) {
         var $entry = $(context.entries[i]);
-        var $image = $entry.find('img');
+        var $image = imgFromEntry($entry);
 
         if ($image.data('jg.loaded') === true || $image.data('jg.loaded') === 'skipped') {
           isLastRow = i >= context.entries.length - 1;
@@ -588,9 +596,12 @@
       }
 
       var imagesToLoad = false;
+      var skippedImages = false;
       $.each(context.entries, function (index, entry) {
         var $entry = $(entry);
-        var $image = $entry.find('img');
+        var $image = imgFromEntry($entry);
+
+        $entry.addClass('jg-entry');
 
         if ($image.data('jg.loaded') !== true && $image.data('jg.loaded') !== 'skipped') {
 
@@ -612,6 +623,7 @@
             $image.data('jg.imgw', width);
             $image.data('jg.imgh', height);
             $image.data('jg.loaded', 'skipped');
+            skippedImages = true;
             startImgAnalyzer(context, false);
             return true;
           }
@@ -652,7 +664,7 @@
 
       });
 
-      if (!imagesToLoad) startImgAnalyzer(context, false);
+      if (!imagesToLoad && !skippedImages) startImgAnalyzer(context, false);
       checkWidth(context);
     });
 

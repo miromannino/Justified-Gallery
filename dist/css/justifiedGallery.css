@@ -1,6 +1,6 @@
 /*!
- * Justified Gallery - v3.4.0
- * http://miromannino.com/projects/justified-gallery/
+ * Justified Gallery - v3.5.0
+ * http://miromannino.github.io/Justified-Gallery/
  * Copyright (c) 2014 Miro Mannino
  * Licensed under the MIT license.
  */
@@ -83,7 +83,9 @@
   /* IE8 or Earlier */
 }
 .justified-gallery > a > img,
-.justified-gallery > div > img {
+.justified-gallery > div > img,
+.justified-gallery > a > a > img,
+.justified-gallery > div > a > img {
   position: absolute;
   top: 50%;
   left: 50%;
