@@ -25,12 +25,12 @@ the following settings can be used:
 
 * Now is possible to have entries with the structure: 
 
-	<div>
-		<a href="...">
-			<img src="..." />
-		</a>
-		<div class="caption">...</div>
-	</div>
+	&lt;div&gt;
+		&lt;a href="..."&gt;
+			&lt;img src="..." /&gt;
+		&lt;/a&gt;
+		&lt;div class="caption"&gt;...&lt;/div&gt;
+	&lt;/div&gt;
 	
 * Corrected bugs for the callbacks when waitThumbnailsLoad = false
 
