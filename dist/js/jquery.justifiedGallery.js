@@ -225,7 +225,7 @@
       var i, $entry, $image, imgAspectRatio, newImgW, newImgH, justify = true;
       var minHeight = 0;
       var availableWidth = context.galleryWidth - (
-                          (context.buildingRow.entriesBuff.length - 1) * settings.margins);
+                          (context.buildingRow.entriesBuff.length + 1) * settings.margins);
       var rowHeight = availableWidth / context.buildingRow.aspectRatio;
       var justificable = context.buildingRow.width / availableWidth > settings.justifyThreshold;
 
@@ -281,12 +281,12 @@
       context.buildingRow.entriesBuff = [];
       context.buildingRow.aspectRatio = 0;
       context.buildingRow.width = 0;
-      context.offY = 0;
+      context.offY = context.settings.margins;
     }
 
     function flushRow(context, isLastRow) {
       var settings = context.settings;
-      var $entry, $image, minHeight, buildingRowRes, offX = 0;
+      var $entry, $image, minHeight, buildingRowRes, offX = settings.margins;
 
       //DEBUG// console.log('flush (isLastRow: ' + isLastRow + ')');
 
@@ -313,7 +313,7 @@
       }
 
       //Gallery Height
-      context.$gallery.height(context.offY + minHeight +
+      context.$gallery.height(context.offY + minHeight + settings.margins + 
         (context.spinner.active ? context.spinner.$el.innerHeight() : 0)
       );
 
