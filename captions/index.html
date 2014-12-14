@@ -1,5 +1,6 @@
 ---
 layout: default
+title: Captions
 ---
 
 <h1 class="jg-h1-secondary">
@@ -17,7 +18,7 @@ layout: default
 		For example, the following entry have <i>"I'm only in the alt"</i> as caption.
 {% highlight html %}
 <a href="imageurl.jpg">
-  <img alt="I'm only in the alt" src="thumbnailurl.jpg" />
+    <img alt="I'm only in the alt" src="thumbnailurl.jpg" />
 </a>
 {% endhighlight %}
 	</p>
@@ -26,7 +27,7 @@ layout: default
 		In this case the plugin will set <i>"I'm only in the title"</i> as caption.
 		{% highlight html %}
 <a href="imageurl.jpg" title="I'm only in the title">
-  <img src="thumbnailurl.jpg" />
+    <img src="thumbnailurl.jpg" />
 </a>
 		{% endhighlight %}
 	</p>
@@ -36,7 +37,7 @@ layout: default
 		will be <i>"I'm in the alt"</i>.
 		{% highlight html %}
 <a href="imageurl.jpg" title="I'm in the title">
-  <img alt="I'm in the alt" src="thumbnailurl.jpg" />
+    <img alt="I'm in the alt" src="thumbnailurl.jpg" />
 </a>
 		{% endhighlight %}
 	</p>
@@ -48,11 +49,11 @@ layout: default
 		for the entries that already have a caption in the entry.
 		{% highlight html %}
 <a href="imageurl.jpg">
-  <img src="thumbnailurl.jpg" />
-  <div class="caption">
-    I'm <span style="color:red">a</span> <strong>custom</strong> caption!
-	<div>I'm a div</div>
-  </div>
+    <img src="thumbnailurl.jpg" />
+    <div class="caption">
+        I'm <span style="color:red">a</span> <strong>custom</strong> caption!
+        <div>I'm a div</div>
+    </div>
 </a>
 		{% endhighlight %}		
 	</p>
@@ -74,6 +75,19 @@ layout: default
 		</a>
 	</div>
 	<script>
-		$('#captionsExample').justifiedGallery();
+		$('#captionsExample').justifiedGallery({
+			sizeRangeSuffixes: {
+				lt100 : '_t', 
+				lt240 : '_m', 
+				lt320 : '_n', 
+				lt500 : '', 
+				lt640 : '_z', 
+				lt1024 : '_b'
+			}
+		});
 	</script>
+
+	<p style="margin-top: 10px;">
+		See how to use the captions with other <a href="{{ '/input-formats' | prepend: site.baseurl }}">input formats</a>.
+	</p>
 </div>

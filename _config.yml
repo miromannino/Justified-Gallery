@@ -2,17 +2,16 @@
 title: Justified Gallery
 email: miro.mannino@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  A JQuery plugin that allows you to create an high quality justified gallery of images. 
+  A common problem, for people who create sites, is to create an elegant image gallery that manages
+  the various sizes of images. Flickr and Google+ manage this situation in an excellent way, 
+  the purpose of this plugin is to give you the power of these solutions, with a new fast algorithm.
 baseurl: "/Justified-Gallery" # the subpath of your site, e.g. /blog/
 url: "http://miromannino.github.io" # the base hostname & protocol for your site
-#baseurl: ""
-#url: "http://localhost:4000/"
 github_username:  miromanninno
 
-currJGVer: 3.4
-completeCurrJGVer: 3.4.0
+currJGVer: 3.5
+completeCurrJGVer: 3.5.0
 
 # Build settings
 markdown: kramdown

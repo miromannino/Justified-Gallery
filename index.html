@@ -19,11 +19,19 @@ layout: default
 <script>
 	jQuery(document).ready(function() { 
 		jQuery("#liveDemo").justifiedGallery({
-			'lastRow' : 'justify', 
-			'rowHeight' : 120, 
-			'fixedHeight' : false, 
-			'captions' : false, 
-			'margins' : 1
+			lastRow : 'justify', 
+			rowHeight : 120, 
+			fixedHeight : false, 
+			captions : false, 
+			margins : 1,
+			sizeRangeSuffixes: {
+				'lt100':'_t', 
+				'lt240':'_m', 
+				'lt320':'_n', 
+				'lt500':'', 
+				'lt640':'_z', 
+				'lt1024':'_b'
+			}
 		}); 
 	});
 </script>
@@ -95,13 +103,12 @@ bower install Justified-Gallery
 		<p class="feature-body">Ready for any device and screen resolution. Up to six thumbnails to
 		always guarantee the best quality of your images.</p>
 		<div><a href="{{ '/getting-started' | prepend: site.baseurl }}">Getting started tutorial...</a></div>
-		<div><a href="{{ '/single-thumbnail' | prepend: site.baseurl }}">Use only a thumbnail tutorial...</a></div>
 	</div>
 	<div class="clearfix visible-md-block visible-lg-block"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">Easy Lightboxes Integration</div>
 		<p class="feature-body">Use existing lightboxes such as Colorbox or Swipebox.</p>
-		<div><a href="{{ '/lightbox' | prepend: site.baseurl }}">See the tutorial...</a></div>
+		<div><a href="{{ '/lightboxes' | prepend: site.baseurl }}">See the tutorial...</a></div>
 	</div>
 	<div class="clearfix visible-sm-block"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
@@ -143,32 +150,20 @@ where each link leads to the original image.
 
 {% highlight html %}
 <div id="mygallery" >
-  <a href="path/to/myimage1_original.jpg">
-    <img alt="Title 1" src="path/to/myimage1_t.jpg"/>
-  </a>
-  <a href="path/to/myimage2_original.jpg">
-    <img alt="Title 2" src="path/to/myimage2_t.jpg"/>
-  </a>
-  <!-- other images... -->
+    <a href="path/to/myimage1_original.jpg">
+        <img alt="Title 1" src="path/to/myimage1_thumbnail.jpg"/>
+    </a>
+    <a href="path/to/myimage2_original.jpg">
+        <img alt="Title 2" src="path/to/myimage2_thumbnail.jpg"/>
+    </a>
+    <!-- other images... -->
 </div>
 {% endhighlight %}
 </p>
-
 <p>
-If you don't need links on photos, or if you want the links only in your captions, you can also use 
-<code>&lt;div&gt;</code> instead of <code>&lt;a&gt;</code>.
-
-{% highlight html %}
-<div id="mygallery">
-  <div>
-    <img alt="Title 1" src="path/to/myimage1_t.jpg"/>
-  </div>
-  <div>
-    <img alt="Title 2" src="path/to/myimage2_t.jpg"/>
-  </div>
-  <!-- other images... -->
-</div>
-{% endhighlight %}
+	Justified Gallery also accepts other 
+	<a href="{{ '/input-formats' | prepend: site.baseurl }}">input formats</a>, 
+	to better fits your needs.
 </p>
 
 <h3>Files to include</h3>
@@ -194,12 +189,7 @@ $("#mygallery").justifiedGallery();
 </p>
 
 <p>
-	Start to learn how to use the plugin better starting from the <a href="{{ '/getting-started' | prepend: site.baseurl }}">getting started</a> tutorial.
-	<div class="text-center">
-		<a href="{{ '/getting-started' | prepend: site.baseurl }}" class="btn btn-default">
-			Getting started tutorial
-		</a>
-	</div>
+	Start to learn how to use the plugin better starting from the <a href="{{ '/getting-started' | prepend: site.baseurl }}">getting started tutorial</a>.
 </p>
 
 <hr/>
@@ -232,7 +222,7 @@ $("#mygallery").justifiedGallery();
 This is an open source project, and I don't earn anything from it. You can help the project to grow in various way:
 
 <ul>
-<li>Talking about it (in blogs, social network, ...)</li>
+<li>Talking about it (in blogs, social network, etc.)</li>
 <li>Writing your personal features, and making a pull request, as someone did. If you want to do this, go to the <a href="https://github.com/miromannino/Justified-Gallery" title="Justified Gallery Github Project Page" target="_blank">github project page</a>.</li>
 <li>Donate! I will be more motivated to implement your requested features.
 <div class="text-center" style="margin-top: 20px;">

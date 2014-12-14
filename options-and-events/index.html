@@ -1,5 +1,6 @@
 ---
 layout: default
+title: Options &amp; Events
 ---
 
 <h1 class="jg-h1-secondary">
@@ -115,7 +116,15 @@ layout: default
 				lastRow: 'nojustify',
 				fixedHeight: false,
 				captions: true,
-				randomize: false
+				randomize: false,
+				sizeRangeSuffixes: {
+					lt100 : '_t', 
+					lt240 : '_m', 
+					lt320 : '_n', 
+					lt500 : '', 
+					lt640 : '_z', 
+					lt1024 : '_b'
+				}
 			}).on('jg.complete', function () {
 				$(this).find('a').colorbox({
 					maxWidth : '80%',
@@ -187,19 +196,34 @@ layout: default
 			<th>option</th><th>default value</th><th>description</th>
 		</tr>
 		<tr>
-			<td><code>rowHeight</code></td><td><code>120</code></td><td>The approximately height of rows.</td>
+			<td><code>rowHeight</code></td><td><code>120</code></td><td>The approximately height of rows in pixel.</td>
 		</tr>
 		<tr>
-			<td><code>maxRowHeight</code></td><td><code>0</code></td><td>Negative value to haven't limits. Zero to have a limit of <code>1.5 * rowHeight</code></td>
+			<td><code>maxRowHeight</code></td><td><code>0</code></td><td>The maximum row height in pixel. Negative value to haven't limits. Zero to have a limit of <code>1.5 * rowHeight</code></td>
 		</tr>
 		<tr>
 			<td><code>sizeRangeSuffixes</code></td><td>
-			<code style="white-space: nowrap;">{'lt100':'_t', <br/> 
-				'lt240':'_m', <br/>
-				'lt320':'_n', <br/>
+			<code style="white-space: nowrap;">{'lt100':'', <br/> 
+				'lt240':'', <br/>
+				'lt320':'', <br/>
 				'lt500':'', <br/>
-				'lt640':'_z', <br/>
-				'lt1024':'_b'}</code></td><td>Describes the suffix for each size range. By default the Flickr suffixes are used. See the <a href="{{ '/single-thumbnail' | prepend: site.baseurl }}">tutorial</a> that explains how to use only a single thumbnail.</td>
+				'lt640':'', <br/>
+				'lt1024':''}</code></td><td>
+				<p>
+				Describes the suffix for each size range. By default all the suffixes are the same and void:
+				the plugin doesn't search for other thumbnails.
+				</p>
+				<p>
+					To agree with the <a href="http://www.flickr.com/services/api/misc.urls.html">Flickr's suffixes</a> you should change it in the following way:
+				</p><p>
+					<code style="white-space: nowrap;">{'lt100':'_t', <br/>
+					'lt240':'_m', <br/>
+					'lt320':'_n', <br/>
+					'lt500':'', <br/>
+					'lt640':'_z', <br/>
+					'lt1024':'_b'}</code>
+				</p>
+				</td>
 			</tr>
 			<tr>
 				<td><code>lastRow</code></td><td><code>'nojustify'</code></td><td>Decide if you want to justify the last row (i.e. <code>'justify'</code>) or not (i.e. <code>'nojustify'</code>), or to hide the row if it can't be justified (i.e. <code>'hide'</code>)</td>
@@ -275,7 +299,7 @@ layout: default
 	<h3>Example</h3>
 	{% highlight javascript %}
 $("#callbacktest").justifiedGallery().on('jg.complete', function (e) {
-	alert('on complete');
+    alert('on complete');
 });
 {% endhighlight %}
 </div>

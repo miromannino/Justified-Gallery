@@ -1,5 +1,6 @@
 ---
 layout: default
+title: Errors Handling
 ---
 
 <h1 class="jg-h1-secondary">
@@ -10,7 +11,7 @@ layout: default
 
 <div>
 	<p>
-		In the new version of Justified Gallery the errors are handled in a very smart way, without hurting the user with strange messages. 
+		In Justified Gallery the errors are handled in a very smart way, without hurting the user with strange messages, searching to recover whatever is possible.
 	</p>
 	<p>
 		The rules are simple:
@@ -20,14 +21,10 @@ layout: default
 		</ul>
 	</p>
 	<p>
-		Note that the errors are still visible in the console.
+		The errors are still visible in the console to be seen by the developer.
 	</p>
-	<div class="alert alert-warning">
-		Remember: it is not the best way to manage galleries with only one kind of thumbnail.
-	</div>
 	<p>
-		In the following example we have a gallery with 5 thumbnails, where one of them is inexistent. This thumbnail is ignored and is not shown in the gallery. Furthermore, the plugin requests a bigger thumbnail for the image <code>onlythethumbnail_t.jpg</code>, but this is the only existent thumbnail. Hence, the plugin leaves the original one (the low quality image in the example). You can see that the
-		console will show you some errors about the inexistent images.
+		In the following example we have a gallery with 5 thumbnails, where one of them is inexistent. This thumbnail is ignored and is not shown in the gallery. Furthermore, the plugin requests a bigger thumbnail for the image <code>onlythethumbnail_t.jpg</code>, but this is the only existent thumbnail. Hence, the plugin leaves the original one (the low quality image in the example). You can see that the console will show you some errors about the inexistent images.
 	</p>
 	{% highlight html %}
 <div id="notFoundExample" >
@@ -49,8 +46,16 @@ layout: default
 </div>
 
 $('#notFoundExample').justifiedGallery({
-  lastRow: 'justify',
-  rowHeight: 160
+    lastRow: 'justify',
+    rowHeight: 160,
+    sizeRangeSuffixes: {
+        lt100 : '_t', 
+        lt240 : '_m', 
+        lt320 : '_n', 
+        lt500 : '', 
+        lt640 : '_z', 
+        lt1024 : '_b'
+    }
 });
 	{% endhighlight %}
 	<p>
@@ -74,5 +79,16 @@ $('#notFoundExample').justifiedGallery({
 	</a>
 </div>
 <script>
-	$('#notFoundExample').justifiedGallery({lastRow: 'justify', rowHeight: 160});
+	$('#notFoundExample').justifiedGallery({
+		lastRow: 'justify', 
+		rowHeight: 160,
+		sizeRangeSuffixes: {
+			lt100 : '_t', 
+			lt240 : '_m', 
+			lt320 : '_n', 
+			lt500 : '', 
+			lt640 : '_z', 
+			lt1024 : '_b'
+		}
+	});
 </script>

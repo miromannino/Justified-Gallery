@@ -1,5 +1,6 @@
 ---
 layout: default
+title: Lightboxes
 ---
 
 <h1 class="jg-h1-secondary">
@@ -19,29 +20,29 @@ layout: default
 	</p>
 	{% highlight html %}
 <div id="colorboxExample">
-	<a href="image1.jpg">
-		<img alt="title 1" src="image1_t.jpg" />
-	</a>
-	<a href="image2.jpg">
-		<img alt="title 2" src="image2_t.jpg" />
-	</a>
-	...
+    <a href="image1.jpg">
+        <img alt="title 1" src="image1_thumbnail.jpg" />
+    </a>
+    <a href="image2.jpg">
+        <img alt="title 2" src="image2_thumbnail.jpg" />
+    </a>
+    ...
 </div>
 	{% endhighlight %}
 	{% highlight javascript %}
 $('#colorboxExample').justifiedGallery({
-	lastRow : 'nojustify', 
-	rowHeight : 100, 
-	rel : 'gallery1', //replace with 'gallery1' the rel attribute of each link
-	margins : 1
+    lastRow : 'nojustify', 
+    rowHeight : 100, 
+    rel : 'gallery1', //replace with 'gallery1' the rel attribute of each link
+    margins : 1
 }).on('jg.complete', function () {
-	$(this).find('a').colorbox({
-		maxWidth : '80%',
-		maxHeight : '80%',
-		opacity : 0.8,
-		transition : 'elastic',
-		current : ''
-	});
+    $(this).find('a').colorbox({
+        maxWidth : '80%',
+        maxHeight : '80%',
+        opacity : 0.8,
+        transition : 'elastic',
+        current : ''
+    });
 });
 	{% endhighlight %}
 
@@ -57,7 +58,15 @@ $('#colorboxExample').justifiedGallery({
 			lastRow : 'nojustify', 
 			rowHeight : 100, 
 			rel : 'gallery1',
-			margins : 1
+			margins : 1,
+			sizeRangeSuffixes: {
+				lt100 : '_t', 
+				lt240 : '_m', 
+				lt320 : '_n', 
+				lt500 : '', 
+				lt640 : '_z', 
+				lt1024 : '_b'
+			}
 		}).on('jg.complete', function () {
 			$(this).find('a').colorbox({
 				maxWidth : '80%',
@@ -90,23 +99,23 @@ $('#swipeboxExample a').swipebox();
 	</p>
 	{% highlight html %}
 <div id="swipeboxExample">
-	<a href="image1.jpg">
-		<img alt="title 1" src="image1_t.jpg" />
-	</a>
-	<a href="image2.jpg">
-		<img alt="title 2" src="image2_t.jpg" />
-	</a>
-	...
+    <a href="image1.jpg">
+        <img alt="title 1" src="image1_thumbnail.jpg" />
+    </a>
+    <a href="image2.jpg">
+        <img alt="title 2" src="image2_thumbnail.jpg" />
+    </a>
+    ...
 </div>
 	{% endhighlight %}
 	{% highlight javascript %}
 $('#swipeboxExample').justifiedGallery({
-	lastRow : 'nojustify', 
-	rowHeight : 100, 
-	rel : 'gallery2',
-	margins : 1
+    lastRow : 'nojustify', 
+    rowHeight : 100, 
+    rel : 'gallery2',
+    margins : 1
 }).on('jg.complete', function () {
-	$('#swipeboxExample a').swipebox();
+    $('#swipeboxExample a').swipebox();
 });
 	{% endhighlight %}
 
@@ -122,7 +131,15 @@ $('#swipeboxExample').justifiedGallery({
 			lastRow : 'nojustify', 
 			rowHeight : 100, 
 			rel : 'gallery2',
-			margins : 1
+			margins : 1,
+			sizeRangeSuffixes: {
+				lt100 : '_t', 
+				lt240 : '_m', 
+				lt320 : '_n', 
+				lt500 : '', 
+				lt640 : '_z', 
+				lt1024 : '_b'
+			}
 		}).on('jg.complete', function () {
 			//$(this).find('a').swipebox(); //doesn't work
 			$('#swipeboxExample a').swipebox();
@@ -135,60 +152,60 @@ $('#swipeboxExample').justifiedGallery({
 	</p>
 	{% highlight html %}
 <div class="myExMul" >
-	<a href="image1_b.jpg" rel="myExMul-1">
-		<img alt="title 1" src="image1_m.jpg" />
-	</a>
-	<a href="image2_b.jpg" rel="myExMul-1">
-		<img alt="title 2" src="image1_m.jpg" />
-	</a>
-	...
+    <a href="image1_b.jpg" rel="myExMul-1">
+        <img alt="title 1" src="image1_thumbnail.jpg" />
+    </a>
+    <a href="image2_b.jpg" rel="myExMul-1">
+        <img alt="title 2" src="image1_thumbnail.jpg" />
+    </a>
+    ...
 </div>
 <div class="myExMul" >
-	<a href="image3_b.jpg" rel="myExMul-2">
-		<img alt="title 3" src="image3_m.jpg" />
-	</a>
-	<a href="image4_b.jpg" rel="myExMul-2">
-		<img alt="title 4" src="image4_m.jpg" />
-	</a>
-	...
+    <a href="image3_b.jpg" rel="myExMul-2">
+        <img alt="title 3" src="image3_thumbnail.jpg" />
+    </a>
+    <a href="image4_b.jpg" rel="myExMul-2">
+        <img alt="title 4" src="image4_thumbnail.jpg" />
+    </a>
+    ...
 </div>
 <div class="myExMul" >
-	<a href="image5_b.jpg" rel="myExMul-3">
-		<img alt="title 5" src="image5_m.jpg" />
-	</a>
-	<a href="image6_b.jpg" rel="myExMul-3">
-		<img alt="title 6" src="image6_m.jpg" />
-	</a>
-	...
+    <a href="image5_b.jpg" rel="myExMul-3">
+        <img alt="title 5" src="image5_thumbnail.jpg" />
+    </a>
+    <a href="image6_b.jpg" rel="myExMul-3">
+        <img alt="title 6" src="image6_thumbnail.jpg" />
+    </a>
+    ...
 </div>
-	{% endhighlight %}
-	{% highlight javascript %}
+    {% endhighlight %}
+    {% highlight javascript %}
 $('.myExMul').justifiedGallery({
-	rowHeight : 50 
+    rowHeight : 50 
 }).on('jg.complete', function () {
-	$(this).find('a').colorbox({
-		maxWidth : '80%',
-		maxHeight : '80%',
-		opacity : 0.8,
-		transition : 'elastic',
-		current : ''
-	});
+    $(this).find('a').colorbox({
+        maxWidth : '80%',
+        maxHeight : '80%',
+        opacity : 0.8,
+        transition : 'elastic',
+        current : ''
+    });
 });
-	{% endhighlight %}
+    {% endhighlight %}
 	<p>
 		To set the rel automatically, just call the Justified Gallery inside a foreach.
 	</p>
 	{% highlight javascript %}
 $('.myExMul').each(function (i, el) {
-	$(el).justifiedGallery({rel: 'myExMul-' + i}).on('jg.complete', function () {
-		$(this).find('a').colorbox({
-			maxWidth : '80%',
-			maxHeight : '80%',
-			opacity : 0.8,
-			transition : 'elastic',
-			current : ''
-		});
-	});
+    $(el).justifiedGallery({rel: 'myExMul-' + i}).on('jg.complete', function () {
+        $(this).find('a').colorbox({
+            maxWidth : '80%',
+            maxHeight : '80%',
+            opacity : 0.8,
+            transition : 'elastic',
+            current : ''
+        });
+    });
 });
 	{% endhighlight %}
 
@@ -239,7 +256,17 @@ $('.myExMul').each(function (i, el) {
 
 	<script>
 		$('.myExMul').each(function (i, el) {
-			$(el).justifiedGallery({rel: 'myExMul-' + i}).on('jg.complete', function () {
+			$(el).justifiedGallery({
+				rel: 'myExMul-' + i,
+				sizeRangeSuffixes: {
+					lt100 : '_t', 
+					lt240 : '_m', 
+					lt320 : '_n', 
+					lt500 : '', 
+					lt640 : '_z', 
+					lt1024 : '_b'
+				}
+			}).on('jg.complete', function () {
 				$(this).find('a').colorbox({
 					maxWidth : '80%',
 					maxHeight : '80%',
@@ -257,10 +284,9 @@ $('.myExMul').each(function (i, el) {
 	</p>
 	{% highlight javascript %}
 $('.myExMul').each(function (i, el) {
-	$(el).justifiedGallery({rel: 'myExMul-' + i}).on('jg.complete', function () {
-		if (i == 1) $('.myExMul a').swipebox();
-	});
+    $(el).justifiedGallery({rel: 'myExMul-' + i}).on('jg.complete', function () {
+        if (i == 1) $('.myExMul a').swipebox();
+    });
 });
 	{% endhighlight %}
-
 </div>

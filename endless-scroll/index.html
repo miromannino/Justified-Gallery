@@ -1,5 +1,6 @@
 ---
 layout: default
+title: Infinite Scroll
 ---
 
 <h1 class="jg-h1-secondary">
@@ -23,16 +24,16 @@ $('#gallery').justifiedGallery({rowHeight:120});
 	</p>
 		{% highlight javascript %}
 $(window).scroll(function() {
-	if($(window).scrollTop() + $(window).height() == $(document).height()) {
-		for (var i = 0; i < 5; i++) {
-			$('#gallery').append('<a>' +
-				'<img src="http://path/to/image" />' + 
-				'</a>');
-		}
-		$('#gallery').justifiedGallery('norewind');
-	}
+    if($(window).scrollTop() + $(window).height() == $(document).height()) {
+        for (var i = 0; i < 5; i++) {
+            $('#gallery').append('<a>' +
+                '<img src="http://path/to/image" />' + 
+                '</a>');
+        }
+        $('#gallery').justifiedGallery('norewind');
+    }
 });
-		{% endhighlight %}
+        {% endhighlight %}
 	<p>
 		You can notice that we are calling Justified Gallery using the special parameter <code>'norewind'</code>. In this way the plugin doesn't re-analyzes all the images, but only the new ones. This parameter increases the performance, and also prevents the page to have strange behaviours with the scrollbars.
 	</p>
@@ -67,15 +68,7 @@ $(window).scroll(function() {
 		}
 
 		$('#endless-gallery').justifiedGallery({
-			rowHeight : 120, 
-			sizeRangeSuffixes : {
-				'lt100': '', 
-				'lt240': '', 
-				'lt320': '', 
-				'lt500': '', 
-				'lt640': '', 
-				'lt1024': ''
-			}
+			rowHeight : 120
 		});
 
 		addSomeImages(10);

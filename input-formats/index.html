@@ -1,0 +1,116 @@
+---
+layout: default
+title: Input Formats
+---
+
+<h1 class="jg-h1-secondary">
+	Input Formats
+</h1>
+
+<hr/>
+
+<div>
+	<p>
+		The plugin accepts several formats for the gallery, and each of them is useful to solve your
+		specific problem.
+	</p>
+
+	<p>
+		The most important format, which is also accepted by many lightboxes, is the following:
+	</p>
+
+	{% highlight html %}
+<div id="mygallery" >
+    <a href="path/to/myimage1_original.jpg">
+        <img alt="Title 1" src="path/to/myimage1_thumbnail.jpg"/>
+    </a>
+    <a href="path/to/myimage2_original.jpg">
+        <img alt="Title 2" src="path/to/myimage2_thumbnail.jpg"/>
+    </a>
+    <!-- other images... -->
+</div>
+	{% endhighlight %}
+	
+
+	<p>
+		If you don't need links on photos, or if you want the links only in your captions, you can also use 
+		<code>&lt;div&gt;</code> instead of <code>&lt;a&gt;</code>.
+	</p>
+
+	{% highlight html %}
+<div id="mygallery">
+    <div>
+        <img alt="Title 1" src="path/to/myimage1_thumbnail.jpg"/>
+    </div>
+    <div>
+        <img alt="Title 2" src="path/to/myimage2_thumbnail.jpg"/>
+    </div>
+    <!-- other images... -->
+</div>
+	{% endhighlight %}
+	
+
+	<p>
+		If you want custom captions you can also insert the caption tag inside the entries. 
+		If present, Justified Gallery doesn't generate the caption tags, but it uses the existing one.
+	</p>
+
+	{% highlight html %}
+<div id="mygallery" >
+    <a href="path/to/myimage1_original.jpg">
+        <img alt="Title 1" src="path/to/myimage1_thumbnail.jpg"/>
+        <div class="caption">my custom caption</div>
+    </a>
+    <a href="path/to/myimage2_original.jpg">
+        <img alt="Title 2" src="path/to/myimage2_thumbnail.jpg"/>
+        <div class="caption">my custom caption 2</div>
+    </a>
+    <!-- other images... -->
+</div>	
+	{% endhighlight %}
+
+
+	<p>
+		If you want to put links inside the captions you have to use the <code>&lt;div&gt;</code>, in the 
+		same way we have seen in the second format.
+	</p>
+
+	{% highlight html %}
+<div id="mygallery">
+    <div>
+        <img alt="Title 1" src="path/to/myimage1_thumbnail.jpg"/>
+        <div class="caption">my custom caption <a href="any path">link to somewhere</a></div>
+    </div>
+    <div>
+        <img alt="Title 2" src="path/to/myimage2_thumbnail.jpg"/>
+        <div class="caption">my custom caption <a href="any path">link to somewhere 2</a></div>
+    </div>
+    <!-- other images... -->
+</div>
+	{% endhighlight %}
+
+
+	<p>
+		But if you still need a link in your image, and you also want to use links inside your captions, 
+		you can wrap the images with the anchor tag (i.e. <code>&lt;a&gt;</code>)in the following way:
+	</p>
+
+
+	{% highlight html %}
+<div id="mygallery">
+    <div>
+        <a href="path/to/myimage1_original.jpg">
+            <img alt="Title 1" src="path/to/myimage1_thumbnail.jpg"/>
+        </a>	
+        <div class="caption">my custom caption <a href="any path">link to somewhere</a></div>
+    </div>
+    <div>
+        <a href="path/to/myimage1_original.jpg">
+            <img alt="Title 2" src="path/to/myimage2_thumbnail.jpg"/>
+        </a>
+        <div class="caption">my custom caption <a href="any path">link to somewhere 2</a></div>
+    </div>
+    <!-- other images... -->
+</div>
+	{% endhighlight %}
+</div>
