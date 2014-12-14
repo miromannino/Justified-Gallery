@@ -21,16 +21,27 @@ the purpose of this plugin is to give you the power of this solutions, with a ne
 * The default suffixes are all empty, to be simpler to understand. To have the previous suffixes,
 the following settings can be used:
 
-	sizeRangeSuffixes : { 'lt100': '_t', 'lt240': '_m', 'lt320': '_n', 'lt500': '', 'lt640': '_z', 'lt1024': '_b' }
+	```
+	sizeRangeSuffixes : { 
+		'lt100': '_t', 
+		'lt240': '_m', 
+		'lt320': '_n', 
+		'lt500': '', 
+		'lt640': '_z', 
+		'lt1024': '_b' 
+	}
+	```
 
 * Now is possible to have entries with the structure: 
 
-	&lt;div&gt;
-		&lt;a href="..."&gt;
-			&lt;img src="..." /&gt;
-		&lt;/a&gt;
-		&lt;div class="caption"&gt;...&lt;/div&gt;
-	&lt;/div&gt;
+	```
+	<div>
+		<a href="...">
+			<img src="..." />
+		</a>
+		<div class="caption">...</div>
+	</div>
+	```
 	
 * Corrected bugs for the callbacks when waitThumbnailsLoad = false
 
@@ -53,11 +64,14 @@ too like a bug than a feature.
 * Initial opacity settings for the caption to allow them to be always visible
 	* Can be also configured changing the less file, if one prefers CSS animations
 * All caption settings in a single object to be more compact
+
+	```
 	captionSettings : { //ignored with css animations
 		animationDuration : 500,
 		visibleOpacity : 0.7, 
 		nonVisibleOpacity : 0.0 
 	},
+	```
 * Justification formulas refactoring to be more maintainable
 
 ### 3.2
