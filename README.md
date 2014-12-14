@@ -42,7 +42,8 @@ the following settings can be used:
 		<div class="caption">...</div>
 	</div>
 	```
-	
+
+* Fixed margins, the border of the entire gallery is included
 * Corrected bugs for the callbacks when waitThumbnailsLoad = false
 
 ### 3.4
