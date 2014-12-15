@@ -269,7 +269,7 @@
 
         availableWidth -= Math.round(newImgW);
         $image.data('jg.jimgw', Math.round(newImgW));
-        $image.data('jg.jimgh', Math.round(newImgH));
+        $image.data('jg.jimgh', Math.ceil(newImgH));
         if (i === 0 || minHeight > newImgH) minHeight = newImgH;
       }
 
