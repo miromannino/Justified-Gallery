@@ -10,8 +10,8 @@ baseurl: "/Justified-Gallery" # the subpath of your site, e.g. /blog/
 url: "http://miromannino.github.io" # the base hostname & protocol for your site
 github_username:  miromanninno
 
-currJGVer: 3.4
-completeCurrJGVer: 3.4.0
+currJGVer: 3.5
+completeCurrJGVer: 3.5.0
 
 # Build settings
 markdown: kramdown
