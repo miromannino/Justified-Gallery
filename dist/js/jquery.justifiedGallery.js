@@ -225,7 +225,7 @@
       var i, $entry, $image, imgAspectRatio, newImgW, newImgH, justify = true;
       var minHeight = 0;
       var availableWidth = context.galleryWidth - (
-                          (context.buildingRow.entriesBuff.length + 1) * settings.margins);
+                            (context.buildingRow.entriesBuff.length + 1) * settings.margins);
       var rowHeight = availableWidth / context.buildingRow.aspectRatio;
       var justificable = context.buildingRow.width / availableWidth > settings.justifyThreshold;
 
@@ -249,7 +249,8 @@
         imgAspectRatio = $image.data('jg.imgw') / $image.data('jg.imgh');
 
         if (justify) {
-          newImgW = rowHeight * imgAspectRatio;
+          newImgW = (i === context.buildingRow.entriesBuff.length - 1) ? availableWidth 
+                      : rowHeight * imgAspectRatio;
           newImgH = rowHeight;
 
           /* With fixedHeight the newImgH must be greater than rowHeight. 
@@ -260,13 +261,15 @@
             newImgW = settings.rowHeight * imgAspectRatio;
             newImgH = settings.rowHeight;
           }*/
+
         } else {
           newImgW = settings.rowHeight * imgAspectRatio;
           newImgH = settings.rowHeight;
         }
 
-        $image.data('jg.jimgw', Math.ceil(newImgW));
-        $image.data('jg.jimgh', Math.ceil(newImgH));
+        availableWidth -= Math.round(newImgW);
+        $image.data('jg.jimgw', Math.round(newImgW));
+        $image.data('jg.jimgh', Math.round(newImgH));
         if (i === 0 || minHeight > newImgH) minHeight = newImgH;
       }
 
@@ -537,10 +540,11 @@
 
         // Spinner init
         var $spinner = $('<div class="spinner"><span></span><span></span><span></span></div>');
+        var extendedSettings = $.extend({}, defaults, arg);
 
         //Context init
         context = {
-          settings : $.extend({}, defaults, arg),
+          settings : extendedSettings,
           imgAnalyzerTimeout : null,
           entries : null,
           buildingRow : {
@@ -554,7 +558,7 @@
                   * must be greater than 1, else the analyzeImages will loop */
             flushed : 0 //flushed rows without a yield
           },
-          offY : 0,
+          offY : extendedSettings.margins,
           spinner : {
             active : false,
             phase : 0,
