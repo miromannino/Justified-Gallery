@@ -1,7 +1,7 @@
 /*!
- * Justified Gallery - v3.5.0
+ * Justified Gallery - v3.5.1
  * http://miromannino.github.io/Justified-Gallery/
- * Copyright (c) 2014 Miro Mannino
+ * Copyright (c) 2015 Miro Mannino
  * Licensed under the MIT license.
  */
 (function($) {
@@ -146,10 +146,10 @@
       var $image = imgFromEntry($entry);
       $image.css('width', imgWidth);
       $image.css('height', imgHeight);
-      if ($entry.get(0) === $image.parent().get(0)) {
+      //if ($entry.get(0) === $image.parent().get(0)) { // this creates an error in link_around_img test
         $image.css('margin-left', - imgWidth / 2);
         $image.css('margin-top', - imgHeight / 2);
-      }
+      //}
       $entry.width(imgWidth);
       $entry.height(rowHeight);
       $entry.css('top', y);
