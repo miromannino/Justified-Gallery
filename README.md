@@ -43,7 +43,8 @@ the following settings can be used:
 	</div>
 	```
 
-* Fixed margins, the border of the entire gallery is included
+* Fixed margins
+* The border of the entire gallery can be customized
 * Corrected bugs for the callbacks when waitThumbnailsLoad = false
 
 ### 3.4
