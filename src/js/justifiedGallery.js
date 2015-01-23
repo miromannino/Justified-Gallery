@@ -26,6 +26,8 @@
       rowHeight : 120,
       maxRowHeight : 0, // negative value = no limits, 0 = 1.5 * rowHeight
       margins : 1,
+      border: -1, // negative value = same as margins, 0 = disabled
+
       lastRow : 'nojustify', // or can be 'justify' or 'hide'
       justifyThreshold: 0.75, /* if row width / available space > 0.75 it will be always justified 
                                   (i.e. lastRow setting is not considered) */
@@ -225,7 +227,7 @@
       var i, $entry, $image, imgAspectRatio, newImgW, newImgH, justify = true;
       var minHeight = 0;
       var availableWidth = context.galleryWidth - (
-                            (context.buildingRow.entriesBuff.length + 1) * settings.margins);
+                            (context.buildingRow.entriesBuff.length - 1) * settings.margins);
       var rowHeight = availableWidth / context.buildingRow.aspectRatio;
       var justificable = context.buildingRow.width / availableWidth > settings.justifyThreshold;
 
@@ -284,12 +286,12 @@
       context.buildingRow.entriesBuff = [];
       context.buildingRow.aspectRatio = 0;
       context.buildingRow.width = 0;
-      context.offY = context.settings.margins;
+      context.offY = context.border;
     }
 
     function flushRow(context, isLastRow) {
       var settings = context.settings;
-      var $entry, $image, minHeight, buildingRowRes, offX = settings.margins;
+      var $entry, $image, minHeight, buildingRowRes, offX = context.border;
 
       //DEBUG// console.log('flush (isLastRow: ' + isLastRow + ')');
 
@@ -316,7 +318,7 @@
       }
 
       //Gallery Height
-      context.$gallery.height(context.offY + minHeight + settings.margins + 
+      context.$gallery.height(context.offY + minHeight + context.border + 
         (context.spinner.active ? context.spinner.$el.innerHeight() : 0)
       );
 
@@ -335,7 +337,7 @@
 
     function checkWidth(context) {
       context.checkWidthIntervalId = setInterval(function () {
-        var galleryWidth = parseInt(context.$gallery.width(), 10);
+        var galleryWidth = parseInt(context.$gallery.width(), 10) - 2 * context.border;
         if (context.galleryWidth !== galleryWidth) {
           //DEBUG// console.log("resize. old: " + context.galleryWidth + " new: " + galleryWidth);
           
@@ -486,6 +488,7 @@
       }
       
       checkOrConvertNumber(settings, 'margins');
+      checkOrConvertNumber(settings, 'border');
 
       if (settings.lastRow !== 'nojustify' &&
           settings.lastRow !== 'justify' &&
@@ -542,6 +545,8 @@
         var $spinner = $('<div class="spinner"><span></span><span></span><span></span></div>');
         var extendedSettings = $.extend({}, defaults, arg);
 
+        var border = extendedSettings.border >= 0 ? extendedSettings.border : extendedSettings.margins;
+
         //Context init
         context = {
           settings : extendedSettings,
@@ -558,7 +563,8 @@
                   * must be greater than 1, else the analyzeImages will loop */
             flushed : 0 //flushed rows without a yield
           },
-          offY : extendedSettings.margins,
+          border : border,
+          offY : border,
           spinner : {
             active : false,
             phase : 0,
@@ -568,7 +574,7 @@
             intervalId : null
           },
           checkWidthIntervalId : null,
-          galleryWidth : $gallery.width(),
+          galleryWidth :  $gallery.width() - 2 * border,
           $gallery : $gallery
         };
 
