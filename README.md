@@ -16,6 +16,11 @@ the purpose of this plugin is to give you the power of this solutions, with a ne
 
 ## Release History
 
+### 3.5.4
+
+* Added the border option
+* Fixed some problems with waitThumbnailsLoad and infinite scroll
+
 ### 3.5
 
 * The default suffixes are all empty, to be simpler to understand. To have the previous suffixes,
