@@ -173,7 +173,7 @@
       }
 
       if ($image.data('jg.loaded') === 'skipped') {
-        $image.one('load', function() {
+        onImageEvent(imageSrc, function() {
           showImg($entry, loadNewImage, context);
           $image.data('jg.loaded', true);
         });
@@ -527,6 +527,30 @@
 
     }
 
+    function onImageEvent(imageSrc, onLoad, onError) {
+      if (!onLoad && !onError) {
+        return;
+      }
+      /* Check if the image is loaded or not using another image object.
+       We cannot use the 'complete' image property, because some browsers,
+       with a 404 set complete = true */
+      var memImage = new Image();
+      var $memImage = $(memImage);
+      if (onLoad) {
+        $memImage.one('load', function () {
+          $memImage.off('load error');
+          onLoad(memImage);
+        });
+      }
+      if (onError) {
+        $memImage.one('error', function() {
+          $memImage.off('load error');
+          onError(memImage);
+        });
+      }
+      memImage.src = imageSrc;
+    }
+
     return this.each(function (index, gallery) {
 
       var $gallery = $(gallery);
@@ -643,26 +667,18 @@
             startLoadingSpinnerAnimation(context.spinner);
           }
 
-          /* Check if the image is loaded or not using another image object.
-            We cannot use the 'complete' image property, because some browsers, 
-            with a 404 set complete = true */
-          var loadImg = new Image();
-          var $loadImg = $(loadImg);
-          $loadImg.one('load', function imgLoaded () {
+          onImageEvent(imageSrc, function imgLoaded (loadImg) {
             //DEBUG// console.log('img load (alt: ' + $image.attr('alt') + ')');
-            $image.off('load error');
             $image.data('jg.imgw', loadImg.width);
             $image.data('jg.imgh', loadImg.height);
             $image.data('jg.loaded', true);
             startImgAnalyzer(context, false);
-          });
-          $loadImg.one('error', function imgLoadError () {
+          }, function imgLoadError () {
             //DEBUG// console.log('img error (alt: ' + $image.attr('alt') + ')');
             $image.off('load error');
             $image.data('jg.loaded', 'error');
             startImgAnalyzer(context, false);
           });
-          loadImg.src = imageSrc;
 
         }
 
