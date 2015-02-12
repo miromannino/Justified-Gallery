@@ -675,7 +675,6 @@
             startImgAnalyzer(context, false);
           }, function imgLoadError () {
             //DEBUG// console.log('img error (alt: ' + $image.attr('alt') + ')');
-            $image.off('load error');
             $image.data('jg.loaded', 'error');
             startImgAnalyzer(context, false);
           });
