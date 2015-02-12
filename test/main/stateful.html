@@ -18,6 +18,10 @@
 				$("#statefulEx").justifiedGallery({rowHeight: 200});
 			});
 
+			$('#callBorder20').on('click', function () {
+				$("#statefulEx").justifiedGallery({border:20});
+			});
+
 			$('#addEntries').on('click', function () {
 				var $entries = $('#statefulEx a');
 				for (var i = 0; i < 2; i++) $($entries.get([Math.floor(Math.random() * $entries.length)]).outerHTML).appendTo($('#statefulEx'));
@@ -39,6 +43,7 @@
 		<button id="removeEntries">Remove last two entries</button>
 		<button id="callJG">CallJG</button>
 		<button id="callJGW200">CallJG with Width 200</button>
+		<button id="callBorder20">CallJG with Border 20</button>
 	</p>
 	<div id="statefulEx" style="background-color: red;">
 		<a href="../photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">

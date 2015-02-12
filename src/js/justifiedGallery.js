@@ -1,5 +1,5 @@
 /*
- * Justified Gallery - v3.5.3
+ * Justified Gallery - v3.5.4
  * http://miromannino.com/projects/justified-gallery/
  * Copyright (c) 2014 Miro Mannino
  * Licensed under the MIT license.
@@ -226,7 +226,7 @@
       var settings = context.settings;
       var i, $entry, $image, imgAspectRatio, newImgW, newImgH, justify = true;
       var minHeight = 0;
-      var availableWidth = context.galleryWidth - (
+      var availableWidth = context.galleryWidth - 2 * context.border - (
                             (context.buildingRow.entriesBuff.length - 1) * settings.margins);
       var rowHeight = availableWidth / context.buildingRow.aspectRatio;
       var justificable = context.buildingRow.width / availableWidth > settings.justifyThreshold;
@@ -337,7 +337,7 @@
 
     function checkWidth(context) {
       context.checkWidthIntervalId = setInterval(function () {
-        var galleryWidth = parseInt(context.$gallery.width(), 10) - 2 * context.border;
+        var galleryWidth = parseInt(context.$gallery.width(), 10);
         if (context.galleryWidth !== galleryWidth) {
           //DEBUG// console.log("resize. old: " + context.galleryWidth + " new: " + galleryWidth);
           
@@ -403,7 +403,7 @@
         if ($image.data('jg.loaded') === true || $image.data('jg.loaded') === 'skipped') {
           isLastRow = i >= context.entries.length - 1;
 
-          var availableWidth = context.galleryWidth - (
+          var availableWidth = context.galleryWidth - 2 * context.border - (
                                (context.buildingRow.entriesBuff.length - 1) * settings.margins);
           var imgAspectRatio = $image.data('jg.imgw') / $image.data('jg.imgh');
           if (availableWidth / (context.buildingRow.aspectRatio + imgAspectRatio) < settings.rowHeight) {
@@ -598,7 +598,7 @@
             intervalId : null
           },
           checkWidthIntervalId : null,
-          galleryWidth :  $gallery.width() - 2 * border,
+          galleryWidth :  $gallery.width(),
           $gallery : $gallery
         };
 
@@ -613,6 +613,7 @@
         // In this case we don't rewind, and analyze all the images
       } else {
         context.settings = $.extend({}, context.settings, arg);
+        context.border = context.settings.border >= 0 ? context.settings.border : context.settings.margins;
         rewind(context);
       }
       
