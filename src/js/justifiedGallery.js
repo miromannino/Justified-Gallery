@@ -45,7 +45,8 @@
       target : null, // rewrite the target of all links
       extension : /\.[^.\\/]+$/,
       refreshTime : 100,
-      randomize : false
+      randomize : false,
+      ignoreElement : '' // a comma seperated list of div element selectors to be ignored e.g.: '.someClass, #someId'
     };
 
     function getSuffix(width, height, context) {
@@ -559,6 +560,10 @@
       var $gallery = $(gallery);
       $gallery.addClass('justified-gallery');
 
+      var extendedSettings = $.extend({}, defaults, arg);
+      var ignoreElement = extendedSettings.ignoreElement ? ' ,' + extendedSettings.ignoreElement : '';
+      var border = extendedSettings.border >= 0 ? extendedSettings.border : extendedSettings.margins;
+
       var context = $gallery.data('jg.context');
       if (typeof context === 'undefined') {
 
@@ -567,9 +572,6 @@
 
         // Spinner init
         var $spinner = $('<div class="spinner"><span></span><span></span><span></span></div>');
-        var extendedSettings = $.extend({}, defaults, arg);
-
-        var border = extendedSettings.border >= 0 ? extendedSettings.border : extendedSettings.margins;
 
         //Context init
         context = {
@@ -619,7 +621,7 @@
       
       checkSettings(context);
 
-      context.entries = $gallery.find('> a, > div:not(.spinner)').toArray();
+      context.entries = $gallery.find('> a, > div:not(.spinner' + ignoreElement + ')').toArray();
       if (context.entries.length === 0) return;
 
       // Randomize
