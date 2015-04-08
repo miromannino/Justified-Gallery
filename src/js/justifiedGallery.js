@@ -17,9 +17,9 @@
     var defaults = {
       sizeRangeSuffixes : {
         'lt100': '',  // e.g. Flickr uses '_t'
-        'lt240': '',  // e.g. Flickr uses '_m' 
-        'lt320': '',  // e.g. Flickr uses '_n' 
-        'lt500': '',  // e.g. Flickr uses '' 
+        'lt240': '',  // e.g. Flickr uses '_m'
+        'lt320': '',  // e.g. Flickr uses '_n'
+        'lt500': '',  // e.g. Flickr uses ''
         'lt640': '',  // e.g. Flickr uses '_z'
         'lt1024': '', // e.g. Flickr uses '_b'
       },
@@ -29,7 +29,7 @@
       border: -1, // negative value = same as margins, 0 = disabled
 
       lastRow : 'nojustify', // or can be 'justify' or 'hide'
-      justifyThreshold: 0.75, /* if row width / available space > 0.75 it will be always justified 
+      justifyThreshold: 0.75, /* if row width / available space > 0.75 it will be always justified
                                   (i.e. lastRow setting is not considered) */
       fixedHeight : false,
       waitThumbnailsLoad : true,
@@ -38,8 +38,8 @@
       imagesAnimationDuration : 500, // ignored with css animations
       captionSettings : { // ignored with css animations
         animationDuration : 500,
-        visibleOpacity : 0.7, 
-        nonVisibleOpacity : 0.0 
+        visibleOpacity : 0.7,
+        nonVisibleOpacity : 0.0
       },
       rel : null, // rewrite the rel of each analyzed links
       target : null, // rewrite the target of all links
@@ -106,7 +106,7 @@
       if (ev.data.settings.cssAnimation) {
         $caption.addClass('caption-visible').removeClass('caption-hidden');
       } else {
-        $caption.stop().fadeTo(ev.data.settings.captionSettings.animationDuration, 
+        $caption.stop().fadeTo(ev.data.settings.captionSettings.animationDuration,
                                ev.data.settings.captionSettings.visibleOpacity);
       }
     }
@@ -116,7 +116,7 @@
       if (ev.data.settings.cssAnimation) {
         $caption.removeClass('caption-visible').removeClass('caption-hidden');
       } else {
-        $caption.stop().fadeTo(ev.data.settings.captionSettings.animationDuration, 
+        $caption.stop().fadeTo(ev.data.settings.captionSettings.animationDuration,
                                ev.data.settings.captionSettings.nonVisibleOpacity);
       }
     }
@@ -140,7 +140,7 @@
 
     function imgFromEntry($entry) {
       var $img = $entry.find('> img');
-      if ($img.length === 0) $img = $entry.find('> a > img');    
+      if ($img.length === 0) $img = $entry.find('> a > img');
       return $img;
     }
 
@@ -195,12 +195,12 @@
             $entry.append($imgCaption);
           }
         }
-      
+
         // Create events (we check again the $imgCaption because it can be still inexistent)
         if ($imgCaption.length !== 0) {
           if (!context.settings.cssAnimation) {
-            $imgCaption.stop().fadeTo(context.settings.imagesAnimationDuration, 
-                                      context.settings.captionSettings.nonVisibleOpacity); 
+            $imgCaption.stop().fadeTo(context.settings.imagesAnimationDuration,
+                                      context.settings.captionSettings.nonVisibleOpacity);
           }
           if (typeof captionMouseEvents === 'undefined') {
             captionMouseEvents = {
@@ -235,8 +235,8 @@
       if (isLastRow && settings.lastRow === 'hide' && !justificable) {
         for (i = 0; i < context.buildingRow.entriesBuff.length; i++) {
           $entry = context.buildingRow.entriesBuff[i];
-          if (settings.cssAnimation) 
-            $entry.removeClass('entry-visible');            
+          if (settings.cssAnimation)
+            $entry.removeClass('entry-visible');
           else
             $entry.stop().fadeTo(0, 0);
         }
@@ -251,13 +251,13 @@
         imgAspectRatio = $image.data('jg.imgw') / $image.data('jg.imgh');
 
         if (justify) {
-          newImgW = (i === context.buildingRow.entriesBuff.length - 1) ? availableWidth 
+          newImgW = (i === context.buildingRow.entriesBuff.length - 1) ? availableWidth
                       : rowHeight * imgAspectRatio;
           newImgH = rowHeight;
 
-          /* With fixedHeight the newImgH must be greater than rowHeight. 
+          /* With fixedHeight the newImgH must be greater than rowHeight.
           In some cases here this is not satisfied (due to the justification).
-          But we comment it, because is better to have a shorter but justified row instead 
+          But we comment it, because is better to have a shorter but justified row instead
           to have a cropped image at the end. */
           /*if (settings.fixedHeight && newImgH < settings.rowHeight) {
             newImgW = settings.rowHeight * imgAspectRatio;
@@ -275,7 +275,7 @@
         if (i === 0 || minHeight > newImgH) minHeight = newImgH;
       }
 
-      if (settings.fixedHeight && minHeight > settings.rowHeight) 
+      if (settings.fixedHeight && minHeight > settings.rowHeight)
         minHeight = settings.rowHeight;
 
       return {minHeight: minHeight, justify: justify};
@@ -312,13 +312,13 @@
       for (var i = 0; i < context.buildingRow.entriesBuff.length; i++) {
         $entry = context.buildingRow.entriesBuff[i];
         $image = imgFromEntry($entry);
-        displayEntry($entry, offX, context.offY, $image.data('jg.jimgw'), 
+        displayEntry($entry, offX, context.offY, $image.data('jg.jimgw'),
                      $image.data('jg.jimgh'), minHeight, context);
         offX += $image.data('jg.jimgw') + settings.margins;
       }
 
       //Gallery Height
-      context.$gallery.height(context.offY + minHeight + context.border + 
+      context.$gallery.height(context.offY + minHeight + context.border +
         (context.spinner.active ? context.spinner.$el.innerHeight() : 0)
       );
 
@@ -340,7 +340,7 @@
         var galleryWidth = parseInt(context.$gallery.width(), 10);
         if (context.galleryWidth !== galleryWidth) {
           //DEBUG// console.log("resize. old: " + context.galleryWidth + " new: " + galleryWidth);
-          
+
           context.galleryWidth = galleryWidth;
           rewind(context);
 
@@ -348,12 +348,12 @@
           startImgAnalyzer(context, true);
         }
       }, context.settings.refreshTime);
-    } 
+    }
 
     function startLoadingSpinnerAnimation(spinnerContext) {
       clearInterval(spinnerContext.intervalId);
       spinnerContext.intervalId = setInterval(function () {
-        if (spinnerContext.phase < spinnerContext.$points.length) 
+        if (spinnerContext.phase < spinnerContext.$points.length)
           spinnerContext.$points.eq(spinnerContext.phase).fadeTo(spinnerContext.timeslot, 1);
         else
           spinnerContext.$points.eq(spinnerContext.phase - spinnerContext.$points.length)
@@ -374,15 +374,15 @@
 
     function startImgAnalyzer(context, isForResize) {
       stopImgAnalyzerStarter(context);
-      context.imgAnalyzerTimeout = setTimeout(function () { 
-        analyzeImages(context, isForResize); 
+      context.imgAnalyzerTimeout = setTimeout(function () {
+        analyzeImages(context, isForResize);
       }, 0.001);
       analyzeImages(context, isForResize);
     }
 
     function analyzeImages(context, isForResize) {
-      
-      /* //DEBUG// 
+
+      /* //DEBUG//
       var rnd = parseInt(Math.random() * 10000, 10);
       console.log('analyzeImages ' + rnd + ' start');
       console.log('images status: ');
@@ -395,7 +395,7 @@
       /* The first row */
       var settings = context.settings;
       var isLastRow;
-      
+
       for (var i = context.lastAnalyzedIndex + 1; i < context.entries.length; i++) {
         var $entry = $(context.entries[i]);
         var $image = imgFromEntry($entry);
@@ -437,14 +437,14 @@
 
       /* Stop, if there is, the timeout to start the analyzeImages.
           This is because an image can be set loaded, and the timeout can be set,
-          but this image can be analyzed yet. 
+          but this image can be analyzed yet.
       */
       stopImgAnalyzerStarter(context);
 
       //On complete callback
-      if (!isForResize) 
-        context.$gallery.trigger('jg.complete'); 
-      else 
+      if (!isForResize)
+        context.$gallery.trigger('jg.complete');
+      else
         context.$gallery.trigger('jg.resize');
 
       //DEBUG// console.log('analyzeImages ' + rnd +  ' end');
@@ -482,11 +482,11 @@
       checkOrConvertNumber(settings, 'rowHeight');
       checkOrConvertNumber(settings, 'maxRowHeight');
 
-      if (settings.maxRowHeight > 0 && 
+      if (settings.maxRowHeight > 0 &&
           settings.maxRowHeight < settings.rowHeight) {
         settings.maxRowHeight = settings.rowHeight;
       }
-      
+
       checkOrConvertNumber(settings, 'margins');
       checkOrConvertNumber(settings, 'border');
 
@@ -500,9 +500,9 @@
       if (settings.justifyThreshold < 0 || settings.justifyThreshold > 1)
         throw 'justifyThreshold must be in the interval [0,1]';
       if (typeof settings.cssAnimation !== 'boolean') {
-        throw 'cssAnimation must be a boolean'; 
+        throw 'cssAnimation must be a boolean';
       }
-      
+
       checkOrConvertNumber(settings.captionSettings, 'animationDuration');
       checkOrConvertNumber(settings, 'imagesAnimationDuration');
 
@@ -515,17 +515,17 @@
         throw 'captionSettings.nonVisibleOpacity must be in the interval [0, 1]';
 
       if (typeof settings.fixedHeight !== 'boolean') {
-        throw 'fixedHeight must be a boolean';  
+        throw 'fixedHeight must be a boolean';
       }
 
       if (typeof settings.captions !== 'boolean') {
-        throw 'captions must be a boolean'; 
+        throw 'captions must be a boolean';
       }
 
       checkOrConvertNumber(settings, 'refreshTime');
 
       if (typeof settings.randomize !== 'boolean') {
-        throw 'randomize must be a boolean';  
+        throw 'randomize must be a boolean';
       }
 
     }
@@ -562,7 +562,7 @@
       var context = $gallery.data('jg.context');
       if (typeof context === 'undefined') {
 
-        if (typeof arg !== 'undefined' && arg !== null && typeof arg !== 'object') 
+        if (typeof arg !== 'undefined' && arg !== null && typeof arg !== 'object')
           throw 'The argument must be an object';
 
         // Spinner init
@@ -602,6 +602,7 @@
           $gallery : $gallery
         };
 
+        context.border = context.settings.border >= 0 ? context.settings.border : context.settings.margins;
         $gallery.data('jg.context', context);
 
       } else if (arg === 'norewind') {
@@ -613,10 +614,9 @@
         // In this case we don't rewind, and analyze all the images
       } else {
         context.settings = $.extend({}, context.settings, arg);
-        context.border = context.settings.border >= 0 ? context.settings.border : context.settings.margins;
         rewind(context);
       }
-      
+
       checkSettings(context);
 
       context.entries = $gallery.find('> a, > div:not(.spinner)').toArray();
@@ -647,7 +647,7 @@
           if (context.settings.target !== null) $entry.attr('target', context.settings.target);
 
           // Image src
-          var imageSrc = (typeof $image.data('safe-src') !== 'undefined') ? 
+          var imageSrc = (typeof $image.data('safe-src') !== 'undefined') ?
                             $image.data('safe-src') : $image.attr('src');
           $image.data('jg.originalSrc', imageSrc);
           $image.attr('src', imageSrc);
@@ -695,5 +695,5 @@
     });
 
   };
-  
+
 }(jQuery));
