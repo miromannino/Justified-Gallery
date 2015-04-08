@@ -15,6 +15,7 @@
 
     // Default options
     var defaults = {
+      selector: ''
       sizeRangeSuffixes : {
         'lt100': '',  // e.g. Flickr uses '_t'
         'lt240': '',  // e.g. Flickr uses '_m'
@@ -619,7 +620,31 @@
 
       checkSettings(context);
 
-      context.entries = $gallery.find('> a, > div:not(.spinner)').toArray();
+
+      context.entries = $gallery.find('> a' + context.settings.selector + ', > div' + context.settings.selector + ':not(.spinner)').toArray();
+
+      if (context.settings.selector) {
+        // show selected
+        $.each($gallery.find('> a, > div:not(.spinner)'), function(index, entry) {
+          var $entry = $(entry);
+          $entry.show();
+        });
+
+        // hide not selected
+        $.each($gallery.find('> a, > div:not(.spinner)').not(context.settings.selector), function(index, entry) {
+          var $entry = $(entry);
+          $entry.hide();
+          $entry.css('top', 0);
+          $entry.css('left', 0);
+        });
+      }
+      else {
+        // show all entries
+        $.each($gallery.find('> a, > div:not(.spinner)').not(context.settings.selector), function(index, entry) {
+          $(entry).show();
+        });
+      }
+
       if (context.entries.length === 0) return;
 
       // Randomize
