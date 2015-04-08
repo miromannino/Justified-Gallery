@@ -15,7 +15,7 @@
 
     // Default options
     var defaults = {
-      selector: ''
+      selector: '',
       sizeRangeSuffixes : {
         'lt100': '',  // e.g. Flickr uses '_t'
         'lt240': '',  // e.g. Flickr uses '_m'
