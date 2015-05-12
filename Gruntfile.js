@@ -19,23 +19,7 @@ module.exports = function(grunt) {
       files: ['dist']
     },
 
-    wiredep: {
-      target: {
-        devDependencies: true,
-        includeSelf: true,
-        src: ['test/main/*.html', 'test/related/*.html'],
-        "overrides": {
-          "swipebox": { //TODO waiting for the pull request
-            "main": ["src/js/jquery.swipebox.min.js", "src/css/swipebox.min.css"]
-          },
-          "colorbox": { 
-            "main": ["jquery.colorbox.js", "example1/colorbox.css"]
-          }
-
-        }
-      }
-    },
-
+    // Copy the src files to the dist files, also appending the banner
     concat: {
       options: {
         banner: '<%= banner %>',
@@ -138,6 +122,24 @@ module.exports = function(grunt) {
           }
         ]
       }
+    },
+
+    // Task to update the dependencies in the test HTMLs, to use when new tests have been added
+    wiredep: {
+      target: {
+        devDependencies: true,
+        includeSelf: true,
+        src: ['test/main/*.html', 'test/related/*.html'],
+        "overrides": {
+          "swipebox": { //TODO waiting for the pull request
+            "main": ["src/js/jquery.swipebox.min.js", "src/css/swipebox.min.css"]
+          },
+          "colorbox": { 
+            "main": ["jquery.colorbox.js", "example1/colorbox.css"]
+          }
+
+        }
+      }
     }
 
   });
@@ -145,7 +147,11 @@ module.exports = function(grunt) {
   // These plugins provide necessary tasks.
   require('load-grunt-tasks')(grunt);
 
-  // Default task.
+  // Default task (release mode)
   grunt.registerTask('default', ['jshint', 'less', 'csslint', 'concat', 'uglify', 'compress']);
+
+  // Debug mode (when the library is needed to be compiled only for the tests)
+  grunt.registerTask('debug', ['less', 'concat']);
+
 
 };

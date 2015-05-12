@@ -166,29 +166,34 @@ too like a bug than a feature.
 ## Contributing
 
 ### Important notes
-Please don't edit files in the `dist` subdirectory as they are generated via Grunt. You'll find source code in the `src` subdirectory!
+Please don't edit files in the `dist` subdirectory as they are generated via Grunt. You'll find source code in the `src` subdirectory.
 
 #### Code style
 Regarding code style like indentation and whitespace, **follow the conventions you see used in the source already.**
 
 ### Modifying the code
-First, ensure that you have the latest [Node.js](http://nodejs.org/) and [npm](http://npmjs.org/) installed.
+ 
+ - Prerequisites:
+	- Ensure that you have the latest [Node.js](http://nodejs.org/) and [npm](http://npmjs.org/) installed.
+	- Test that Grunt's CLI is installed by running `grunt --version`.  If the command isn't found, run `npm install -g grunt-cli`.  For more information about installing Grunt, see the [getting started guide](http://gruntjs.com/getting-started).
+	- Ensure that you have Bower installed. If not, install it using `npm install -g bower`. 
 
-Test that Grunt's CLI is installed by running `grunt --version`.  If the command isn't found, run `npm install -g grunt-cli`.  For more information about installing Grunt, see the [getting started guide](http://gruntjs.com/getting-started).
-
-1. Fork and clone the repo.
-1. Run `npm install` to install all dependencies (including Grunt).
-1. Run `grunt` to grunt this project.
-
-Assuming that you don't see any red, you're ready to go. Just be sure to run `grunt` after making any changes, to ensure that nothing is broken.
+ - Steps:
+	- Fork and clone this repository.
+	- Open a terminal and change the current directory to the cloned folder.
+	- Run `npm install` to install all dependencies (including Grunt).
+	- Run `bower install` to install all the dependencies needed for the tests.
+	- Run `grunt debug` to build the library only for testing (debug mode).
+	- Run `grunt` to build this project in release mode.
 
 ### Submitting pull requests
 
-1. Create a new branch, please don't work in your `master` branch directly.
-1. Add failing tests for the change you want to make. Run `grunt` to see the tests fail.
-1. Fix stuff.
-1. Update the documentation to reflect any changes.
-1. Push to your fork and submit a pull request.
+- Create a new branch, please don't work in your `master` branch directly.
+- Add failing tests for the change you want to make.
+- Fix stuff.
+- Ensure that the written tests don't fail anymore, as well as the other tests.
+- Update the documentation to reflect any changes.
+- Push to your fork and submit a pull request.
 
 
 
