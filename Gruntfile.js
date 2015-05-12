@@ -4,6 +4,7 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
+    
     // Metadata.
     pkg: grunt.file.readJSON('justifiedGallery.jquery.json'),
     banner: '/*!\n' +
@@ -12,9 +13,27 @@ module.exports = function(grunt) {
       ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>\n' +
       ' * Licensed under the <%= _.pluck(pkg.licenses, "type").join(", ") %> license.\n' + 
       ' */\n',
+
     // Task configuration.
     clean: {
       files: ['dist']
+    },
+
+    wiredep: {
+      target: {
+        devDependencies: true,
+        includeSelf: true,
+        src: ['test/main/*.html', 'test/related/*.html'],
+        "overrides": {
+          "swipebox": { //TODO waiting for the pull request
+            "main": ["src/js/jquery.swipebox.min.js", "src/css/swipebox.min.css"]
+          },
+          "colorbox": { 
+            "main": ["jquery.colorbox.js", "example1/colorbox.css"]
+          }
+
+        }
+      }
     },
 
     concat: {
@@ -79,6 +98,7 @@ module.exports = function(grunt) {
       ]
     },
 
+    // compress the zip with the distribution, to allow fast downloads from GitHub
     compress: {
       main: {
         options: {

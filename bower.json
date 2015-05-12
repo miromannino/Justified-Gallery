@@ -7,7 +7,7 @@
   ],
   "description": "This is a JQuery plugin that allows you to create an high quality justified gallery of images. Fill all the spaces!",
   "main": [
-    "dist/js/jquery.justifiedGallery.js", 
+    "dist/js/jquery.justifiedGallery.js",
     "dist/css/justifiedGallery.css"
   ],
   "keywords": [
@@ -26,5 +26,13 @@
     "node_modules",
     "bower_components",
     "test"
-  ]
+  ],
+  "devDependencies": {
+    "jquery": ">1.9.0",
+    "colorbox": "~1.6.0",
+    "swipebox": "~1.2.9"
+  },
+  "dependencies": {
+    "jquery": ">1.9.0"
+  }
 }
