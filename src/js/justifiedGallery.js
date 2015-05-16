@@ -21,7 +21,7 @@
         'lt320': '',  // e.g. Flickr uses '_n' 
         'lt500': '',  // e.g. Flickr uses '' 
         'lt640': '',  // e.g. Flickr uses '_z'
-        'lt1024': '', // e.g. Flickr uses '_b'
+        'lt1024': ''  // e.g. Flickr uses '_b'
       },
       rowHeight : 120,
       maxRowHeight : 0, // negative value = no limits, 0 = 1.5 * rowHeight
@@ -47,6 +47,9 @@
       refreshTime : 100,
       randomize : false
     };
+
+    // The spinner HTML template that is used when the images are loading
+    var spinnerTemplate = '<div class="spinner"><span></span><span></span><span></span></div>';
 
     function getSuffix(width, height, context) {
       var longestSide;
@@ -138,10 +141,24 @@
       }
     }
 
+    /** Extract the image src form the image, looking from the 'safe-src', and if it can't be found, from the
+     * 'src' attribute. It saves in the image data the 'jg.originalSrc' field, with the extracted src.
+     * Returns the extracted src. */
+    function extractImgSrcFromImage($image) {
+      var imageSrc = (typeof $image.data('safe-src') !== 'undefined') ? $image.data('safe-src') : $image.attr('src');
+      $image.data('jg.originalSrc', imageSrc);
+      return imageSrc;
+    }
+
     function imgFromEntry($entry) {
       var $img = $entry.find('> img');
       if ($img.length === 0) $img = $entry.find('> a > img');    
       return $img;
+    }
+
+    function captionFromEntry($entry) {
+      var $caption = $entry.find('> .caption');
+      return $caption.length === 0 ? null : $caption;
     }
 
     function displayEntry($entry, x, y, imgWidth, imgHeight, rowHeight, context) {
@@ -186,13 +203,14 @@
       // Captions ------------------------------
       var captionMouseEvents = $entry.data('jg.captionMouseEvents');
       if (context.settings.captions === true) {
-        var $imgCaption = $entry.find('.caption');
-        if ($imgCaption.length === 0) { // Create it if it doesn't exists
+        var $imgCaption = captionFromEntry($entry);
+        if ($imgCaption == null) { // Create it if it doesn't exists
           var caption = $image.attr('alt');
           if (typeof caption === 'undefined') caption = $entry.attr('title');
           if (typeof caption !== 'undefined') { // Create only we found something
             $imgCaption = $('<div class="caption">' + caption + '</div>');
             $entry.append($imgCaption);
+            $entry.data('jg.createdCaption', true);
           }
         }
       
@@ -319,7 +337,7 @@
 
       //Gallery Height
       context.$gallery.height(context.offY + minHeight + context.border + 
-        (context.spinner.active ? context.spinner.$el.innerHeight() : 0)
+        (isSpinnerActive(context) ? getSpinnerHeight(context) : 0)
       );
 
       if (!isLastRow || (minHeight <= context.settings.rowHeight && buildingRowRes.justify)) {
@@ -350,21 +368,35 @@
       }, context.settings.refreshTime);
     } 
 
-    function startLoadingSpinnerAnimation(spinnerContext) {
+    function startLoadingSpinnerAnimation(context) {
+      var spinnerContext = context.spinner;
+      var $spinnerPoints = spinnerContext.$el.find('span');
       clearInterval(spinnerContext.intervalId);
+      context.$gallery.append(spinnerContext.$el);
+      context.$gallery.height(context.offY + getSpinnerHeight(context));
       spinnerContext.intervalId = setInterval(function () {
-        if (spinnerContext.phase < spinnerContext.$points.length) 
-          spinnerContext.$points.eq(spinnerContext.phase).fadeTo(spinnerContext.timeslot, 1);
-        else
-          spinnerContext.$points.eq(spinnerContext.phase - spinnerContext.$points.length)
-                        .fadeTo(spinnerContext.timeslot, 0);
-        spinnerContext.phase = (spinnerContext.phase + 1) % (spinnerContext.$points.length * 2);
+        if (spinnerContext.phase < $spinnerPoints.length) {
+          $spinnerPoints.eq(spinnerContext.phase).fadeTo(spinnerContext.timeslot, 1);
+        } else {
+          $spinnerPoints.eq(spinnerContext.phase - $spinnerPoints.length).fadeTo(spinnerContext.timeslot, 0);
+        }
+        spinnerContext.phase = (spinnerContext.phase + 1) % ($spinnerPoints.length * 2);
       }, spinnerContext.timeslot);
     }
 
-    function stopLoadingSpinnerAnimation(spinnerContext) {
-      clearInterval(spinnerContext.intervalId);
-      spinnerContext.intervalId = null;
+    function isSpinnerActive(context) {
+      return context.spinner.intervalId != null;
+    }
+
+    function getSpinnerHeight(context) {
+      return context.spinner.$el.innerHeight();
+    }
+
+    function stopLoadingSpinnerAnimation(context) {
+      clearInterval(context.spinner.intervalId);
+      context.spinner.intervalId = null;
+      context.$gallery.height(context.$gallery.height() - getSpinnerHeight(context));
+      context.spinner.$el.detach();
     }
 
     function stopImgAnalyzerStarter(context) {
@@ -428,11 +460,8 @@
       // Last row flush (the row is not full)
       if (context.buildingRow.entriesBuff.length > 0) flushRow(context, true);
 
-      if (context.spinner.active) {
-        context.spinner.active = false;
-        context.$gallery.height(context.$gallery.height() - context.spinner.$el.innerHeight());
-        context.spinner.$el.detach();
-        stopLoadingSpinnerAnimation(context.spinner);
+      if (isSpinnerActive(context)) {
+        stopLoadingSpinnerAnimation(context);
       }
 
       /* Stop, if there is, the timeout to start the analyzeImages.
@@ -554,24 +583,72 @@
       memImage.src = imageSrc;
     }
 
+    function randomizeEntries(context) {
+      context.entries.sort(function () { return Math.random() * 2 - 1; });
+      $.each(context.entries, function () {
+        $(this).appendTo(context.$gallery);
+      });
+    }
+
+    function destroyJustifiedGalleryInstance(context) {
+      clearInterval(context.checkWidthIntervalId);
+
+      /* Clear all the css properties added in the style attributes. We doesn't backup the original
+       * values for those css attributes, because it costs (performance) and because in general one
+       * shouldn't use the style attribute for an uniform set of images (where we suppose the use of
+       * classes). Creating a backup is also difficult because JG could be called multiple times and
+       * with different style attributes. */
+      $.each(context.entries, function(_, entry) {
+        var $entry = $(entry);
+
+        // Reset entry style
+        $entry.css('width', '');
+        $entry.css('height', '');
+        $entry.css('top', '');
+        $entry.css('left', '');
+        $entry.data('jg.loaded', undefined);
+        $entry.removeClass('jg-entry');
+
+        // Reset image style
+        var $img = imgFromEntry($entry);
+        $img.css('width', '');
+        $img.css('height', '');
+        $img.css('margin-left', '');
+        $img.css('margin-top', '');
+        $img.attr('src', $img.data('jg.originalSrc'));
+        $img.data('jg.originalSrc', undefined);
+
+        // Remove caption
+        if ($entry.data('jg.createdCaption')) {
+          $entry.data('jg.createdCaption', undefined);
+          var $caption = captionFromEntry($entry);
+          if ($caption != null) $caption.remove();
+        }
+      });
+
+      context.$gallery.css('height', '');
+      context.$gallery.removeClass('justified-gallery');
+      context.$gallery.data('jg.context', undefined);
+    }
+
+    // STARTING POINT
     return this.each(function (index, gallery) {
 
       var $gallery = $(gallery);
       $gallery.addClass('justified-gallery');
 
+      /* The context stores all the settings to let the object to be stateful. For example the
+       * first time JG is called specifying all the settings, the next time it is called with the
+       * 'norewind' command, without specifying any setting (and the old are maintained). */
       var context = $gallery.data('jg.context');
       if (typeof context === 'undefined') {
-
-        if (typeof arg !== 'undefined' && arg !== null && typeof arg !== 'object') 
-          throw 'The argument must be an object';
-
-        // Spinner init
-        var $spinner = $('<div class="spinner"><span></span><span></span><span></span></div>');
+        if (arg !== null && typeof arg !== 'object') throw 'The argument must be an object';
         var extendedSettings = $.extend({}, defaults, arg);
 
+        // As reported in the settings: negative value = same as margins, 0 = disabled
         var border = extendedSettings.border >= 0 ? extendedSettings.border : extendedSettings.margins;
 
-        //Context init
+        //Context default values
         context = {
           settings : extendedSettings,
           imgAnalyzerTimeout : null,
@@ -590,11 +667,9 @@
           border : border,
           offY : border,
           spinner : {
-            active : false,
             phase : 0,
             timeslot : 150,
-            $el : $spinner,
-            $points : $spinner.find('span'),
+            $el : $(spinnerTemplate),
             intervalId : null
           },
           checkWidthIntervalId : null,
@@ -605,15 +680,23 @@
         $gallery.data('jg.context', context);
 
       } else if (arg === 'norewind') {
+        // In this case we don't rewind: we analyze only the latest images (e.g. to complete the last unfinished row
+
         /* Hide the image of the buildingRow to prevent strange effects when the row will be
-           re-justified again */
+         re-justified again */
         for (var i = 0; i < context.buildingRow.entriesBuff.length; i++) {
           hideImgImmediately(context.buildingRow.entriesBuff[i], context);
         }
-        // In this case we don't rewind, and analyze all the images
+      } else if (arg === 'destroy') {
+        destroyJustifiedGalleryInstance(context);
+        return;
       } else {
+        // In this case Justified Gallery has been called again changing only some options
         context.settings = $.extend({}, context.settings, arg);
+
+        // As reported in the settings: negative value = same as margins, 0 = disabled
         context.border = context.settings.border >= 0 ? context.settings.border : context.settings.margins;
+
         rewind(context);
       }
       
@@ -623,12 +706,7 @@
       if (context.entries.length === 0) return;
 
       // Randomize
-      if (context.settings.randomize) {
-        context.entries.sort(function () { return Math.random() * 2 - 1; });
-        $.each(context.entries, function () {
-          $(this).appendTo($gallery);
-        });
-      }
+      if (context.settings.randomize && arg !== 'norewind') randomizeEntries(context);
 
       var imagesToLoad = false;
       var skippedImages = false;
@@ -647,41 +725,38 @@
           if (context.settings.target !== null) $entry.attr('target', context.settings.target);
 
           // Image src
-          var imageSrc = (typeof $image.data('safe-src') !== 'undefined') ? 
-                            $image.data('safe-src') : $image.attr('src');
-          $image.data('jg.originalSrc', imageSrc);
+          var imageSrc = extractImgSrcFromImage($image);
           $image.attr('src', imageSrc);
 
-          var width = parseInt($image.attr('width'), 10);
-          var height = parseInt($image.attr('height'), 10);
-          if(context.settings.waitThumbnailsLoad !== true && !isNaN(width) && !isNaN(height)) {
-            $image.data('jg.imgw', width);
-            $image.data('jg.imgh', height);
-            $image.data('jg.loaded', 'skipped');
-            skippedImages = true;
-            startImgAnalyzer(context, false);
-            return true;
+          /* If we have the height and the width, we don't wait that the image is loaded, but we start directly
+           * with the justification */
+          if (context.settings.waitThumbnailsLoad === false) {
+            var width = parseInt($image.attr('width'), 10);
+            var height = parseInt($image.attr('height'), 10);
+            if (!isNaN(width) && !isNaN(height)) {
+              $image.data('jg.imgw', width);
+              $image.data('jg.imgh', height);
+              $image.data('jg.loaded', 'skipped');
+              skippedImages = true;
+              startImgAnalyzer(context, false);
+              return true; // continue
+            }
           }
 
           $image.data('jg.loaded', false);
           imagesToLoad = true;
 
           // Spinner start
-          if (context.spinner.active === false) {
-            context.spinner.active = true;
-            $gallery.append(context.spinner.$el);
-            $gallery.height(context.offY + context.spinner.$el.innerHeight());
-            startLoadingSpinnerAnimation(context.spinner);
+          if (!isSpinnerActive(context)) {
+            startLoadingSpinnerAnimation(context);
           }
 
-          onImageEvent(imageSrc, function imgLoaded (loadImg) {
-            //DEBUG// console.log('img load (alt: ' + $image.attr('alt') + ')');
+          onImageEvent(imageSrc, function (loadImg) { // image loaded
             $image.data('jg.imgw', loadImg.width);
             $image.data('jg.imgh', loadImg.height);
             $image.data('jg.loaded', true);
             startImgAnalyzer(context, false);
-          }, function imgLoadError () {
-            //DEBUG// console.log('img error (alt: ' + $image.attr('alt') + ')');
+          }, function () { // image load error
             $image.data('jg.loaded', 'error');
             startImgAnalyzer(context, false);
           });

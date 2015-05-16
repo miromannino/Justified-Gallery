@@ -16,6 +16,11 @@ the purpose of this plugin is to give you the power of this solutions, with a ne
 
 ## Release History
 
+### 3.6
+
+* Destroy method
+* Code refactoring to be more understandable
+
 ### 3.5.4
 
 * Added the border option
