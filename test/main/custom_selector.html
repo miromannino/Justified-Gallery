@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src='../../libs/jquery/jquery.min.js'></script>
+    <link rel='stylesheet' href='../../dist/css/justifiedGallery.css' type='text/css' media='all' />
+    <style>
+    figure { margin: 0; }
+    .justified-gallery > figure {
+      position: absolute;
+      display: inline-block;
+      overflow: hidden;
+      opacity: 0;
+      filter: alpha(opacity=0);
+      /* IE8 or Earlier */
+    }
+    .justified-gallery > figure > img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+    .justified-gallery > figure > .caption {
+      display: none;
+      position: absolute;
+      bottom: 0;
+      padding: 5px;
+      background-color: #000000;
+      left: 0;
+      right: 0;
+      margin: 0;
+      color: white;
+      font-size: 12px;
+      font-weight: 300;
+      font-family: sans-serif;
+    }
+    .justified-gallery > figure > .caption.caption-visible {
+      display: initial;
+      opacity: 0.7;
+      filter: "alpha(opacity=70)";
+      /* IE8 or Earlier */
+      -webkit-animation: justified-gallery-show-caption-animation 500ms 0 ease;
+      -moz-animation: justified-gallery-show-caption-animation 500ms 0 ease;
+      -ms-animation: justified-gallery-show-caption-animation 500ms 0 ease;
+    }
+    </style>
+    <script src='../../src/js/justifiedGallery.js'></script>
+    <script>
+        $(document).ready(function () {
+            $("#customselector").justifiedGallery({
+                entriesSelector: '> div:not(.spinner), > figure'
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Specifying custom entry selector</h1>
+    <div id="customselector" style="background-color: red;">
+        <figure>
+            <img alt="What's your destination?" src="../photos/8083451788_552becfbc7_m.jpg" />
+            <div class="caption">
+                <a style="color: white;" href="../photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">link in caption</a>
+            </div>
+        </figure>
+        <div>
+            <img alt="Just in a dream Place" src="../photos/7948632554_01f6ae6b6f_m.jpg" />
+        </div>
+        <div>
+            <img alt="Truthful Innocence" src="../photos/7302459122_19fa1d8223_m.jpg" />
+        </div>
+        <figure>
+            <img alt="Simply my Brother" src="../photos/7222046648_5bf70e893a_m.jpg" />
+        </figure>
+        <figure>
+            <img alt="Freedom" src="../photos/7002395006_29fdc85f7a_m.jpg" />
+        </figure>
+        <figure>
+            <img alt="Maybe spring" src="../photos/7062575651_b23918b11a_m.jpg" />
+        </figure>
+        <figure>
+            <img alt="Love" src="../photos/6841267340_855273fd7e_m.jpg" />
+        </figure>
+        <figure>
+            <img alt="Young Lovers' Wall and the Old Rain" src="../photos/6958456697_e56a37bb5f_m.jpg" />
+        </figure>
+        <figure>
+            <img alt="This is the colors I love" src="../photos/6791628438_affaa19e10_m.jpg" />
+        </figure>
+        <figure>
+            <img alt="The Hope" src="../photos/6916180091_9c9559e463_m.jpg" />
+        </figure>
+        <figure>
+            <img alt="Florence streets. Florence people." src="../photos/6880502467_d4b3c4b2a8_m.jpg" />
+        </figure>
+        <figure>
+            <img alt="I Love You" src="../photos/6876412479_6268c6e2aa_m.jpg" />
+        </figure>
+        <figure>
+            <img alt="The painter in Florence" src="../photos/6840627709_92ed52fb41_m.jpg" />
+        </figure>
+        <figure>
+            <img alt="Me and My Belover" src="../photos/6812090617_5fd5bbdda0_m.jpg" />
+        </figure>
+        <figure>
+            <img alt="Fiocco" src="../photos/6806687375_07d2b7a1f9_m.jpg" />
+        </figure>
+        <figure>
+            <img alt="My first clothespin" src="../photos/6798453217_72dea2d06e_m.jpg" />
+        </figure>
+    </div>
+
+
+</body>
+</html>

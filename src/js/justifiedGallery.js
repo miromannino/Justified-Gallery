@@ -15,6 +15,8 @@
 
     // Default options
     var defaults = {
+      entriesSelector: '> a, > div:not(.spinner)',
+
       sizeRangeSuffixes : {
         'lt100': '',  // e.g. Flickr uses '_t'
         'lt240': '',  // e.g. Flickr uses '_m' 
@@ -619,7 +621,7 @@
       
       checkSettings(context);
 
-      context.entries = $gallery.find('> a, > div:not(.spinner)').toArray();
+      context.entries = $gallery.find(context.settings.entriesSelector).toArray();
       if (context.entries.length === 0) return;
 
       // Randomize
