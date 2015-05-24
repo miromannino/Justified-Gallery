@@ -12,8 +12,9 @@
 <body>
     <h1>NoRewind with loaded image test</h1>
     <p>This test check whether the infinite scroll behaviour works when images are already loaded.</p>
-    <p>If the test passes you should see every image twice, the first image is a bw food counter and the last image is of a heart necklace. If the test fails the second set of pictures will not show up, though they are still there and can be clicked on.
-    </p>
+    <p>If the test passes you should see every image twice, the first image is a bw food counter and the last image is
+       of a heart necklace. If the test fails the second set of pictures will not show up, though they are still there
+       and can be clicked on.</p>
     <div id="gallery">
         <a href="../photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
             <img src="../photos/8083451788_552becfbc7_m.jpg" width="240" height="198" />
@@ -57,7 +58,7 @@
     // give the images a chance to load before we update the gallery
     setTimeout(function() {
         $gallery.justifiedGallery('norewind');
-    }, 0);
+    }, 1000);
     </script>
 </body>
 

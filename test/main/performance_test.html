@@ -194,7 +194,9 @@
 
     $('#addEntries').on('click', function() {
         var $entries = $('#highNumEx a');
-        for (var i = 0; i < 60; i++) $($entries.get([Math.floor(Math.random() * $entries.length)]).outerHTML).appendTo($('#highNumEx'));
+        for (var i = 0; i < 60; i++) {
+            $($entries.get([Math.floor(Math.random() * $entries.length)]).outerHTML).appendTo($('#highNumEx'));
+        }
     });
     </script>
 </body>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- bower:css -->
+    <link rel="stylesheet" href="../../bower_components/colorbox/example1/colorbox.css" />
+    <link rel="stylesheet" href="../../bower_components/swipebox/src/css/swipebox.min.css" />
+    <link rel="stylesheet" href="../../dist/css/justifiedGallery.css" />
+    <!-- endbower -->
+</head>
+
+<body>
+    <h1>Infinite scroll test</h1>
+    <p>This test check the infinite scroll with remote images</p>
+    </p>
+    <div id="gallery">
+    </div>
+    
+    <!-- bower:js -->
+    <script src="../../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../../bower_components/colorbox/jquery.colorbox.js"></script>
+    <script src="../../bower_components/swipebox/src/js/jquery.swipebox.min.js"></script>
+    <script src="../../dist/js/jquery.justifiedGallery.js"></script>
+    <!-- endbower -->
+    <script>
+        var $gallery = $("#gallery");
+
+        function addSomeImages(limit) {
+            for (var i = 0; i < limit; i++) {
+                $gallery.append('<a>' +
+                    '<img src="http://lorempixel.com/' +
+                    Math.ceil(Math.random() * 250 + 150) +
+                    '/' +
+                    Math.ceil(Math.random() * 250 + 150) +
+                    '" />' +
+                '</a>');
+            }
+            $gallery.justifiedGallery('norewind');
+        }
+
+        $gallery.justifiedGallery({
+            rowHeight : 120
+        });
+
+        addSomeImages(50);
+        $(window).scroll(function() {
+            if($(window).scrollTop() + $(window).height() == $(document).height()) {
+                addSomeImages(5);
+            }
+        });
+    </script>
+</body>
+
+</html>

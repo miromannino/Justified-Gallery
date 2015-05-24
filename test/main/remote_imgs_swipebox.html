@@ -10,8 +10,9 @@
 </head>
 
 <body>
-    <h1>Remote Images</h1>
-    <p>The images are loaded by the browser in a random order. But the layout will appear row by row following the order.</p>
+    <h1>Swipebox with remote images</h1>
+    <p>Test that, during the loading phase, clicking at a visible row, Swipebox is not shown.
+        That is because it is called at the jg.complete event</p>
     <div id="remotetest" style="border: 1px solid black;">
         <a href="http://farm8.staticflickr.com/7431/10271435233_c0552862ee_b.jpg" title="San Vito Lo Capo">
             <img src="http://farm8.staticflickr.com/7431/10271435233_c0552862ee_m.jpg" />
@@ -112,10 +113,10 @@
     <script src="../../dist/js/jquery.justifiedGallery.js"></script>
     <!-- endbower -->
     <script>
-    $('#remotetest').justifiedGallery({
+    $('#remotetest').on('jg.complete', function() {
+        $('#remotetest a').swipebox();
+    }).justifiedGallery({
         rel: 'gal0'
-    }).on('jg.rowflush', function() {
-        $('#remotetest').swipebox();
     });
     </script>
 </body>
