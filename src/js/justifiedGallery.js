@@ -33,7 +33,7 @@
     this.offY = this.border;
     this.spinner = {
       phase : 0,
-      timeslot : 150,
+      timeSlot : 150,
       $el : $('<div class="spinner"><span></span><span></span><span></span></div>'),
       intervalId : null
     };
@@ -66,6 +66,7 @@
 
   /**
    * Remove the suffix from the string
+   *
    * @returns {string} a new string without the suffix
    */
   JustifiedGallery.prototype.removeSuffix = function (str, suffix) {
@@ -80,6 +81,8 @@
   };
 
   /**
+   * Get the used suffix of a particular url
+   *
    * @param str
    * @returns {String} return the used suffix
    */
@@ -102,6 +105,7 @@
   /**
    * Given an image src, with the width and the height, returns the new image src with the
    * best suffix to show the best quality thumbnail.
+   *
    * @returns {String} the suffix to use
    */
   JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight) {
@@ -115,6 +119,7 @@
 
   /**
    * Shows the images that is in the given entry
+   *
    * @param $entry the entry
    * @param callback the callback that is called when the show animation is finished
    */
@@ -130,6 +135,7 @@
   /**
    * Extract the image src form the image, looking from the 'safe-src', and if it can't be found, from the
    * 'src' attribute. It saves in the image data the 'jg.originalSrc' field, with the extracted src.
+   *
    * @param $image the image to analyze
    * @returns {String} the extracted src
    */
@@ -154,6 +160,7 @@
 
   /**
    * Display the entry
+   *
    * @param {jQuery} $entry the entry to display
    * @param {int} x the x position where the entry must be positioned
    * @param y the y position where the entry must be positioned
@@ -202,7 +209,8 @@
 
   /**
    * Display the entry caption. If the caption element doesn't exists, it creates the caption using the 'alt'
-   * or the 'title' attributes. Then it
+   * or the 'title' attributes.
+   *
    * @param {jQuery} $entry the entry to process
    */
   JustifiedGallery.prototype.displayEntryCaption = function ($entry) {
@@ -234,6 +242,7 @@
   /**
    * The callback for the event 'mouseenter'. It assumes that the event currentTarget is an entry.
    * It shows the caption using jQuery (or using CSS if it is configured so)
+   *
    * @param {Event} eventObject the event object
    */
   JustifiedGallery.prototype.onEntryMouseEnterForCaption = function (eventObject) {
@@ -249,6 +258,7 @@
   /**
    * The callback for the event 'mouseleave'. It assumes that the event currentTarget is an entry.
    * It hides the caption using jQuery (or using CSS if it is configured so)
+   *
    * @param {Event} eventObject the event object
    */
   JustifiedGallery.prototype.onEntryMouseLeaveForCaption = function (eventObject) {
@@ -263,6 +273,7 @@
 
   /**
    * Add the handlers of the entry for the caption
+   *
    * @param $entry the entry to modify
    */
   JustifiedGallery.prototype.addCaptionEventsHandlers = function ($entry) {
@@ -280,6 +291,7 @@
 
   /**
    * Remove the handlers of the entry for the caption
+   *
    * @param $entry the entry to modify
    */
   JustifiedGallery.prototype.removeCaptionEventsHandlers = function ($entry) {
@@ -293,6 +305,7 @@
 
   /**
    * Justify the building row, preparing it to
+   *
    * @param isLastRow
    * @returns {*}
    */
@@ -364,7 +377,6 @@
 
   /**
    * Flush a row: justify it, modify the gallery height accordingly to the row height
-   *
    *
    * @param isLastRow
    */
@@ -454,12 +466,12 @@
     this.$gallery.height(this.offY + this.getSpinnerHeight());
     spinnerContext.intervalId = setInterval(function () {
       if (spinnerContext.phase < $spinnerPoints.length) {
-        $spinnerPoints.eq(spinnerContext.phase).fadeTo(spinnerContext.timeslot, 1);
+        $spinnerPoints.eq(spinnerContext.phase).fadeTo(spinnerContext.timeSlot, 1);
       } else {
-        $spinnerPoints.eq(spinnerContext.phase - $spinnerPoints.length).fadeTo(spinnerContext.timeslot, 0);
+        $spinnerPoints.eq(spinnerContext.phase - $spinnerPoints.length).fadeTo(spinnerContext.timeSlot, 0);
       }
       spinnerContext.phase = (spinnerContext.phase + 1) % ($spinnerPoints.length * 2);
-    }, spinnerContext.timeslot);
+    }, spinnerContext.timeSlot);
   };
 
   /**
@@ -495,26 +507,28 @@
     this.entries = this.$gallery.find('> a, > div:not(.spinner)').toArray();
     if (this.entries.length === 0) return false;
 
-    // Randomize
-    if (this.settings.randomize) this.randomizeEntries(norewind);
+    if (this.settings.randomize) this.modifyEntries(this.shuffleArray, norewind);
 
     return true;
   };
 
   /**
    * Apply the entries order to the DOM, iterating the entries and appending the images
+   *
    * @param entries the entries that has been modified and that must be re-ordered in the DOM
    */
   JustifiedGallery.prototype.insertToGallery = function (entries) {
-    var that = this, $that = $(this);
+    var that = this;
     $.each(entries, function () {
-      $that.appendTo(that.$gallery);
+      $(this).appendTo(that.$gallery);
     });
   };
 
   /**
    * Shuffle the array using the Fisher-Yates shuffle algorithm
+   *
    * @param a the array to shuffle
+   * @return the shuffled array
    */
   JustifiedGallery.prototype.shuffleArray = function (a) {
     var i, j, temp;
@@ -524,20 +538,22 @@
       a[i] = a[j];
       a[j] = temp;
     }
+    return a;
   };
 
   /**
-   * Randomize the entries. With norewind only the new inserted images will be modified (the ones after
-   * lastAnalyzedIndex)
+   * Modify the entries. With norewind only the new inserted images will be modified (the ones after lastAnalyzedIndex)
+   *
+   * @param functionToApply the function to call to modify the entries (e.g. sorting, randomization, filtering)
    * @param norewind specify if the norewind has been called or not
    */
-  JustifiedGallery.prototype.randomizeEntries = function (norewind) {
-    var lastEntries = norewind ? 
-          this.entries.splice(this.lastAnalyzedIndex + 1, this.entries.length - this.lastAnalyzedIndex - 1)
+  JustifiedGallery.prototype.modifyEntries = function (functionToApply, norewind) {
+    var lastEntries = norewind ?
+        this.entries.splice(this.lastAnalyzedIndex + 1, this.entries.length - this.lastAnalyzedIndex - 1)
         : this.entries;
-    this.shuffleArray(lastEntries);
+    lastEntries = functionToApply.call(this, lastEntries);
     this.insertToGallery(lastEntries);
-    if (norewind) this.entries = this.entries.concat(lastEntries);
+    this.entries = norewind ? this.entries.concat(lastEntries) : lastEntries;
   };
 
   /**
@@ -667,6 +683,7 @@
   /**
    * Checks if the image is loaded or not using another image object. We cannot use the 'complete' image property,
    * because some browsers, with a 404 set complete = true.
+   *
    * @param imageSrc the image src to load
    * @param onLoad callback that is called when the image has been loaded
    * @param onError callback that is called in case of an error
@@ -695,7 +712,6 @@
 
   /**
    * Init of Justified Gallery controlled
-   *
    * It analyzes all the entries starting theirs loading and calling the image analyzer (that works with loaded images)
    */
   JustifiedGallery.prototype.init = function () {
@@ -761,6 +777,7 @@
 
   /**
    * Check the range suffixes
+   *
    * @param range the range key
    */
   JustifiedGallery.prototype.checkRangeSuffix = function (range) {
@@ -771,6 +788,7 @@
 
   /**
    * Checks that it is a valid number. If a string is passed it is converted to a number
+   *
    * @param settingContainer the object that contains the setting (to allow the conversion)
    * @param settingName the setting name
    */
@@ -853,6 +871,7 @@
 
   /**
    * Update the existing settings only changing some of them
+   *
    * @param newSettings the new settings (or a subgroup of them)
    */
   JustifiedGallery.prototype.updateSettings = function (newSettings) {
