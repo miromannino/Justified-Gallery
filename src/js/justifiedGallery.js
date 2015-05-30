@@ -195,10 +195,10 @@
       }
     }
 
-    if ($image.data('jg.loaded') === 'skipped') {
+    if ($entry.data('jg.loaded') === 'skipped') {
       this.onImageEvent(imageSrc, $.proxy(function() {
         this.showImg($entry, loadNewImage);
-        $image.data('jg.loaded', true);
+        $entry.data('jg.loaded', true);
       }, this));
     } else {
       this.showImg($entry, loadNewImage);
@@ -333,8 +333,8 @@
     if (isLastRow && !justifiable && this.settings.lastRow === 'nojustify') justify = false;
 
     for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
-      $image = this.imgFromEntry(this.buildingRow.entriesBuff[i]);
-      imgAspectRatio = $image.data('jg.imgw') / $image.data('jg.imgh');
+      $entry = this.buildingRow.entriesBuff[i];
+      imgAspectRatio = $entry.data('jg.width') / $entry.data('jg.height');
 
       if (justify) {
         newImgW = (i === this.buildingRow.entriesBuff.length - 1) ? availableWidth : rowHeight * imgAspectRatio;
@@ -355,8 +355,8 @@
       }
 
       availableWidth -= Math.round(newImgW);
-      $image.data('jg.jimgw', Math.round(newImgW));
-      $image.data('jg.jimgh', Math.ceil(newImgH));
+      $entry.data('jg.jwidth', Math.round(newImgW));
+      $entry.data('jg.jheight', Math.ceil(newImgH));
       if (i === 0 || minHeight > newImgH) minHeight = newImgH;
     }
 
@@ -400,8 +400,8 @@
     for (var i = 0; i < this.buildingRow.entriesBuff.length; i++) {
       $entry = this.buildingRow.entriesBuff[i];
       $image = this.imgFromEntry($entry);
-      this.displayEntry($entry, offX, this.offY, $image.data('jg.jimgw'), $image.data('jg.jimgh'), minHeight);
-      offX += $image.data('jg.jimgw') + settings.margins;
+      this.displayEntry($entry, offX, this.offY, $entry.data('jg.jwidth'), $entry.data('jg.jheight'), minHeight);
+      offX += $entry.data('jg.jwidth') + settings.margins;
     }
 
     //Gallery Height
@@ -676,14 +676,12 @@
 
     for (var i = this.lastAnalyzedIndex + 1; i < this.entries.length; i++) {
       var $entry = $(this.entries[i]);
-      var $image = this.imgFromEntry($entry);
-
-      if ($image.data('jg.loaded') === true || $image.data('jg.loaded') === 'skipped') {
+      if ($entry.data('jg.loaded') === true || $entry.data('jg.loaded') === 'skipped') {
         isLastRow = i >= this.entries.length - 1;
 
         var availableWidth = this.galleryWidth - 2 * this.border - (
             (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
-        var imgAspectRatio = $image.data('jg.imgw') / $image.data('jg.imgh');
+        var imgAspectRatio = $entry.data('jg.width') / $entry.data('jg.height');
         if (availableWidth / (this.buildingRow.aspectRatio + imgAspectRatio) < this.settings.rowHeight) {
           this.flushRow(isLastRow);
           if(++this.yield.flushed >= this.yield.every) {
@@ -697,7 +695,7 @@
         this.buildingRow.width += imgAspectRatio * this.settings.rowHeight;
         this.lastAnalyzedIndex = i;
 
-      } else if ($image.data('jg.loaded') !== 'error') {
+      } else if ($entry.data('jg.loaded') !== 'error') {
         return;
       }
     }
@@ -782,7 +780,7 @@
 
       $entry.addClass('jg-entry');
 
-      if ($image.data('jg.loaded') !== true && $image.data('jg.loaded') !== 'skipped') {
+      if ($entry.data('jg.loaded') !== true && $entry.data('jg.loaded') !== 'skipped') {
 
         // Link Rel global overwrite
         if (that.settings.rel !== null) $entry.attr('rel', that.settings.rel);
@@ -800,16 +798,16 @@
           var width = parseInt($image.attr('width'), 10);
           var height = parseInt($image.attr('height'), 10);
           if (!isNaN(width) && !isNaN(height)) {
-            $image.data('jg.imgw', width);
-            $image.data('jg.imgh', height);
-            $image.data('jg.loaded', 'skipped');
+            $entry.data('jg.width', width);
+            $entry.data('jg.height', height);
+            $entry.data('jg.loaded', 'skipped');
             skippedImages = true;
             that.startImgAnalyzer(false);
             return true; // continue
           }
         }
 
-        $image.data('jg.loaded', false);
+        $entry.data('jg.loaded', false);
         imagesToLoad = true;
 
         // Spinner start
@@ -818,12 +816,12 @@
         }
 
         that.onImageEvent(imageSrc, function (loadImg) { // image loaded
-          $image.data('jg.imgw', loadImg.width);
-          $image.data('jg.imgh', loadImg.height);
-          $image.data('jg.loaded', true);
+          $entry.data('jg.width', loadImg.width);
+          $entry.data('jg.height', loadImg.height);
+          $entry.data('jg.loaded', true);
           that.startImgAnalyzer(false);
         }, function () { // image load error
-          $image.data('jg.loaded', 'error');
+          $entry.data('jg.loaded', 'error');
           that.startImgAnalyzer(false);
         });
 
