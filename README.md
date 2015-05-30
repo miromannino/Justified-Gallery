@@ -4,11 +4,12 @@
   </a>
 </div>
 
-This is a JQuery plugin that allows you to create an high quality justified gallery of images. 
+This is a JQuery plugin which allows you to create responsive, infinite, and high quality justified 
+gallery of images. 
 
 A common problem, for people who create sites, is to create an elegant image gallery that manages 
-the various sizes of images. Flickr and Google+ manage this situation in an excellent way, 
-the purpose of this plugin is to give you the power of this solutions, with a new fast algorithm.
+the various sizes and aspect ratio of images. Flickr and Google+ manage this situation in an excellent 
+way, the purpose of this plugin is to give you the power of these solutions, with a new fast algorithm.
 
 <div style="text-align: center; font-size: 110%;">
 	<a href="http://miromannino.github.io/Justified-Gallery/" target="_blank">Official project page</a>
@@ -18,8 +19,10 @@ the purpose of this plugin is to give you the power of this solutions, with a ne
 
 ### 3.6
 
+* Sort (works also with infinite scroll)
+* Filter (works also with infinite scroll)
 * Destroy method
-* Code refactoring to be more understandable
+* Code refactoring
 
 ### 3.5.4
 
