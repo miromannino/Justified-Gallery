@@ -868,65 +868,58 @@
    * Checks the settings
    */
   JustifiedGallery.prototype.checkSettings = function () {
+    if (typeof this.settings.sizeRangeSuffixes !== 'object') {
+      throw 'sizeRangeSuffixes must be defined and must be an object';
+    }
 
-      if (typeof this.settings.sizeRangeSuffixes !== 'object')
-        throw 'sizeRangeSuffixes must be defined and must be an object';
+    this.checkRangeSuffix('lt100');
+    this.checkRangeSuffix('lt240');
+    this.checkRangeSuffix('lt320');
+    this.checkRangeSuffix('lt500');
+    this.checkRangeSuffix('lt640');
+    this.checkRangeSuffix('lt1024');
 
-      this.checkRangeSuffix('lt100');
-      this.checkRangeSuffix('lt240');
-      this.checkRangeSuffix('lt320');
-      this.checkRangeSuffix('lt500');
-      this.checkRangeSuffix('lt640');
-      this.checkRangeSuffix('lt1024');
+    this.checkOrConvertNumber(this.settings, 'rowHeight');
+    this.checkOrConvertNumber(this.settings, 'maxRowHeight');
 
-      this.checkOrConvertNumber(this.settings, 'rowHeight');
-      this.checkOrConvertNumber(this.settings, 'maxRowHeight');
+    if (this.settings.maxRowHeight > 0 && this.settings.maxRowHeight < this.settings.rowHeight) {
+      this.settings.maxRowHeight = this.settings.rowHeight;
+    }
 
-      if (this.settings.maxRowHeight > 0 &&
-          this.settings.maxRowHeight < this.settings.rowHeight) {
-        this.settings.maxRowHeight = this.settings.rowHeight;
-      }
+    this.checkOrConvertNumber(this.settings, 'margins');
+    this.checkOrConvertNumber(this.settings, 'border');
 
-      this.checkOrConvertNumber(this.settings, 'margins');
-      this.checkOrConvertNumber(this.settings, 'border');
+    if (this.settings.lastRow !== 'nojustify' && this.settings.lastRow !== 'justify' && this.settings.lastRow !== 'hide') {
+      throw 'lastRow must be "nojustify", "justify" or "hide"';
+    }
 
-      if (this.settings.lastRow !== 'nojustify' &&
-          this.settings.lastRow !== 'justify' &&
-          this.settings.lastRow !== 'hide') {
-        throw 'lastRow must be "nojustify", "justify" or "hide"';
-      }
+    this.checkOrConvertNumber(this.settings, 'justifyThreshold');
+    if (this.settings.justifyThreshold < 0 || this.settings.justifyThreshold > 1) {
+      throw 'justifyThreshold must be in the interval [0,1]';
+    }
+    if (typeof this.settings.cssAnimation !== 'boolean') {
+      throw 'cssAnimation must be a boolean';
+    }
 
-      this.checkOrConvertNumber(this.settings, 'justifyThreshold');
-      if (this.settings.justifyThreshold < 0 || this.settings.justifyThreshold > 1)
-        throw 'justifyThreshold must be in the interval [0,1]';
-      if (typeof this.settings.cssAnimation !== 'boolean') {
-        throw 'cssAnimation must be a boolean';
-      }
+    if (typeof this.settings.captions !== 'boolean') throw 'captions must be a boolean';
+    this.checkOrConvertNumber(this.settings.captionSettings, 'animationDuration');
 
-      this.checkOrConvertNumber(this.settings.captionSettings, 'animationDuration');
-      this.checkOrConvertNumber(this.settings, 'imagesAnimationDuration');
+    this.checkOrConvertNumber(this.settings.captionSettings, 'visibleOpacity');
+    if (this.settings.captionSettings.visibleOpacity < 0 || this.settings.captionSettings.visibleOpacity > 1) {
+      throw 'captionSettings.visibleOpacity must be in the interval [0, 1]';
+    }
 
-      this.checkOrConvertNumber(this.settings.captionSettings, 'visibleOpacity');
-      if (this.settings.captionSettings.visibleOpacity < 0 || this.settings.captionSettings.visibleOpacity > 1)
-        throw 'captionSettings.visibleOpacity must be in the interval [0, 1]';
+    this.checkOrConvertNumber(this.settings.captionSettings, 'nonVisibleOpacity');
+    if (this.settings.captionSettings.nonVisibleOpacity < 0 || this.settings.captionSettings.nonVisibleOpacity > 1) {
+      throw 'captionSettings.nonVisibleOpacity must be in the interval [0, 1]';
+    }
 
-      this.checkOrConvertNumber(this.settings.captionSettings, 'nonVisibleOpacity');
-      if (this.settings.captionSettings.visibleOpacity < 0 || this.settings.captionSettings.visibleOpacity > 1)
-        throw 'captionSettings.nonVisibleOpacity must be in the interval [0, 1]';
+    if (typeof this.settings.fixedHeight !== 'boolean') throw 'fixedHeight must be a boolean';
+    this.checkOrConvertNumber(this.settings, 'imagesAnimationDuration');
+    this.checkOrConvertNumber(this.settings, 'refreshTime');
+    if (typeof this.settings.randomize !== 'boolean') throw 'randomize must be a boolean';
 
-      if (typeof this.settings.fixedHeight !== 'boolean') {
-        throw 'fixedHeight must be a boolean';
-      }
-
-      if (typeof this.settings.captions !== 'boolean') {
-        throw 'captions must be a boolean';
-      }
-
-      this.checkOrConvertNumber(this.settings, 'refreshTime');
-
-      if (typeof this.settings.randomize !== 'boolean') {
-        throw 'randomize must be a boolean';
-      }
+    //TODO sort and filter options checks
   };
 
   /**
