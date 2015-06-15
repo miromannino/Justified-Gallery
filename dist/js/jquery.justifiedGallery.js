@@ -1,5 +1,5 @@
 /*!
- * Justified Gallery - v3.5.4
+ * Justified Gallery - v3.5.5
  * http://miromannino.github.io/Justified-Gallery/
  * Copyright (c) 2015 Miro Mannino
  * Licensed under the MIT license.
@@ -45,7 +45,8 @@
       target : null, // rewrite the target of all links
       extension : /\.[^.\\/]+$/,
       refreshTime : 100,
-      randomize : false
+      randomize : false,
+      selector: '> a, > div:not(.spinner)'
     };
 
     function getSuffix(width, height, context) {
@@ -619,7 +620,7 @@
       
       checkSettings(context);
 
-      context.entries = $gallery.find('> a, > div:not(.spinner)').toArray();
+      context.entries = $gallery.find(context.settings.selector).toArray();
       if (context.entries.length === 0) return;
 
       // Randomize

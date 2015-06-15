@@ -16,6 +16,15 @@ the purpose of this plugin is to give you the power of this solutions, with a ne
 
 ## Release History
 
+### 3.5.5
+
+* Added a "selector" option for overriding the default `> a, > div:not(.spinner)` selector used to
+  find child elements to justify.
+
+  ```javascript
+  $('.list_of_paragraphs').justifiedGallery({selector: '> p'})
+  ```
+
 ### 3.5.4
 
 * Added the border option
