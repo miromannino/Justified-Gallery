@@ -19,6 +19,7 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 
 ### 3.6
 
+* No-image/text entries
 * Sort (works also with infinite scroll)
 * Filter (works also with infinite scroll)
 * Destroy method
