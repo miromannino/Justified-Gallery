@@ -16,6 +16,7 @@
         <button class="enable-b">only b</button>
         <button class="enable-c">only c</button>
         <button class="enable-d">only d</button>
+        <button class="add-entry-filted-in-d">add jg-filtered class in d</button>
         <button class="enable-z">only z</button>
         <button class="enable-all">all</button>
     </div>
@@ -95,6 +96,11 @@
             $("#filters").justifiedGallery({ filter: '.z' });
         });
         $('.enable-all').click(function () {
+            $("#filters").justifiedGallery({ filter: false });
+        });
+        $('.add-entry-filted-in-d').click(function () {
+            $("#filters > a").removeClass('jg-filtered');
+            $("#filters > a.d").addClass('jg-filtered');
             $("#filters").justifiedGallery({ filter: false });
         });
 

@@ -504,7 +504,7 @@
    * @returns {boolean} true if some entries has been founded
    */
   JustifiedGallery.prototype.updateEntries = function (norewind) {
-    this.entries = this.$gallery.find('> a, > div:not(.spinner,.entry-filtered)').toArray();
+    this.entries = this.$gallery.find('> a, > div:not(.spinner)').toArray();
     if (this.entries.length === 0) return false;
 
     // Filter
@@ -564,13 +564,13 @@
   };
 
   /**
-   * Reset the filters removing the 'entry-filtered' class from all the entries
+   * Reset the filters removing the 'jg-filtered' class from all the entries
    *
    * @param a the array to reset
    */
   JustifiedGallery.prototype.resetFilters = function (a) {
     for (var i = 0; i < a.length; i++) {
-      $(a[i]).removeClass('entry-filtered');
+      $(a[i]).removeClass('jg-filtered');
     }
     return a;
   };
@@ -588,10 +588,10 @@
       return a.filter(function (el) {
         var $el = $(el);
         if ($el.is(settings.filter)) {
-          $el.removeClass('entry-filtered');
+          $el.removeClass('jg-filtered');
           return true;
         } else {
-          $el.addClass('entry-filtered');
+          $el.addClass('jg-filtered');
           return false;
         }
       });

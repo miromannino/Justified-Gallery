@@ -126,7 +126,7 @@
   -moz-animation: justified-gallery-show-entry-animation 500ms 0 ease;
   -ms-animation: justified-gallery-show-entry-animation 500ms 0 ease;
 }
-.justified-gallery > .entry-filtered {
+.justified-gallery > .jg-filtered {
   display: none;
 }
 .justified-gallery > .spinner {
