@@ -149,7 +149,7 @@
   JustifiedGallery.prototype.imgFromEntry = function ($entry) {
     var $img = $entry.find('> img');
     if ($img.length === 0) $img = $entry.find('> a > img');
-    return $img;
+    return $img.length === 0 ? null : $img;
   };
 
   /** @returns {jQuery} the caption in the given entry */
@@ -169,29 +169,30 @@
    * @param rowHeight the row height of the row that owns the entry
    */
   JustifiedGallery.prototype.displayEntry = function ($entry, x, y, imgWidth, imgHeight, rowHeight) {
-    var $image = this.imgFromEntry($entry);
-    $image.css('width', imgWidth);
-    $image.css('height', imgHeight);
-    // if ($entry.get(0) === $image.parent().get(0)) { // TODO: to remove? this creates an error in link_around_img test
-    $image.css('margin-left', - imgWidth / 2);
-    $image.css('margin-top', - imgHeight / 2);
-    // }
     $entry.width(imgWidth);
     $entry.height(rowHeight);
     $entry.css('top', y);
     $entry.css('left', x);
 
-    // Image reloading for an high quality of thumbnails
-    var imageSrc = $image.attr('src');
-    var newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight);
+    var $image = this.imgFromEntry($entry);
+    if ($image !== null) {
+      $image.css('width', imgWidth);
+      $image.css('height', imgHeight);
+      $image.css('margin-left', - imgWidth / 2);
+      $image.css('margin-top', - imgHeight / 2);
 
-    $image.one('error', function () {
-      $image.attr('src', $image.data('jg.originalSrc')); //revert to the original thumbnail, we got it.
-    });
+      // Image reloading for an high quality of thumbnails
+      var imageSrc = $image.attr('src');
+      var newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight);
 
-    function loadNewImage() {
-      if (imageSrc !== newImageSrc) { //load the new image after the fadeIn
-        $image.attr('src', newImageSrc);
+      $image.one('error', function () {
+        $image.attr('src', $image.data('jg.originalSrc')); //revert to the original thumbnail, we got it.
+      });
+
+      function loadNewImage() {
+        if (imageSrc !== newImageSrc) { //load the new image after the fadeIn
+          $image.attr('src', newImageSrc);
+        }
       }
     }
 
@@ -215,7 +216,7 @@
    */
   JustifiedGallery.prototype.displayEntryCaption = function ($entry) {
     var $image = this.imgFromEntry($entry);
-    if (this.settings.captions === true) {
+    if ($image !== null && this.settings.captions === true) {
       var $imgCaption = this.captionFromEntry($entry);
 
       // Create it if it doesn't exists
@@ -310,7 +311,7 @@
    * @returns {*}
    */
   JustifiedGallery.prototype.prepareBuildingRow = function (isLastRow) {
-    var i, $entry, $image, imgAspectRatio, newImgW, newImgH, justify = true;
+    var i, $entry, imgAspectRatio, newImgW, newImgH, justify = true;
     var minHeight = 0;
     var availableWidth = this.galleryWidth - 2 * this.border - (
         (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
@@ -382,7 +383,7 @@
    */
   JustifiedGallery.prototype.flushRow = function (isLastRow) {
     var settings = this.settings;
-    var $entry, $image, minHeight, buildingRowRes, offX = this.border;
+    var $entry, minHeight, buildingRowRes, offX = this.border;
 
     buildingRowRes = this.prepareBuildingRow(isLastRow);
     minHeight = buildingRowRes.minHeight;
@@ -399,7 +400,6 @@
 
     for (var i = 0; i < this.buildingRow.entriesBuff.length; i++) {
       $entry = this.buildingRow.entriesBuff[i];
-      $image = this.imgFromEntry($entry);
       this.displayEntry($entry, offX, this.offY, $entry.data('jg.jwidth'), $entry.data('jg.jheight'), minHeight);
       offX += $entry.data('jg.jwidth') + settings.margins;
     }
@@ -788,42 +788,50 @@
         // Link Target global overwrite
         if (that.settings.target !== null) $entry.attr('target', that.settings.target);
 
-        // Image src
-        var imageSrc = that.extractImgSrcFromImage($image);
-        $image.attr('src', imageSrc);
+        if ($image !== null) {
 
-        /* If we have the height and the width, we don't wait that the image is loaded, but we start directly
-         * with the justification */
-        if (that.settings.waitThumbnailsLoad === false) {
-          var width = parseInt($image.attr('width'), 10);
-          var height = parseInt($image.attr('height'), 10);
-          if (!isNaN(width) && !isNaN(height)) {
-            $entry.data('jg.width', width);
-            $entry.data('jg.height', height);
-            $entry.data('jg.loaded', 'skipped');
-            skippedImages = true;
-            that.startImgAnalyzer(false);
-            return true; // continue
+          // Image src
+          var imageSrc = that.extractImgSrcFromImage($image);
+          $image.attr('src', imageSrc);
+
+          /* If we have the height and the width, we don't wait that the image is loaded, but we start directly
+           * with the justification */
+          if (that.settings.waitThumbnailsLoad === false) {
+            var width = parseInt($image.attr('width'), 10);
+            var height = parseInt($image.attr('height'), 10);
+            if (!isNaN(width) && !isNaN(height)) {
+              $entry.data('jg.width', width);
+              $entry.data('jg.height', height);
+              $entry.data('jg.loaded', 'skipped');
+              skippedImages = true;
+              that.startImgAnalyzer(false);
+              return true; // continue
+            }
           }
-        }
 
-        $entry.data('jg.loaded', false);
-        imagesToLoad = true;
+          $entry.data('jg.loaded', false);
+          imagesToLoad = true;
 
-        // Spinner start
-        if (!that.isSpinnerActive()) {
-          that.startLoadingSpinnerAnimation();
-        }
+          // Spinner start
+          if (!that.isSpinnerActive()) {
+            that.startLoadingSpinnerAnimation();
+          }
 
-        that.onImageEvent(imageSrc, function (loadImg) { // image loaded
-          $entry.data('jg.width', loadImg.width);
-          $entry.data('jg.height', loadImg.height);
+          that.onImageEvent(imageSrc, function (loadImg) { // image loaded
+            $entry.data('jg.width', loadImg.width);
+            $entry.data('jg.height', loadImg.height);
+            $entry.data('jg.loaded', true);
+            that.startImgAnalyzer(false);
+          }, function () { // image load error
+            $entry.data('jg.loaded', 'error');
+            that.startImgAnalyzer(false);
+          });
+
+        } else {
           $entry.data('jg.loaded', true);
-          that.startImgAnalyzer(false);
-        }, function () { // image load error
-          $entry.data('jg.loaded', 'error');
-          that.startImgAnalyzer(false);
-        });
+          $entry.data('jg.width', $entry.width() | $entry.css('width') | 1);
+          $entry.data('jg.height', $entry.height() | $entry.css('height') | 1);
+        }
 
       }
 
