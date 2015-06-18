@@ -89,12 +89,14 @@
   JustifiedGallery.prototype.getUsedSuffix = function (str) {
     var voidSuffix = false;
     for (var si in this.settings.sizeRangeSuffixes) {
-      if (this.settings.sizeRangeSuffixes[si].length === 0) {
-        voidSuffix = true;
-        continue;
-      }
-      if (this.endsWith(str, this.settings.sizeRangeSuffixes[si])) {
-        return this.settings.sizeRangeSuffixes[si];
+      if (this.settings.sizeRangeSuffixes.hasOwnProperty(si)) {
+        if (this.settings.sizeRangeSuffixes[si].length === 0) {
+          voidSuffix = true;
+          continue;
+        }
+        if (this.endsWith(str, this.settings.sizeRangeSuffixes[si])) {
+          return this.settings.sizeRangeSuffixes[si];
+        }
       }
     }
 
@@ -550,8 +552,8 @@
       a[i] = a[j];
       a[j] = temp;
     }
-    return a;
     this.insertToGallery(a);
+    return a;
   };
 
   /**
@@ -858,7 +860,7 @@
    */
   JustifiedGallery.prototype.checkOrConvertNumber = function (settingContainer, settingName) {
     if (typeof settingContainer[settingName] === 'string') {
-      settingContainer[settingName] = parseFloat(settingContainer[settingName], 10);
+      settingContainer[settingName] = parseFloat(settingContainer[settingName]);
     }
 
     if (typeof settingContainer[settingName] === 'number') {
@@ -1001,7 +1003,7 @@
     rowHeight: 120,
     maxRowHeight: 0, // negative value = no limits, 0 = 1.5 * rowHeight
     margins: 1,
-    border: -1, // negative value = same as margins, 0 = disabled, any other value to set the border 
+    border: -1, // negative value = same as margins, 0 = disabled, any other value to set the border
 
     lastRow: 'nojustify', // or can be 'justify' or 'hide'
     justifyThreshold: 0.75, /* if row width / available space > 0.75 it will be always justified
