@@ -586,7 +586,7 @@
    */
   JustifiedGallery.prototype.filterArray = function (a) {
     var settings = this.settings;
-    if (typeof settings.filter == 'string' || settings.filter instanceof String) {
+    if ($.type(settings.filter) === 'string') {
       // Filter only keeping the entries passed in the string
       return a.filter(function (el) {
         var $el = $(el);
@@ -847,7 +847,7 @@
    * @param range the range key
    */
   JustifiedGallery.prototype.checkRangeSuffix = function (range) {
-    if (typeof this.settings.sizeRangeSuffixes[range] !== 'string') {
+    if ($.type(this.settings.sizeRangeSuffixes[range]) !== 'string') {
       throw 'sizeRangeSuffixes.' + range + ' must be a string';
     }
   };
@@ -859,11 +859,11 @@
    * @param settingName the setting name
    */
   JustifiedGallery.prototype.checkOrConvertNumber = function (settingContainer, settingName) {
-    if (typeof settingContainer[settingName] === 'string') {
+    if ($.type(settingContainer[settingName]) === 'string') {
       settingContainer[settingName] = parseFloat(settingContainer[settingName]);
     }
 
-    if (typeof settingContainer[settingName] === 'number') {
+    if ($.type(settingContainer[settingName]) === 'number') {
       if (isNaN(settingContainer[settingName])) throw 'invalid number for ' + settingName;
     } else {
       throw settingName + ' must be a number';
@@ -874,7 +874,7 @@
    * Checks the settings
    */
   JustifiedGallery.prototype.checkSettings = function () {
-    if (typeof this.settings.sizeRangeSuffixes !== 'object') {
+    if ($.type(this.settings.sizeRangeSuffixes) !== 'object') {
       throw 'sizeRangeSuffixes must be defined and must be an object';
     }
 
@@ -903,11 +903,11 @@
     if (this.settings.justifyThreshold < 0 || this.settings.justifyThreshold > 1) {
       throw 'justifyThreshold must be in the interval [0,1]';
     }
-    if (typeof this.settings.cssAnimation !== 'boolean') {
+    if ($.type(this.settings.cssAnimation) !== 'boolean') {
       throw 'cssAnimation must be a boolean';
     }
 
-    if (typeof this.settings.captions !== 'boolean') throw 'captions must be a boolean';
+    if ($.type(this.settings.captions) !== 'boolean') throw 'captions must be a boolean';
     this.checkOrConvertNumber(this.settings.captionSettings, 'animationDuration');
 
     this.checkOrConvertNumber(this.settings.captionSettings, 'visibleOpacity');
@@ -920,12 +920,20 @@
       throw 'captionSettings.nonVisibleOpacity must be in the interval [0, 1]';
     }
 
-    if (typeof this.settings.fixedHeight !== 'boolean') throw 'fixedHeight must be a boolean';
+    if ($.type(this.settings.fixedHeight) !== 'boolean') throw 'fixedHeight must be a boolean';
     this.checkOrConvertNumber(this.settings, 'imagesAnimationDuration');
     this.checkOrConvertNumber(this.settings, 'refreshTime');
-    if (typeof this.settings.randomize !== 'boolean') throw 'randomize must be a boolean';
+    if ($.type(this.settings.randomize) !== 'boolean') throw 'randomize must be a boolean';
+    if ($.type(this.settings.selector) !== 'string') throw 'selector must be a string';
+    
+    if (this.settings.sort !== false && !$.isFunction(this.settings.sort)) {
+      throw 'sort must be false or a comparison function';
+    }
 
-    //TODO sort and filter options checks
+    if (this.settings.filter !== false && !($.type(this.settings.filter) in ['string', 'function'])) {
+      throw 'filter must be false, a string or a filter function';
+    }
+
   };
 
   /**
@@ -942,6 +950,7 @@
 
     // Checks the new settings
     this.checkSettings();
+
   };
 
   /**
@@ -964,7 +973,7 @@
       var controller = $gallery.data('jg.controller');
       if (typeof controller === 'undefined') {
         // Create controller and assign it to the object data
-        if (typeof arg !== 'undefined' && arg !== null && typeof arg !== 'object') {
+        if (typeof arg !== 'undefined' && arg !== null && $.type(arg) !== 'object') {
           throw 'The argument must be an object';
         }
         controller = new JustifiedGallery($gallery, $.extend({}, $.fn.justifiedGallery.defaults, arg));
