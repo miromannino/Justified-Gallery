@@ -551,6 +551,7 @@
       a[j] = temp;
     }
     return a;
+    this.insertToGallery(a);
   };
 
   /**
@@ -560,7 +561,9 @@
    * @return the sorted array
    */
   JustifiedGallery.prototype.sortArray = function (a) {
-    return a.sort(this.settings.sort);
+    a.sort(this.settings.sort);
+    this.insertToGallery(a);
+    return a;
   };
 
   /**
@@ -569,9 +572,7 @@
    * @param a the array to reset
    */
   JustifiedGallery.prototype.resetFilters = function (a) {
-    for (var i = 0; i < a.length; i++) {
-      $(a[i]).removeClass('jg-filtered');
-    }
+    for (var i = 0; i < a.length; i++) $(a[i]).removeClass('jg-filtered');
     return a;
   };
 
@@ -612,7 +613,6 @@
         this.entries.splice(this.lastAnalyzedIndex + 1, this.entries.length - this.lastAnalyzedIndex - 1)
         : this.entries;
     lastEntries = functionToApply.call(this, lastEntries);
-    this.insertToGallery(lastEntries);
     this.entries = norewind ? this.entries.concat(lastEntries) : lastEntries;
   };
 
@@ -1001,7 +1001,7 @@
     rowHeight: 120,
     maxRowHeight: 0, // negative value = no limits, 0 = 1.5 * rowHeight
     margins: 1,
-    border: -1, // negative value = same as margins, 0 = disabled
+    border: -1, // negative value = same as margins, 0 = disabled, any other value to set the border 
 
     lastRow: 'nojustify', // or can be 'justify' or 'hide'
     justifyThreshold: 0.75, /* if row width / available space > 0.75 it will be always justified
@@ -1018,11 +1018,20 @@
     },
     rel: null, // rewrite the rel of each analyzed links
     target: null, // rewrite the target of all links
-    extension: /\.[^.\\/]+$/,
-    refreshTime: 100,
+    extension: /\.[^.\\/]+$/, // regexp to capture the extension of an image
+    refreshTime: 100, // time interval (in ms) to check if the page changes its width
     randomize: false,
-    sort: false,
-    filter: false,
+    sort: false, /*
+      - false: to do not sort
+      - function: to sort them using the function as comparator (see Array.prototype.sort())
+    */
+    filter: false, /*
+      - false: for a disabled filter
+      - a string: an entry is kept if entry.is(filter string) returns true
+                  see jQuery's .is() function for further information
+      - a function: invoked with arguments (entry, index, array). Return true to keep the entry, false otherwise.
+                    see Array.prototype.filter for further information.
+    */
     selector: '> a, > div:not(.spinner)' // The selector that is used to know what are the entries of the gallery
   };
 
