@@ -216,7 +216,7 @@
    */
   JustifiedGallery.prototype.displayEntryCaption = function ($entry) {
     var $image = this.imgFromEntry($entry);
-    if ($image !== null && this.settings.captions === true) {
+    if ($image !== null && this.settings.captions) {
       var $imgCaption = this.captionFromEntry($entry);
 
       // Create it if it doesn't exists
@@ -504,7 +504,7 @@
    * @returns {boolean} true if some entries has been founded
    */
   JustifiedGallery.prototype.updateEntries = function (norewind) {
-    this.entries = this.$gallery.find('> a, > div:not(.spinner)').toArray();
+    this.entries = this.$gallery.find(this.settings.selector).toArray();
     if (this.entries.length === 0) return false;
 
     // Filter
@@ -747,9 +747,7 @@
    * @param onError callback that is called in case of an error
    */
   JustifiedGallery.prototype.onImageEvent = function (imageSrc, onLoad, onError) {
-    if (!onLoad && !onError) {
-      return;
-    }
+    if (!onLoad && !onError) return;
 
     var memImage = new Image();
     var $memImage = $(memImage);
@@ -1024,7 +1022,8 @@
     refreshTime: 100,
     randomize: false,
     sort: false,
-    filter: false
+    filter: false,
+    selector: '> a, > div:not(.spinner)' // The selector that is used to know what are the entries of the gallery
   };
 
 }(jQuery));
