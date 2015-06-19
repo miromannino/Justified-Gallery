@@ -15,7 +15,10 @@
    * @constructor
    */
   var JustifiedGallery = function ($gallery, settings) {
+
     this.settings = settings;
+    this.checkSettings();
+
     this.imgAnalyzerTimeout = null;
     this.entries = null;
     this.buildingRow = {
@@ -25,11 +28,11 @@
     };
     this.lastAnalyzedIndex = -1;
     this.yield = {
-      every : 2, /* do a flush every n flushes (must be greater than 1, 
-                  * else the analyzeImages will loop */
+      every : 2, // do a flush every n flushes (must be greater than 1)
       flushed : 0 // flushed rows without a yield
     };
     this.border = settings.border >= 0 ? settings.border : settings.margins;
+    this.suffixRanges = this.retrieveSuffixRanges();
     this.offY = this.border;
     this.spinner = {
       phase : 0,
@@ -41,27 +44,18 @@
     this.galleryWidth = $gallery.width();
     this.$gallery = $gallery;
 
-    // Check the assigned settings
-    this.checkSettings();
   };
 
   /** @returns {String} the best suffix given the width and the height */
   JustifiedGallery.prototype.getSuffix = function (width, height) {
-    var longestSide;
+    var longestSide, i;
     longestSide = (width > height) ? width : height;
-    if (longestSide <= 100) {
-      return this.settings.sizeRangeSuffixes.lt100;
-    } else if (longestSide <= 240) {
-      return this.settings.sizeRangeSuffixes.lt240;
-    } else if (longestSide <= 320) {
-      return this.settings.sizeRangeSuffixes.lt320;
-    } else if (longestSide <= 500) {
-      return this.settings.sizeRangeSuffixes.lt500;
-    } else if (longestSide <= 640) {
-      return this.settings.sizeRangeSuffixes.lt640;
-    } else {
-      return this.settings.sizeRangeSuffixes.lt1024;
+    for (i = 0; i < this.suffixRanges.length; i++) {
+      if (longestSide <= this.suffixRanges[i]) {
+        return this.settings.sizeRangeSuffixes[this.suffixRanges[i]];
+      }
     }
+    return this.settings.sizeRangeSuffixes[this.suffixRanges[i - 1]];
   };
 
   /**
@@ -842,17 +836,6 @@
   };
 
   /**
-   * Check the range suffixes
-   *
-   * @param range the range key
-   */
-  JustifiedGallery.prototype.checkRangeSuffix = function (range) {
-    if ($.type(this.settings.sizeRangeSuffixes[range]) !== 'string') {
-      throw 'sizeRangeSuffixes.' + range + ' must be a string';
-    }
-  };
-
-  /**
    * Checks that it is a valid number. If a string is passed it is converted to a number
    *
    * @param settingContainer the object that contains the setting (to allow the conversion)
@@ -878,12 +861,22 @@
       throw 'sizeRangeSuffixes must be defined and must be an object';
     }
 
-    this.checkRangeSuffix('lt100');
-    this.checkRangeSuffix('lt240');
-    this.checkRangeSuffix('lt320');
-    this.checkRangeSuffix('lt500');
-    this.checkRangeSuffix('lt640');
-    this.checkRangeSuffix('lt1024');
+    // Check the suffix ranges and convert them in number if they are strings
+    var suffxRngs = this.retrieveSuffixRanges();
+    var newSizeRngSuffxs = {};
+    for (var i = 0; i < suffxRngs.length; i++) {
+      if ($.type(suffxRngs[i]) === 'string') {
+        try {
+          var numIdx = parseInt(suffxRngs[i].replace(/^[a-z]+/, ''), 10);
+          newSizeRngSuffxs[numIdx] = this.settings.sizeRangeSuffixes[suffxRngs[i]];
+        } catch (e) {
+          throw 'sizeRangeSuffixes keys must contains correct numbers (' + e + ')';
+        }
+      } else {
+        newSizeRngSuffxs[suffxRngs[i]] = this.settings.sizeRangeSuffixes[suffxRngs[i]];
+      }
+    }
+    this.settings.sizeRangeSuffixes = newSizeRngSuffxs;
 
     this.checkOrConvertNumber(this.settings, 'rowHeight');
     this.checkOrConvertNumber(this.settings, 'maxRowHeight');
@@ -925,7 +918,7 @@
     this.checkOrConvertNumber(this.settings, 'refreshTime');
     if ($.type(this.settings.randomize) !== 'boolean') throw 'randomize must be a boolean';
     if ($.type(this.settings.selector) !== 'string') throw 'selector must be a string';
-    
+
     if (this.settings.sort !== false && !$.isFunction(this.settings.sort)) {
       throw 'sort must be false or a comparison function';
     }
@@ -934,6 +927,18 @@
       throw 'filter must be false, a string or a filter function';
     }
 
+  };
+
+  /**
+   * It brings all the indexes from the sizeRangeSuffixes and it orders them. They are then sorted and returned.
+   * @returns {array} sorted suffix ranges
+   */
+  JustifiedGallery.prototype.retrieveSuffixRanges = function () {
+    var suffixRanges = [];
+    for (var rangeIdx in this.settings.sizeRangeSuffixes) {
+      if (this.settings.sizeRangeSuffixes.hasOwnProperty(rangeIdx)) suffixRanges.push(rangeIdx);
+    }
+    return suffixRanges.sort();
   };
 
   /**
@@ -947,6 +952,9 @@
 
     // As reported in the settings: negative value = same as margins, 0 = disabled
     this.border = this.settings.border >= 0 ? this.settings.border : this.settings.margins;
+
+    // Update suffixes ranges
+    this.suffixRanges = this.retrieveSuffixRanges();
 
     // Checks the new settings
     this.checkSettings();
@@ -1002,12 +1010,12 @@
   // Default options
   $.fn.justifiedGallery.defaults = {
     sizeRangeSuffixes: {
-      'lt100': '',  // e.g. Flickr uses '_t'
-      'lt240': '',  // e.g. Flickr uses '_m'
-      'lt320': '',  // e.g. Flickr uses '_n'
-      'lt500': '',  // e.g. Flickr uses ''
-      'lt640': '',  // e.g. Flickr uses '_z'
-      'lt1024': ''  // e.g. Flickr uses '_b'
+      100: '',  // e.g. Flickr uses '_t'
+      240: '',  // e.g. Flickr uses '_m'
+      320: '',  // e.g. Flickr uses '_n'
+      500: '',  // e.g. Flickr uses ''
+      640: '',  // e.g. Flickr uses '_z'
+      1024: ''  // e.g. Flickr uses '_b'
     },
     rowHeight: 120,
     maxRowHeight: 0, // negative value = no limits, 0 = 1.5 * rowHeight
