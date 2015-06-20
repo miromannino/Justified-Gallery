@@ -853,9 +853,10 @@
   };
 
   /**
-   * Checks the settings
+   * Checks the sizeRangeSuffixes and, if necessary, converts
+   * its keys from string (e.g. old settings with 'lt100') to int.
    */
-  JustifiedGallery.prototype.checkSettings = function () {
+  JustifiedGallery.prototype.checkSizeRangesSuffixes = function () {
     if ($.type(this.settings.sizeRangeSuffixes) !== 'object') {
       throw 'sizeRangeSuffixes must be defined and must be an object';
     }
@@ -876,6 +877,13 @@
       }
     }
     this.settings.sizeRangeSuffixes = newSizeRngSuffxs;
+  };
+
+  /**
+   * Checks the settings
+   */
+  JustifiedGallery.prototype.checkSettings = function () {
+    this.checkSizeRangesSuffixes();
 
     this.checkOrConvertNumber(this.settings, 'rowHeight');
     this.checkOrConvertNumber(this.settings, 'maxRowHeight');
@@ -887,7 +895,9 @@
     this.checkOrConvertNumber(this.settings, 'margins');
     this.checkOrConvertNumber(this.settings, 'border');
 
-    if (this.settings.lastRow !== 'nojustify' && this.settings.lastRow !== 'justify' && this.settings.lastRow !== 'hide') {
+    if (this.settings.lastRow !== 'nojustify'
+        && this.settings.lastRow !== 'justify'
+        && this.settings.lastRow !== 'hide') {
       throw 'lastRow must be "nojustify", "justify" or "hide"';
     }
 
@@ -903,12 +913,14 @@
     this.checkOrConvertNumber(this.settings.captionSettings, 'animationDuration');
 
     this.checkOrConvertNumber(this.settings.captionSettings, 'visibleOpacity');
-    if (this.settings.captionSettings.visibleOpacity < 0 || this.settings.captionSettings.visibleOpacity > 1) {
+    if (this.settings.captionSettings.visibleOpacity < 0
+        || this.settings.captionSettings.visibleOpacity > 1) {
       throw 'captionSettings.visibleOpacity must be in the interval [0, 1]';
     }
 
     this.checkOrConvertNumber(this.settings.captionSettings, 'nonVisibleOpacity');
-    if (this.settings.captionSettings.nonVisibleOpacity < 0 || this.settings.captionSettings.nonVisibleOpacity > 1) {
+    if (this.settings.captionSettings.nonVisibleOpacity < 0
+        || this.settings.captionSettings.nonVisibleOpacity > 1) {
       throw 'captionSettings.nonVisibleOpacity must be in the interval [0, 1]';
     }
 
@@ -1009,7 +1021,7 @@
   // Default options
   $.fn.justifiedGallery.defaults = {
     sizeRangeSuffixes: {
-      100: '',  // e.g. Flickr uses '_t'
+      100: '',  // used with images with the longest side which is less than 100px (e.g. Flickr uses '_t')
       240: '',  // e.g. Flickr uses '_m'
       320: '',  // e.g. Flickr uses '_n'
       500: '',  // e.g. Flickr uses ''
