@@ -31,6 +31,7 @@
       flushed : 0 // flushed rows without a yield
     };
     this.border = settings.border >= 0 ? settings.border : settings.margins;
+    this.maxRowHeight = this.retrieveMaxRowHeight();
     this.suffixRanges = this.retrieveSuffixRanges();
     this.offY = this.border;
     this.spinner = {
@@ -80,21 +81,13 @@
    * @returns {String} return the used suffix
    */
   JustifiedGallery.prototype.getUsedSuffix = function (str) {
-    var voidSuffix = false;
     for (var si in this.settings.sizeRangeSuffixes) {
       if (this.settings.sizeRangeSuffixes.hasOwnProperty(si)) {
-        if (this.settings.sizeRangeSuffixes[si].length === 0) {
-          voidSuffix = true;
-          continue;
-        }
-        if (this.endsWith(str, this.settings.sizeRangeSuffixes[si])) {
-          return this.settings.sizeRangeSuffixes[si];
-        }
+        if (this.settings.sizeRangeSuffixes[si].length === 0) continue;
+        if (this.endsWith(str, this.settings.sizeRangeSuffixes[si])) return this.settings.sizeRangeSuffixes[si];
       }
     }
-
-    if (voidSuffix) return "";
-    else throw 'unknown suffix for ' + str;
+    return '';
   };
 
   /**
@@ -387,10 +380,10 @@
       return;
     }
 
-    if (settings.maxRowHeight > 0 && settings.maxRowHeight < minHeight) {
-      minHeight = settings.maxRowHeight;
-    } else if (settings.maxRowHeight === 0 && (1.5 * settings.rowHeight) < minHeight) {
-      minHeight = 1.5 * settings.rowHeight;
+    if (this.maxRowHeight.percentage) {
+      if (this.maxRowHeight.value * settings.rowHeight < minHeight) minHeight = this.maxRowHeight.value * settings.rowHeight;
+    } else {
+      if (this.maxRowHeight.value > 0 && this.maxRowHeight.value < minHeight) minHeight = this.maxRowHeight.value;
     }
 
     for (var i = 0; i < this.buildingRow.entriesBuff.length; i++) {
@@ -861,22 +854,63 @@
       throw 'sizeRangeSuffixes must be defined and must be an object';
     }
 
-    // Check the suffix ranges and convert them in number if they are strings
-    var suffxRngs = this.retrieveSuffixRanges();
-    var newSizeRngSuffxs = {};
-    for (var i = 0; i < suffxRngs.length; i++) {
-      if ($.type(suffxRngs[i]) === 'string') {
+    var suffixRanges = [];
+    for (var rangeIdx in this.settings.sizeRangeSuffixes) {
+      if (this.settings.sizeRangeSuffixes.hasOwnProperty(rangeIdx)) suffixRanges.push(rangeIdx);
+    }
+
+    var newSizeRngSuffixes = {0: ''};
+    for (var i = 0; i < suffixRanges.length; i++) {
+      if ($.type(suffixRanges[i]) === 'string') {
         try {
-          var numIdx = parseInt(suffxRngs[i].replace(/^[a-z]+/, ''), 10);
-          newSizeRngSuffxs[numIdx] = this.settings.sizeRangeSuffixes[suffxRngs[i]];
+          var numIdx = parseInt(suffixRanges[i].replace(/^[a-z]+/, ''), 10);
+          newSizeRngSuffixes[numIdx] = this.settings.sizeRangeSuffixes[suffixRanges[i]];
         } catch (e) {
           throw 'sizeRangeSuffixes keys must contains correct numbers (' + e + ')';
         }
       } else {
-        newSizeRngSuffxs[suffxRngs[i]] = this.settings.sizeRangeSuffixes[suffxRngs[i]];
+        newSizeRngSuffixes[suffixRanges[i]] = this.settings.sizeRangeSuffixes[suffixRanges[i]];
       }
     }
-    this.settings.sizeRangeSuffixes = newSizeRngSuffxs;
+
+    this.settings.sizeRangeSuffixes = newSizeRngSuffixes;
+  };
+
+  /**
+   * check and convert the maxRowHeight setting
+   */
+  JustifiedGallery.prototype.retrieveMaxRowHeight = function () {
+    var newMaxRowHeight = { };
+
+    if ($.type(this.settings.maxRowHeight) == 'string') {
+      if (this.settings.maxRowHeight.match(/^[0-9]+%$/)) {
+        newMaxRowHeight.value = parseFloat(this.settings.maxRowHeight.match(/^([0-9])+%$/)[1]) / 100;
+        newMaxRowHeight.percentage = false;
+      } else {
+        newMaxRowHeight.value = parseFloat(this.settings.maxRowHeight);
+        newMaxRowHeight.percentage = true;
+      }
+    } else if ($.type(this.settings.maxRowHeight) === 'number') {
+      newMaxRowHeight.value = this.settings.maxRowHeight;
+      newMaxRowHeight.percentage = false;
+    } else {
+      throw 'maxRowHeight must be a number or a percentage';
+    }
+
+    // check if the converted value is not a number
+    if (isNaN(newMaxRowHeight.value)) throw 'invalid number for maxRowHeight';
+
+    // check values
+    if (newMaxRowHeight.percentage) {
+      if (newMaxRowHeight.value < 100) newMaxRowHeight.value = 100;
+    } else {
+      if (newMaxRowHeight.value > 0 && newMaxRowHeight.value < this.settings.rowHeight) {
+        newMaxRowHeight.value = this.settings.rowHeight;
+      }
+    }
+
+    return newMaxRowHeight;
+
   };
 
   /**
@@ -886,12 +920,6 @@
     this.checkSizeRangesSuffixes();
 
     this.checkOrConvertNumber(this.settings, 'rowHeight');
-    this.checkOrConvertNumber(this.settings, 'maxRowHeight');
-
-    if (this.settings.maxRowHeight > 0 && this.settings.maxRowHeight < this.settings.rowHeight) {
-      this.settings.maxRowHeight = this.settings.rowHeight;
-    }
-
     this.checkOrConvertNumber(this.settings, 'margins');
     this.checkOrConvertNumber(this.settings, 'border');
 
@@ -934,22 +962,23 @@
       throw 'sort must be false or a comparison function';
     }
 
-    if (this.settings.filter !== false && !($.type(this.settings.filter) in ['string', 'function'])) {
+    if (this.settings.filter !== false && !$.isFunction(this.settings.sort)
+        && $.type(this.settings.filter) !== 'string') {
       throw 'filter must be false, a string or a filter function';
     }
-
   };
 
   /**
    * It brings all the indexes from the sizeRangeSuffixes and it orders them. They are then sorted and returned.
-   * @returns {array} sorted suffix ranges
+   * @returns {Array} sorted suffix ranges
    */
   JustifiedGallery.prototype.retrieveSuffixRanges = function () {
     var suffixRanges = [];
     for (var rangeIdx in this.settings.sizeRangeSuffixes) {
-      if (this.settings.sizeRangeSuffixes.hasOwnProperty(rangeIdx)) suffixRanges.push(rangeIdx);
+      if (this.settings.sizeRangeSuffixes.hasOwnProperty(rangeIdx)) suffixRanges.push(parseInt(rangeIdx, 10));
     }
-    return suffixRanges.sort();
+    suffixRanges.sort(function (a, b) { return a > b ? 1 : a < b ? -1 : 0; });
+    return suffixRanges;
   };
 
   /**
@@ -960,16 +989,13 @@
   JustifiedGallery.prototype.updateSettings = function (newSettings) {
     // In this case Justified Gallery has been called again changing only some options
     this.settings = $.extend({}, this.settings, newSettings);
+    this.checkSettings();
 
     // As reported in the settings: negative value = same as margins, 0 = disabled
     this.border = this.settings.border >= 0 ? this.settings.border : this.settings.margins;
 
-    // Update suffixes ranges
+    this.maxRowHeight = this.retrieveMaxRowHeight();
     this.suffixRanges = this.retrieveSuffixRanges();
-
-    // Checks the new settings
-    this.checkSettings();
-
   };
 
   /**
@@ -1020,16 +1046,20 @@
 
   // Default options
   $.fn.justifiedGallery.defaults = {
-    sizeRangeSuffixes: {
-      100: '',  // used with images with the longest side which is less than 100px (e.g. Flickr uses '_t')
-      240: '',  // e.g. Flickr uses '_m'
-      320: '',  // e.g. Flickr uses '_n'
-      500: '',  // e.g. Flickr uses ''
-      640: '',  // e.g. Flickr uses '_z'
-      1024: ''  // e.g. Flickr uses '_b'
-    },
+    sizeRangeSuffixes: { }, /* e.g. Flickr configuration
+        {
+          100: '_t',  // used when longest is less than 100px
+          240: '_m',  // used when longest is between 101px and 240px
+          320: '_n',  // ...
+          500: '',
+          640: '_z',
+          1024: '_b'  // used as else case because it is the last
+        }
+    */
     rowHeight: 120,
-    maxRowHeight: 0, // negative value = no limits, 0 = 1.5 * rowHeight
+    maxRowHeight: '200%', // negative value = no limits, number to express the value in pixels,
+                          // '[0-9]+%' to express in percentage (e.g. 200% means that the row height
+                          // can't exceed 2 * rowHeight)
     margins: 1,
     border: -1, // negative value = same as margins, 0 = disabled, any other value to set the border
 
