@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- bower:css -->
+    <link rel="stylesheet" href="../../bower_components/colorbox/example1/colorbox.css" />
+    <link rel="stylesheet" href="../../bower_components/swipebox/src/css/swipebox.min.css" />
+    <link rel="stylesheet" href="../../dist/css/justifiedGallery.css" />
+    <!-- endbower -->
+    <style>
+        html { overflow-y:scroll; }
+    </style>
+</head>
+
+<body>
+    <h1>Layout test</h1>
+    <div id="simpletest" style="background-color: red;">
+        <a><img src="http://lorempixel.com/350/350" /></a>
+        <a><img src="http://lorempixel.com/350/350" /></a>
+        <a><img src="http://lorempixel.com/350/350" /></a>
+    </div>
+    
+    <!-- bower:js -->
+    <script src="../../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../../bower_components/colorbox/jquery.colorbox.js"></script>
+    <script src="../../bower_components/swipebox/src/js/jquery.swipebox.min.js"></script>
+    <script src="../../dist/js/jquery.justifiedGallery.js"></script>
+    <!-- endbower -->
+    <script>
+    $("#simpletest").justifiedGallery({
+        rowHeight: 250,
+        lastRow: 'nojustify',
+        justifyThreshold: 0.5
+    });
+    </script>
+</body>
+
+</html>

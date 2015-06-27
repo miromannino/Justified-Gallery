@@ -661,18 +661,14 @@
    * @param isForResize if the image analyzer is called for resizing or not, to call a different callback at the end
    */
   JustifiedGallery.prototype.analyzeImages = function (isForResize) {
-    var isLastRow;
-
     for (var i = this.lastAnalyzedIndex + 1; i < this.entries.length; i++) {
       var $entry = $(this.entries[i]);
       if ($entry.data('jg.loaded') === true || $entry.data('jg.loaded') === 'skipped') {
-        isLastRow = i >= this.entries.length - 1;
-
         var availableWidth = this.galleryWidth - 2 * this.border - (
             (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
         var imgAspectRatio = $entry.data('jg.width') / $entry.data('jg.height');
         if (availableWidth / (this.buildingRow.aspectRatio + imgAspectRatio) < this.settings.rowHeight) {
-          this.flushRow(isLastRow);
+          this.flushRow(false);
           if(++this.yield.flushed >= this.yield.every) {
             this.startImgAnalyzer(isForResize);
             return;
