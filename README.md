@@ -34,7 +34,7 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 		2000: '_m'
 	}
 	```
-
+* Configurable entry selector
 * Code refactoring
 
 ### 3.5.4
