@@ -19,10 +19,22 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 
 ### 3.6
 
-* No-image/text entries
 * Sort (works also with infinite scroll)
 * Filter (works also with infinite scroll)
+* Randomize images now works also with infinite scroll
+* Text entries (i.e. without images) support
 * Destroy method
+* maxRowHeight could be also a percentage
+* configurable sizeRangeSuffixes.
+  e.g. to have only thumbnails and big images it could be:
+
+	```	
+	sizeRangeSuffixes : { 
+		500: '_t', 
+		2000: '_m'
+	}
+	```
+
 * Code refactoring
 
 ### 3.5.4
