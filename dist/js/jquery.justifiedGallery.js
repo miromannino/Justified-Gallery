@@ -1,5 +1,5 @@
 /*!
- * Justified Gallery - v3.5.4
+ * Justified Gallery - v3.6.0
  * http://miromannino.github.io/Justified-Gallery/
  * Copyright (c) 2015 Miro Mannino
  * Licensed under the MIT license.
@@ -114,7 +114,7 @@
   JustifiedGallery.prototype.showImg = function ($entry, callback) {
     if (this.settings.cssAnimation) {
       $entry.addClass('entry-visible');
-      callback();
+      if (callback) callback();
     } else {
       $entry.stop().fadeTo(this.settings.imagesAnimationDuration, 1.0, callback);
     }
@@ -177,20 +177,23 @@
         $image.attr('src', $image.data('jg.originalSrc')); //revert to the original thumbnail, we got it.
       });
 
-      function loadNewImage() {
+      var loadNewImage = function () {
         if (imageSrc !== newImageSrc) { //load the new image after the fadeIn
           $image.attr('src', newImageSrc);
         }
-      }
-    }
+      };
 
-    if ($entry.data('jg.loaded') === 'skipped') {
-      this.onImageEvent(imageSrc, $.proxy(function() {
+      if ($entry.data('jg.loaded') === 'skipped') {
+        this.onImageEvent(imageSrc, $.proxy(function() {
+          this.showImg($entry, loadNewImage);
+          $entry.data('jg.loaded', true);
+        }, this));
+      } else {
         this.showImg($entry, loadNewImage);
-        $entry.data('jg.loaded', true);
-      }, this));
+      }
+
     } else {
-      this.showImg($entry, loadNewImage);
+      this.showImg($entry);
     }
 
     this.displayEntryCaption($entry);
@@ -878,7 +881,7 @@
   JustifiedGallery.prototype.retrieveMaxRowHeight = function () {
     var newMaxRowHeight = { };
 
-    if ($.type(this.settings.maxRowHeight) == 'string') {
+    if ($.type(this.settings.maxRowHeight) === 'string') {
       if (this.settings.maxRowHeight.match(/^[0-9]+%$/)) {
         newMaxRowHeight.value = parseFloat(this.settings.maxRowHeight.match(/^([0-9])+%$/)[1]) / 100;
         newMaxRowHeight.percentage = false;
@@ -919,9 +922,9 @@
     this.checkOrConvertNumber(this.settings, 'margins');
     this.checkOrConvertNumber(this.settings, 'border');
 
-    if (this.settings.lastRow !== 'nojustify'
-        && this.settings.lastRow !== 'justify'
-        && this.settings.lastRow !== 'hide') {
+    if (this.settings.lastRow !== 'nojustify' &&
+        this.settings.lastRow !== 'justify' &&
+        this.settings.lastRow !== 'hide') {
       throw 'lastRow must be "nojustify", "justify" or "hide"';
     }
 
@@ -937,14 +940,14 @@
     this.checkOrConvertNumber(this.settings.captionSettings, 'animationDuration');
 
     this.checkOrConvertNumber(this.settings.captionSettings, 'visibleOpacity');
-    if (this.settings.captionSettings.visibleOpacity < 0
-        || this.settings.captionSettings.visibleOpacity > 1) {
+    if (this.settings.captionSettings.visibleOpacity < 0 ||
+        this.settings.captionSettings.visibleOpacity > 1) {
       throw 'captionSettings.visibleOpacity must be in the interval [0, 1]';
     }
 
     this.checkOrConvertNumber(this.settings.captionSettings, 'nonVisibleOpacity');
-    if (this.settings.captionSettings.nonVisibleOpacity < 0
-        || this.settings.captionSettings.nonVisibleOpacity > 1) {
+    if (this.settings.captionSettings.nonVisibleOpacity < 0 ||
+        this.settings.captionSettings.nonVisibleOpacity > 1) {
       throw 'captionSettings.nonVisibleOpacity must be in the interval [0, 1]';
     }
 
@@ -958,8 +961,8 @@
       throw 'sort must be false or a comparison function';
     }
 
-    if (this.settings.filter !== false && !$.isFunction(this.settings.sort)
-        && $.type(this.settings.filter) !== 'string') {
+    if (this.settings.filter !== false && !$.isFunction(this.settings.sort) &&
+        $.type(this.settings.filter) !== 'string') {
       throw 'filter must be false, a string or a filter function';
     }
   };
