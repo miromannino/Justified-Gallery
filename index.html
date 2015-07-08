@@ -17,7 +17,7 @@ layout: default
 
 <hr/>
 
-<div id="liveDemo" >
+<div id="liveDemo" class="justified-gallery">
 	{% for en in site.images %}
 		<div>
 			<img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg" />
@@ -232,11 +232,11 @@ $("#mygallery").justifiedGallery();
 
 <p class="text-center">
 This is an open source project, and I don't earn anything from it. You can help the project to grow in various way:
-
 <ul>
 <li>Talking about it (in blogs, social network, etc.)</li>
 <li>Writing your personal features, and making a pull request, as someone did. If you want to do this, go to the <a href="https://github.com/miromannino/Justified-Gallery" title="Justified Gallery Github Project Page" target="_blank">github project page</a>.</li>
-<li>Donate! I will be more motivated to implement your requested features.
+<li>Adding me on LinkedIn (Miro Mannino) to endorse me some skills, to leave me a positive comment, or just to connect each other in case of future projects together.</li>
+<li>Donating:
 <div class="text-center" style="margin-top: 20px;">
 <form action="https://www.paypal.com/<cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">

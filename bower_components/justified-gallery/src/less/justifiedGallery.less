@@ -1,0 +1,128 @@
+/*
+ * Justified Gallery - v3.6.0
+ * http://miromannino.com/projects/justified-gallery/
+ * Copyright (c) 2014 Miro Mannino
+ * Licensed under the MIT license.
+ */
+
+@caption-initial-opacity: 0.0;
+@caption-visibile-opacity: 0.7;
+@caption-animation-duration: 500ms;
+
+.animation (@name, @duration: 500ms, @delay: 0, @ease: ease) {
+	-webkit-animation: @name @duration @delay @ease;
+	-moz-animation:    @name @duration @delay @ease;
+	-ms-animation:     @name @duration @delay @ease;
+}
+
+.show-caption-frame () {
+	from {opacity: @caption-initial-opacity;}
+	to {opacity: @caption-visibile-opacity;}
+}
+
+.show-entry-frame () {
+	from {opacity: 0;}
+	to {opacity: 1.0;}
+}
+
+@-webkit-keyframes justified-gallery-show-caption-animation {.show-caption-frame};
+@-moz-keyframes justified-gallery-show-caption-animation {.show-caption-frame};
+@-o-keyframes justified-gallery-show-caption-animation {.show-caption-frame};
+@keyframes justified-gallery-show-caption-animation {.show-caption-frame};
+
+@-webkit-keyframes justified-gallery-show-entry-animation {.show-entry-frame};
+@-moz-keyframes justified-gallery-show-entry-animation {.show-entry-frame};
+@-o-keyframes justified-gallery-show-entry-animation {.show-entry-frame};
+@keyframes justified-gallery-show-entry-animation {.show-entry-frame};
+
+.justified-gallery { 
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+
+	> a, > div {
+		position: absolute;
+		display: inline-block;
+		overflow: hidden;
+		opacity: 0;
+		filter: e("alpha(opacity=0)"); /* IE8 or Earlier */
+
+		> img, > a > img {
+			position: absolute;
+			top: 50%; 
+			left: 50%; 
+			margin: 0;
+			padding: 0;
+			border: none;
+		}
+
+		> .caption {
+			& when (@caption-initial-opacity = 0) {
+				display: none;
+			}
+			& when (@caption-initial-opacity > 0) {
+				display: initial;
+				opacity: @caption-initial-opacity;
+				filter: %("alpha(opacity=%d)", @caption-initial-opacity * 100); /* IE8 or Earlier */
+			}
+			position: absolute;
+			bottom: 0;
+			padding: 5px;
+			background-color: #000000;
+			left: 0;
+			right: 0;
+			margin: 0;
+			color: white;
+			font-size: 12px;
+			font-weight: 300;
+			font-family: sans-serif;
+		}
+
+		> .caption.caption-visible {
+			display: initial;
+			opacity: @caption-visibile-opacity;
+			filter: %("alpha(opacity=%d)", @caption-visibile-opacity * 100); /* IE8 or Earlier */
+			.animation(justified-gallery-show-caption-animation, @caption-animation-duration);
+		}
+
+	}
+
+	> .entry-visible {
+		opacity: 1.0;
+		filter: e("alpha(opacity=100)"); /* IE8 or Earlier */
+		.animation(justified-gallery-show-entry-animation);
+	}
+
+  	> .jg-filtered {
+		display: none;
+	}
+
+	> .spinner {
+		@spinnerDotWeight: 8px;
+		@spinnerDotNum: 3;
+
+		position: absolute;
+		bottom: 0;
+		margin-left: -(@spinnerDotWeight * 2) * @spinnerDotNum / 2;
+		padding: 10px 0 10px 0;
+		left: 50%;
+		opacity: initial;
+		filter: initial;
+		overflow: initial;
+
+		> span {
+			display: inline-block;
+			opacity: 0;
+			filter:alpha(opacity=0); /* IE8 or Earlier */
+			width: @spinnerDotWeight;
+			height: @spinnerDotWeight;
+			margin: 0 (@spinnerDotWeight / 2) 0 (@spinnerDotWeight / 2);
+			background-color: #000;
+			border-top-left-radius: @spinnerDotWeight - 2px;
+			border-top-right-radius: @spinnerDotWeight - 2px;
+			border-bottom-right-radius: @spinnerDotWeight - 2px;
+			border-bottom-left-radius: @spinnerDotWeight - 2px;
+		}
+	}
+
+}

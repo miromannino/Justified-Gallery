@@ -11,7 +11,7 @@ title: Getting Started
 
 <div>
 	<p>
-		Here we have a <code>div</code>, with the id <code>basicExample</code>, that has a list of links that point to some images (original size images), and where inside of each link there is a thumbnail. Calling Justified Gallery, the disposition of all the thumbnails is changed to fill all the spaces (<i>justification</i>). 
+		Here we have a <code>div</code>, with the id <code>basicExample</code>, that has a list of links that point to some images (original size images), and where inside of each link there is a thumbnail. Calling Justified Gallery, the disposition of all the thumbnails is changed to fill all the spaces (<i>justification</i>).
 	</p>
 	{% highlight html %}
 <div id="basicExample">
@@ -60,14 +60,14 @@ $("#basicExample").justifiedGallery();
 </figure>
 
 <p>
-	However, the justification may resize the images, and, as a consequence, the row height may be a little bit different than 160px. This means that the row height is intended as your preferred height, and it is not an exact measure. If you want that the row height remains strictly fixed, you can use the <a href="{{ '/options-and-events' | prepend: site.baseurl }}"><code>fixedHeight</code></a> option: this option will crop the images a little bit to make sure that the row height doesn’t change.
+	However, the justification may resize the images, and, as a consequence, the row height may be a little bit different than 160px. This means that the row height is intended as your preferred height, and it is not an exact measure. If you want that the row height remains strictly fixed, you can use the <a href="{{ '/options-and-events' | prepend: site.baseurl }}"><code>fixedHeight</code></a> option; but remember that this option will crop the images a little bit to make sure that the row height doesn’t change.
 </p><p>
 	This algorithm builds each row until it reaches the last. But, this last row may not have enough images to fill the entire width. In this case you can decide (with the <a href="{{ '/options-and-events' | prepend: site.baseurl }}"><code>lastRow</code></a> option) to leave a blank space, to justify the images, or to hide the last row if there is too much blank space. But, note that, if you decide to justify the last row, and you don’t have the fixed height option, the last images can be much larger than the others (you can use the <a href="{{ '/options-and-events' | prepend: site.baseurl }}"><code>maxRowHeight</code></a> option to control this behavior).
 </p><p>
 	The following is an example where we use smaller images (<a href="{{ '/options-and-events' | prepend: site.baseurl }}"><code>rowHeight : 70</code></a>). Furthermore, we don't justify the last row (<a href="{{ '/options-and-events' | prepend: site.baseurl }}"><code>lastRow : 'nojustify'</code></a>), and we are using a margin of 5px (<a href="{{ '/options-and-events' | prepend: site.baseurl }}"><code>margins : 5px</code></a>).
 </p>
 {% highlight html %}
-<div id="basicExample2">
+<div id="basicExample2" class="justified-gallery">
     <a href="path/to/image1.jpg">
         <img alt="caption for image 1" src="path/to/image1_thumbnail.jpg" />
     </a>
@@ -84,7 +84,7 @@ $('#basicExample2').justifiedGallery({
 });
 {% endhighlight %}
 
-<div id="basicExample2" >
+<div id="basicExample2" class="justified-gallery">
 {% for en in site.images %}
 	<a href="{{ en.url | prepend: site.baseurl }}_b.jpg">
 		<img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg" />
@@ -110,19 +110,33 @@ $('#basicExample2').justifiedGallery({
 </script>
 
 <p style="margin-top: 15px;">
-	The thubnails can also be changed: bigger or smaller thumbnails can be loaded to always have an high quality also after resizes.
-	To do that you simply have to change the setting <code>sizeRangeSuffixes</code>. For example, to agree with the <a href="http://www.flickr.com/services/api/misc.urls.html">Flickr's suffixes</a>, you have to set this setting in the following way:
+	If in the server-side you have different sizes of the same images (e.g. a thumbnail for small devices, a bigger thumbnail for retina displays, etc.),
+	the plugin can be set to automatically load the best available thumbnails: bigger or smaller thumbnails are loaded to always have an high quality of
+	the images.
+
+	To do that you simply have to change the setting <code>sizeRangeSuffixes</code>. For example,
+	to agree with the <a href="http://www.flickr.com/services/api/misc.urls.html">Flickr's suffixes</a>, you have to set
+	this setting in the following way:
 	{% highlight javascript %}
 sizeRangeSuffixes: {
-    lt100 : '_t', 
-    lt240 : '_m', 
-    lt320 : '_n', 
-    lt500 : '', 
-    lt640 : '_z', 
-    lt1024 : '_b'
+    100 : '_t', // used with images which are less than 100px on the longest side
+    240 : '_m', // used with images which are between 100px and 240px on the longest side
+    320 : '_n', // ...
+    500 : '',
+    640 : '_z',
+    1024 : '_b' // used which images that are more than 640px on the longest side
 }
 	{% endhighlight %}
-	In this way the plugin will derives the path of the other thumbnails for the same image changing the filenames suffix. For example, if in a link there is the thumbnail <code>path/to/image1_t.jpg</code>, the plugin can load the thumbnails <code>path/to/image1_b.jpg</code>.
+	In this way the plugin derives the path of the other thumbnails for the same image only changing the filenames suffix.
+	For example, with an entry with the thumbnail <code>path/to/image1_t.jpg</code>, the plugin could load the thumbnail <code>path/to/image1_b.jpg</code>.
+</p>
+<p>
+	By default, the plugin is configured to only use the thumbnail that is provided in the HTML. To do that, it uses the following
+	configuration:
+
+	{% highlight javascript %}
+sizeRangeSuffixes: { }
+	{% endhighlight %}
 </p>
 
 <p style="margin-top: 15px;">

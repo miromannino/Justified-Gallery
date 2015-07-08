@@ -214,22 +214,20 @@ title: Options &amp; Events
 			<th>option</th><th>default value</th><th>description</th>
 		</tr>
 		<tr>
-			<td><code>rowHeight</code></td><td><code>120</code></td><td>The approximately height of rows in pixel.</td>
+			<td><code>rowHeight</code></td><td><code>120</code></td>
+			<td>The preferred height of rows in pixel.</td>
 		</tr>
 		<tr>
-			<td><code>maxRowHeight</code></td><td><code>0</code></td><td>The maximum row height in pixel. Negative value to haven't limits. Zero to have a limit of <code>1.5 * rowHeight</code></td>
+			<td><code>maxRowHeight</code></td><td><code>'200%'</code></td>
+			<td>A number (e.g <code>200</code>) which specifies the maximum row height in pixel.
+			A negative value to don't have limits. Alternatively, a string which specifies a percentage (e.g. 200% means that the row height
+			can't exceed <code>2 * rowHeight</code>)</td>
 		</tr>
 		<tr>
-			<td><code>sizeRangeSuffixes</code></td><td>
-			<code style="white-space: nowrap;">{'lt100':'', <br/> 
-				'lt240':'', <br/>
-				'lt320':'', <br/>
-				'lt500':'', <br/>
-				'lt640':'', <br/>
-				'lt1024':''}</code></td><td>
+			<td><code>sizeRangeSuffixes</code></td>
+			<td><code style="white-space: nowrap;">{ }</code></td><td>
 				<p>
-				Describes the suffix for each size range. By default all the suffixes are the same and void:
-				the plugin doesn't search for other thumbnails.
+				Describes the suffix for each size range. By default the plugin doesn't search for other thumbnails.
 				</p>
 				<p>
 					To agree with the <a href="http://www.flickr.com/services/api/misc.urls.html">Flickr's suffixes</a> you should change it in the following way:
@@ -244,47 +242,94 @@ title: Options &amp; Events
 				</td>
 			</tr>
 			<tr>
-				<td><code>lastRow</code></td><td><code>'nojustify'</code></td><td>Decide if you want to justify the last row (i.e. <code>'justify'</code>) or not (i.e. <code>'nojustify'</code>), or to hide the row if it can't be justified (i.e. <code>'hide'</code>)</td>
+				<td><code>lastRow</code></td><td><code>'nojustify'</code></td>
+				<td>Decide if you want to justify the last row (i.e. <code>'justify'</code>) or not (i.e. <code>'nojustify'</code>),
+					or to hide the row if it can't be justified (i.e. <code>'hide'</code>)</td>
 			</tr>
 			<tr>
-				<td><code>fixedHeight</code></td><td><code>false</code></td><td>Decide if you want to have a fixed height. This mean that all the rows will be exactly with the specified <code>rowHeight</code>.</td>
+				<td><code>fixedHeight</code></td><td><code>false</code></td>
+				<td>Decide if you want to have a fixed height. This mean that all the rows will be exactly
+					with the specified <code>rowHeight</code>.</td>
 			</tr>
 			<tr>
-				<td><code>captions</code></td><td><code>true</code></td><td>Decide if you want to show the caption or not, that appears when your mouse is over the image.
+				<td><code>captions</code></td><td><code>true</code></td>
+				<td>Decide if you want to show the caption or not, that appears when your mouse is over the image.
 			</td>
 		</tr>
 		<tr>
-			<td><code>margins</code></td><td><code>1</code></td><td>Decide the margins between the images</td>
+			<td><code>margins</code></td><td><code>1</code></td>
+			<td>Decide the margins between the images</td>
 		</tr>
 		<tr>
-			<td><code>border</code></td><td><code>-1</code></td><td>Decide the border size of the gallery. With a negative value the border will be the same as the margins.</td>
+			<td><code>border</code></td><td><code>-1</code></td>
+			<td>Decide the border size of the gallery. With a negative value the border will be the same as the margins.</td>
 		</tr>
 		<tr>
-			<td><code>randomize</code></td><td><code>false</code></td><td>Automatically randomize or not the order of photos.</td>
+			<td><code>waitThumbnailsLoad</code></td><td><code>true</code></td>
+			<td>In presence of width and height attributes in thumbnails, the layout is immediately built,
+				and the thumbnails will appear randomly while they are loaded.</td>
 		</tr>
 		<tr>
-			<td><code>extension</code></td><td><code>/.[^.]+$/</code></td><td>Specify the extension for the images with a regex. Is used to reconstruct the filename of the images, change it if you need. For example <code>/.jpg$/</code> is to detect only the ".jpg" extension and no more.</td>
+			<td><code>randomize</code></td><td><code>false</code></td>
+			<td>Automatically randomize or not the order of photos.</td>
 		</tr>
 		<tr>
-			<td><code>refreshTime</code></td><td><code>250</code></td><td>The time that the plugin waits before checking the page size, and if it is changed it recreates the gallery layout</td>
+			<td><code>filter</code></td><td><code>false</code></td>
+			<td>
+				Can be:
+				<ul>
+					<li><code>false</code>: for a disabled filter</li>
+					<li>a string: an entry is kept if <code>entry.is(filter string)</code> returns <code>true</code>
+						(see jQuery's <code><a href="http://api.jquery.com/is/">.is()</a></code> function for further information)</li>
+					<li>a function: invoked with arguments (entry, index, array). Return <code>true</code> to keep the entry, <code>false</code> otherwise.
+						see <code><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/filter">Array.prototype.filter</a></code>
+						for further information.</li>
+				</ul>
+			</td>
 		</tr>
 		<tr>
-			<td><code>waitThumbnailsLoad</code></td><td><code>true</code></td><td>In presence of width and height attributes in thumbnails, the layout is immediately built, and the thumbnails will appear randomly while they are loaded.</td>
+			<td><code>sort</code></td><td><code>false</code></td>
+			<td> Can be
+				<ul>
+					<li><code>false</code> to do not sort</li>
+					<li>a function to sort them using the function as comparator
+						(see <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">Array.prototype.sort()</a></code>)</li>
+				</ul>
+			</td>
 		</tr>
 		<tr>
-			<td><code>rel</code></td><td></td><td>To rewrite all the links <code>rel</code> attribute with the specified value. For example can be 'gallery1', and is usually used to create gallery group for the lightbox (e.g. Colorbox)</td>
+			<td><code>extension</code></td><td><code>/.[^.]+$/</code></td>
+			<td>Specify the extension for the images with a regex. Is used to reconstruct the filename of the images,
+				change it if you need. For example <code>/.jpg$/</code> is to detect only the ".jpg" extension and no more.</td>
 		</tr>
 		<tr>
-			<td><code>target</code></td><td></td><td>To rewrite all the links <code>target</code> attribute with the specified value. For example, if you don't use a lightbox, specifying <code>'_blank'</code>, all the images will be opened to another page.</td>
+			<td><code>refreshTime</code></td><td><code>250</code></td>
+			<td>The time that the plugin waits before checking the page size, and if it is changed it recreates the gallery layout</td>
 		</tr>
 		<tr>
-			<td><code>justifyThreshold</code></td><td>0.35</td><td>If available space / row width < 0.35 the last row is justified, without considering the lastRow setting.</td>
+			<td><code>rel</code></td><td></td>
+			<td>To rewrite all the links <code>rel</code> attribute with the specified value.
+				For example can be 'gallery1', and is usually used to create gallery group for the lightbox (e.g. Colorbox)</td>
 		</tr>
 		<tr>
-			<td><code>cssAnimation</code></td><td>false</td><td>Use or not css animations. Using css animations you can change the behavior changing the justified gallery CSS file, or rewriting that rules.</td>
+			<td><code>target</code></td><td></td>
+			<td>To rewrite all the links <code>target</code> attribute with the specified value.
+				For example, if you don't use a lightbox, specifying <code>'_blank'</code>, all the
+				images will be opened to another page.</td>
 		</tr>
 		<tr>
-			<td><code>imagesAnimationDuration</code></td><td>300</td><td>Image fadeIn duration.</td>
+			<td><code>justifyThreshold</code></td><td>0.75</td>
+			<td>If <i>'available space' / 'row width' > 0.75</i> the last row is justified, even though
+				the <code>lastRow</code> setting is <code>'nojustify'</code>.</td>
+		</tr>
+		<tr>
+			<td><code>cssAnimation</code></td><td>false</td>
+			<td>Use or not css animations. Using css animations you can change the behavior
+				changing the justified gallery CSS file, or overriding that rules.</td>
+		</tr>
+		<tr>
+			<td><code>imagesAnimationDuration</code></td><td>300</td>
+			<td>Image fadeIn duration (in milliseconds).</td>
 		</tr>
 		<tr>
 			<td><code>captionSettings</code></td>
@@ -293,7 +338,9 @@ title: Options &amp; Events
 				&nbsp;&nbsp;visibleOpacity: 0.7,<br/>
 				&nbsp;&nbsp;nonVisibleOpacity: 0.0 }</code>
 			</td>
-			<td>Caption settings</td>
+			<td>Caption settings. To configure the animation duration (in milliseconds), the caption opacity when the
+			mouse is over (i.e. it should be visible), and the caption opacity when the mouse is not over (i.e. it should
+				be not visible). </td>
 		</tr>
 	</table>
 </div>
