@@ -239,6 +239,8 @@ title: Options &amp; Events
 					'lt640':'_z', <br/>
 					'lt1024':'_b'}</code>
 				</p>
+				<p>The keys could be specified also as numbers (e.g. <code style="white-space: nowrap;">{512:'_small', 1024:'_big'}</code>
+					to specify the '_small' suffix for images which are less than 512px on the longest side, and '_big' for the bigger ones).
 				</td>
 			</tr>
 			<tr>
@@ -278,9 +280,9 @@ title: Options &amp; Events
 			<td>
 				Can be:
 				<ul>
-					<li><code>false</code>: for a disabled filter</li>
+					<li><code>false</code>: for a disabled filter.</li>
 					<li>a string: an entry is kept if <code>entry.is(filter string)</code> returns <code>true</code>
-						(see jQuery's <code><a href="http://api.jquery.com/is/">.is()</a></code> function for further information)</li>
+						(see jQuery's <code><a href="http://api.jquery.com/is/">.is()</a></code> function for further information).</li>
 					<li>a function: invoked with arguments (entry, index, array). Return <code>true</code> to keep the entry, <code>false</code> otherwise.
 						see <code><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/filter">Array.prototype.filter</a></code>
 						for further information.</li>
@@ -291,10 +293,16 @@ title: Options &amp; Events
 			<td><code>sort</code></td><td><code>false</code></td>
 			<td> Can be
 				<ul>
-					<li><code>false</code> to do not sort</li>
+					<li><code>false</code> to do not sort.</li>
 					<li>a function to sort them using the function as comparator
-						(see <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">Array.prototype.sort()</a></code>)</li>
+						(see <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">Array.prototype.sort()</a></code>).</li>
 				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td><code>selector</code></td><td><code>'> a, > div:not(.spinner)'</code></td>
+			<td>
+				Used to determines which are the entries of the gallery.
 			</td>
 		</tr>
 		<tr>
