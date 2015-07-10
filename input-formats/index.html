@@ -14,7 +14,6 @@ title: Input Formats
 		The plugin accepts several formats for the gallery, and each of them is useful to solve your
 		specific problem.
 	</p>
-
 	<p>
 		The most important format, which is also accepted by many lightboxes, is the following:
 	</p>
@@ -30,7 +29,6 @@ title: Input Formats
     <!-- other images... -->
 </div>
 	{% endhighlight %}
-	
 
 	<p>
 		If you don't need links on photos, or if you want the links only in your captions, you can also use 
@@ -48,8 +46,50 @@ title: Input Formats
     <!-- other images... -->
 </div>
 	{% endhighlight %}
-	
 
+    <h2>No-image entry: text or video entry</h2>
+    <p>
+        You can also have entries without an image inside, for example to have a text or a video entry. In this
+        case the height and the width needed to resize an entry, to maintain its correct aspect ratio, are taken
+        from its CSS properties (rather than from image). For example, this could be an example of a text entry:
+    </p>
+    {% highlight html %}
+    <div class="mygallery">
+        <!-- other images... -->
+        <div style="height: 50px; width: 200px;">
+            <a href="..." style="position: absolute; bottom: 10px; right: 10px;">Next entries...</a>
+        </div>
+    </div>
+    {% endhighlight%}
+    <p>
+        You can change the selector option with the following value <code>'> figure, > div:not(.spinner)'</code>. Note
+        that, in this case, you also need to extend the Justified Gallery's CSS rules.
+    </p>
+
+
+    <h2>Arbitrary format changing the selector</h2>
+    <p>
+        If you have a particular structure you can also change the default behaviour of Justified Gallery changing the
+        default <a href="{{ '/options-and-events' | prepend: site.baseurl }}"><code>selector</code> option</a>.
+        For example, assume that you have the following structure:
+    </p>
+    {% highlight html %}
+<div class="mygallery">
+    <figure>
+        <a href="path/to/myimage1_original.jpg">
+            <img src="path/to/image1_thumbnail.jpg" />
+        </a>
+        <figcaption class="caption">my caption</figcaption>
+    </figure>
+    <!-- other images... -->
+</div>
+    {% endhighlight%}
+    <p>
+      You can change the selector option with the following value <code>'> figure, > div:not(.spinner)'</code>. Note
+        that, in this case, you also need to extend the Justified Gallery's CSS rules.
+    </p>
+
+    <h2>Custom captions</h2>
 	<p>
 		If you want custom captions you can also insert the caption tag inside the entries. 
 		If present, Justified Gallery doesn't generate the caption tags, but it uses the existing one.

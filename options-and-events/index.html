@@ -300,7 +300,7 @@ title: Options &amp; Events
 			</td>
 		</tr>
 		<tr>
-			<td><code>selector</code></td><td><code>'> a, > div:not(.spinner)'</code></td>
+			<td><code>selector</code></td><td style="white-space: nowrap;"><code>'> a, > div:not(.spinner)'</code></td>
 			<td>
 				Used to determines which are the entries of the gallery.
 			</td>
@@ -353,6 +353,27 @@ title: Options &amp; Events
 	</table>
 </div>
 
+<h2>Commands</h2>
+
+<div style="margin-top: 20px;">
+	<table class="table">
+		<tr>
+			<th>Command</th><th>Description</th>
+		</tr>
+		<tr>
+			<td><code>norewind</code></td><td>Call again justified gallery, but only the newest images will be justified.
+			This command could be used for example with the <a href="{{ '/endless-scroll' | prepend: site.baseurl }}">infinite scroll</a>.</td>
+		</tr>
+		<tr>
+			<td><code>destroy</code></td><td>Destroy the justified gallery instance. The images justification will be cleared.</td>
+		</tr>
+	</table>
+
+	<h3>Example</h3>
+	{% highlight javascript %}
+$('#commandtest').justifiedGallery('norewind');
+	{% endhighlight %}
+</div>
 
 <h2>Events</h2>
 
@@ -374,7 +395,7 @@ title: Options &amp; Events
 
 	<h3>Example</h3>
 	{% highlight javascript %}
-$("#callbacktest").justifiedGallery().on('jg.complete', function (e) {
+$('#callbacktest').justifiedGallery().on('jg.complete', function (e) {
     alert('on complete');
 });
 {% endhighlight %}

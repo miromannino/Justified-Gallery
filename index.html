@@ -3,10 +3,17 @@ layout: default
 ---
 
 <style type="text/css">
-	.jg-entry {
+	.shadowed-entry {
 		-webkit-box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
 		-moz-box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
 		box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
+	}
+	.load-more-entry {
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+	}
+	.load-more-entry-content {
+
 	}
 </style>
 
@@ -19,7 +26,7 @@ layout: default
 
 <div id="liveDemo" class="justified-gallery">
 	{% for en in site.images %}
-		<div>
+		<div class="shadowed-entry">
 			<img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg" />
 		</div>
 	{% endfor %}
@@ -27,8 +34,7 @@ layout: default
 <script>
 	jQuery(document).ready(function() { 
 		jQuery("#liveDemo").justifiedGallery({
-			lastRow : 'justify', 
-			rowHeight : 120, 
+			rowHeight : 120,
 			fixedHeight : false, 
 			captions : false, 
 			margins : 7,
@@ -62,7 +68,7 @@ A common problem, for people who create sites, is to create an elegant image gal
 			</a>
 			<a class="list-group-item" href="https://github.com/miromannino/Justified-Gallery/archive/{{ site.completeCurrJGVer }}.zip">
 				<h4 class="list-group-item-heading">Source code</h4>
-				<p class="list-group-item-text">Source Javascript and Less.</p>
+				<p class="list-group-item-text">Javascript and Less source code, tests.</p>
 			</a>
 		</div>
 	</div>
@@ -114,33 +120,41 @@ bower install Justified-Gallery
 	</div>
 	<div class="clearfix visible-md-block visible-lg-block"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
+		<div class="feature-title">Dynamic gallery</div>
+		<p class="feature-body">Filter, sort, randomize, add or remove the images. Do what you
+			want with the gallery, even after it has been created.</p>
+		<div><a href="{{ '/options-and-events' | prepend: site.baseurl }}">Explore the options...</a></div>
+	</div>
+	<div class="clearfix visible-sm-block"></div>
+	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">Easy Lightboxes Integration</div>
 		<p class="feature-body">Use existing lightboxes such as Colorbox or Swipebox.</p>
 		<div><a href="{{ '/lightboxes' | prepend: site.baseurl }}">See the tutorial...</a></div>
 	</div>
-	<div class="clearfix visible-sm-block"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">Highly Configurable</div>
 		<p class="feature-body">A lot of options to build the gallery you want.</p>
 		<div><a href="{{ '/options-and-events' | prepend: site.baseurl }}">Explore the options...</a></div>
 	</div>
+	<div class="clearfix visible-sm-block"></div>
+	<div class="clearfix visible-md-block visible-lg-block"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">Captions</div>
 		<p class="feature-body">Fully configurable awesome captions to your images.</p>
 		<div><a href="{{ '/captions' | prepend: site.baseurl }}">See the tutorial...</a></div>
-	</div>	
-	<div class="clearfix hidden-xs"></div>
+	</div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">Responsiveness</div>
 		<p class="feature-body">The gallery resizes itself as the browser.</p>
 	</div>
+	<div class="clearfix visible-sm-block"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">Fast by Design</div>
 		<p class="feature-body">Born to be fast, with a smart thumbnails load.</p>
 		<div><a href="{{ '/performance-tips' | prepend: site.baseurl }}">See the tutorial...</a></div>
 	</div>
-	<div class="clearfix visible-sm-block"></div>
-	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
+	<div class="clearfix hidden-xs"></div>
+	<div class="feature-container centered col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">Silent Error Handling</div>
 		<p class="feature-body">Manage the server errors skipping the temporarily unavailable images,
 		and notifying that just only in the console.</p>
