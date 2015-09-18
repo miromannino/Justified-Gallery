@@ -412,7 +412,7 @@
    */
   JustifiedGallery.prototype.checkWidth = function () {
     this.checkWidthIntervalId = setInterval($.proxy(function () {
-      var galleryWidth = parseInt(this.$gallery.width(), 10);
+      var galleryWidth = parseFloat(this.$gallery.width());
       if (this.galleryWidth !== galleryWidth) {
         this.galleryWidth = galleryWidth;
         this.rewind();
@@ -783,8 +783,8 @@
           /* If we have the height and the width, we don't wait that the image is loaded, but we start directly
            * with the justification */
           if (that.settings.waitThumbnailsLoad === false) {
-            var width = parseInt($image.attr('width'), 10);
-            var height = parseInt($image.attr('height'), 10);
+            var width = parseFloat($image.attr('width'));
+            var height = parseFloat($image.attr('height'));
             if (!isNaN(width) && !isNaN(height)) {
               $entry.data('jg.width', width);
               $entry.data('jg.height', height);
@@ -815,8 +815,8 @@
 
         } else {
           $entry.data('jg.loaded', true);
-          $entry.data('jg.width', $entry.width() | $entry.css('width') | 1);
-          $entry.data('jg.height', $entry.height() | $entry.css('height') | 1);
+          $entry.data('jg.width', $entry.width() | parseFloat($entry.css('width')) | 1);
+          $entry.data('jg.height', $entry.height() | parseFloat($entry.css('height')) | 1);
         }
 
       }
