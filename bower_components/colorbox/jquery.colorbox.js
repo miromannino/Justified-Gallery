@@ -1,5 +1,5 @@
 /*!
-	Colorbox 1.6.1
+	Colorbox 1.6.3
 	license: MIT
 	http://www.jacklmoore.com/colorbox
 */
@@ -115,7 +115,7 @@
 				iframe.allowTransparency = "true";
 			}
 			iframe.name = (new Date()).getTime(); // give the iframe a unique name to prevent caching
-			iframe.allowFullScreen = true;
+			iframe.allowFullscreen = true;
 
 			return iframe;
 		}
@@ -413,8 +413,8 @@
 				var maxWidth = settings.get('maxWidth');
 				var maxHeight = settings.get('maxHeight');
 
-				settings.w = (maxWidth !== false ? Math.min(initialWidth, setSize(maxWidth, 'x')) : initialWidth) - loadedWidth - interfaceWidth;
-				settings.h = (maxHeight !== false ? Math.min(initialHeight, setSize(maxHeight, 'y')) : initialHeight) - loadedHeight - interfaceHeight;
+				settings.w = Math.max((maxWidth !== false ? Math.min(initialWidth, setSize(maxWidth, 'x')) : initialWidth) - loadedWidth - interfaceWidth, 0);
+				settings.h = Math.max((maxHeight !== false ? Math.min(initialHeight, setSize(maxHeight, 'y')) : initialHeight) - loadedHeight - interfaceHeight, 0);
 
 				$loaded.css({width:'', height:settings.h});
 				publicMethod.position();

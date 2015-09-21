@@ -45,7 +45,7 @@ title: Performance Tips
 	To speed up the loading phase you can also use the option <code>waitThumbnailsLoad</code>. It's important to remember that this option works only if the thumbnails have the height and width attributes, as the following:
 </p>
 	{% highlight html %}
-<img src="path/to/img.jpg" height="70px" width="105px" /> 
+<img src="path/to/img.jpg" height="70" width="105" />
 	{% endhighlight %}
 <p>
 	Using this option the layout is built immediately, and the thumbnails will appear randomly while they are loaded. This generates white holes during the loading phase, of course, but it reduce the loading times.
