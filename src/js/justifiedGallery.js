@@ -1,5 +1,5 @@
 /**
- * Justified Gallery - v3.6
+ * Justified Gallery - v3.6.1
  * http://miromannino.github.io/Justified-Gallery/
  *
  * Copyright (c) 2014 Miro Mannino
@@ -962,7 +962,7 @@
       throw 'sort must be false or a comparison function';
     }
 
-    if (this.settings.filter !== false && !$.isFunction(this.settings.sort) &&
+    if (this.settings.filter !== false && !$.isFunction(this.settings.filter) &&
         $.type(this.settings.filter) !== 'string') {
       throw 'filter must be false, a string or a filter function';
     }
