@@ -322,7 +322,7 @@
     }
 
     // With lastRow = nojustify, justify if is justificable (the images will not become too big)
-    if (isLastRow && !justifiable && this.settings.lastRow === 'nojustify') justify = false;
+    if (isLastRow && !justifiable && this.settings.lastRow !== 'justify' && this.settings.lastRow !== 'hide') justify = false;
 
     for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
       $entry = this.buildingRow.entriesBuff[i];
@@ -389,6 +389,23 @@
       if (this.maxRowHeight.value > 0 && this.maxRowHeight.value < minHeight) minHeight = this.maxRowHeight.value;
     }
 
+
+    //Align last (unjustified) row
+    if (settings.lastRow === 'center' || settings.lastRow === 'right') {
+      var availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * settings.margins;
+
+      for (var i = 0; i < this.buildingRow.entriesBuff.length; i++) {
+        $entry = this.buildingRow.entriesBuff[i];
+        availableWidth -= $entry.data('jg.jwidth');
+      }
+
+      if (settings.lastRow === 'center')
+        offX += availableWidth / 2;
+      else if (settings.lastRow === 'right')
+        offX += availableWidth;
+    }
+
+
     for (var i = 0; i < this.buildingRow.entriesBuff.length; i++) {
       $entry = this.buildingRow.entriesBuff[i];
       this.displayEntry($entry, offX, this.offY, $entry.data('jg.jwidth'), $entry.data('jg.jheight'), minHeight);
@@ -398,9 +415,9 @@
     //Gallery Height
     this.$gallery.height(this.offY + minHeight + this.border + (this.isSpinnerActive() ? this.getSpinnerHeight() : 0));
 
-    if (!isLastRow || (minHeight <= this.settings.rowHeight && buildingRowRes.justify)) {
+    if (!isLastRow || (minHeight <= settings.rowHeight && buildingRowRes.justify)) {
       //Ready for a new row
-      this.offY += minHeight + this.settings.margins;
+      this.offY += minHeight + settings.margins;
       this.clearBuildingRow();
       this.$gallery.trigger('jg.rowflush');
     }
@@ -922,10 +939,12 @@
     this.checkOrConvertNumber(this.settings, 'margins');
     this.checkOrConvertNumber(this.settings, 'border');
 
-    if (this.settings.lastRow !== 'nojustify' &&
-        this.settings.lastRow !== 'justify' &&
+    if (this.settings.lastRow !== 'justify' &&
+        this.settings.lastRow !== 'nojustify' && this.settings.lastRow !== 'left' &&
+        this.settings.lastRow !== 'center' &&
+        this.settings.lastRow !== 'right' &&
         this.settings.lastRow !== 'hide') {
-      throw 'lastRow must be "nojustify", "justify" or "hide"';
+      throw 'lastRow must be "justify", "nojustify", "left", "center", "right" or "hide"';
     }
 
     this.checkOrConvertNumber(this.settings, 'justifyThreshold');
@@ -1062,7 +1081,8 @@
     margins: 1,
     border: -1, // negative value = same as margins, 0 = disabled, any other value to set the border
 
-    lastRow: 'nojustify', // or can be 'justify' or 'hide'
+    lastRow: 'nojustify', // … which is the same as 'left', or can be 'justify', 'center', 'right' or 'hide'
+    
     justifyThreshold: 0.75, /* if row width / available space > 0.75 it will be always justified
                              * (i.e. lastRow setting is not considered) */
     fixedHeight: false,
