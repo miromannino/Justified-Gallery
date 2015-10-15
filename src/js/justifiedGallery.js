@@ -214,8 +214,8 @@
       // Create it if it doesn't exists
       if ($imgCaption == null) {
         var caption = $image.attr('alt');
-        if (typeof caption === 'undefined') caption = $entry.attr('title');
-        if (typeof caption !== 'undefined') { // Create only we found something
+        if (!this.isValidCaption(caption)) caption = $entry.attr('title');
+        if (this.isValidCaption(caption)) { // Create only we found something
           $imgCaption = $('<div class="caption">' + caption + '</div>');
           $entry.append($imgCaption);
           $entry.data('jg.createdCaption', true);
@@ -230,6 +230,16 @@
     } else {
       this.removeCaptionEventsHandlers($entry);
     }
+  };
+
+  /**
+   * Validates the caption
+   *
+   * @param caption The caption that should be validated
+   * @return {boolean} Validation result
+   */
+  JustifiedGallery.prototype.isValidCaption = function (caption) {
+    return (typeof caption !== 'undefined' && caption.length > 0);
   };
 
   /**
