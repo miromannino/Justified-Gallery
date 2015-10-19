@@ -423,7 +423,7 @@
   JustifiedGallery.prototype.checkWidth = function () {
     this.checkWidthIntervalId = setInterval($.proxy(function () {
       var galleryWidth = parseFloat(this.$gallery.width());
-      if (Math.abs(galleryWidth - this.galleryWidth) > this.checkOrConvertNumber(this.settings, 'refreshSensitivity')) {
+      if (Math.abs(galleryWidth - this.galleryWidth) > this.settings.refreshSensitivity) {
         this.galleryWidth = galleryWidth;
         this.rewind();
 
