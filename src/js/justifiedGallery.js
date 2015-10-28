@@ -984,7 +984,7 @@
     if ($.type(this.settings.fixedHeight) !== 'boolean') throw 'fixedHeight must be a boolean';
     this.checkOrConvertNumber(this.settings, 'imagesAnimationDuration');
     this.checkOrConvertNumber(this.settings, 'refreshTime');
-	this.checkOrConvertNumber(this.settings, 'refreshSensitivity');
+    this.checkOrConvertNumber(this.settings, 'refreshSensitivity');
     if ($.type(this.settings.randomize) !== 'boolean') throw 'randomize must be a boolean';
     if ($.type(this.settings.selector) !== 'string') throw 'selector must be a string';
 
@@ -1111,7 +1111,7 @@
     target: null, // rewrite the target of all links
     extension: /\.[^.\\/]+$/, // regexp to capture the extension of an image
     refreshTime: 100, // time interval (in ms) to check if the page changes its width
-	refreshSensitivity: 0, // change in width allowed (in px) without re-building the gallery
+    refreshSensitivity: 0, // change in width allowed (in px) without re-building the gallery
     randomize: false,
     sort: false, /*
       - false: to do not sort
