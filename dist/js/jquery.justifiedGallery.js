@@ -98,7 +98,7 @@
    */
   JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight) {
     var matchRes = imageSrc.match(this.settings.extension);
-    var ext = (matchRes != null) ? matchRes[0] : '';
+    var ext = (matchRes !== null) ? matchRes[0] : '';
     var newImageSrc = imageSrc.replace(this.settings.extension, '');
     newImageSrc = this.removeSuffix(newImageSrc, this.getUsedSuffix(newImageSrc));
     newImageSrc += this.getSuffix(imgWidth, imgHeight) + ext;
@@ -211,7 +211,7 @@
       var $imgCaption = this.captionFromEntry($entry);
 
       // Create it if it doesn't exists
-      if ($imgCaption == null) {
+      if ($imgCaption === null) {
         var caption = $image.attr('alt');
         if (!this.isValidCaption(caption)) caption = $entry.attr('title');
         if (this.isValidCaption(caption)) { // Create only we found something
@@ -384,7 +384,7 @@
    */
   JustifiedGallery.prototype.flushRow = function (isLastRow) {
     var settings = this.settings;
-    var $entry, minHeight, buildingRowRes, offX = this.border;
+    var $entry, minHeight, buildingRowRes, offX = this.border, i;
 
     buildingRowRes = this.prepareBuildingRow(isLastRow);
     minHeight = buildingRowRes.minHeight;
@@ -404,7 +404,7 @@
     if (settings.lastRow === 'center' || settings.lastRow === 'right') {
       var availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * settings.margins;
 
-      for (var i = 0; i < this.buildingRow.entriesBuff.length; i++) {
+      for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
         $entry = this.buildingRow.entriesBuff[i];
         availableWidth -= $entry.data('jg.jwidth');
       }
@@ -416,7 +416,7 @@
     }
 
 
-    for (var i = 0; i < this.buildingRow.entriesBuff.length; i++) {
+    for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
       $entry = this.buildingRow.entriesBuff[i];
       this.displayEntry($entry, offX, this.offY, $entry.data('jg.jwidth'), $entry.data('jg.jheight'), minHeight);
       offX += $entry.data('jg.jwidth') + settings.margins;
@@ -439,7 +439,7 @@
   JustifiedGallery.prototype.checkWidth = function () {
     this.checkWidthIntervalId = setInterval($.proxy(function () {
       var galleryWidth = parseFloat(this.$gallery.width());
-      if (this.galleryWidth !== galleryWidth) {
+      if (Math.abs(galleryWidth - this.galleryWidth) > this.settings.refreshSensitivity) {
         this.galleryWidth = galleryWidth;
         this.rewind();
 
@@ -453,7 +453,7 @@
    * @returns {boolean} a boolean saying if the spinner is active or not
    */
   JustifiedGallery.prototype.isSpinnerActive = function () {
-    return this.spinner.intervalId != null;
+    return this.spinner.intervalId !== null;
   };
 
   /**
@@ -672,9 +672,9 @@
       if ($entry.data('jg.createdCaption')) {
         // remove also the caption element (if created by jg)
         $entry.data('jg.createdCaption', undefined);
-        if ($caption != null) $caption.remove();
+        if ($caption !== null) $caption.remove();
       } else {
-        if ($caption != null) $caption.fadeTo(0, 1);
+        if ($caption !== null) $caption.fadeTo(0, 1);
       }
 
     }, this));
@@ -983,6 +983,7 @@
     if ($.type(this.settings.fixedHeight) !== 'boolean') throw 'fixedHeight must be a boolean';
     this.checkOrConvertNumber(this.settings, 'imagesAnimationDuration');
     this.checkOrConvertNumber(this.settings, 'refreshTime');
+	this.checkOrConvertNumber(this.settings, 'refreshSensitivity');
     if ($.type(this.settings.randomize) !== 'boolean') throw 'randomize must be a boolean';
     if ($.type(this.settings.selector) !== 'string') throw 'selector must be a string';
 
@@ -1109,6 +1110,7 @@
     target: null, // rewrite the target of all links
     extension: /\.[^.\\/]+$/, // regexp to capture the extension of an image
     refreshTime: 100, // time interval (in ms) to check if the page changes its width
+	refreshSensitivity: 0, // change in width allowed (in px) without re-building the gallery
     randomize: false,
     sort: false, /*
       - false: to do not sort
