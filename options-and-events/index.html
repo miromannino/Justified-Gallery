@@ -13,7 +13,7 @@ title: Options &amp; Events
 	<p>
 		This configurable demo is a fast way to explore the visual settings of Justified Gallery. 
 		Moreover, ti is also a good example that uses Justified Gallery as a stateful entity. 
-		In fact, in this example, the plugin is called when the page is loaded using some settings, and
+		In fact, in this example, Justified Gallery is called when the page is loaded using some settings, and
 		then it is called again only to change a specific setting, leaving the old ones remains unchanged.
 	</p>
 	<div style="margin-top: 20px;">
@@ -227,7 +227,7 @@ title: Options &amp; Events
 			<td><code>sizeRangeSuffixes</code></td>
 			<td><code style="white-space: nowrap;">{ }</code></td><td>
 				<p>
-				Describes the suffix for each size range. By default the plugin doesn't search for other thumbnails.
+				Describes the suffix for each size range. By default other thumbnails are not searched.
 				</p>
 				<p>
 					To agree with the <a href="http://www.flickr.com/services/api/misc.urls.html">Flickr's suffixes</a> you should change it in the following way:
@@ -245,8 +245,11 @@ title: Options &amp; Events
 			</tr>
 			<tr>
 				<td><code>lastRow</code></td><td><code>'nojustify'</code></td>
-				<td>Decide if you want to justify the last row (i.e. <code>'justify'</code>) or not (i.e. <code>'nojustify'</code>),
-					or to hide the row if it can't be justified (i.e. <code>'hide'</code>)</td>
+				<td>Decide to justify the last row (using <code>'justify'</code>) or not (using <code>'nojustify'</code>),
+					or to hide the row if it can't be justified (using <code>'hide'</code>). By default, using <code>'nojustify'</code>, the
+					last row images are aligned to the left, but they can be also aligned to the center (using <code>'center'</code>) 
+					or to the right (using <code>'right'</code>).
+				</td>
 			</tr>
 			<tr>
 				<td><code>fixedHeight</code></td><td><code>false</code></td>
@@ -312,7 +315,12 @@ title: Options &amp; Events
 		</tr>
 		<tr>
 			<td><code>refreshTime</code></td><td><code>250</code></td>
-			<td>The time that the plugin waits before checking the page size, and if it is changed it recreates the gallery layout</td>
+			<td>The waited time before checking the page size. If the page width has changed the gallery
+			layout is rebuilt</td>
+		</tr>
+		<tr>
+			<td><code>refreshSensitivity</code></td><td><code>250</code></td>
+			<td>Change in width allowed (in px) without re-building the gallery</td>
 		</tr>
 		<tr>
 			<td><code>rel</code></td><td></td>
