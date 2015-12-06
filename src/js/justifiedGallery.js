@@ -24,6 +24,7 @@
     this.buildingRow = {
       entriesBuff : [],
       width : 0,
+      height : 0,
       aspectRatio : 0
     };
     this.lastAnalyzedIndex = -1;
@@ -310,7 +311,7 @@
    * Justify the building row, preparing it to
    *
    * @param isLastRow
-   * @returns {*}
+   * @returns a boolean to know if the row has been justified or not
    */
   JustifiedGallery.prototype.prepareBuildingRow = function (isLastRow) {
     var i, $entry, imgAspectRatio, newImgW, newImgH, justify = true;
@@ -366,7 +367,8 @@
     if (this.settings.fixedHeight && minHeight > this.settings.rowHeight)
       minHeight = this.settings.rowHeight;
 
-    return {minHeight: minHeight, justify: justify};
+    this.buildingRow.height = minHeight;
+    return justify;
   };
 
   /**
@@ -385,21 +387,23 @@
    */
   JustifiedGallery.prototype.flushRow = function (isLastRow) {
     var settings = this.settings;
-    var $entry, minHeight, buildingRowRes, offX = this.border, i;
+    var $entry, buildingRowRes, offX = this.border, i;
 
     buildingRowRes = this.prepareBuildingRow(isLastRow);
-    minHeight = buildingRowRes.minHeight;
-    if (isLastRow && settings.lastRow === 'hide' && minHeight === -1) {
+    if (isLastRow && settings.lastRow === 'hide' && this.buildingRow.height === -1) {
       this.clearBuildingRow();
       return;
     }
 
-    if (this.maxRowHeight.percentage) {
-      if (this.maxRowHeight.value * settings.rowHeight < minHeight) minHeight = this.maxRowHeight.value * settings.rowHeight;
+    if (this.maxRowHeight.isPercentage) {
+      if (this.maxRowHeight.value * settings.rowHeight < this.buildingRow.height) {
+        this.buildingRow.height = this.maxRowHeight.value * settings.rowHeight;
+      }
     } else {
-      if (this.maxRowHeight.value > 0 && this.maxRowHeight.value < minHeight) minHeight = this.maxRowHeight.value;
+      if (this.maxRowHeight.value > 0 && this.maxRowHeight.value < this.buildingRow.height) {
+        this.buildingRow.height = this.maxRowHeight.value;
+      }
     }
-
 
     //Align last (unjustified) row
     if (settings.lastRow === 'center' || settings.lastRow === 'right') {
@@ -419,16 +423,17 @@
 
     for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
       $entry = this.buildingRow.entriesBuff[i];
-      this.displayEntry($entry, offX, this.offY, $entry.data('jg.jwidth'), $entry.data('jg.jheight'), minHeight);
+      this.displayEntry($entry, offX, this.offY, $entry.data('jg.jwidth'), $entry.data('jg.jheight'), this.buildingRow.height);
       offX += $entry.data('jg.jwidth') + settings.margins;
     }
 
     //Gallery Height
-    this.$gallery.height(this.offY + minHeight + this.border + (this.isSpinnerActive() ? this.getSpinnerHeight() : 0));
+    this.$gallery.height(this.offY + this.buildingRow.height + 
+        this.border + (this.isSpinnerActive() ? this.getSpinnerHeight() : 0));
 
-    if (!isLastRow || (minHeight <= settings.rowHeight && buildingRowRes.justify)) {
+    if (!isLastRow || (this.buildingRow.height <= settings.rowHeight && buildingRowRes)) {
       //Ready for a new row
-      this.offY += minHeight + settings.margins;
+      this.offY += this.buildingRow.height + settings.margins;
       this.clearBuildingRow();
       this.$gallery.trigger('jg.rowflush');
     }
@@ -482,7 +487,7 @@
     var $spinnerPoints = spinnerContext.$el.find('span');
     clearInterval(spinnerContext.intervalId);
     this.$gallery.append(spinnerContext.$el);
-    this.$gallery.height(this.offY + this.getSpinnerHeight());
+    this.$gallery.height(this.offY + this.buildingRow.height + this.getSpinnerHeight());
     spinnerContext.intervalId = setInterval(function () {
       if (spinnerContext.phase < $spinnerPoints.length) {
         $spinnerPoints.eq(spinnerContext.phase).fadeTo(spinnerContext.timeSlot, 1);
@@ -500,20 +505,6 @@
     this.lastAnalyzedIndex = -1;
     this.offY = this.border;
     this.clearBuildingRow();
-  };
-
-  /**
-   * Hide the image of the buildingRow to prevent strange effects when the row will be
-   * re-justified again
-   */
-  JustifiedGallery.prototype.hideBuildingRowImages = function () {
-    for (var i = 0; i < this.buildingRow.entriesBuff.length; i++) {
-      if (this.settings.cssAnimation) {
-        this.buildingRow.entriesBuff[i].removeClass('entry-visible');
-      } else {
-        this.buildingRow.entriesBuff[i].stop().fadeTo(0, 0);
-      }
-    }
   };
 
   /**
@@ -826,9 +817,7 @@
           imagesToLoad = true;
 
           // Spinner start
-          if (!that.isSpinnerActive()) {
-            that.startLoadingSpinnerAnimation();
-          }
+          if (!that.isSpinnerActive()) that.startLoadingSpinnerAnimation();
 
           that.onImageEvent(imageSrc, function (loadImg) { // image loaded
             $entry.data('jg.width', loadImg.width);
@@ -912,14 +901,14 @@
     if ($.type(this.settings.maxRowHeight) === 'string') {
       if (this.settings.maxRowHeight.match(/^[0-9]+%$/)) {
         newMaxRowHeight.value = parseFloat(this.settings.maxRowHeight.match(/^([0-9])+%$/)[1]) / 100;
-        newMaxRowHeight.percentage = false;
+        newMaxRowHeight.isPercentage = false;
       } else {
         newMaxRowHeight.value = parseFloat(this.settings.maxRowHeight);
-        newMaxRowHeight.percentage = true;
+        newMaxRowHeight.isPercentage = true;
       }
     } else if ($.type(this.settings.maxRowHeight) === 'number') {
       newMaxRowHeight.value = this.settings.maxRowHeight;
-      newMaxRowHeight.percentage = false;
+      newMaxRowHeight.isPercentage = false;
     } else {
       throw 'maxRowHeight must be a number or a percentage';
     }
@@ -928,7 +917,7 @@
     if (isNaN(newMaxRowHeight.value)) throw 'invalid number for maxRowHeight';
 
     // check values
-    if (newMaxRowHeight.percentage) {
+    if (newMaxRowHeight.isPercentage) {
       if (newMaxRowHeight.value < 100) newMaxRowHeight.value = 100;
     } else {
       if (newMaxRowHeight.value > 0 && newMaxRowHeight.value < this.settings.rowHeight) {
@@ -1055,7 +1044,7 @@
         $gallery.data('jg.controller', controller);
       } else if (arg === 'norewind') {
         // In this case we don't rewind: we analyze only the latest images (e.g. to complete the last unfinished row
-        controller.hideBuildingRowImages();
+        // ... left to be more readable 
       } else if (arg === 'destroy') {
         controller.destroy();
         return;
