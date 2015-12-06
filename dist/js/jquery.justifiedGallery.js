@@ -899,7 +899,7 @@
 
     if ($.type(this.settings.maxRowHeight) === 'string') {
       if (this.settings.maxRowHeight.match(/^[0-9]+%$/)) {
-        newMaxRowHeight.value = parseFloat(this.settings.maxRowHeight.match(/^([0-9])+%$/)[1]) / 100;
+        newMaxRowHeight.value = parseFloat(this.settings.maxRowHeight.match(/^([0-9]+)%$/)[1]) / 100;
         newMaxRowHeight.isPercentage = false;
       } else {
         newMaxRowHeight.value = parseFloat(this.settings.maxRowHeight);
@@ -1075,9 +1075,9 @@
         }
     */
     rowHeight: 120,
-    maxRowHeight: '200%', // negative value = no limits, number to express the value in pixels,
-                          // '[0-9]+%' to express in percentage (e.g. 200% means that the row height
-                          // can't exceed 2 * rowHeight)
+    maxRowHeight: -1, // negative value = no limits, number to express the value in pixels,
+                          // '[0-9]+%' to express in percentage (e.g. 300% means that the row height
+                          // can't exceed 3 * rowHeight)
     margins: 1,
     border: -1, // negative value = same as margins, 0 = disabled, any other value to set the border
 
