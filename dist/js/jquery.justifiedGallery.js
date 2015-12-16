@@ -1037,6 +1037,7 @@
       if (typeof controller === 'undefined') {
         // Create controller and assign it to the object data
         if (typeof arg !== 'undefined' && arg !== null && $.type(arg) !== 'object') {
+          if (arg === 'destroy') return; // Just a call to an unexisting object
           throw 'The argument must be an object';
         }
         controller = new JustifiedGallery($gallery, $.extend({}, $.fn.justifiedGallery.defaults, arg));
