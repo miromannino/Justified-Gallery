@@ -17,6 +17,23 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 
 ## Release History
 
+### 3.6.1
+
+* refreshSensitivity option, to configure the change in width allowed (in px) without re-building the gallery
+* thumbnailPath to configure JG with a custom thumbnail selector, 
+  e.g. 
+  ```
+$("#thumnailPathTest").justifiedGallery({
+	thumbnailPath: function (currentPath, width, height) {
+		if (Math.max(width, height) < 250) {
+		    return currentPath.replace(/(.*)(_[a-z]+)(\..*)/, "$1_small$2");
+		} else { 
+		    return currentPath.replace(/(.*)(_[a-z]+)(\..*)/, "$1_medium$2");
+		}
+	}
+});
+  ```
+
 ### 3.6
 
 * Sort (works also with infinite scroll)
