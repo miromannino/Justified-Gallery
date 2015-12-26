@@ -21,18 +21,19 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 
 * refreshSensitivity option, to configure the change in width allowed (in px) without re-building the gallery
 * thumbnailPath to configure JG with a custom thumbnail selector, 
-  e.g. 
-  ```
-$("#thumnailPathTest").justifiedGallery({
-	thumbnailPath: function (currentPath, width, height) {
-		if (Math.max(width, height) < 250) {
-		    return currentPath.replace(/(.*)(_[a-z]+)(\..*)/, "$1_small$2");
-		} else { 
-		    return currentPath.replace(/(.*)(_[a-z]+)(\..*)/, "$1_medium$2");
+  e.g. we want to do select the correct thumbnail changing only a suffix of the current filename
+
+	```
+	$("#myGallery").justifiedGallery({
+		thumbnailPath: function (currentPath, width, height) {
+			if (Math.max(width, height) < 250) {
+			    return currentPath.replace(/(.*)(_[a-z]+)(\..*)/, "$1_small$2");
+			} else { 
+			    return currentPath.replace(/(.*)(_[a-z]+)(\..*)/, "$1_medium$2");
+			}
 		}
-	}
-});
-  ```
+	});
+	```
 
 ### 3.6
 
