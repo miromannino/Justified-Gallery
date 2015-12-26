@@ -19,6 +19,7 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 
 ### 3.6.1
 
+* bugfixes
 * refreshSensitivity option, to configure the change in width allowed (in px) without re-building the gallery
 * thumbnailPath to configure JG with a custom thumbnail selector, 
   e.g. we want to do select the correct thumbnail changing only a suffix of the current filename
