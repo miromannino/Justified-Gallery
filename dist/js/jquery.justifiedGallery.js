@@ -98,11 +98,18 @@
    * @returns {String} the suffix to use
    */
   JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight) {
-    var matchRes = imageSrc.match(this.settings.extension);
-    var ext = (matchRes !== null) ? matchRes[0] : '';
-    var newImageSrc = imageSrc.replace(this.settings.extension, '');
-    newImageSrc = this.removeSuffix(newImageSrc, this.getUsedSuffix(newImageSrc));
-    newImageSrc += this.getSuffix(imgWidth, imgHeight) + ext;
+    var newImageSrc;
+    
+    if (this.settings.thumbnailPath) {
+      newImageSrc = this.settings.thumbnailPath(imageSrc, imgWidth, imgHeight);
+    } else {
+      var matchRes = imageSrc.match(this.settings.extension);
+      var ext = (matchRes !== null) ? matchRes[0] : '';
+      newImageSrc = imageSrc.replace(this.settings.extension, '');
+      newImageSrc = this.removeSuffix(newImageSrc, this.getUsedSuffix(newImageSrc));
+      newImageSrc += this.getSuffix(imgWidth, imgHeight) + ext;
+    }
+
     return newImageSrc;
   };
 
@@ -1075,6 +1082,9 @@
           1024: '_b'  // used as else case because it is the last
         }
     */
+    thumbnailPath: undefined, /* If defined, sizeRangeSuffixes is not used, and this function is used to determine the
+    path relative to a specific thumbnail size. The function should accept respectively three arguments: 
+    current path, width and height */
     rowHeight: 120,
     maxRowHeight: -1, // negative value = no limits, number to express the value in pixels,
                           // '[0-9]+%' to express in percentage (e.g. 300% means that the row height
@@ -1099,7 +1109,7 @@
     rel: null, // rewrite the rel of each analyzed links
     target: null, // rewrite the target of all links
     extension: /\.[^.\\/]+$/, // regexp to capture the extension of an image
-    refreshTime: 100, // time interval (in ms) to check if the page changes its width
+    refreshTime: 200, // time interval (in ms) to check if the page changes its width
     refreshSensitivity: 0, // change in width allowed (in px) without re-building the gallery
     randomize: false,
     sort: false, /*
