@@ -18,7 +18,6 @@
   "dependencies": {
     "colorbox": "~1.6.0",
     "swipebox": "~1.2.9",
-    "justified-gallery": "3.6.0",
     "bootstrap": "~3.3.5"
   }
 }
