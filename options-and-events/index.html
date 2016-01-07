@@ -239,27 +239,52 @@ title: Options &amp; Events
 					'lt640':'_z', <br/>
 					'lt1024':'_b'}</code>
 				</p>
-				<p>The keys could be specified also as numbers (e.g. <code style="white-space: nowrap;">{512:'_small', 1024:'_big'}</code>
+				<p>
+					The keys could be specified also as numbers (e.g. <code style="white-space: nowrap;">{512:'_small', 1024:'_big'}</code>
 					to specify the '_small' suffix for images which are less than 512px on the longest side, and '_big' for the bigger ones).
-				</td>
-			</tr>
-			<tr>
-				<td><code>lastRow</code></td><td><code>'nojustify'</code></td>
-				<td>Decide to justify the last row (using <code>'justify'</code>) or not (using <code>'nojustify'</code>),
-					or to hide the row if it can't be justified (using <code>'hide'</code>). By default, using <code>'nojustify'</code>, the
-					last row images are aligned to the left, but they can be also aligned to the center (using <code>'center'</code>) 
-					or to the right (using <code>'right'</code>).
-				</td>
-			</tr>
-			<tr>
-				<td><code>fixedHeight</code></td><td><code>false</code></td>
-				<td>Decide if you want to have a fixed height. This mean that all the rows will be exactly
-					with the specified <code>rowHeight</code>.</td>
-			</tr>
-			<tr>
-				<td><code>captions</code></td><td><code>true</code></td>
-				<td>Decide if you want to show the caption or not, that appears when your mouse is over the image.
+				</p>
 			</td>
+		</tr>
+		<tr>
+			<td><code>thumbnailPath</code></td>
+			<td><code style="white-space: nowrap;">undefined</code></td><td>
+				<p>
+					To configure a custom thumbnail selector rather than using <code>sizeRangeSuffixes</code>, to have more flexibility in particular situations.
+				</p>
+				<p>
+					For example, to select the correct thumbnail changing only a suffix of the current filename (like we can done using <code>sizeRangeSuffixes</code>)
+				</p><p>
+					<pre><code>$("#myGallery").justifiedGallery({
+  thumbnailPath: function (currentPath, width, height) {
+    if (Math.max(width, height) < 250) {
+      return currentPath.replace(/(.*)(_[a-z]+)(\..*)/, "$1_small$2");
+    } else { 
+      return currentPath.replace(/(.*)(_[a-z]+)(\..*)/, "$1_medium$2");
+    }
+  }
+});</code></pre>
+				</p>
+				<p>
+					Remember that if this option is defined, <code>sizeRangeSuffixes</code> is not considered.
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td><code>lastRow</code></td><td><code>'nojustify'</code></td>
+			<td>Decide to justify the last row (using <code>'justify'</code>) or not (using <code>'nojustify'</code>),
+				or to hide the row if it can't be justified (using <code>'hide'</code>). By default, using <code>'nojustify'</code>, the
+				last row images are aligned to the left, but they can be also aligned to the center (using <code>'center'</code>) 
+				or to the right (using <code>'right'</code>).
+			</td>
+		</tr>
+		<tr>
+			<td><code>fixedHeight</code></td><td><code>false</code></td>
+			<td>Decide if you want to have a fixed height. This mean that all the rows will be exactly
+				with the specified <code>rowHeight</code>.</td>
+		</tr>
+		<tr>
+			<td><code>captions</code></td><td><code>true</code></td>
+			<td>Decide if you want to show the caption or not, that appears when your mouse is over the image.</td>
 		</tr>
 		<tr>
 			<td><code>margins</code></td><td><code>1</code></td>
