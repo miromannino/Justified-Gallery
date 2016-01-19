@@ -19,7 +19,7 @@ layout: default
 
 <h1 class="jg-h1">
 	Justified Gallery
-	<small>Elegant, Fast, Endless.</small>
+	<small>Elegant, Professional, Endless.</small>
 	<div class="author-name"><a href="http://miromannino.com" target="_blank">by Miro<span class="dot">.</span></a></div>
 </h1>
 
@@ -52,9 +52,9 @@ layout: default
 </script>
 
 <p style="margin-top: 20px;" class="text-center">
-This is a <strong>JQuery plugin</strong> that allows you to create an <strong>high quality justified gallery</strong> of images. Fill all the spaces!
+This is a <strong>JQuery plugin</strong> that allows you to create an <strong>high quality justified gallery</strong> of images. 
 <br/>
-A common problem, for people who create sites, is to create an elegant image gallery that manages the various sizes of images. <strong>Flickr and Google+</strong> manage this situation in an excellent way, the purpose of this plugin is to give you the power of these solutions, with a new fast algorithm.
+A common problem, for people who create sites, is to create an elegant image gallery that manages the various sizes of thumbnails. <strong>Flickr and Google+</strong> manage this situation in an excellent way, the purpose of this plugin is to give you the power of those solutions, with a new professional and open source plugin.
 </p>
 
 <hr/>
@@ -78,7 +78,7 @@ A common problem, for people who create sites, is to create an elegant image gal
 		<div class="list-group">
 			<a class="list-group-item" target="_blank" href="https://github.com/miromannino/Justified-Gallery/">
 				<h4 class="list-group-item-heading">GitHub repo</h4>
-				<p class="list-group-item-text">Fork, stay updated, ask questions, solve issues.</p>
+				<p class="list-group-item-text">Star, fork, stay updated, ask questions, solve issues.</p>
 			</a>
 		</div>
 		<div>
@@ -89,77 +89,7 @@ A common problem, for people who create sites, is to create an elegant image gal
 	<div class="clearfix"></div>
 	<div class="feature-container col-xs-12 col-sm-6">
 		<h2 class="text-center"><span class="fa fa-plug fa"></span> Install</h2>
-		{% highlight bash %}
-bower install Justified-Gallery
-		{% endhighlight %}
-	</div>
-</div>
-
-<hr/>
-
-<h2>Features</h2>
-
-<div class="row central">
-	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Don't Miss a Pixel</div>
-		<p class="feature-body">An advanced algorithm to justify your images without cropping
-		them.</p>
-		<div><a href="{{ '/getting-started' | prepend: site.baseurl }}">Getting started tutorial...</a></div>
-	</div>
-	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Infinite scroll ready</div>
-		<p class="feature-body">Ready to realize an infinite wall of images. Append the images
-		to your gallery and only notify that to Justified Gallery.</p>
-		<div><a href="{{ '/endless-scroll' | prepend: site.baseurl }}">Endless scroll tutorial...</a></div>
-	</div>
-	<div class="clearfix visible-sm-block"></div>
-	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">High Quality</div>
-		<p class="feature-body">Ready for any device and screen resolution. Up to six thumbnails to
-		always guarantee the best quality of your images.</p>
-		<div><a href="{{ '/getting-started' | prepend: site.baseurl }}">Getting started tutorial...</a></div>
-	</div>
-	<div class="clearfix visible-md-block visible-lg-block"></div>
-	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Dynamic gallery</div>
-		<p class="feature-body">Filter, sort, randomize, add or remove the images. Do what you
-			want with the gallery, even after it has been created.</p>
-		<div><a href="{{ '/options-and-events' | prepend: site.baseurl }}">Explore the options...</a></div>
-	</div>
-	<div class="clearfix visible-sm-block"></div>
-	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Easy Lightboxes Integration</div>
-		<p class="feature-body">Use existing lightboxes such as Colorbox or Swipebox.</p>
-		<div><a href="{{ '/lightboxes' | prepend: site.baseurl }}">See the tutorial...</a></div>
-	</div>
-	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Highly Configurable</div>
-		<p class="feature-body">A lot of options to build the gallery you want.</p>
-		<div><a href="{{ '/options-and-events' | prepend: site.baseurl }}">Explore the options...</a></div>
-	</div>
-	<div class="clearfix visible-sm-block"></div>
-	<div class="clearfix visible-md-block visible-lg-block"></div>
-	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Captions</div>
-		<p class="feature-body">Fully configurable awesome captions to your images.</p>
-		<div><a href="{{ '/captions' | prepend: site.baseurl }}">See the tutorial...</a></div>
-	</div>
-	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Responsiveness</div>
-		<p class="feature-body">The gallery resizes itself as the browser.</p>
-	</div>
-	<div class="clearfix visible-sm-block"></div>
-	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Fast by Design</div>
-		<p class="feature-body">Born to be fast, with a smart thumbnails load.</p>
-		<div><a href="{{ '/performance-tips' | prepend: site.baseurl }}">See the tutorial...</a></div>
-	</div>
-	<div class="clearfix hidden-xs"></div>
-	<div class="feature-container centered col-xs-12 col-sm-6 col-md-4">
-		<div class="feature-title">Silent Error Handling</div>
-		<p class="feature-body">Manage the server errors skipping the temporarily unavailable images,
-		and notifying that just only in the console.</p>
-		<div><a href="{{ '/errors-handling' | prepend: site.baseurl }}">See the tutorial...</a></div>
+		{% highlight bash %}bower install justified-gallery{% endhighlight %}
 	</div>
 </div>
 
@@ -217,6 +147,74 @@ $("#mygallery").justifiedGallery();
 
 <hr/>
 
+<h2>Features</h2>
+
+<div class="row central">
+	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
+		<div class="feature-title">Don't Miss a Pixel</div>
+		<p class="feature-body">An advanced algorithm to justify your images without cropping
+		them.</p>
+		<div><a href="{{ '/getting-started' | prepend: site.baseurl }}">Getting started tutorial...</a></div>
+	</div>
+	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
+		<div class="feature-title">Infinite scroll ready</div>
+		<p class="feature-body">Ready to realize an infinite wall of images. Append the images
+		to your gallery and only notify that to Justified Gallery.</p>
+		<div><a href="{{ '/endless-scroll' | prepend: site.baseurl }}">Endless scroll tutorial...</a></div>
+	</div>
+	<div class="clearfix visible-sm-block"></div>
+	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
+		<div class="feature-title">High Quality</div>
+		<p class="feature-body">Ready for any device and screen resolution. Up to six thumbnails to
+		always guarantee the best quality of your images.</p>
+		<div><a href="{{ '/getting-started' | prepend: site.baseurl }}">Getting started tutorial...</a></div>
+	</div>
+	<div class="clearfix visible-md-block visible-lg-block"></div>
+	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
+		<div class="feature-title">Dynamic gallery</div>
+		<p class="feature-body">Filter, sort, randomize, add or remove the images. Do what you
+			want with the gallery, even after it has been created.</p>
+		<div><a href="{{ '/options-and-events' | prepend: site.baseurl }}">Explore the options...</a></div>
+	</div>
+	<div class="clearfix visible-sm-block"></div>
+	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
+		<div class="feature-title">Easy Lightboxes Integration</div>
+		<p class="feature-body">Use existing lightboxes such as Colorbox or Swipebox.</p>
+		<div><a href="{{ '/lightboxes' | prepend: site.baseurl }}">See the tutorial...</a></div>
+	</div>
+	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
+		<div class="feature-title">Highly Configurable</div>
+		<p class="feature-body">A lot of options to build the gallery you want.</p>
+		<div><a href="{{ '/options-and-events' | prepend: site.baseurl }}">Explore the options...</a></div>
+	</div>
+	<div class="clearfix visible-sm-block"></div>
+	<div class="clearfix visible-md-block visible-lg-block"></div>
+	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
+		<div class="feature-title">Captions</div>
+		<p class="feature-body">Fully configurable awesome captions to your images.</p>
+		<div><a href="{{ '/captions' | prepend: site.baseurl }}">Captions tutorial...</a></div>
+	</div>
+	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
+		<div class="feature-title">Responsiveness</div>
+		<p class="feature-body">The gallery resizes itself as the browser.</p>
+	</div>
+	<div class="clearfix visible-sm-block"></div>
+	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
+		<div class="feature-title">Fast by Design</div>
+		<p class="feature-body">Born to be fast, with a smart thumbnails load.</p>
+		<div><a href="{{ '/performance-tips' | prepend: site.baseurl }}">Performance tutorial...</a></div>
+	</div>
+	<div class="clearfix hidden-xs"></div>
+	<div class="feature-container centered col-xs-12 col-sm-6 col-md-4">
+		<div class="feature-title">Silent Error Handling</div>
+		<p class="feature-body">Manage the server errors skipping the temporarily unavailable images,
+		and notifying that just only in the console.</p>
+		<div><a href="{{ '/errors-handling' | prepend: site.baseurl }}">Error handling tutorial...</a></div>
+	</div>
+</div>
+
+<hr/>
+
 <h2>Who uses it?</h2>
 <div class="text-center" style="margin-bottom: 10px;">
 	Some example of uses of this plugin
@@ -224,15 +222,19 @@ $("#mygallery").justifiedGallery();
 <div class="row central">
 	<div class="feature-container col-xs-12 col-sm-offset-3 col-sm-6">
 		<div class="list-group">
-			<a class="list-group-item" href="http://wordpress.org/extend/plugins/flickr-justified-gallery">
+			<a class="list-group-item" href="http://wordpress.org/extend/plugins/flickr-justified-gallery" target="_blank">
 				<h4 class="list-group-item-heading">Flickr Justified Gallery for Wordpress</h4>
 				<p class="list-group-item-text">Plugin that allows you to show your Flickr photostream, photosets, galleries, group pools, or tags in your blog, with a very elegant and awesome layout.</p>
 			</a>
-			<a class="list-group-item" href="http://fotoarabia.com">
+			<a class="list-group-item" href="http://fotoarabia.com" target="_blank">
 				<h4 class="list-group-item-heading">Fotoarabia.com</h4>
 				<p class="list-group-item-text">Royalty-free Middle Eastern &amp; Arabic themed images.</p>
 			</a>
-			<a class="list-group-item" href="https://wordpress.org/plugins/foogallery/">
+			<a class="list-group-item" href="http://www.dreihochzwo.de/wordpress-plugins/advanced-custom-fields-addon-justified-image-grid/" target="_blank">
+				<h4 class="list-group-item-heading">ACF Justified Image Grid Addon</h4>
+				<p class="list-group-item-text">Wordpress plugin to create justified galleries</p>
+			</a>
+			<a class="list-group-item" href="https://wordpress.org/plugins/foogallery/" target="_blank">
 				<h4 class="list-group-item-heading">FooGallery Plugin for Wordpress</h4>
 				<p class="list-group-item-text">The Most Intuitive and Extensible Gallery Creation and Management Tool Ever Created for WordPress.</p>
 			</a>
