@@ -19,8 +19,7 @@ title: Captions
 {% highlight html %}
 <a href="imageurl.jpg">
     <img alt="I'm only in the alt" src="thumbnailurl.jpg" />
-</a>
-{% endhighlight %}
+</a>{% endhighlight %}
 	</p>
 	<p>
 		The following entry hasn't an <code>alt</code>, but it has a <code>title</code>. 
@@ -28,8 +27,7 @@ title: Captions
 		{% highlight html %}
 <a href="imageurl.jpg" title="I'm only in the title">
     <img src="thumbnailurl.jpg" />
-</a>
-		{% endhighlight %}
+</a>{% endhighlight %}
 	</p>
 	<p>
 		In this last example, we have both the <code>title</code> and the <code>alt</code>. 
@@ -38,8 +36,7 @@ title: Captions
 		{% highlight html %}
 <a href="imageurl.jpg" title="I'm in the title">
     <img alt="I'm in the alt" src="thumbnailurl.jpg" />
-</a>
-		{% endhighlight %}
+</a>{% endhighlight %}
 	</p>
 	<p>
 		The plugin creates the captions inserting, for each entry, an extra <code>div</code> element just after the <code>img</code> element. 
@@ -54,8 +51,7 @@ title: Captions
         I'm <span style="color:red">a</span> <strong>custom</strong> caption!
         <div>I'm a div</div>
     </div>
-</a>
-		{% endhighlight %}		
+</a>{% endhighlight %}		
 	</p>
 	<div id="captionsExample" >
 		<a href="{{ site.images[0].url | prepend: site.baseurl }}_b.jpg">

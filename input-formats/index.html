@@ -27,8 +27,7 @@ title: Input Formats
         <img alt="Title 2" src="path/to/myimage2_thumbnail.jpg"/>
     </a>
     <!-- other images... -->
-</div>
-	{% endhighlight %}
+</div>{% endhighlight %}
 
 	<p>
 		If you don't need links on photos, or if you want the links only in your captions, you can also use 
@@ -44,8 +43,7 @@ title: Input Formats
         <img alt="Title 2" src="path/to/myimage2_thumbnail.jpg"/>
     </div>
     <!-- other images... -->
-</div>
-	{% endhighlight %}
+</div>{% endhighlight %}
 
     <h2>No-image entry: text or video entry</h2>
     <p>
@@ -54,13 +52,12 @@ title: Input Formats
         from its CSS properties (rather than from image). For example, this could be an example of a text entry:
     </p>
     {% highlight html %}
-    <div class="mygallery">
-        <!-- other images... -->
-        <div style="height: 50px; width: 200px;">
-            <a href="..." style="position: absolute; bottom: 10px; right: 10px;">Next entries...</a>
-        </div>
+<div class="mygallery">
+    <!-- other images... -->
+    <div style="height: 50px; width: 200px;">
+        <a href="..." style="position: absolute; bottom: 10px; right: 10px;">Next entries...</a>
     </div>
-    {% endhighlight%}
+</div>{% endhighlight%}
     <p>
         You can change the selector option with the following value <code>'> figure, > div:not(.spinner)'</code>. Note
         that, in this case, you also need to extend the Justified Gallery's CSS rules.
@@ -82,8 +79,7 @@ title: Input Formats
         <figcaption class="caption">my caption</figcaption>
     </figure>
     <!-- other images... -->
-</div>
-    {% endhighlight%}
+</div>{% endhighlight%}
     <p>
       You can change the selector option with the following value <code>'> figure, > div:not(.spinner)'</code>. Note
         that, in this case, you also need to extend the Justified Gallery's CSS rules.
@@ -106,8 +102,7 @@ title: Input Formats
         <div class="caption">my custom caption 2</div>
     </a>
     <!-- other images... -->
-</div>	
-	{% endhighlight %}
+</div>{% endhighlight %}
 
 
 	<p>
@@ -126,8 +121,7 @@ title: Input Formats
         <div class="caption">my custom caption <a href="any path">link to somewhere 2</a></div>
     </div>
     <!-- other images... -->
-</div>
-	{% endhighlight %}
+</div>{% endhighlight %}
 
 
 	<p>
@@ -151,6 +145,5 @@ title: Input Formats
         <div class="caption">my custom caption <a href="any path">link to somewhere 2</a></div>
     </div>
     <!-- other images... -->
-</div>
-	{% endhighlight %}
+</div>{% endhighlight %}
 </div>

@@ -22,11 +22,9 @@ title: Getting Started
         <img alt="caption for image 2" src="path/to/image2_thumbnail.jpg" />
     </a>
     ...
-</div>
-	{% endhighlight %}
+</div>{% endhighlight %}
 	{% highlight javascript %}
-$("#basicExample").justifiedGallery();
-	{% endhighlight %}
+$("#basicExample").justifiedGallery();{% endhighlight %}
 
 <div id="basicExample" >
 {% for en in site.images %}
@@ -81,8 +79,7 @@ $('#basicExample2').justifiedGallery({
     rowHeight : 70,
     lastRow : 'nojustify',
     margins : 3
-});
-{% endhighlight %}
+});{% endhighlight %}
 
 <div id="basicExample2" class="justified-gallery">
 {% for en in site.images %}
@@ -125,8 +122,7 @@ sizeRangeSuffixes: {
     500 : '',
     640 : '_z',
     1024 : '_b' // used which images that are more than 640px on the longest side
-}
-	{% endhighlight %}
+}{% endhighlight %}
 	In this way the plugin derives the path of the other thumbnails for the same image only changing the filenames suffix.
 	For example, with an entry with the thumbnail <code>path/to/image1_t.jpg</code>, the plugin could load the thumbnail <code>path/to/image1_b.jpg</code>.
 </p>
@@ -135,8 +131,7 @@ sizeRangeSuffixes: {
 	configuration:
 
 	{% highlight javascript %}
-sizeRangeSuffixes: { }
-	{% endhighlight %}
+sizeRangeSuffixes: { }{% endhighlight %}
 </p>
 
 <p style="margin-top: 15px;">

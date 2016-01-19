@@ -27,8 +27,7 @@ title: Lightboxes
         <img alt="title 2" src="image2_thumbnail.jpg" />
     </a>
     ...
-</div>
-	{% endhighlight %}
+</div>{% endhighlight %}
 	{% highlight javascript %}
 $('#colorboxExample').justifiedGallery({
     lastRow : 'nojustify', 
@@ -43,8 +42,7 @@ $('#colorboxExample').justifiedGallery({
         transition : 'elastic',
         current : ''
     });
-});
-	{% endhighlight %}
+});{% endhighlight %}
 
 	<div id="colorboxExample" >
 		{% for en in site.images %}
@@ -86,14 +84,12 @@ $('#colorboxExample').justifiedGallery({
 		Unfortunately, due to a Swipebox's misteriousely bug, the simple code: 
 	</p>
 		{% highlight javascript %}	
-$(this).find('a').swipebox();
-		{% endhighlight %}	
+$(this).find('a').swipebox();{% endhighlight %}	
 	<p>
 		doesn't work properly. In this way Swipebox activate itself for all photos in the same page. To fix that, one needs to select the gallery using a complete selector like the following:
 	</p>
 		{% highlight javascript %}	
-$('#swipeboxExample a').swipebox();
-		{% endhighlight %}	
+$('#swipeboxExample a').swipebox();{% endhighlight %}	
 	<p>
 		Look at the following code for a complete example:
 	</p>
@@ -106,8 +102,7 @@ $('#swipeboxExample a').swipebox();
         <img alt="title 2" src="image2_thumbnail.jpg" />
     </a>
     ...
-</div>
-	{% endhighlight %}
+</div>{% endhighlight %}
 	{% highlight javascript %}
 $('#swipeboxExample').justifiedGallery({
     lastRow : 'nojustify', 
@@ -116,8 +111,7 @@ $('#swipeboxExample').justifiedGallery({
     margins : 1
 }).on('jg.complete', function () {
     $('#swipeboxExample a').swipebox();
-});
-	{% endhighlight %}
+});{% endhighlight %}
 
 	<div id="swipeboxExample" >
 		{% for en in site.images %}
@@ -177,8 +171,7 @@ $('#swipeboxExample').justifiedGallery({
         <img alt="title 6" src="image6_thumbnail.jpg" />
     </a>
     ...
-</div>
-    {% endhighlight %}
+</div>{% endhighlight %}
     {% highlight javascript %}
 $('.myExMul').justifiedGallery({
     rowHeight : 50 
@@ -190,8 +183,7 @@ $('.myExMul').justifiedGallery({
         transition : 'elastic',
         current : ''
     });
-});
-    {% endhighlight %}
+});{% endhighlight %}
 	<p>
 		To set the rel automatically, just call the Justified Gallery inside a foreach.
 	</p>
@@ -206,8 +198,7 @@ $('.myExMul').each(function (i, el) {
             current : ''
         });
     });
-});
-	{% endhighlight %}
+});{% endhighlight %}
 
 	<h3>Gallery 1</h3>
 	<p>
@@ -287,6 +278,5 @@ $('.myExMul').each(function (i, el) {
     $(el).justifiedGallery({rel: 'myExMul-' + i}).on('jg.complete', function () {
         if (i == 1) $('.myExMul a').swipebox();
     });
-});
-	{% endhighlight %}
+});{% endhighlight %}
 </div>

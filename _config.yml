@@ -19,18 +19,43 @@ markdown: kramdown
 photosPath: /Justified-Gallery/photos
 
 images:
+
   - 
-    url: /photos/8083451788_552becfbc7
-    desc: What's your destination?
+    url: /photos/24096687789_c37d45712f
+    desc: Peace of mind
+  -
+    url: /photos/23753792354_bd75d8dabc
+    desc: Abu Dhabi
+  - 
+    url: /photos/16961685188_f130144d60
+    desc: Never stop climbing
+  - 
+    url: /photos/24014174029_2cfa940264
+    desc: Terme
+  - 
+    url: /photos/13824674674_ca1e482394
+    desc: Deep sea
+  - 
+    url: /photos/13824322785_104dc0968c
+    desc: Above the World
+  - 
+    url: /photos/8842312290_f310d491f4
+    desc: The Spring
+  - 
+    url: /photos/8811828736_88392f614a
+    desc: Cat firmness
+  - 
+    url: /photos/8400794773_932654a20e
+    desc: Into the Sea
+  - 
+    url: /photos/8157236803_78aa1698b6
+    desc: Bologna's T-Day
   - 
     url: /photos/7948632554_01f6ae6b6f
     desc: Just in a dream Place
   - 
     url: /photos/7302459122_19fa1d8223
     desc: Truthful Innocence
-  - 
-    url: /photos/7222046648_5bf70e893a
-    desc: Simply my Brother
   - 
     url: /photos/7002395006_29fdc85f7a
     desc: Freedom
@@ -40,9 +65,6 @@ images:
   - 
     url: /photos/6841267340_855273fd7e
     desc: Love
-  - 
-    url: /photos/6958456697_e56a37bb5f
-    desc: Young Lovers' Wall and the Old Rain
   - 
     url: /photos/6791628438_affaa19e10
     desc: These are the colors I love
