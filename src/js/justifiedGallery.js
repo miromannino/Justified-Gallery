@@ -1,8 +1,8 @@
 /**
- * Justified Gallery - v3.6.1
+ * Justified Gallery - v3.6.2
  * http://miromannino.github.io/Justified-Gallery/
  *
- * Copyright (c) 2014 Miro Mannino
+ * Copyright (c) 2016 Miro Mannino
  * Licensed under the MIT license.
  */
 (function($) {
