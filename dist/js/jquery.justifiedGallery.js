@@ -6,6 +6,9 @@
  */
 (function($) {
 
+  function hasScrollBar() {
+    return $("body").height() > $(window).height();
+  }
   /**
    * Justified Gallery controller constructor
    *
@@ -434,8 +437,8 @@
     }
 
     //Gallery Height
-    this.$gallery.height(this.offY + this.buildingRow.height + 
-        this.border + (this.isSpinnerActive() ? this.getSpinnerHeight() : 0));
+    this.galleryHeightToSet = this.offY + this.buildingRow.height +
+        this.border + (this.isSpinnerActive() ? this.getSpinnerHeight() : 0);
 
     if (!isLastRow || (this.buildingRow.height <= settings.rowHeight && buildingRowRes)) {
       //Ready for a new row
@@ -448,15 +451,22 @@
   /**
    * Checks the width of the gallery container, to know if a new justification is needed
    */
+  var scrollBarOn = false;
   JustifiedGallery.prototype.checkWidth = function () {
     this.checkWidthIntervalId = setInterval($.proxy(function () {
       var galleryWidth = parseFloat(this.$gallery.width());
-      if (Math.abs(galleryWidth - this.galleryWidth) > this.settings.refreshSensitivity) {
-        this.galleryWidth = galleryWidth;
-        this.rewind();
+      if (hasScrollBar() === scrollBarOn){
 
-        // Restart to analyze
-        this.startImgAnalyzer(true);
+        if (Math.abs(galleryWidth - this.galleryWidth) > this.settings.refreshSensitivity) {
+          this.galleryWidth = galleryWidth;
+          this.rewind();
+
+          // Restart to analyze
+          this.startImgAnalyzer(true);
+        }
+      } else {
+        scrollBarOn = hasScrollBar();
+        this.galleryWidth = galleryWidth;
       }
     }, this), this.settings.refreshTime);
   };
@@ -727,6 +737,7 @@
 
     //On complete callback
     this.$gallery.trigger(isForResize ? 'jg.resize' : 'jg.complete');
+    this.$gallery.height(this.galleryHeightToSet);
   };
 
   /**
