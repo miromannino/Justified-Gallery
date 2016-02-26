@@ -20,6 +20,7 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 ### 3.6.2
 
 * fixed cssAnimation
+* scrollbar existence check to avoid image resizing flickering
 
 ### 3.6.1
 
