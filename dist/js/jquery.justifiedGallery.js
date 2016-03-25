@@ -146,7 +146,8 @@
 
   /** @returns {jQuery} the image in the given entry */
   JustifiedGallery.prototype.imgFromEntry = function ($entry) {
-    var $img = $entry.find('> img');
+    var $img = $entry.find(this.settings.imgSelector);
+    // old code to maintain old versions
     if ($img.length === 0) $img = $entry.find('> a > img');
     return $img.length === 0 ? null : $img;
   };
@@ -1134,7 +1135,8 @@
       - a function: invoked with arguments (entry, index, array). Return true to keep the entry, false otherwise.
                     see Array.prototype.filter for further information.
     */
-    selector: '> a, > div:not(.spinner)' // The selector that is used to know what are the entries of the gallery
+    selector: '> a, > div:not(.spinner)', // The selector that is used to know what are the entries of the gallery
+    imgSelector: '> img' // The selector that is used to know what are the images of each entry
   };
 
 }(jQuery));
