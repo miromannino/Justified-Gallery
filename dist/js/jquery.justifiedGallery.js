@@ -102,7 +102,7 @@
    */
   JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight) {
     var newImageSrc;
-    
+
     if (this.settings.thumbnailPath) {
       newImageSrc = this.settings.thumbnailPath(imageSrc, imgWidth, imgHeight);
     } else {
@@ -226,15 +226,25 @@
         var caption = $image.attr('alt');
         if (!this.isValidCaption(caption)) caption = $entry.attr('title');
         if (this.isValidCaption(caption)) { // Create only we found something
-          $imgCaption = $('<div class="caption">' + caption + '</div>');
+          if(this.settings.captionsShowAlways){
+            $imgCaption = $('<div class="caption caption-visible">' + caption + '</div>');
+          }
+          else{
+            $imgCaption = $('<div class="caption">' + caption + '</div>');
+          }
           $entry.append($imgCaption);
           $entry.data('jg.createdCaption', true);
         }
       }
 
       // Create events (we check again the $imgCaption because it can be still inexistent)
-      if ($imgCaption !== null) {
-        if (!this.settings.cssAnimation) $imgCaption.stop().fadeTo(0, this.settings.captionSettings.nonVisibleOpacity);
+      if ($imgCaption !== null && this.settings.captionsAnimation) {
+        if(this.settings.captionsShowAlways){
+        if (!this.settings.cssAnimation) $imgCaption.stop().fadeTo(this.settings.captionSettings.animationDuration, this.settings.captionSettings.VisibleOpacity);
+      }
+      else{
+        if (!this.settings.cssAnimation) $imgCaption.stop().fadeTo(this.settings.captionSettings.animationDuration, this.settings.captionSettings.nonVisibleOpacity);
+      }
         this.addCaptionEventsHandlers($entry);
       }
     } else {
@@ -260,11 +270,21 @@
    */
   JustifiedGallery.prototype.onEntryMouseEnterForCaption = function (eventObject) {
     var $caption = this.captionFromEntry($(eventObject.currentTarget));
+    if(this.settings.captionsShowAlways){
+      if (this.settings.cssAnimation) {
+        $caption.addClass('caption-hidden').removeClass('caption-visible');
+      } else {
+        $caption.stop().fadeTo(this.settings.captionSettings.animationDuration,
+            this.settings.captionSettings.nonVisibleOpacity);
+      }
+    }
+    else{
     if (this.settings.cssAnimation) {
       $caption.addClass('caption-visible').removeClass('caption-hidden');
     } else {
       $caption.stop().fadeTo(this.settings.captionSettings.animationDuration,
           this.settings.captionSettings.visibleOpacity);
+    }
     }
   };
 
@@ -276,11 +296,21 @@
    */
   JustifiedGallery.prototype.onEntryMouseLeaveForCaption = function (eventObject) {
     var $caption = this.captionFromEntry($(eventObject.currentTarget));
+    if(this.settings.captionsShowAlways){
+      if (this.settings.cssAnimation) {
+        $caption.addClass('caption-visible').removeClass('caption-hidden');
+      } else {
+        $caption.stop().fadeTo(this.settings.captionSettings.animationDuration,
+            this.settings.captionSettings.visibleOpacity);
+      }
+    }
+    else{
     if (this.settings.cssAnimation) {
-      $caption.removeClass('caption-visible').removeClass('caption-hidden');
+      $caption.addClass('caption-hidden').removeClass('caption-visible');
     } else {
       $caption.stop().fadeTo(this.settings.captionSettings.animationDuration,
           this.settings.captionSettings.nonVisibleOpacity);
+    }
     }
   };
 
@@ -971,6 +1001,12 @@
     if ($.type(this.settings.cssAnimation) !== 'boolean') {
       throw 'cssAnimation must be a boolean';
     }
+    if ($.type(this.settings.captionsShowAlways) !== 'boolean') {
+      throw 'captionsShowAlways must be a boolean';
+    }
+    if ($.type(this.settings.captionsAnimation) !== 'boolean') {
+      throw 'captionsAnimation must be a boolean';
+    }
 
     if ($.type(this.settings.captions) !== 'boolean') throw 'captions must be a boolean';
     this.checkOrConvertNumber(this.settings.captionSettings, 'animationDuration');
@@ -1062,7 +1098,7 @@
         $gallery.data('jg.controller', controller);
       } else if (arg === 'norewind') {
         // In this case we don't rewind: we analyze only the latest images (e.g. to complete the last unfinished row
-        // ... left to be more readable 
+        // ... left to be more readable
       } else if (arg === 'destroy') {
         controller.destroy();
         return;
@@ -1094,7 +1130,7 @@
         }
     */
     thumbnailPath: undefined, /* If defined, sizeRangeSuffixes is not used, and this function is used to determine the
-    path relative to a specific thumbnail size. The function should accept respectively three arguments: 
+    path relative to a specific thumbnail size. The function should accept respectively three arguments:
     current path, width and height */
     rowHeight: 120,
     maxRowHeight: -1, // negative value = no limits, number to express the value in pixels,
@@ -1104,13 +1140,15 @@
     border: -1, // negative value = same as margins, 0 = disabled, any other value to set the border
 
     lastRow: 'nojustify', // … which is the same as 'left', or can be 'justify', 'center', 'right' or 'hide'
-    
+
     justifyThreshold: 0.75, /* if row width / available space > 0.75 it will be always justified
                              * (i.e. lastRow setting is not considered) */
     fixedHeight: false,
     waitThumbnailsLoad: true,
     captions: true,
     cssAnimation: false,
+    captionsShowAlways: false,
+    captionsAnimation: true,
     imagesAnimationDuration: 500, // ignored with css animations
     captionSettings: { // ignored with css animations
       animationDuration: 500,
