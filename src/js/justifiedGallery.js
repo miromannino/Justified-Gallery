@@ -39,6 +39,7 @@
     this.maxRowHeight = this.retrieveMaxRowHeight();
     this.suffixRanges = this.retrieveSuffixRanges();
     this.offY = this.border;
+    this.rows = 0;
     this.spinner = {
       phase : 0,
       timeSlot : 150,
@@ -103,7 +104,7 @@
    */
   JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight) {
     var newImageSrc;
-    
+
     if (this.settings.thumbnailPath) {
       newImageSrc = this.settings.thumbnailPath(imageSrc, imgWidth, imgHeight);
     } else {
@@ -324,7 +325,7 @@
    * @returns a boolean to know if the row has been justified or not
    */
   JustifiedGallery.prototype.prepareBuildingRow = function (isLastRow) {
-    var i, $entry, imgAspectRatio, newImgW, newImgH, justify = true;
+    var i, $entry, imgAspectRatio, imgAverageHeight, newImgW, newImgH, justify = true, average = false;
     var minHeight = 0;
     var availableWidth = this.galleryWidth - 2 * this.border - (
         (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
@@ -344,7 +345,18 @@
     }
 
     // With lastRow = nojustify, justify if is justificable (the images will not become too big)
-    if (isLastRow && !justifiable && this.settings.lastRow !== 'justify' && this.settings.lastRow !== 'hide') justify = false;
+    if (isLastRow && !justifiable && this.settings.lastRow !== 'justify' && this.settings.lastRow !== 'hide') {
+      justify = false;
+    }
+
+    if (!justify && this.rows > 0 && ($.inArray(this.settings.lastRow, ['left-average', 'center-average', 'right-average']) !== -1)) {
+      imgAverageHeight = Math.floor((this.offY - this.border - this.settings.margins * this.rows) / this.rows);
+      if (imgAverageHeight * this.buildingRow.aspectRatio / availableWidth > this.settings.justifyThreshold) {
+        justify = true;
+      } else {
+        average = true;
+      }
+    }
 
     for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
       $entry = this.buildingRow.entriesBuff[i];
@@ -363,6 +375,9 @@
          newImgH = this.settings.rowHeight;
          }*/
 
+      } else if (average) {
+        newImgW = imgAverageHeight * imgAspectRatio;
+        newImgH = imgAverageHeight;
       } else {
         newImgW = this.settings.rowHeight * imgAspectRatio;
         newImgH = this.settings.rowHeight;
@@ -416,7 +431,7 @@
     }
 
     //Align last (unjustified) row
-    if (settings.lastRow === 'center' || settings.lastRow === 'right') {
+    if ($.inArray(settings.lastRow, ['center', 'center-average', 'right', 'right-average']) !== -1) {
       var availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * settings.margins;
 
       for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
@@ -424,9 +439,9 @@
         availableWidth -= $entry.data('jg.jwidth');
       }
 
-      if (settings.lastRow === 'center')
+      if (settings.lastRow === 'center' || settings.lastRow === 'center-average')
         offX += availableWidth / 2;
-      else if (settings.lastRow === 'right')
+      else if (settings.lastRow === 'right' || settings.lastRow === 'right-average')
         offX += availableWidth;
     }
 
@@ -444,6 +459,7 @@
     if (!isLastRow || (this.buildingRow.height <= settings.rowHeight && buildingRowRes)) {
       //Ready for a new row
       this.offY += this.buildingRow.height + settings.margins;
+      this.rows += 1;
       this.clearBuildingRow();
       this.$gallery.trigger('jg.rowflush');
     }
@@ -521,6 +537,7 @@
   JustifiedGallery.prototype.rewind = function () {
     this.lastAnalyzedIndex = -1;
     this.offY = this.border;
+    this.rows = 0;
     this.clearBuildingRow();
   };
 
@@ -957,12 +974,20 @@
     this.checkOrConvertNumber(this.settings, 'margins');
     this.checkOrConvertNumber(this.settings, 'border');
 
-    if (this.settings.lastRow !== 'justify' &&
-        this.settings.lastRow !== 'nojustify' && this.settings.lastRow !== 'left' &&
-        this.settings.lastRow !== 'center' &&
-        this.settings.lastRow !== 'right' &&
-        this.settings.lastRow !== 'hide') {
-      throw 'lastRow must be "justify", "nojustify", "left", "center", "right" or "hide"';
+    var lastRowModes = [
+      'justify',
+      'nojustify',
+      'left',
+      'left-average',
+      'center',
+      'center-average',
+      'right',
+      'right-average',
+      'hide'
+    ];
+
+    if ($.inArray(this.settings.lastRow, lastRowModes) === -1) {
+      throw 'lastRow must be one of: ' + lastRowModes.join(', ');
     }
 
     this.checkOrConvertNumber(this.settings, 'justifyThreshold');
@@ -1063,7 +1088,7 @@
         $gallery.data('jg.controller', controller);
       } else if (arg === 'norewind') {
         // In this case we don't rewind: we analyze only the latest images (e.g. to complete the last unfinished row
-        // ... left to be more readable 
+        // ... left to be more readable
       } else if (arg === 'destroy') {
         controller.destroy();
         return;
@@ -1095,7 +1120,7 @@
         }
     */
     thumbnailPath: undefined, /* If defined, sizeRangeSuffixes is not used, and this function is used to determine the
-    path relative to a specific thumbnail size. The function should accept respectively three arguments: 
+    path relative to a specific thumbnail size. The function should accept respectively three arguments:
     current path, width and height */
     rowHeight: 120,
     maxRowHeight: -1, // negative value = no limits, number to express the value in pixels,
@@ -1104,8 +1129,8 @@
     margins: 1,
     border: -1, // negative value = same as margins, 0 = disabled, any other value to set the border
 
-    lastRow: 'nojustify', // … which is the same as 'left', or can be 'justify', 'center', 'right' or 'hide'
-    
+    lastRow: 'nojustify', // … which is the same as 'left', or can be 'justify', 'left-average', 'center', 'center-average', 'right', 'right-average' or 'hide'
+
     justifyThreshold: 0.75, /* if row width / available space > 0.75 it will be always justified
                              * (i.e. lastRow setting is not considered) */
     fixedHeight: false,
