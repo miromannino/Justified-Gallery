@@ -184,7 +184,7 @@
       // Image reloading for an high quality of thumbnails
       var imageSrc = $image.attr('src');
       var imgSizes = $image.data('sizes');
-      var newImageSrc = this.newSrc(imageSrc, imgWidth, imgSizes);
+      var newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, imgSizes);
 
       $image.one('error', function () {
         $image.attr('src', $image.data('jg.originalSrc')); //revert to the original thumbnail, we got it.
