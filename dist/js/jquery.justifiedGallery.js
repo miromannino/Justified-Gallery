@@ -100,11 +100,11 @@
    *
    * @returns {String} the suffix to use
    */
-  JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight) {
+  JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight, $image) {
     var newImageSrc;
     
     if (this.settings.thumbnailPath) {
-      newImageSrc = this.settings.thumbnailPath(imageSrc, imgWidth, imgHeight);
+      newImageSrc = this.settings.thumbnailPath(imageSrc, imgWidth, imgHeight, $image);
     } else {
       var matchRes = imageSrc.match(this.settings.extension);
       var ext = (matchRes !== null) ? matchRes[0] : '';
@@ -182,7 +182,7 @@
 
       // Image reloading for an high quality of thumbnails
       var imageSrc = $image.attr('src');
-      var newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight);
+      var newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, $image);
 
       $image.one('error', function () {
         $image.attr('src', $image.data('jg.originalSrc')); //revert to the original thumbnail, we got it.
