@@ -399,7 +399,7 @@
     var $entry, buildingRowRes, offX = this.border, i;
 
     buildingRowRes = this.prepareBuildingRow(isLastRow);
-    if (isLastRow && settings.lastRow === 'hide' && this.buildingRow.height === -1) {
+    if (isLastRow && settings.lastRow === 'hide' && buildingRowRes === -1) {
       this.clearBuildingRow();
       return;
     }
@@ -439,6 +439,9 @@
     //Gallery Height
     this.galleryHeightToSet = this.offY + this.buildingRow.height +
         this.border + (this.isSpinnerActive() ? this.getSpinnerHeight() : 0);
+
+    this.galleryHeightToSet = this.offY + this.buildingRow.height +
+        this.border;
 
     if (!isLastRow || (this.buildingRow.height <= settings.rowHeight && buildingRowRes)) {
       //Ready for a new row

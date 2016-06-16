@@ -430,7 +430,6 @@
         offX += availableWidth;
     }
 
-
     for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
       $entry = this.buildingRow.entriesBuff[i];
       this.displayEntry($entry, offX, this.offY, $entry.data('jg.jwidth'), $entry.data('jg.jheight'), this.buildingRow.height);
@@ -439,7 +438,7 @@
 
     //Gallery Height
     this.galleryHeightToSet = this.offY + this.buildingRow.height +
-        this.border + (this.isSpinnerActive() ? this.getSpinnerHeight() : 0);
+        this.border;
 
     if (!isLastRow || (this.buildingRow.height <= settings.rowHeight && buildingRowRes)) {
       //Ready for a new row
