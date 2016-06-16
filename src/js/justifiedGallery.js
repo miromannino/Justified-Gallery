@@ -400,7 +400,7 @@
     var $entry, buildingRowRes, offX = this.border, i;
 
     buildingRowRes = this.prepareBuildingRow(isLastRow);
-    if (isLastRow && settings.lastRow === 'hide' && this.buildingRow.height === -1) {
+    if (isLastRow && settings.lastRow === 'hide' && buildingRowRes === -1) {
       this.clearBuildingRow();
       return;
     }
