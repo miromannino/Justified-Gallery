@@ -437,8 +437,8 @@
     }
 
     //Gallery Height
-    this.galleryHeightToSet = this.offY + this.buildingRow.height +
-        this.border;
+    this.galleryHeightToSet = this.offY + this.buildingRow.height + this.border;
+    this.$gallery.height(this.galleryHeightToSet + this.getSpinnerHeight());
 
     if (!isLastRow || (this.buildingRow.height <= settings.rowHeight && buildingRowRes)) {
       //Ready for a new row

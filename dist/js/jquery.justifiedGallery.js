@@ -429,7 +429,6 @@
         offX += availableWidth;
     }
 
-
     for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
       $entry = this.buildingRow.entriesBuff[i];
       this.displayEntry($entry, offX, this.offY, $entry.data('jg.jwidth'), $entry.data('jg.jheight'), this.buildingRow.height);
@@ -437,11 +436,8 @@
     }
 
     //Gallery Height
-    this.galleryHeightToSet = this.offY + this.buildingRow.height +
-        this.border + (this.isSpinnerActive() ? this.getSpinnerHeight() : 0);
-
-    this.galleryHeightToSet = this.offY + this.buildingRow.height +
-        this.border;
+    this.galleryHeightToSet = this.offY + this.buildingRow.height + this.border;
+    this.$gallery.height(this.galleryHeightToSet + this.getSpinnerHeight());
 
     if (!isLastRow || (this.buildingRow.height <= settings.rowHeight && buildingRowRes)) {
       //Ready for a new row
@@ -494,6 +490,7 @@
   JustifiedGallery.prototype.stopLoadingSpinnerAnimation = function () {
     clearInterval(this.spinner.intervalId);
     this.spinner.intervalId = null;
+    console.log('gallery height: ', this.$gallery.height() - this.getSpinnerHeight());
     this.$gallery.height(this.$gallery.height() - this.getSpinnerHeight());
     this.spinner.$el.detach();
   };
@@ -506,6 +503,7 @@
     var $spinnerPoints = spinnerContext.$el.find('span');
     clearInterval(spinnerContext.intervalId);
     this.$gallery.append(spinnerContext.$el);
+    console.log('gallery height: ', this.offY + this.buildingRow.height + this.getSpinnerHeight());
     this.$gallery.height(this.offY + this.buildingRow.height + this.getSpinnerHeight());
     spinnerContext.intervalId = setInterval(function () {
       if (spinnerContext.phase < $spinnerPoints.length) {
