@@ -325,11 +325,12 @@
    * @returns a boolean to know if the row has been justified or not
    */
   JustifiedGallery.prototype.prepareBuildingRow = function (isLastRow) {
-    var i, $entry, imgAspectRatio, imgAverageHeight, newImgW, newImgH, justify = true, average = false;
+    var i, $entry, imgAspectRatio, newImgW, newImgH, justify = true;
     var minHeight = 0;
     var availableWidth = this.galleryWidth - 2 * this.border - (
         (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
     var rowHeight = availableWidth / this.buildingRow.aspectRatio;
+    var defaultRowHeight = this.settings.rowHeight;
     var justifiable = this.buildingRow.width / availableWidth > this.settings.justifyThreshold;
 
     //Skip the last row if we can't justify it and the lastRow == 'hide'
@@ -347,14 +348,10 @@
     // With lastRow = nojustify, justify if is justificable (the images will not become too big)
     if (isLastRow && !justifiable && this.settings.lastRow !== 'justify' && this.settings.lastRow !== 'hide') {
       justify = false;
-    }
 
-    if (!justify && this.rows > 0 && ($.inArray(this.settings.lastRow, ['left-average', 'center-average', 'right-average']) !== -1)) {
-      imgAverageHeight = Math.floor((this.offY - this.border - this.settings.margins * this.rows) / this.rows);
-      if (imgAverageHeight * this.buildingRow.aspectRatio / availableWidth > this.settings.justifyThreshold) {
-        justify = true;
-      } else {
-        average = true;
+      if (this.rows > 0) {
+        defaultRowHeight = (this.offY - this.border - this.settings.margins * this.rows) / this.rows;
+        justify = defaultRowHeight * this.buildingRow.aspectRatio / availableWidth > this.settings.justifyThreshold;
       }
     }
 
@@ -375,12 +372,9 @@
          newImgH = this.settings.rowHeight;
          }*/
 
-      } else if (average) {
-        newImgW = imgAverageHeight * imgAspectRatio;
-        newImgH = imgAverageHeight;
       } else {
-        newImgW = this.settings.rowHeight * imgAspectRatio;
-        newImgH = this.settings.rowHeight;
+        newImgW = defaultRowHeight * imgAspectRatio;
+        newImgH = defaultRowHeight;
       }
 
       availableWidth -= Math.round(newImgW);
@@ -431,7 +425,7 @@
     }
 
     //Align last (unjustified) row
-    if ($.inArray(settings.lastRow, ['center', 'center-average', 'right', 'right-average']) !== -1) {
+    if (settings.lastRow === 'center' || settings.lastRow === 'right') {
       var availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * settings.margins;
 
       for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
@@ -439,9 +433,9 @@
         availableWidth -= $entry.data('jg.jwidth');
       }
 
-      if (settings.lastRow === 'center' || settings.lastRow === 'center-average')
+      if (settings.lastRow === 'center')
         offX += availableWidth / 2;
-      else if (settings.lastRow === 'right' || settings.lastRow === 'right-average')
+      else if (settings.lastRow === 'right')
         offX += availableWidth;
     }
 
@@ -977,15 +971,11 @@
       'justify',
       'nojustify',
       'left',
-      'left-average',
       'center',
-      'center-average',
       'right',
-      'right-average',
       'hide'
     ];
-
-    if ($.inArray(this.settings.lastRow, lastRowModes) === -1) {
+    if (lastRowModes.indexOf(this.settings.lastRow) === -1) {
       throw 'lastRow must be one of: ' + lastRowModes.join(', ');
     }
 
@@ -1128,9 +1118,9 @@
     margins: 1,
     border: -1, // negative value = same as margins, 0 = disabled, any other value to set the border
 
-    lastRow: 'nojustify', // … which is the same as 'left', or can be 'justify', 'left-average', 'center', 'center-average', 'right', 'right-average' or 'hide'
+    lastRow: 'nojustify', // … which is the same as 'left', or can be 'justify', 'center', 'right' or 'hide'
 
-    justifyThreshold: 0.75, /* if row width / available space > 0.75 it will be always justified
+    justifyThreshold: 0.90, /* if row width / available space > 0.90 it will be always justified
                              * (i.e. lastRow setting is not considered) */
     fixedHeight: false,
     waitThumbnailsLoad: true,
