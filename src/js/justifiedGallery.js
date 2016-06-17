@@ -101,10 +101,12 @@
    *
    * @returns {String} the suffix to use
    */
-  JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight) {
+  JustifiedGallery.prototype.newSrc = function ($image, imageSrc, imgWidth, imgHeight) {
     var newImageSrc;
-    
-    if (this.settings.thumbnailPath) {
+
+    if (this.settings.thumbnailPathByElement) {
+      newImageSrc = this.settings.thumbnailPathByElement($image, imgWidth, imgHeight);
+    } else if (this.settings.thumbnailPath) {
       newImageSrc = this.settings.thumbnailPath(imageSrc, imgWidth, imgHeight);
     } else {
       var matchRes = imageSrc.match(this.settings.extension);
@@ -183,7 +185,7 @@
 
       // Image reloading for an high quality of thumbnails
       var imageSrc = $image.attr('src');
-      var newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight);
+      var newImageSrc = this.newSrc($image, imageSrc, imgWidth, imgHeight);
 
       $image.one('error', function () {
         $image.attr('src', $image.data('jg.originalSrc')); //revert to the original thumbnail, we got it.
@@ -1094,6 +1096,7 @@
           1024: '_b'  // used as else case because it is the last
         }
     */
+    thumbnailPathByElement: undefined,
     thumbnailPath: undefined, /* If defined, sizeRangeSuffixes is not used, and this function is used to determine the
     path relative to a specific thumbnail size. The function should accept respectively three arguments: 
     current path, width and height */
