@@ -129,6 +129,7 @@
       if (callback) callback();
     } else {
       $entry.stop().fadeTo(this.settings.imagesAnimationDuration, 1.0, callback);
+      $entry.find('> img, > a > img').stop().fadeTo(this.settings.imagesAnimationDuration, 1.0, callback);
     }
   };
 
@@ -338,8 +339,10 @@
         $entry = this.buildingRow.entriesBuff[i];
         if (this.settings.cssAnimation)
           $entry.removeClass('entry-visible');
-        else
-          $entry.stop().fadeTo(0, 0);
+        else {
+          $entry.stop().fadeTo(0, 0.1);
+          $entry.find('> img, > a > img').fadeTo(0, 0);
+        }
       }
       return -1;
     }
@@ -350,11 +353,7 @@
 
       if (this.rows > 0) {
         defaultRowHeight = (this.offY - this.border - this.settings.margins * this.rows) / this.rows;
-        if (defaultRowHeight * this.buildingRow.aspectRatio / availableWidth > this.settings.justifyThreshold) {
-          justify = true;
-        } else {
-          justify = false;
-        }
+        justify = defaultRowHeight * this.buildingRow.aspectRatio / availableWidth > this.settings.justifyThreshold;
       }
     }
 
@@ -365,16 +364,6 @@
       if (justify) {
         newImgW = (i === this.buildingRow.entriesBuff.length - 1) ? availableWidth : rowHeight * imgAspectRatio;
         newImgH = rowHeight;
-
-        /* With fixedHeight the newImgH must be greater than rowHeight.
-         In some cases here this is not satisfied (due to the justification).
-         But we comment it, because is better to have a shorter but justified row instead
-         to have a cropped image at the end. */
-        /*if (this.settings.fixedHeight && newImgH < this.settings.rowHeight) {
-         newImgW = this.settings.rowHeight * imgAspectRatio;
-         newImgH = this.settings.rowHeight;
-         }*/
-
       } else {
         newImgW = defaultRowHeight * imgAspectRatio;
         newImgH = defaultRowHeight;
@@ -385,9 +374,6 @@
       $entry.data('jg.jheight', Math.ceil(newImgH));
       if (i === 0 || minHeight > newImgH) minHeight = newImgH;
     }
-
-    if (this.settings.fixedHeight && minHeight > this.settings.rowHeight)
-      minHeight = this.settings.rowHeight;
 
     this.buildingRow.height = minHeight;
     return justify;
@@ -468,8 +454,7 @@
   JustifiedGallery.prototype.checkWidth = function () {
     this.checkWidthIntervalId = setInterval($.proxy(function () {
       var galleryWidth = parseFloat(this.$gallery.width());
-      if (hasScrollBar() === scrollBarOn){
-
+      if (hasScrollBar() === scrollBarOn) {
         if (Math.abs(galleryWidth - this.galleryWidth) > this.settings.refreshSensitivity) {
           this.galleryWidth = galleryWidth;
           this.rewind();
@@ -1005,7 +990,6 @@
       throw 'captionSettings.nonVisibleOpacity must be in the interval [0, 1]';
     }
 
-    if ($.type(this.settings.fixedHeight) !== 'boolean') throw 'fixedHeight must be a boolean';
     this.checkOrConvertNumber(this.settings, 'imagesAnimationDuration');
     this.checkOrConvertNumber(this.settings, 'refreshTime');
     this.checkOrConvertNumber(this.settings, 'refreshSensitivity');
@@ -1125,10 +1109,9 @@
 
     justifyThreshold: 0.90, /* if row width / available space > 0.90 it will be always justified
                              * (i.e. lastRow setting is not considered) */
-    fixedHeight: false,
     waitThumbnailsLoad: true,
     captions: true,
-    cssAnimation: false,
+    cssAnimation: true,
     imagesAnimationDuration: 500, // ignored with css animations
     captionSettings: { // ignored with css animations
       animationDuration: 500,
@@ -1146,11 +1129,11 @@
       - function: to sort them using the function as comparator (see Array.prototype.sort())
     */
     filter: false, /*
-      - false: for a disabled filter
+      - false, null or undefined: for a disabled filter
       - a string: an entry is kept if entry.is(filter string) returns true
                   see jQuery's .is() function for further information
       - a function: invoked with arguments (entry, index, array). Return true to keep the entry, false otherwise.
-                    see Array.prototype.filter for further information.
+                    It follows the specifications of the Array.prototype.filter() function of JavaScript.
     */
     selector: '> a, > div:not(.spinner)' // The selector that is used to know what are the entries of the gallery
   };
