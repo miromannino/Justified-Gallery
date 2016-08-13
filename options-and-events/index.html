@@ -4,204 +4,191 @@ title: Options &amp; Events
 ---
 
 <h1 class="jg-h1-secondary">
-	Options &amp; Events
+    Options &amp; Events
 </h1>
 
 <hr/>
 
 <div>
-	<p>
-		This configurable demo is a fast way to explore the visual settings of Justified Gallery. 
-		Moreover, ti is also a good example that uses Justified Gallery as a stateful entity. 
-		In fact, in this example, Justified Gallery is called when the page is loaded using some settings, and
-		then it is called again only to change a specific setting, leaving the old ones remains unchanged.
-	</p>
-	<div style="margin-top: 20px;">
-		<form id="jgs-form" class="form-horizontal" role="form" >
-			<div class="col-sm-8">
+    <p>
+        This configurable demo is a fast way to explore the visual settings of Justified Gallery.
+        Moreover, ti is also a good example that uses Justified Gallery as a stateful entity.
+        In fact, in this example, Justified Gallery is called when the page is loaded using some settings, and
+        then it is called again only to change a specific setting, leaving the old ones remains unchanged.
+    </p>
+    <div style="margin-top: 20px;">
+        <form id="jgs-form" class="form-horizontal" role="form">
+            <div class="col-sm-8">
 
-				<div class="form-group" id="jgs-rowHeight-container">
-					<label class="col-sm-4 control-label" for="jgs-rowHeight">Row Height</label>
-					<div class="col-sm-8">
-						<input type="text" class="form-control input-sm" id="jgs-rowHeight" value="120" />
-					</div>
-				</div>
+                <div class="form-group" id="jgs-rowHeight-container">
+                    <label class="col-sm-4 control-label" for="jgs-rowHeight">Row Height</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control input-sm" id="jgs-rowHeight" value="120"/>
+                    </div>
+                </div>
 
-				<div class="form-group" id="jgs-maxRowHeight-container">
-					<label class="col-sm-4 control-label" for="jgs-maxRowHeight">Max Row Height</label>
-					<div class="col-sm-8">
-						<input type="text" class="form-control input-sm" id="jgs-maxRowHeight" value="0" />
-					</div>
-				</div>
+                <div class="form-group" id="jgs-maxRowHeight-container">
+                    <label class="col-sm-4 control-label" for="jgs-maxRowHeight">Max Row Height</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control input-sm" id="jgs-maxRowHeight" value="0"/>
+                    </div>
+                </div>
 
-				<div class="form-group" id="jgs-margins-container">
-					<label class="col-sm-4 control-label" for="jgs-margins">Margins</label>
-					<div class="col-sm-8">
-						<input type="text" class="form-control input-sm" id="jgs-margins" value="1" />
-					</div>
-				</div>
+                <div class="form-group" id="jgs-margins-container">
+                    <label class="col-sm-4 control-label" for="jgs-margins">Margins</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control input-sm" id="jgs-margins" value="1"/>
+                    </div>
+                </div>
 
-				<div class="form-group" id="jgs-border-container">
-					<label class="col-sm-4 control-label" for="jgs-border">Border</label>
-					<div class="col-sm-8">
-						<input type="text" class="form-control input-sm" id="jgs-border" value="0" />
-					</div>
-				</div>
+                <div class="form-group" id="jgs-border-container">
+                    <label class="col-sm-4 control-label" for="jgs-border">Border</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control input-sm" id="jgs-border" value="0"/>
+                    </div>
+                </div>
 
-				<div class="form-group" id="jgs-lastRowOpt-container">
-					<label class="col-sm-4 control-label" for="jgs-margin">Last row</label>
-					<div class="col-sm-8"> 
-						<div class="radio-inline">
-							<label>
-								<input type="radio" name="jgs-lastRow" id="jgs-lastRowOpt1" value="nojustify" checked>
-								No Justify
-							</label>
-						</div>
-						<div class="radio-inline">
-							<label>
-								<input type="radio" name="jgs-lastRow" id="jgs-lastRowOpt2" value="justify">
-								Justify
-							</label>
-						</div>
-						<div class="radio-inline">
-							<label>
-								<input type="radio" name="jgs-lastRow" id="jgs-lastRowOpt3" value="hide">
-								Hide
-							</label>
-						</div>
-					</div>
-				</div>
+                <div class="form-group" id="jgs-lastRowOpt-container">
+                    <label class="col-sm-4 control-label">Last row</label>
+                    <div class="col-sm-8">
+                        <div class="radio-inline">
+                            <label>
+                                <input type="radio" name="jgs-lastRow" id="jgs-lastRowOpt1" value="nojustify" checked>
+                                No Justify
+                            </label>
+                        </div>
+                        <div class="radio-inline">
+                            <label>
+                                <input type="radio" name="jgs-lastRow" id="jgs-lastRowOpt2" value="justify">
+                                Justify
+                            </label>
+                        </div>
+                        <div class="radio-inline">
+                            <label>
+                                <input type="radio" name="jgs-lastRow" id="jgs-lastRowOpt3" value="hide">
+                                Hide
+                            </label>
+                        </div>
+                    </div>
+                </div>
 
-			</div>
-			<div class="col-sm-4">
-				<div class="form-group" id="jgs-fixedHeight-container">
-				<label class="col-sm-8 control-label" for="jgs-fixedHeight">Fixed Height</label>
-				<div class="col-sm-4">
-					<div class="checkbox">
-						<input type="checkbox" id="jgs-fixedHeight"/>
-					</div>
-				</div>
-			</div>
+            </div>
 
-			<div class="form-group" id="jgs-captions-container">
-				<label class="col-sm-8 control-label" for="jgs-captions">Captions</label>
-				<div class="col-sm-4">
-					<div class="checkbox">
-						<input type="checkbox" id="jgs-captions" checked="checked" />
-					</div>
-				</div>
-			</div>
+            <div class="col-sm-4">
+                <div class="form-group" id="jgs-captions-container">
+                    <label class="col-sm-8 control-label" for="jgs-captions">Captions</label>
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <input type="checkbox" id="jgs-captions" checked="checked"/>
+                        </div>
+                    </div>
+                </div>
 
-			<div class="form-group" id="jgs-randomize-container">
-				<label class="col-sm-8 control-label" for="jgs-randomize">Randomize</label>
-				<div class="col-sm-4">
-					<div class="checkbox">
-						<input type="checkbox" id="jgs-randomize" />
-					</div>
-				</div>
-			</div>
+                <div class="form-group" id="jgs-randomize-container">
+                    <label class="col-sm-8 control-label" for="jgs-randomize">Randomize</label>
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <input type="checkbox" id="jgs-randomize"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-			</div>
-		</form>
-	</div>
-	<div id="liveDemo" >
-		{% for en in site.images %}
-			<a href="{{ en.url | prepend: site.baseurl }}_b.jpg">
-				<img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg" />
-			</a>
-		{% endfor %}
-	</div>
-	<script>
-		$(document).ready(function () {
-			$('#jgs-form').submit(false);
+        </form>
+    </div>
+    <div id="liveDemo">
+        {% for en in site.images %}
+        <a href="{{ en.url | prepend: site.baseurl }}_b.jpg">
+            <img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg"/>
+        </a>
+        {% endfor %}
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#jgs-form').submit(false);
 
-			$('#liveDemo').justifiedGallery({
-				rowHeight: 120,
-				maxRowHeight: 0,
-				margins: 1,
-				border: 0,
-				rel : 'liveDemo',
-				lastRow: 'nojustify',
-				fixedHeight: false,
-				captions: true,
-				randomize: false,
-				sizeRangeSuffixes: {
-					lt100 : '_t', 
-					lt240 : '_m', 
-					lt320 : '_n', 
-					lt500 : '', 
-					lt640 : '_z', 
-					lt1024 : '_b'
-				}
-			}).on('jg.complete', function () {
-				$(this).find('a').colorbox({
-					maxWidth : '80%',
-					maxHeight : '80%',
-					opacity : 0.8,
-					transition : 'elastic',
-					current : ''
-				});
-			});
+            $('#liveDemo').justifiedGallery({
+                rowHeight: 120,
+                maxRowHeight: -1,
+                margins: 1,
+                border: 0,
+                rel: 'liveDemo',
+                lastRow: 'nojustify',
+                captions: true,
+                randomize: false,
+                sizeRangeSuffixes: {
+                    lt100: '_t',
+                    lt240: '_m',
+                    lt320: '_n',
+                    lt500: '',
+                    lt640: '_z',
+                    lt1024: '_b'
+                }
+            }).on('jg.complete', function () {
+                $(this).find('a').colorbox({
+                    maxWidth: '80%',
+                    maxHeight: '80%',
+                    opacity: 0.8,
+                    transition: 'elastic',
+                    current: ''
+                });
+            });
 
-			$('#jgs-form #jgs-rowHeight').on('keyup', function () {
-				var m = parseInt($(this).val(), 10);
-				if (!isNaN(m) && m > 0) {
-					$('#liveDemo').justifiedGallery({rowHeight: m});
-					$('#jgs-form #jgs-rowHeight-container').removeClass('has-error');
-				} else {
-					$('#jgs-form #jgs-rowHeight-container').addClass('has-error');
-				}
-			});
+            $('#jgs-form #jgs-rowHeight').on('keyup', function () {
+                var m = parseInt($(this).val(), 10);
+                if (!isNaN(m) && m > 0) {
+                    $('#liveDemo').justifiedGallery({rowHeight: m});
+                    $('#jgs-form #jgs-rowHeight-container').removeClass('has-error');
+                } else {
+                    $('#jgs-form #jgs-rowHeight-container').addClass('has-error');
+                }
+            });
 
-			$('#jgs-form #jgs-maxRowHeight').on('keyup', function () {
-				var m = parseInt($(this).val(), 10);
-				if (!isNaN(m) && m >= 0) {
-					$('#liveDemo').justifiedGallery({maxRowHeight: m});
-					$('#jgs-form #jgs-maxRowHeight-container').removeClass('has-error');
-				} else {
-					$('#jgs-form #jgs-maxRowHeight-container').addClass('has-error');
-				}
-			});
+            $('#jgs-form #jgs-maxRowHeight').on('keyup', function () {
+                var m = parseInt($(this).val(), 10);
+                if (!isNaN(m) && m >= 0) {
+                    $('#liveDemo').justifiedGallery({maxRowHeight: m});
+                    $('#jgs-form #jgs-maxRowHeight-container').removeClass('has-error');
+                } else {
+                    $('#jgs-form #jgs-maxRowHeight-container').addClass('has-error');
+                }
+            });
 
-			$('#jgs-form #jgs-margins').on('keyup', function () {
-				var m = parseInt($(this).val(), 10);
-				if (!isNaN(m) && m >= 0) {
-					$('#liveDemo').justifiedGallery({margins: m});
-					$('#jgs-form #jgs-margins-container').removeClass('has-error');
-				} else {
-					$('#jgs-form #jgs-margins-container').addClass('has-error');
-				}
-			});
+            $('#jgs-form #jgs-margins').on('keyup', function () {
+                var m = parseInt($(this).val(), 10);
+                if (!isNaN(m) && m >= 0) {
+                    $('#liveDemo').justifiedGallery({margins: m});
+                    $('#jgs-form #jgs-margins-container').removeClass('has-error');
+                } else {
+                    $('#jgs-form #jgs-margins-container').addClass('has-error');
+                }
+            });
 
-			$('#jgs-form #jgs-border').on('keyup', function () {
-				var b = parseInt($(this).val(), 10);
-				if (!isNaN(b)) {
-					$('#liveDemo').justifiedGallery({border: b});
-					$('#jgs-form #jgs-border-container').removeClass('has-error');
-				} else {
-					$('#jgs-form #jgs-border-container').addClass('has-error');
-				}
-			});
+            $('#jgs-form #jgs-border').on('keyup', function () {
+                var b = parseInt($(this).val(), 10);
+                if (!isNaN(b)) {
+                    $('#liveDemo').justifiedGallery({border: b});
+                    $('#jgs-form #jgs-border-container').removeClass('has-error');
+                } else {
+                    $('#jgs-form #jgs-border-container').addClass('has-error');
+                }
+            });
 
-			$('#jgs-form input[name="jgs-lastRow"]').on('change', function (e) {
-				$('#liveDemo').justifiedGallery({lastRow: $(this).val()});
-			});
+            $('#jgs-form input[name="jgs-lastRow"]').on('change', function (e) {
+                $('#liveDemo').justifiedGallery({lastRow: $(this).val()});
+            });
 
-			$('#jgs-form #jgs-fixedHeight').on('change', function (e) {
-				$('#liveDemo').justifiedGallery({fixedHeight: $(this).prop('checked')});
-			});
+            $('#jgs-form #jgs-captions').on('change', function (e) {
+                if (!$(this).prop('checked')) $('#liveDemo .caption').remove();
+                $('#liveDemo').justifiedGallery({captions: $(this).prop('checked')});
+            });
 
-			$('#jgs-form #jgs-captions').on('change', function (e) {
-				if (!$(this).prop('checked')) $('#liveDemo .caption').remove();	
-				$('#liveDemo').justifiedGallery({captions: $(this).prop('checked')});
-			});
+            $('#jgs-form #jgs-randomize').on('change', function (e) {
+                $('#liveDemo').justifiedGallery({randomize: $(this).prop('checked')});
+            });
 
-			$('#jgs-form #jgs-randomize').on('change', function (e) {
-				$('#liveDemo').justifiedGallery({randomize: $(this).prop('checked')});
-			});
-
-		});
-	</script>
+        });
+    </script>
 </div>
 
 <hr/>
@@ -209,51 +196,66 @@ title: Options &amp; Events
 <h2>Options</h2>
 
 <div style="margin-top: 20px;">
-	<table class="table">
-		<tr>
-			<th>option</th><th>default value</th><th>description</th>
-		</tr>
-		<tr>
-			<td><code>rowHeight</code></td><td><code>120</code></td>
-			<td>The preferred height of rows in pixel.</td>
-		</tr>
-		<tr>
-			<td><code>maxRowHeight</code></td><td><code>'200%'</code></td>
-			<td>A number (e.g <code>200</code>) which specifies the maximum row height in pixel.
-			A negative value to don't have limits. Alternatively, a string which specifies a percentage (e.g. 200% means that the row height
-			can't exceed <code>2 * rowHeight</code>). Note that this can crop the images if they need to be very high to be justified.</td>
-		</tr>
-		<tr>
-			<td><code>sizeRangeSuffixes</code></td>
-			<td><code style="white-space: nowrap;">{ }</code></td><td>
-				<p>
-				Describes the suffix for each size range. By default other thumbnails are not searched.
-				</p>
-				<p>
-					To agree with the <a href="http://www.flickr.com/services/api/misc.urls.html">Flickr's suffixes</a> you should change it in the following way:
-				</p><p>
-					<code style="white-space: nowrap;">{'lt100':'_t', <br/>
-					'lt240':'_m', <br/>
-					'lt320':'_n', <br/>
-					'lt500':'', <br/>
-					'lt640':'_z', <br/>
-					'lt1024':'_b'}</code>
-				</p>
-				<p>
-					The keys could be specified also as numbers (e.g. <code style="white-space: nowrap;">{512:'_small', 1024:'_big'}</code>
-					to specify the '_small' suffix for images which are less than 512px on the longest side, and '_big' for the bigger ones).
-				</p>
-			</td>
-		</tr>
-		<tr>
-			<td><code>thumbnailPath</code></td>
-			<td><code style="white-space: nowrap;">undefined</code></td><td>
-				<p>
-					To configure a custom thumbnail selector rather than using <code>sizeRangeSuffixes</code>, to have more flexibility in particular situations.
-				</p>
-				<p>
-					For example, to select the correct thumbnail changing only a suffix of the current filename (like we can done using <code>sizeRangeSuffixes</code>)
-				</p><p>
+    <table class="table">
+        <tr>
+            <th>option</th>
+            <th>default value</th>
+            <th>description</th>
+        </tr>
+        <tr>
+            <td><code>rowHeight</code></td>
+            <td><code>120</code></td>
+            <td>The preferred height of rows in pixel.</td>
+        </tr>
+        <tr>
+            <td><code>maxRowHeight</code></td>
+            <td><code>-1</code></td>
+            <td>This option could be a negative value to keep it disabled. Could be a number (e.g <code>200</code>)
+                which specifies the maximum row height in pixel. Alternatively, a string which specifies a percentage
+                (e.g. "200%" means that the row height can't exceed <code>2 * rowHeight</code>). Note that with this
+                option can crop the images if they need to be higher to be justified.
+            </td>
+        </tr>
+        <tr>
+            <td><code>sizeRangeSuffixes</code></td>
+            <td><code style="white-space: nowrap;">{ }</code></td>
+            <td>
+                <p>
+                    Describes the suffix for each size range. By default other thumbnails are not searched.
+                </p>
+                <p>
+                    To agree with the <a href="http://www.flickr.com/services/api/misc.urls.html">Flickr's suffixes</a>
+                    you should change it in the following way:
+                </p>
+                <p>
+                    <code style="white-space: nowrap;">{'lt100':'_t', <br/>
+                        'lt240':'_m', <br/>
+                        'lt320':'_n', <br/>
+                        'lt500':'', <br/>
+                        'lt640':'_z', <br/>
+                        'lt1024':'_b'}</code>
+                </p>
+                <p>
+                    The keys could be specified also as numbers (e.g. <code style="white-space: nowrap;">{512:'_small',
+                    1024:'_big'}</code>
+                    to specify the '_small' suffix for images which are less than 512px on the longest side, and '_big'
+                    for the bigger ones).
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td><code>thumbnailPath</code></td>
+            <td><code style="white-space: nowrap;">undefined</code></td>
+            <td>
+                <p>
+                    To configure a custom thumbnail selector rather than using <code>sizeRangeSuffixes</code>, to have
+                    more flexibility in particular situations.
+                </p>
+                <p>
+                    For example, to select the correct thumbnail changing only a suffix of the current filename (like we
+                    can done using <code>sizeRangeSuffixes</code>)
+                </p>
+                <p>
 					<pre><code>$("#myGallery").justifiedGallery({
   thumbnailPath: function (currentPath, width, height) {
     if (Math.max(width, height) < 250) {
@@ -263,171 +265,213 @@ title: Options &amp; Events
     }
   }
 });</code></pre>
-				</p>
-				<p>
-					Remember that if this option is defined, <code>sizeRangeSuffixes</code> is not considered.
-				</p>
-			</td>
-		</tr>
-		<tr>
-			<td><code>lastRow</code></td><td><code>'nojustify'</code></td>
-			<td>Decide to justify the last row (using <code>'justify'</code>) or not (using <code>'nojustify'</code>),
-				or to hide the row if it can't be justified (using <code>'hide'</code>). By default, using <code>'nojustify'</code>, the
-				last row images are aligned to the left, but they can be also aligned to the center (using <code>'center'</code>) 
-				or to the right (using <code>'right'</code>).
-			</td>
-		</tr>
-		<tr>
-			<td><code>fixedHeight</code></td><td><code>false</code></td>
-			<td>Decide if you want to have a fixed height. This mean that all the rows will be exactly
-				with the specified <code>rowHeight</code>.</td>
-		</tr>
-		<tr>
-			<td><code>captions</code></td><td><code>true</code></td>
-			<td>Decide if you want to show the caption or not, that appears when your mouse is over the image.</td>
-		</tr>
-		<tr>
-			<td><code>margins</code></td><td><code>1</code></td>
-			<td>Decide the margins between the images</td>
-		</tr>
-		<tr>
-			<td><code>border</code></td><td><code>-1</code></td>
-			<td>Decide the border size of the gallery. With a negative value the border will be the same as the margins.</td>
-		</tr>
-		<tr>
-			<td><code>waitThumbnailsLoad</code></td><td><code>true</code></td>
-			<td>In presence of width and height attributes in thumbnails, the layout is immediately built,
-				and the thumbnails will appear randomly while they are loaded.</td>
-		</tr>
-		<tr>
-			<td><code>randomize</code></td><td><code>false</code></td>
-			<td>Automatically randomize or not the order of photos.</td>
-		</tr>
-		<tr>
-			<td><code>filter</code></td><td><code>false</code></td>
-			<td>
-				Can be:
-				<ul>
-					<li><code>false</code>: for a disabled filter.</li>
-					<li>a string: an entry is kept if <code>entry.is(filter string)</code> returns <code>true</code>
-						(see jQuery's <code><a href="http://api.jquery.com/is/">.is()</a></code> function for further information).</li>
-					<li>a function: invoked with arguments (entry, index, array). Return <code>true</code> to keep the entry, <code>false</code> otherwise.
-						see <code><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/filter">Array.prototype.filter</a></code>
-						for further information.</li>
-				</ul>
-			</td>
-		</tr>
-		<tr>
-			<td><code>sort</code></td><td><code>false</code></td>
-			<td> Can be
-				<ul>
-					<li><code>false</code> to do not sort.</li>
-					<li>a function to sort them using the function as comparator
-						(see <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">Array.prototype.sort()</a></code>).</li>
-				</ul>
-			</td>
-		</tr>
-		<tr>
-			<td><code>selector</code></td><td style="white-space: nowrap;"><code>'> a, > div:not(.spinner)'</code></td>
-			<td>
-				Used to determines which are the entries of the gallery.
-			</td>
-		</tr>
-		<tr>
-			<td><code>extension</code></td><td><code>/.[^.]+$/</code></td>
-			<td>Specify the extension for the images with a regex. Is used to reconstruct the filename of the images,
-				change it if you need. For example <code>/.jpg$/</code> is to detect only the ".jpg" extension and no more.</td>
-		</tr>
-		<tr>
-			<td><code>refreshTime</code></td><td><code>250</code></td>
-			<td>The waited time before checking the page size. If the page width has changed the gallery
-			layout is rebuilt.</td>
-		</tr>
-		<tr>
-			<td><code>refreshSensitivity</code></td><td><code>0</code></td>
-			<td>Change in width allowed (in px) without re-building the gallery.</td>
-		</tr>
-		<tr>
-			<td><code>rel</code></td><td></td>
-			<td>To rewrite all the links <code>rel</code> attribute with the specified value.
-				For example can be 'gallery1', and is usually used to create gallery group for the lightbox (e.g. Colorbox).</td>
-		</tr>
-		<tr>
-			<td><code>target</code></td><td></td>
-			<td>To rewrite all the links <code>target</code> attribute with the specified value.
-				For example, if you don't use a lightbox, specifying <code>'_blank'</code>, all the
-				images will be opened to another page.</td>
-		</tr>
-		<tr>
-			<td><code>justifyThreshold</code></td><td>0.75</td>
-			<td>If <i>'available space' / 'row width' > 0.75</i> the last row is justified, even though
-				the <code>lastRow</code> setting is <code>'nojustify'</code>.</td>
-		</tr>
-		<tr>
-			<td><code>cssAnimation</code></td><td>false</td>
-			<td>Use or not css animations. Using css animations you can change the behavior
-				changing the justified gallery CSS file, or overriding that rules.</td>
-		</tr>
-		<tr>
-			<td><code>imagesAnimationDuration</code></td><td>300</td>
-			<td>Image fadeIn duration (in milliseconds).</td>
-		</tr>
-		<tr>
-			<td><code>captionSettings</code></td>
-			<td>
-				<code style="white-space: nowrap;">{ animationDuration: 500,<br/>
-				&nbsp;&nbsp;visibleOpacity: 0.7,<br/>
-				&nbsp;&nbsp;nonVisibleOpacity: 0.0 }</code>
-			</td>
-			<td>Caption settings. To configure the animation duration (in milliseconds), the caption opacity when the
-			mouse is over (i.e. it should be visible), and the caption opacity when the mouse is not over (i.e. it should
-				be not visible). </td>
-		</tr>
-	</table>
+                </p>
+                <p>
+                    Remember that if this option is defined, <code>sizeRangeSuffixes</code> is not considered.
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td><code>lastRow</code></td>
+            <td><code>'nojustify'</code></td>
+            <td>Decide to justify the last row (using <code>'justify'</code>) or not (using <code>'nojustify'</code>),
+                or to hide the row if it can't be justified (using <code>'hide'</code>). By default, using <code>'nojustify'</code>,
+                the
+                last row images are aligned to the left, but they can be also aligned to the center (using <code>'center'</code>)
+                or to the right (using <code>'right'</code>).
+            </td>
+        </tr>
+        <tr>
+            <td><code>captions</code></td>
+            <td><code>true</code></td>
+            <td>Decide if you want to show the caption or not, that appears when your mouse is over the image.</td>
+        </tr>
+        <tr>
+            <td><code>margins</code></td>
+            <td><code>1</code></td>
+            <td>Decide the margins between the images</td>
+        </tr>
+        <tr>
+            <td><code>border</code></td>
+            <td><code>-1</code></td>
+            <td>Decide the border size of the gallery. With a negative value the border will be the same as the
+                margins.
+            </td>
+        </tr>
+        <tr>
+            <td><code>waitThumbnailsLoad</code></td>
+            <td><code>true</code></td>
+            <td>In presence of width and height attributes in thumbnails, the layout is immediately built,
+                and the thumbnails will appear randomly while they are loaded.
+            </td>
+        </tr>
+        <tr>
+            <td><code>randomize</code></td>
+            <td><code>false</code></td>
+            <td>Automatically randomize or not the order of photos.</td>
+        </tr>
+        <tr>
+            <td><code>filter</code></td>
+            <td><code>false</code></td>
+            <td>
+                Can be:
+                <ul>
+                    <li><code>false</code>: for a disabled filter.</li>
+                    <li>a string: an entry is kept if <code>entry.is(filter string)</code> returns <code>true</code>
+                        (see jQuery's <code><a href="http://api.jquery.com/is/">.is()</a></code> function for further
+                        information).
+                    </li>
+                    <li>a function: invoked with arguments (entry, index, array). Return <code>true</code> to keep the
+                        entry, <code>false</code> otherwise.
+                        see <code><a
+                                href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/filter">Array.prototype.filter</a></code>
+                        for further information.
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><code>sort</code></td>
+            <td><code>false</code></td>
+            <td> Can be
+                <ul>
+                    <li><code>false</code> to do not sort.</li>
+                    <li>a function to sort them using the function as comparator
+                        (see <code><a
+                                href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">Array.prototype.sort()</a></code>).
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><code>selector</code></td>
+            <td style="white-space: nowrap;"><code>'> a, > div:not(.spinner)'</code></td>
+            <td>
+                Used to determines which are the entries of the gallery.
+            </td>
+        </tr>
+        <tr>
+            <td><code>extension</code></td>
+            <td><code>/.[^.]+$/</code></td>
+            <td>Specify the extension for the images with a regex. Is used to reconstruct the filename of the images,
+                change it if you need. For example <code>/.jpg$/</code> is to detect only the ".jpg" extension and no
+                more.
+            </td>
+        </tr>
+        <tr>
+            <td><code>refreshTime</code></td>
+            <td><code>250</code></td>
+            <td>The waited time before checking the page size. If the page width has changed the gallery
+                layout is rebuilt.
+            </td>
+        </tr>
+        <tr>
+            <td><code>refreshSensitivity</code></td>
+            <td><code>0</code></td>
+            <td>Change in width allowed (in px) without re-building the gallery.</td>
+        </tr>
+        <tr>
+            <td><code>rel</code></td>
+            <td></td>
+            <td>To rewrite all the links <code>rel</code> attribute with the specified value.
+                For example can be 'gallery1', and is usually used to create gallery group for the lightbox (e.g.
+                Colorbox).
+            </td>
+        </tr>
+        <tr>
+            <td><code>target</code></td>
+            <td></td>
+            <td>To rewrite all the links <code>target</code> attribute with the specified value.
+                For example, if you don't use a lightbox, specifying <code>'_blank'</code>, all the
+                images will be opened to another page.
+            </td>
+        </tr>
+        <tr>
+            <td><code>justifyThreshold</code></td>
+            <td>0.75</td>
+            <td>If <i>'available space' / 'row width' > 0.75</i> the last row is justified, even though
+                the <code>lastRow</code> setting is <code>'nojustify'</code>.
+            </td>
+        </tr>
+        <tr>
+            <td><code>cssAnimation</code></td>
+            <td>false</td>
+            <td>Use or not css animations. Using css animations you can change the behavior
+                changing the justified gallery CSS file, or overriding that rules.
+            </td>
+        </tr>
+        <tr>
+            <td><code>imagesAnimationDuration</code></td>
+            <td>300</td>
+            <td>Image fadeIn duration (in milliseconds).</td>
+        </tr>
+        <tr>
+            <td><code>captionSettings</code></td>
+            <td>
+                <code style="white-space: nowrap;">{ animationDuration: 500,<br/>
+                    &nbsp;&nbsp;visibleOpacity: 0.7,<br/>
+                    &nbsp;&nbsp;nonVisibleOpacity: 0.0 }</code>
+            </td>
+            <td>Caption settings. To configure the animation duration (in milliseconds), the caption opacity when the
+                mouse is over (i.e. it should be visible), and the caption opacity when the mouse is not over (i.e. it
+                should
+                be not visible).
+            </td>
+        </tr>
+    </table>
 </div>
 
 <h2>Commands</h2>
 
 <div style="margin-top: 20px;">
-	<table class="table">
-		<tr>
-			<th>Command</th><th>Description</th>
-		</tr>
-		<tr>
-			<td><code>norewind</code></td><td>Call again justified gallery, but only the newest images will be justified.
-			This command could be used for example with the <a href="{{ '/endless-scroll' | prepend: site.baseurl }}">infinite scroll</a>.</td>
-		</tr>
-		<tr>
-			<td><code>destroy</code></td><td>Destroy the justified gallery instance. The images justification will be cleared.</td>
-		</tr>
-	</table>
+    <table class="table">
+        <tr>
+            <th>Command</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code>norewind</code></td>
+            <td>Call again justified gallery, but only the newest images will be justified.
+                This command could be used for example with the <a
+                        href="{{ '/endless-scroll' | prepend: site.baseurl }}">infinite scroll</a>.
+            </td>
+        </tr>
+        <tr>
+            <td><code>destroy</code></td>
+            <td>Destroy the justified gallery instance. The images justification will be cleared.</td>
+        </tr>
+    </table>
 
-	<h3>Example</h3>
-	{% highlight javascript %}
-$('#commandtest').justifiedGallery('norewind');{% endhighlight %}
+    <h3>Example</h3>
+    {% highlight javascript %}
+    $('#commandtest').justifiedGallery('norewind');{% endhighlight %}
 </div>
 
 <h2>Events</h2>
 
 <div style="margin-top: 20px;">
-	<table class="table">
-		<tr>
-			<th>Event</th><th>Description</th>
-		</tr>
-		<tr>
-			<td><code>jg.complete</code></td><td>When the algorithm finished to create the gallery layout.</td>
-		</tr>
-		<tr>
-			<td><code>jg.resize</code></td><td>When the algorithm finished to resize the gallery.</td>
-		</tr>
-		<tr>
-			<td><code>jg.rowflush</code></td><td>When the a new row is ready.</td>
-		</tr>
-	</table>
+    <table class="table">
+        <tr>
+            <th>Event</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code>jg.complete</code></td>
+            <td>When the algorithm finished to create the gallery layout.</td>
+        </tr>
+        <tr>
+            <td><code>jg.resize</code></td>
+            <td>When the algorithm finished to resize the gallery.</td>
+        </tr>
+        <tr>
+            <td><code>jg.rowflush</code></td>
+            <td>When the a new row is ready.</td>
+        </tr>
+    </table>
 
-	<h3>Example</h3>
-	{% highlight javascript %}
-$('#callbacktest').justifiedGallery().on('jg.complete', function (e) {
+    <h3>Example</h3>
+    {% highlight javascript %}
+    $('#callbacktest').justifiedGallery().on('jg.complete', function (e) {
     alert('on complete');
-});{% endhighlight %}
+    });{% endhighlight %}
 </div>
