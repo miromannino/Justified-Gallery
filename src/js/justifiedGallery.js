@@ -185,7 +185,14 @@
 
       // Image reloading for an high quality of thumbnails
       var imageSrc = $image.attr('src');
-      var newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight);
+      var newImageSrc;
+      if ( $image.data( 'skipsizerangesuffixes' ) ) {
+        // skip sizeRangeSuffixes by reusing the same src
+        newImageSrc = $image.attr('src');
+      } else {
+        // generate a new src appropriate for the image size
+        newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight);
+      }
 
       $image.one('error', function () {
         $image.attr('src', $image.data('jg.originalSrc')); //revert to the original thumbnail, we got it.
