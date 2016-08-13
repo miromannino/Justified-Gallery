@@ -4,11 +4,11 @@
   </a>
 </div>
 
-This is a JQuery plugin which allows you to create responsive, infinite, and high quality justified 
-gallery of images. 
+This is a JQuery plugin which allows you to create responsive, infinite, and high quality justified
+gallery of images.
 
-A common problem, for people who create sites, is to create an elegant image gallery that manages 
-the various sizes and aspect ratio of images. Flickr and Google+ manage this situation in an excellent 
+A common problem, for people who create sites, is to create an elegant image gallery that manages
+the various sizes and aspect ratio of images. Flickr and Google+ manage this situation in an excellent
 way, the purpose of this plugin is to give you the power of these solutions, with a new fast algorithm.
 
 <div style="text-align: center; font-size: 110%;">
@@ -16,6 +16,41 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 </div>
 
 ## Release History
+
+### 3.6.2
+
+* cssAnimation = true as default. It’s time to move to the future and leave IE in the past.
+* fixed cssAnimation
+* scrollbar existence check to avoid image resizing flickering
+* The boxes could now be configured to have a background color to be visible with waitThumbnailsLoad = false.
+* removed the `fixedHeight` option since now this behaviour can be replicated using `maxRowHeight`.
+* The last row height will be calculated as the average row height of all the other rows. Before the last row height
+  was always following the `rowHeight` option, that could be smaller than the effective height of all the other rows.
+  For example: a gallery of images of 100x100px in a container of 950px, where rowHeight = 100. That gallery would
+  contain 9 pictures for each row, and the extra space used for justification. Each row will have approximately an
+  height of 105px after the justification. In this example the last row height would be 105px, where in the past
+  it would usually be 100px if not justified.
+* other bugfixes
+
+### 3.6.1
+
+* bugfixes
+* lastRow option can be 'nojustify', which is the same as 'left', or it can be 'justify', 'center', 'right' or 'hide'.
+* refreshSensitivity option, to configure the change in width allowed (in px) without re-building the gallery
+* thumbnailPath to configure JG with a custom thumbnail selector,
+  e.g. we want to do select the correct thumbnail changing only a suffix of the current filename
+
+	```
+	$("#myGallery").justifiedGallery({
+		thumbnailPath: function (currentPath, width, height) {
+			if (Math.max(width, height) < 250) {
+			    return currentPath.replace(/(.*)(_[a-z]+)(\..*)/, "$1_small$2");
+			} else {
+			    return currentPath.replace(/(.*)(_[a-z]+)(\..*)/, "$1_medium$2");
+			}
+		}
+	});
+	```
 
 ### 3.6
 
@@ -28,9 +63,9 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 * configurable sizeRangeSuffixes.
   e.g. to have only thumbnails and big images it could be:
 
-	```	
-	sizeRangeSuffixes : { 
-		500: '_t', 
+	```
+	sizeRangeSuffixes : {
+		500: '_t',
 		2000: '_m'
 	}
 	```
@@ -48,17 +83,17 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 the following settings can be used:
 
 	```
-	sizeRangeSuffixes : { 
-		'lt100': '_t', 
-		'lt240': '_m', 
-		'lt320': '_n', 
-		'lt500': '', 
-		'lt640': '_z', 
-		'lt1024': '_b' 
+	sizeRangeSuffixes : {
+		'lt100': '_t',
+		'lt240': '_m',
+		'lt320': '_n',
+		'lt500': '',
+		'lt640': '_z',
+		'lt1024': '_b'
 	}
 	```
 
-* Now is possible to have entries with the structure: 
+* Now is possible to have entries with the structure:
 
 	```
 	<div>
@@ -76,7 +111,7 @@ the following settings can be used:
 ### 3.4
 
 * Performance improvements
-	* In presence of width and height attributes in thumbnails, and with the option 
+	* In presence of width and height attributes in thumbnails, and with the option
 	  'waitThumbnailsLoad', the layout is immediately built, and the thumbnails will appear randomly
 	  while they are loaded.
 	* Other code refactorings to be more performant
@@ -96,8 +131,8 @@ too like a bug than a feature.
 	```
 	captionSettings : { //ignored with css animations
 		animationDuration : 500,
-		visibleOpacity : 0.7, 
-		nonVisibleOpacity : 0.0 
+		visibleOpacity : 0.7,
+		nonVisibleOpacity : 0.0
 	},
 	```
 * Justification formulas refactoring to be more maintainable
@@ -126,7 +161,7 @@ too like a bug than a feature.
 * Totally rewritten!
 * Row by row loading
  	* The plugin doesn't wait that all the gallery thumbnails are loaded
-	* A row is printed when the its thumbnails are available 
+	* A row is printed when the its thumbnails are available
 	* Non-blocking layout creation
 * No more white spaces (If the gallery needs to load a bigger image, it first show the smaller and then replace it with the bigger)
 * Improved the algorithm for a better result
@@ -148,7 +183,7 @@ too like a bug than a feature.
 * Improved last row behavior
 	* Last row option changed
 		* `justifyLastRow` setting has been renamed to `lastRow`, and it accepts: `'justify'`, `'nojustify'`, `'hide'`.
-	* Option to hide the row if it is incomplete and cannot be justified 
+	* Option to hide the row if it is incomplete and cannot be justified
 	* The plugin can justify also with `lastRow = 'nojustify'`, if the free space is small.
 * Silent error handling
 	* If a thumbnail doesn't exists, it is ignored in the layout (hided)
@@ -193,11 +228,11 @@ Please don't edit files in the `dist` subdirectory as they are generated via Gru
 Regarding code style like indentation and whitespace, **follow the conventions you see used in the source already.**
 
 ### Modifying the code
- 
+
  - Prerequisites:
 	- Ensure that you have the latest [Node.js](http://nodejs.org/) and [npm](http://npmjs.org/) installed.
 	- Test that Grunt's CLI is installed by running `grunt --version`.  If the command isn't found, run `npm install -g grunt-cli`.  For more information about installing Grunt, see the [getting started guide](http://gruntjs.com/getting-started).
-	- Ensure that you have Bower installed. If not, install it using `npm install -g bower`. 
+	- Ensure that you have Bower installed. If not, install it using `npm install -g bower`.
 
  - Steps:
 	- Fork and clone this repository.
@@ -215,6 +250,3 @@ Regarding code style like indentation and whitespace, **follow the conventions y
 - Ensure that the written tests don't fail anymore, as well as the other tests.
 - Update the documentation to reflect any changes.
 - Push to your fork and submit a pull request.
-
-
-

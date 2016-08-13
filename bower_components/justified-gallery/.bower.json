@@ -1,6 +1,6 @@
 {
   "name": "justifiedGallery",
-  "version": "3.6.0",
+  "version": "3.6.2",
   "homepage": "http://miromannino.github.io/Justified-Gallery/",
   "authors": [
     "Miro Mannino <miro.mannino@gmail.com>"
@@ -35,13 +35,14 @@
   "dependencies": {
     "jquery": ">1.9.0"
   },
-  "_release": "3.6.0",
+  "_release": "3.6.2",
   "_resolution": {
     "type": "version",
-    "tag": "3.6.0",
-    "commit": "60d253d6963750db2507571612ae0c2d7c2f970d"
+    "tag": "3.6.2",
+    "commit": "25623a2d4be00a940f94e0dbce6ea4abba4f156b"
   },
-  "_source": "git://github.com/miromannino/Justified-Gallery.git",
-  "_target": "3.6.0",
-  "_originalSource": "justified-gallery"
+  "_source": "https://github.com/miromannino/Justified-Gallery.git",
+  "_target": "^3.6.2",
+  "_originalSource": "justified-gallery",
+  "_direct": true
 }
