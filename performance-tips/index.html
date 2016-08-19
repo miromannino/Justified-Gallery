@@ -4,52 +4,83 @@ title: Performance Tips
 ---
 
 <h1 class="jg-h1-secondary">
-	Performance Tips <small>(advanced topic)</small>
+    Performance Tips
+    <small>(advanced topic)</small>
 </h1>
 
 <hr/>
 
-<div> 
+<div>
 
-<p>
-	If you have a very big gallery, with a lot of images, you need to take care about the performances.
-	Justified Gallery has different options to tune the performances.
-</p>
+    <p>
+        If you have a very big gallery, with a lot of images, you need to take care about the performances.
+        Justified Gallery has different options to tune the performances.
+    </p>
 
-<h3>Fast layout building with <code>waitThumbnailsLoad = false</code></h3>
-<p>
-	By default Justified Gallery waits that all the images of a row are loaded before showing it. That means that, if the browser decides to load the last images of a gallery before the first ones, Justified Gallery waits more than the necessary for the images of the first rows. This means that it may wait a lot before showing the first rows.
-</p>
-<p>
-	To speed up the loading phase you can also set the option <code>waitThumbnailsLoad</code> to <code>false</code>. It's important to remember that this option only works if the thumbnails have the height and width attributes. For example:
-</p>
-	{% highlight html %}<img src="path/to/img.jpg" height="70" width="105" />{% endhighlight %}
-<p>
-	Using this option the layout is built immediately, and the thumbnails will appear randomly while they are loaded. This generates white holes during the loading phase, of course, but it reduce the loading times.
-</p>
-<p>
-	Using the <code>waitThumbnailsLoad</code> is the best way to architect the gallery, and this approach is widely adopted in professional solutions. But, of course, it requires extra-works on the backend side, since you need to output the image URL as well as the height and the width. 
-</p>
+    <h3>Avoid showing the gallery while the Javascript is loading</h3>
+    <p>
+        The images could be inside the HTML page even before the Javascript libraries are loaded. In this case those images
+        will be shown without the correct justified layout. Justified Gallery will immediately hide the gallery as soon
+        as it starts, but that could still be after some milliseconds due to network latency.
 
-<h3>Choosing the right initial thumbnails</h3>
-<p>
-	Justified Gallery has been built to load only the right thumbnails that is needed, without loading too big thumbnails, and without loading too small thumbnails. But is you that control the initial thumbnails that is written in the HTML webpage. Those thumbnails are automatically loaded by the browser, and if they are inappropriate, they may slow down the loading phase.
-</p>
-<p>
-	If we want a gallery with small thumbnails, we have to choose a small <code>rowHeight</code> (e.g. 70). This means that we can put small thumbnails in our HTML (e.g. the ones with an height close to 75px). In this way the thumbnails can be quickly loaded, and only one time.
-</p>
-<p>
-	On the contrary, if we want a gallery with big thumbnails, do we need to choose big thumbnails? The answer is probably no, because in this way the images may take a long time to show up.
-	Putting small thumbnails (but not so small), the gallery is loaded quickly. As side effect they are first resized to be bigger,
-	and they may appear with a bad quality for some seconds, but when Justified Gallery loads the bigger ones they are replaced without creating white holes in your image wall.
-</p>
-<figure class="text-center" style="margin: 10px 10px 20px 0;">
-	<img style="max-width: 100%" src="{{ '/photos/loading-bigger.png' | prepend: site.baseurl }}">
-	<figcaption>The small thumbnails is replaced without removing them. With an effect that is similar to the one represented in this picture.</figcaption>
-</figure>
-<p>
-	However, if you want that the thumbnails are showed immediately with an high quality, no matter the time needed for the gallery to show up the images, you can always put in the HTML the thumbnails with an height that is closer to the gallery's row height.
-</p>
+        To avoid this problem you can put the <code>justified-gallery</code> class to the gallery. This CSS class will
+        immediately hide the gallery, which will only show after that all images are loaded and that the layout is ready.
+    </p>
+
+    <h3>Fast layout building with <code>waitThumbnailsLoad = false</code></h3>
+    <p>
+        By default Justified Gallery waits that all the images of a row are loaded before showing it. That means that,
+        if the browser decides to load the last images of a gallery before the first ones, Justified Gallery waits more
+        than the necessary for the images of the first rows. This means that it may wait a lot before showing the first
+        rows.
+    </p>
+    <p>
+        To speed up the loading phase you can also set the option <code>waitThumbnailsLoad</code> to <code>false</code>.
+        It's important to remember that this option only works if the thumbnails have the height and width attributes.
+        For example:
+    </p>
+    {% highlight html %}<img src="path/to/img.jpg" height="70" width="105"/>{% endhighlight %}
+    <p>
+        Using this option the layout is built immediately, and the thumbnails will appear randomly while they are
+        loaded. This generates white holes during the loading phase, of course, but it reduce the loading times.
+    </p>
+    <p>
+        Using the <code>waitThumbnailsLoad</code> is the best way to architect the gallery, and this approach is widely
+        adopted in professional solutions. But, of course, it requires extra-works on the backend side, since you need
+        to output the image URL as well as the height and the width.
+    </p>
+
+    <h3>Choosing the right initial thumbnails</h3>
+    <p>
+        Justified Gallery has been built to load only the right thumbnails that is needed, without loading too big
+        thumbnails, and without loading too small thumbnails. But is you that control the initial thumbnails that is
+        written in the HTML webpage. Those thumbnails are automatically loaded by the browser, and if they are
+        inappropriate, they may slow down the loading phase.
+    </p>
+    <p>
+        If we want a gallery with small thumbnails, we have to choose a small <code>rowHeight</code> (e.g. 70). This
+        means that we can put small thumbnails in our HTML (e.g. the ones with an height close to 75px). In this way the
+        thumbnails can be quickly loaded, and only one time.
+    </p>
+    <p>
+        On the contrary, if we want a gallery with big thumbnails, do we need to choose big thumbnails? The answer is
+        probably no, because in this way the images may take a long time to show up.
+        Putting small thumbnails (but not so small), the gallery is loaded quickly. As side effect they are first
+        resized to be bigger,
+        and they may appear with a bad quality for some seconds, but when Justified Gallery loads the bigger ones they
+        are replaced without creating white holes in your image wall.
+    </p>
+    <figure class="text-center" style="margin: 10px 10px 20px 0;">
+        <img style="max-width: 100%" src="{{ '/photos/loading-bigger.png' | prepend: site.baseurl }}">
+        <figcaption>The small thumbnails is replaced without removing them. With an effect that is similar to the one
+            represented in this picture.
+        </figcaption>
+    </figure>
+    <p>
+        However, if you want that the thumbnails are showed immediately with an high quality, no matter the time needed
+        for the gallery to show up the images, you can always put in the HTML the thumbnails with an height that is
+        closer to the gallery's row height.
+    </p>
 
 </div>
 

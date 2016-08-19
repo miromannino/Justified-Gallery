@@ -27,7 +27,7 @@ layout: default
 
 <div id="liveDemo" class="justified-gallery">
 	{% for en in site.images %}
-		<div class="shadowed-entry">
+		<div>
 			<img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg" />
 		</div>
 	{% endfor %}
@@ -38,7 +38,7 @@ layout: default
 			rowHeight : 120,
 			fixedHeight : false, 
 			captions : false, 
-			margins : 7,
+			margins : 6,
 			sizeRangeSuffixes: {
 				'lt100':'_t', 
 				'lt240':'_m', 

@@ -17,6 +17,16 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 
 ## Release History
 
+### 3.6.3
+
+* Added in thumbnailPath an extra parameter which specify the current image. In this way properties of that image could
+  be read
+* Fixed bugs for filter when used specifying a function
+* Fixed bugs for filter when norewind is used
+* Performance improvements in case of norewind
+* Changed the selector behaviour. Only direct children of the gallery can be choose as gallery entry.
+* Fixed bug for maxRowHeight
+
 ### 3.6.2
 
 * cssAnimation = true as default. It’s time to move to the future and leave IE in the past.

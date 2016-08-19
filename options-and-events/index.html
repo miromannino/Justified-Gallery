@@ -109,7 +109,7 @@ title: Options &amp; Events
 
             $('#liveDemo').justifiedGallery({
                 rowHeight: 120,
-                maxRowHeight: -1,
+                maxRowHeight: null,
                 margins: 1,
                 border: 0,
                 rel: 'liveDemo',
@@ -209,8 +209,8 @@ title: Options &amp; Events
         </tr>
         <tr>
             <td><code>maxRowHeight</code></td>
-            <td><code>-1</code></td>
-            <td>This option could be a negative value to keep it disabled. Could be a number (e.g <code>200</code>)
+            <td><code>false</code></td>
+            <td>This option could be a false or negative value to keep it disabled. Could be a number (e.g <code>200</code>)
                 which specifies the maximum row height in pixel. Alternatively, a string which specifies a percentage
                 (e.g. "200%" means that the row height can't exceed <code>2 * rowHeight</code>). Note that with this
                 option can crop the images if they need to be higher to be justified.
@@ -249,7 +249,9 @@ title: Options &amp; Events
             <td>
                 <p>
                     To configure a custom thumbnail selector rather than using <code>sizeRangeSuffixes</code>, to have
-                    more flexibility in particular situations.
+                    more flexibility in some particular situations. The function will called giving the following arguments:
+                    the current path of the image, the width and the height of the image to show (after it has been resized),
+                    and the image element which can be used to get further information.
                 </p>
                 <p>
                     For example, to select the correct thumbnail changing only a suffix of the current filename (like we
@@ -257,7 +259,7 @@ title: Options &amp; Events
                 </p>
                 <p>
 					<pre><code>$("#myGallery").justifiedGallery({
-  thumbnailPath: function (currentPath, width, height) {
+  thumbnailPath: function (currentPath, width, height, image) {
     if (Math.max(width, height) < 250) {
       return currentPath.replace(/(.*)(_[a-z]+)(\..*)/, "$1_small$2");
     } else { 
@@ -345,9 +347,10 @@ title: Options &amp; Events
         </tr>
         <tr>
             <td><code>selector</code></td>
-            <td style="white-space: nowrap;"><code>'> a, > div:not(.spinner)'</code></td>
+            <td style="white-space: nowrap;"><code>'a, div:not(.spinner)'</code></td>
             <td>
-                Used to determines which are the entries of the gallery.
+                Used to determines which are the entries of the gallery. Note that the entries of the gallery are always
+                direct children of the gallery.
             </td>
         </tr>
         <tr>
@@ -434,6 +437,9 @@ title: Options &amp; Events
             <td>Call again justified gallery, but only the newest images will be justified.
                 This command could be used for example with the <a
                         href="{{ '/endless-scroll' | prepend: site.baseurl }}">infinite scroll</a>.
+                Remember that with norewind only the last images will be analyzed, so this means that any filter, sort
+                or shuffle actions will only be done on the last entries. That is a great advantage in terms of performances,
+                but pay attention in case you want a different behaviour.
             </td>
         </tr>
         <tr>
