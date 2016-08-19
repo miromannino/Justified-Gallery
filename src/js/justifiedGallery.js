@@ -1,5 +1,5 @@
 /**
- * Justified Gallery - v3.6.2
+ * Justified Gallery - v3.6.3
  * http://miromannino.github.io/Justified-Gallery/
  *
  * Copyright (c) 2016 Miro Mannino
@@ -30,6 +30,7 @@
       height : 0,
       aspectRatio : 0
     };
+    this.lastFetchedEntry = null;
     this.lastAnalyzedIndex = -1;
     this.yield = {
       every : 2, // do a flush every n flushes (must be greater than 1)
@@ -102,11 +103,11 @@
    *
    * @returns {String} the suffix to use
    */
-  JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight) {
+  JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight, image) {
     var newImageSrc;
 
     if (this.settings.thumbnailPath) {
-      newImageSrc = this.settings.thumbnailPath(imageSrc, imgWidth, imgHeight);
+      newImageSrc = this.settings.thumbnailPath(imageSrc, imgWidth, imgHeight, image);
     } else {
       var matchRes = imageSrc.match(this.settings.extension);
       var ext = (matchRes !== null) ? matchRes[0] : '';
@@ -185,7 +186,7 @@
 
       // Image reloading for an high quality of thumbnails
       var imageSrc = $image.attr('src');
-      var newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight);
+      var newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, $image[0]);
 
       $image.one('error', function () {
         $image.attr('src', $image.data('jg.originalSrc')); //revert to the original thumbnail, we got it.
@@ -404,12 +405,10 @@
       return;
     }
 
-    if (this.maxRowHeight.isPercentage) {
-      if (this.maxRowHeight.value * settings.rowHeight < this.buildingRow.height) {
+    if (this.maxRowHeight) {
+      if (this.maxRowHeight.isPercentage && this.maxRowHeight.value * settings.rowHeight < this.buildingRow.height) {
         this.buildingRow.height = this.maxRowHeight.value * settings.rowHeight;
-      }
-    } else {
-      if (this.maxRowHeight.value > 0 && this.maxRowHeight.value < this.buildingRow.height) {
+      } else if (this.maxRowHeight.value >= settings.rowHeight && this.maxRowHeight.value < this.buildingRow.height) {
         this.buildingRow.height = this.maxRowHeight.value;
       }
     }
@@ -517,6 +516,7 @@
    * Rewind the image analysis to start from the first entry.
    */
   JustifiedGallery.prototype.rewind = function () {
+    this.lastFetchedEntry = null;
     this.lastAnalyzedIndex = -1;
     this.offY = this.border;
     this.rows = 0;
@@ -530,23 +530,35 @@
    * @returns {boolean} true if some entries has been founded
    */
   JustifiedGallery.prototype.updateEntries = function (norewind) {
-    this.entries = this.$gallery.find(this.settings.selector).toArray();
-    if (this.entries.length === 0) return false;
+    var newEntries;
 
-    // Filter
-    if (this.settings.filter) {
-      this.modifyEntries(this.filterArray, norewind);
+    if (norewind && this.lastFetchedEntry != null) {
+      newEntries = $(this.lastFetchedEntry).nextAll(this.settings.selector).toArray();
     } else {
-      this.modifyEntries(this.resetFilters, norewind);
+      this.entries = [];
+      newEntries = this.$gallery.children(this.settings.selector).toArray();
     }
 
-    // Sort or randomize
-    if ($.isFunction(this.settings.sort)) {
-      this.modifyEntries(this.sortArray, norewind);
-    } else if (this.settings.randomize) {
-      this.modifyEntries(this.shuffleArray, norewind);
+    if (newEntries.length > 0) {
+
+      // Sort or randomize
+      if ($.isFunction(this.settings.sort)) {
+        newEntries = this.sortArray(newEntries);
+      } else if (this.settings.randomize) {
+        newEntries = this.shuffleArray(newEntries);
+      }
+      this.lastFetchedEntry = newEntries[newEntries.length - 1];
+
+      // Filter
+      if (this.settings.filter) {
+        newEntries = this.filterArray(newEntries);
+      } else {
+        this.resetFilters(newEntries);
+      }
+
     }
 
+    this.entries = this.entries.concat(newEntries);
     return true;
   };
 
@@ -599,7 +611,6 @@
    */
   JustifiedGallery.prototype.resetFilters = function (a) {
     for (var i = 0; i < a.length; i++) $(a[i]).removeClass('jg-filtered');
-    return a;
   };
 
   /**
@@ -618,28 +629,22 @@
           $el.removeClass('jg-filtered');
           return true;
         } else {
-          $el.addClass('jg-filtered');
+          $el.addClass('jg-filtered').removeClass('jg-visible');
           return false;
         }
       });
     } else if ($.isFunction(settings.filter)) {
       // Filter using the passed function
-      return a.filter(settings.filter);
+      var filteredArr = a.filter(settings.filter);
+      for (var i = 0; i < a.length; i++) {
+        if (filteredArr.indexOf(a[i]) == -1) {
+          $(a[i]).addClass('jg-filtered').removeClass('jg-visible');
+        } else {
+          $(a[i]).removeClass('jg-filtered');
+        }
+      }
+      return filteredArr;
     }
-  };
-
-  /**
-   * Modify the entries. With norewind only the new inserted images will be modified (the ones after lastAnalyzedIndex)
-   *
-   * @param functionToApply the function to call to modify the entries (e.g. sorting, randomization, filtering)
-   * @param norewind specify if the norewind has been called or not
-   */
-  JustifiedGallery.prototype.modifyEntries = function (functionToApply, norewind) {
-    var lastEntries = norewind ?
-        this.entries.splice(this.lastAnalyzedIndex + 1, this.entries.length - this.lastAnalyzedIndex - 1)
-        : this.entries;
-    lastEntries = functionToApply.call(this, lastEntries);
-    this.entries = norewind ? this.entries.concat(lastEntries) : lastEntries;
   };
 
   /**
@@ -926,6 +931,10 @@
     } else if ($.type(this.settings.maxRowHeight) === 'number') {
       newMaxRowHeight.value = this.settings.maxRowHeight;
       newMaxRowHeight.isPercentage = false;
+    } else if (this.settings.maxRowHeight === false ||
+        this.settings.maxRowHeight === null ||
+        typeof this.settings.maxRowHeight == 'undefined') {
+      return null;
     } else {
       throw 'maxRowHeight must be a number or a percentage';
     }
@@ -936,14 +945,9 @@
     // check values
     if (newMaxRowHeight.isPercentage) {
       if (newMaxRowHeight.value < 100) newMaxRowHeight.value = 100;
-    } else {
-      if (newMaxRowHeight.value > 0 && newMaxRowHeight.value < this.settings.rowHeight) {
-        newMaxRowHeight.value = this.settings.rowHeight;
-      }
     }
 
     return newMaxRowHeight;
-
   };
 
   /**
@@ -1136,7 +1140,7 @@
       - a function: invoked with arguments (entry, index, array). Return true to keep the entry, false otherwise.
                     It follows the specifications of the Array.prototype.filter() function of JavaScript.
     */
-    selector: '> a, > div:not(.spinner)' // The selector that is used to know what are the entries of the gallery
+    selector: 'a, div:not(.spinner)' // The selector that is used to know what are the entries of the gallery
   };
 
 }(jQuery));
