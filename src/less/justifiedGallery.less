@@ -1,5 +1,5 @@
 /*
- * Justified Gallery - v3.6.3
+ * Justified Gallery - v3.6.4
  * http://miromannino.com/projects/justified-gallery/
  * Copyright (c) 2016 Miro Mannino
  * Licensed under the MIT license.
@@ -25,12 +25,14 @@
   position: relative;
   overflow: hidden;
 
-  > a, > div {
+  > a, > div, > figure {
     position: absolute;
     display: inline-block;
     overflow: hidden;
     /* background: #888888; To have gray placeholders while the gallery is loading with waitThumbnailsLoad = false */
     .opacity(0.1);
+    margin: 0;
+    padding: 0;
 
     > img, > a > img {
       position: absolute;

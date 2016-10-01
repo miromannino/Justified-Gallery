@@ -17,6 +17,10 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 
 ## Release History
 
+### 3.6.4
+
+* semplified the possibility to have a gallery of `<figure>`. 
+
 ### 3.6.3
 
 * Added in thumbnailPath an extra parameter which specify the current image. In this way properties of that image could
