@@ -16,18 +16,17 @@ title: Getting Started
         Gallery, the disposition of all the thumbnails is changed to fill all the spaces (<i>justification</i>).
     </p>
     {% highlight html %}
-    <div id="basicExample">
-        <a href="path/to/image1.jpg">
-            <img alt="caption for image 1" src="ppath/to/image1_thumbnail.jpg"/>
-        </a>
-        <a href="path/to/image2.jpg">
-            <img alt="caption for image 2" src="path/to/image2_thumbnail.jpg"/>
-        </a>
-        ...
-    </div>
-    {% endhighlight %}
+<div id="basicExample">
+    <a href="path/to/image1.jpg">
+        <img alt="caption for image 1" src="ppath/to/image1_thumbnail.jpg"/>
+    </a>
+    <a href="path/to/image2.jpg">
+        <img alt="caption for image 2" src="path/to/image2_thumbnail.jpg"/>
+    </a>
+    ...
+</div>{% endhighlight %}
     {% highlight javascript %}
-    $("#basicExample").justifiedGallery();{% endhighlight %}
+$("#basicExample").justifiedGallery();{% endhighlight %}
 
     <div id="basicExample_demo">
         {% for en in site.images %}
@@ -83,21 +82,21 @@ title: Getting Started
             href="{{ '/options-and-events' | prepend: site.baseurl }}"><code>margins : 5px</code></a>).
     </p>
     {% highlight html %}
-    <div id="basicExample2" class="justified-gallery">
-        <a href="path/to/image1.jpg">
-            <img alt="caption for image 1" src="path/to/image1_thumbnail.jpg"/>
-        </a>
-        <a href="path/to/image2.jpg" title="Just in a dream Place">
-            <img alt="caption for image 2" src="path/to/image2_thumbnail.jpg"/>
-        </a>
-        ...
-    </div>
+<div id="basicExample2" class="justified-gallery">
+    <a href="path/to/image1.jpg">
+        <img alt="caption for image 1" src="path/to/image1_thumbnail.jpg"/>
+    </a>
+    <a href="path/to/image2.jpg" title="Just in a dream Place">
+        <img alt="caption for image 2" src="path/to/image2_thumbnail.jpg"/>
+    </a>
+    ...
+</div>
 
-    $('#basicExample2').justifiedGallery({
+$('#basicExample2').justifiedGallery({
     rowHeight : 70,
     lastRow : 'nojustify',
     margins : 3
-    });{% endhighlight %}
+});{% endhighlight %}
 
     <div id="basicExample2_demo" class="justified-gallery">
         {% for en in site.images %}
@@ -136,14 +135,14 @@ title: Getting Started
         set
         this setting in the following way:
         {% highlight javascript %}
-        sizeRangeSuffixes: {
-        100 : '_t', // used with images which are less than 100px on the longest side
-        240 : '_m', // used with images which are between 100px and 240px on the longest side
-        320 : '_n', // ...
-        500 : '',
-        640 : '_z',
-        1024 : '_b' // used which images that are more than 640px on the longest side
-        }{% endhighlight %}
+sizeRangeSuffixes: {
+    100 : '_t', // used with images which are less than 100px on the longest side
+    240 : '_m', // used with images which are between 100px and 240px on the longest side
+    320 : '_n', // ...
+    500 : '',
+    640 : '_z',
+    1024 : '_b' // used which images that are more than 640px on the longest side
+}{% endhighlight %}
         In this way the plugin derives the path of the other thumbnails for the same image only changing the filenames
         suffix.
         For example, with an entry with the thumbnail <code>path/to/image1_t.jpg</code>, the plugin could load the
@@ -155,7 +154,7 @@ title: Getting Started
         configuration:
 
         {% highlight javascript %}
-        sizeRangeSuffixes: { }{% endhighlight %}
+sizeRangeSuffixes: { }{% endhighlight %}
     </p>
 
     <p style="margin-top: 15px;">

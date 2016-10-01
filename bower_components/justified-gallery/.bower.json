@@ -42,6 +42,6 @@
     "commit": "7d236a9dfc91535f5ec09beda99ca99f8a786f81"
   },
   "_source": "https://github.com/miromannino/Justified-Gallery.git",
-  "_target": "^3.6.2",
+  "_target": "~3.6.3",
   "_originalSource": "justified-gallery"
 }

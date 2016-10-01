@@ -1,24 +1,31 @@
-define( [
+define([
 	"../core",
 	"../core/parseHTML",
 	"../ajax",
 	"../traversing",
 	"../manipulation",
-	"../selector"
+	"../selector",
+	// Optional event/alias dependency
+	"../event/alias"
 ], function( jQuery ) {
 
-"use strict";
+// Keep a copy of the old load method
+var _load = jQuery.fn.load;
 
 /**
  * Load a url into a page
  */
 jQuery.fn.load = function( url, params, callback ) {
+	if ( typeof url !== "string" && _load ) {
+		return _load.apply( this, arguments );
+	}
+
 	var selector, type, response,
 		self = this,
-		off = url.indexOf( " " );
+		off = url.indexOf(" ");
 
-	if ( off > -1 ) {
-		selector = jQuery.trim( url.slice( off ) );
+	if ( off >= 0 ) {
+		selector = url.slice( off );
 		url = url.slice( 0, off );
 	}
 
@@ -36,16 +43,14 @@ jQuery.fn.load = function( url, params, callback ) {
 
 	// If we have elements to modify, make the request
 	if ( self.length > 0 ) {
-		jQuery.ajax( {
+		jQuery.ajax({
 			url: url,
 
-			// If "type" variable is undefined, then "GET" method will be used.
-			// Make value of this field explicit since
-			// user can override it through ajaxSetup method
-			type: type || "GET",
+			// if "type" variable is undefined, then "GET" method will be used
+			type: type,
 			dataType: "html",
 			data: params
-		} ).done( function( responseText ) {
+		}).done(function( responseText ) {
 
 			// Save response for use in complete callback
 			response = arguments;
@@ -54,22 +59,17 @@ jQuery.fn.load = function( url, params, callback ) {
 
 				// If a selector was specified, locate the right elements in a dummy div
 				// Exclude scripts to avoid IE 'Permission Denied' errors
-				jQuery( "<div>" ).append( jQuery.parseHTML( responseText ) ).find( selector ) :
+				jQuery("<div>").append( jQuery.parseHTML( responseText ) ).find( selector ) :
 
 				// Otherwise use the full result
 				responseText );
 
-		// If the request succeeds, this function gets "data", "status", "jqXHR"
-		// but they are ignored because response was set above.
-		// If it fails, this function gets "jqXHR", "status", "error"
-		} ).always( callback && function( jqXHR, status ) {
-			self.each( function() {
-				callback.apply( this, response || [ jqXHR.responseText, status, jqXHR ] );
-			} );
-		} );
+		}).complete( callback && function( jqXHR, status ) {
+			self.each( callback, response || [ jqXHR.responseText, status, jqXHR ] );
+		});
 	}
 
 	return this;
 };
 
-} );
+});

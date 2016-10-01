@@ -16,6 +16,7 @@ Swipebox is a jQuery "lightbox" plugin for desktop, mobile and tablet.
 - CSS transitions with jQuery fallback
 - Retina support for UI icons
 - Easy CSS customization
+- Video, Images and Inline content
 
 ###Compatibility
 
@@ -61,15 +62,26 @@ $( '.swipebox' ).swipebox();
 ```javascript
 useCSS : true, // false will force the use of jQuery for animations
 initialIndexOnArray: 0, // which image index to init when a array is passed
-hideBarsOnMobile : true, // false will show the caption and navbar on mobile devices
-hideBarsDelay : 3000, // 0 to always show caption and action bar
+removeBarsOnMobile : true, // false will show top navigation bar on mobile devices
+hideCloseButtonOnMobile : false, // true will hide the close button on mobile devices
+removeBarsOnMobile : true, // false will show bottom bar on mobile devices
+hideBarsDelay : 3000, // delay before hiding bars on desktop
 videoMaxWidth : 1140, // videos max width
 beforeOpen: function(){} , // called before opening
-afterClose: function(){} // called after closing
+afterOpen: null, // called after opening
+afterClose: function(){}, // called after closing
+afterMedia: function(){}, // called after media is loaded
+loopAtEnd: false, // true will return to the first image after the last image is reached
+autoplayVideos: false // true will autoplay Youtube and Vimeo videos
+queryStringData: {} // plain object with custom query string arguments to pass/override for video URLs,
+toggleClassOnLoad: '' // CSS class that can be toggled when the slide will be loaded (like 'hidden' of Bootstrap)
+useSVG: true
 ```
 
 ###Pull Requests
 
 I want to keep this plugin as simple as possible. I won't merge pull requests for additional features such as download buttons, social like buttons, IE8 compatibility etc... But feel free to fork the project and customize it to suit to your needs. Most wanted PR are for bug fixes. Also, a future improvement will be to allow zoom on touchable devices.
+
+If you want to submit a pull request please be sure to grunt the whole thing (mostly jshintrc validation and minified file) and send me a demo URL. Also, please comment your code.
 
 Thanks for your understanding and thank you all for your helpful support!

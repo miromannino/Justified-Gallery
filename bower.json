@@ -16,9 +16,10 @@
     "tests"
   ],
   "dependencies": {
+    "jquery": "2.1.0",
     "colorbox": "~1.6.0",
-    "swipebox": "~1.2.9",
+    "swipebox": "~1.4.4",
     "bootstrap": "~3.3.5",
-    "justifiedGallery": "justified-gallery#^3.6.2"
+    "justified-gallery": "justified-gallery#~3.6.3"
   }
 }

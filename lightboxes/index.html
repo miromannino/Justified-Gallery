@@ -66,7 +66,7 @@ $('#colorboxExample').justifiedGallery({
 				lt1024 : '_b'
 			}
 		}).on('jg.complete', function () {
-			$(this).find('a').colorbox({
+			$('#colorboxExample > a').colorbox({
 				maxWidth : '80%',
 				maxHeight : '80%',
 				opacity : 0.8,
@@ -81,24 +81,18 @@ $('#colorboxExample').justifiedGallery({
 	<h2>Swipebox</h2>
 	<p>
 		To use Swipebox you need to use again a listener for the <a href="{{ '/options-and-events' | prepend: site.baseurl }}"><code>jg.complete</code></a> callback.
-		Unfortunately, due to a Swipebox's misteriousely bug, the simple code: 
 	</p>
-		{% highlight javascript %}	
-$(this).find('a').swipebox();{% endhighlight %}	
-	<p>
-		doesn't work properly. In this way Swipebox activate itself for all photos in the same page. To fix that, one needs to select the gallery using a complete selector like the following:
-	</p>
-		{% highlight javascript %}	
-$('#swipeboxExample a').swipebox();{% endhighlight %}	
+		{% highlight javascript %}
+$('.swipeboxExampleImg').swipebox();{% endhighlight %}	
 	<p>
 		Look at the following code for a complete example:
 	</p>
 	{% highlight html %}
 <div id="swipeboxExample">
-    <a href="image1.jpg">
+    <a href="image1.jpg" class="swipeboxExampleImg">
         <img alt="title 1" src="image1_thumbnail.jpg" />
     </a>
-    <a href="image2.jpg">
+    <a href="image2.jpg" class="swipeboxExampleImg">
         <img alt="title 2" src="image2_thumbnail.jpg" />
     </a>
     ...
@@ -110,12 +104,13 @@ $('#swipeboxExample').justifiedGallery({
     rel : 'gallery2',
     margins : 1
 }).on('jg.complete', function () {
-    $('#swipeboxExample a').swipebox();
+    $('.swipeboxExampleImg').swipebox();
 });{% endhighlight %}
 
+	<div class="alert alert-warning">Swipebox seems has problems with certain types of jQuery versions. The version 2.x versions seems the only ones that work (here we use v2.1.0).</div>
 	<div id="swipeboxExample" >
 		{% for en in site.images %}
-		<a href="{{ en.url | prepend: site.baseurl }}_b.jpg">
+		<a href="{{ en.url | prepend: site.baseurl }}_b.jpg" class="swipeboxExampleImg" rel='gal'>
 			<img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg" />
 		</a>
 		{% endfor %}
@@ -136,13 +131,14 @@ $('#swipeboxExample').justifiedGallery({
 			}
 		}).on('jg.complete', function () {
 			//$(this).find('a').swipebox(); //doesn't work
-			$('#swipeboxExample a').swipebox();
+		 $('.swipeboxExampleImg').swipebox();
 		});
 	</script>
 
-	<h2>Multiple gallery with one call <small>Colorbox</small></h2>
+	<h2>Multiple gallery with one call</h2>
 	<p>
-		The three galleries are created with a single call to the plugin. Note that, to create the Colorbox groups, the images have different <code>rel</code> tags.
+		The three galleries are created with a single call to the plugin. Note that, to create the groups, the images have different <code>rel</code> tags.
+		Note: certain types of lightbox libraries could accept different methods to create those groups. 
 	</p>
 	{% highlight html %}
 <div class="myExMul" >
@@ -269,14 +265,4 @@ $('.myExMul').each(function (i, el) {
 		});
 	</script>
 
-	<h2>Multiple gallery with one call <small>swipebox</small></h2>
-	<p>
-		To use the Swipebox it's a little hard again due to the same bug. You need to call it once, and to select all the images in one selector.
-	</p>
-	{% highlight javascript %}
-$('.myExMul').each(function (i, el) {
-    $(el).justifiedGallery({rel: 'myExMul-' + i}).on('jg.complete', function () {
-        if (i == 1) $('.myExMul a').swipebox();
-    });
-});{% endhighlight %}
 </div>
