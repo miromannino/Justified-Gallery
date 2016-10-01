@@ -28,7 +28,7 @@ layout: default
 <div id="liveDemo" class="justified-gallery">
 	{% for en in site.images %}
 		<div>
-			<img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg" />
+			<img alt="{{ en.desc }}" src="{{ en.url | prepend: site.baseurl }}_m.jpg" width="{{ en.width }}" height="{{ en.height }}"/>
 		</div>
 	{% endfor %}
 </div>
@@ -36,7 +36,6 @@ layout: default
 	jQuery(document).ready(function() { 
 		jQuery("#liveDemo").justifiedGallery({
 			rowHeight : 120,
-			fixedHeight : false, 
 			captions : false, 
 			margins : 6,
 			sizeRangeSuffixes: {
