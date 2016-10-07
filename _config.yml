@@ -16,8 +16,7 @@ completeCurrJGVer: 3.6.3
 # Build settings
 markdown: kramdown
 
-# it needs pygments installed using python -m pip install Pygments
-highlighter: pygments
+highlighter: rouge
 
 photosPath: /Justified-Gallery/photos
 
