@@ -26,117 +26,117 @@ images:
   - 
     url: /photos/24096687789_c37d45712f
     desc: Peace of mind
-    width: 500px
-    height: 261px
+    width: 500
+    height: 361
   -
     url: /photos/23753792354_bd75d8dabc
     desc: Abu Dhabi
-    width: 500px
-    height: 297px
+    width: 500
+    height: 297
   - 
     url: /photos/16961685188_f130144d60
     desc: Never stop climbing
-    width: 500px
-    height: 167px
+    width: 500
+    height: 167
   - 
     url: /photos/24014174029_2cfa940264
     desc: Terme
-    width: 500px
-    height: 350px
+    width: 500
+    height: 350
   - 
     url: /photos/13824674674_ca1e482394
     desc: Deep sea
-    width: 500px
+    width: 500
     height: 333v
   - 
     url: /photos/13824322785_104dc0968c
     desc: Above the World
-    width: 500px
-    height: 333px
+    width: 500
+    height: 333
   - 
     url: /photos/8842312290_f310d491f4
     desc: The Spring
-    width: 500px
-    height: 307px
+    width: 500
+    height: 307
   - 
     url: /photos/8811828736_88392f614a
     desc: Cat firmness
-    width: 500px
-    height: 333px
+    width: 500
+    height: 333
   - 
     url: /photos/8400794773_932654a20e
     desc: Into the Sea
-    width: 500px
-    height: 333px
+    width: 500
+    height: 333
   - 
     url: /photos/8157236803_78aa1698b6
     desc: Bologna's T-Day
-    width: 500px
-    height: 279px
+    width: 500
+    height: 279
   - 
     url: /photos/7948632554_01f6ae6b6f
     desc: Just in a dream Place
-    width: 500px
-    height: 333px
+    width: 500
+    height: 333
   - 
     url: /photos/7822678460_ee98ff1f69
     desc: Erice
-    width: 500px
-    height: 333px
+    width: 500
+    height: 333
   - 
     url: /photos/7002395006_29fdc85f7a
     desc: Freedom
-    width: 500px
-    height: 274px
+    width: 500
+    height: 274
   - 
     url: /photos/7062575651_b23918b11a
     desc: Maybe spring
-    width: 500px
-    height: 274px
+    width: 500
+    height: 274
   - 
     url: /photos/6841267340_855273fd7e
     desc: Love
-    width: 500px
-    height: 286px
+    width: 500
+    height: 286
   - 
     url: /photos/6791628438_affaa19e10
     desc: These are the colors I love
-    width: 500px
-    height: 333px
+    width: 500
+    height: 333
   - 
     url: /photos/6916180091_9c9559e463
     desc: The Hope
-    width: 500px
-    height: 333px
+    width: 500
+    height: 333
   - 
     url: /photos/6880502467_d4b3c4b2a8
     desc: Florence streets. Florence people.
-    width: 500px
-    height: 333px
+    width: 500
+    height: 333
   - 
     url: /photos/6876412479_6268c6e2aa
     desc: I Love You
-    width: 500px
-    height: 333px
+    width: 500
+    height: 333
   - 
     url: /photos/6840627709_92ed52fb41
     desc: The painter in Florence
-    width: 500px
-    height: 333px
+    width: 500
+    height: 333
   - 
     url: /photos/6812090617_5fd5bbdda0
     desc: Me and My Belover
-    width: 500px
-    height: 500px
+    width: 500
+    height: 500
   - 
     url: /photos/6806687375_07d2b7a1f9
     desc: Fiocco
-    width: 500px
-    height: 333px
+    width: 500
+    height: 333
   - 
     url: /photos/6798453217_72dea2d06e
     desc: My first clothespin
-    width: 500px
-    height: 333px
+    width: 500
+    height: 333
 
 onlyTheThumbnailImg : /photos/onlythethumbnail_t
