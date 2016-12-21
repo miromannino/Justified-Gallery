@@ -1,5 +1,5 @@
 /*!
- * Justified Gallery - v3.6.2
+ * Justified Gallery - v3.6.3
  * http://miromannino.github.io/Justified-Gallery/
  * Copyright (c) 2016 Miro Mannino
  * Licensed under the MIT license.
@@ -14,9 +14,9 @@
   position: absolute;
   display: inline-block;
   overflow: hidden;
-  opacity: 0;
-  filter: alpha(opacity=0);
-  /* IE8 or Earlier */
+  /* background: #888888; To have gray placeholders while the gallery is loading with waitThumbnailsLoad = false */
+  filter: "alpha(opacity=10)";
+  opacity: 0.1;
 }
 .justified-gallery > a > img,
 .justified-gallery > div > img,
@@ -28,6 +28,8 @@
   margin: 0;
   padding: 0;
   border: none;
+  filter: "alpha(opacity=0)";
+  opacity: 0;
 }
 .justified-gallery > a > .caption,
 .justified-gallery > div > .caption {
@@ -47,18 +49,22 @@
 .justified-gallery > a > .caption.caption-visible,
 .justified-gallery > div > .caption.caption-visible {
   display: initial;
-  opacity: 0.7;
   filter: "alpha(opacity=70)";
-  /* IE8 or Earlier */
+  opacity: 0.7;
   -webkit-transition: opacity 500ms ease-in;
   -moz-transition: opacity 500ms ease-in;
   -o-transition: opacity 500ms ease-in;
   transition: opacity 500ms ease-in;
 }
 .justified-gallery > .entry-visible {
-  opacity: 1.0;
-  filter: alpha(opacity=100);
-  /* IE8 or Earlier */
+  filter: "alpha(opacity=100)";
+  opacity: 1;
+  background: none;
+}
+.justified-gallery > .entry-visible > img,
+.justified-gallery > .entry-visible > a > img {
+  filter: "alpha(opacity=100)";
+  opacity: 1;
   -webkit-transition: opacity 500ms ease-in;
   -moz-transition: opacity 500ms ease-in;
   -o-transition: opacity 500ms ease-in;
@@ -73,21 +79,17 @@
   margin-left: -24px;
   padding: 10px 0 10px 0;
   left: 50%;
-  opacity: initial;
-  filter: initial;
+  filter: "alpha(opacity=100)";
+  opacity: 1;
   overflow: initial;
 }
 .justified-gallery > .spinner > span {
   display: inline-block;
+  filter: "alpha(opacity=0)";
   opacity: 0;
-  filter: alpha(opacity=0);
-  /* IE8 or Earlier */
   width: 8px;
   height: 8px;
   margin: 0 4px 0 4px;
   background-color: #000;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-  border-bottom-left-radius: 6px;
+  border-radius: 6px;
 }

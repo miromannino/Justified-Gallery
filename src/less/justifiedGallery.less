@@ -1,108 +1,111 @@
 /*
- * Justified Gallery - v3.6.2
+ * Justified Gallery - v3.6.3
  * http://miromannino.com/projects/justified-gallery/
  * Copyright (c) 2016 Miro Mannino
  * Licensed under the MIT license.
  */
 
 @caption-initial-opacity: 0.0;
-@caption-visibile-opacity: 0.7;
+@caption-visible-opacity: 0.7;
 
 .transition(@property:all, @duration: 500ms, @ease: ease-in) {
-	-webkit-transition: opacity 500ms ease-in;
-	-moz-transition: opacity 500ms ease-in;
-	-o-transition: opacity 500ms ease-in;
-	transition: opacity 500ms ease-in;
+  -webkit-transition: opacity 500ms ease-in;
+  -moz-transition: opacity 500ms ease-in;
+  -o-transition: opacity 500ms ease-in;
+  transition: opacity 500ms ease-in;
+}
+
+.opacity(@opacity: 1) {
+  filter: %("alpha(opacity=%d)", @opacity * 100);
+  opacity: @opacity;
 }
 
 .justified-gallery {
-	width: 100%;
-	position: relative;
-	overflow: hidden;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
 
-	> a, > div {
-		position: absolute;
-		display: inline-block;
-		overflow: hidden;
-		opacity: 0;
-		filter: e("alpha(opacity=0)"); /* IE8 or Earlier */
+  > a, > div {
+    position: absolute;
+    display: inline-block;
+    overflow: hidden;
+    /* background: #888888; To have gray placeholders while the gallery is loading with waitThumbnailsLoad = false */
+    .opacity(0.1);
 
-		> img, > a > img {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			margin: 0;
-			padding: 0;
-			border: none;
-		}
+    > img, > a > img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: 0;
+      padding: 0;
+      border: none;
+      .opacity(0);
+    }
 
-		> .caption {
-			& when (@caption-initial-opacity = 0) {
-				display: none;
-			}
-			& when (@caption-initial-opacity > 0) {
-				display: initial;
-				opacity: @caption-initial-opacity;
-				filter: %("alpha(opacity=%d)", @caption-initial-opacity * 100); /* IE8 or Earlier */
-			}
-			position: absolute;
-			bottom: 0;
-			padding: 5px;
-			background-color: #000000;
-			left: 0;
-			right: 0;
-			margin: 0;
-			color: white;
-			font-size: 12px;
-			font-weight: 300;
-			font-family: sans-serif;
-		}
+    > .caption {
+      & when (@caption-initial-opacity = 0) {
+        display: none;
+      }
+      & when (@caption-initial-opacity > 0) {
+        display: initial;
+        .opacity(@caption-initial-opacity);
+      }
+      position: absolute;
+      bottom: 0;
+      padding: 5px;
+      background-color: #000000;
+      left: 0;
+      right: 0;
+      margin: 0;
+      color: white;
+      font-size: 12px;
+      font-weight: 300;
+      font-family: sans-serif;
+    }
 
-		> .caption.caption-visible {
-			display: initial;
-			opacity: @caption-visibile-opacity;
-			filter: %("alpha(opacity=%d)", @caption-visibile-opacity * 100); /* IE8 or Earlier */
-			.transition(opacity);
-		}
+    > .caption.caption-visible {
+      display: initial;
+      .opacity(@caption-visible-opacity);
+      .transition(opacity);
+    }
 
-	}
+  }
 
-	> .entry-visible {
-		opacity: 1.0;
-		filter: e("alpha(opacity=100)"); /* IE8 or Earlier */
-		.transition(opacity);
-	}
+  > .entry-visible {
+    .opacity(1);
+    background: none;
 
-  	> .jg-filtered {
-		display: none;
-	}
+    > img, > a > img {
+      .opacity(1);
+      .transition(opacity);
+    }
+  }
 
-	> .spinner {
-		@spinnerDotWeight: 8px;
-		@spinnerDotNum: 3;
+  > .jg-filtered {
+    display: none;
+  }
 
-		position: absolute;
-		bottom: 0;
-		margin-left: -(@spinnerDotWeight * 2) * @spinnerDotNum / 2;
-		padding: 10px 0 10px 0;
-		left: 50%;
-		opacity: initial;
-		filter: initial;
-		overflow: initial;
+  > .spinner {
+    @spinnerDotWeight: 8px;
+    @spinnerDotNum: 3;
 
-		> span {
-			display: inline-block;
-			opacity: 0;
-			filter:alpha(opacity=0); /* IE8 or Earlier */
-			width: @spinnerDotWeight;
-			height: @spinnerDotWeight;
-			margin: 0 (@spinnerDotWeight / 2) 0 (@spinnerDotWeight / 2);
-			background-color: #000;
-			border-top-left-radius: @spinnerDotWeight - 2px;
-			border-top-right-radius: @spinnerDotWeight - 2px;
-			border-bottom-right-radius: @spinnerDotWeight - 2px;
-			border-bottom-left-radius: @spinnerDotWeight - 2px;
-		}
-	}
+    position: absolute;
+    bottom: 0;
+    margin-left: -(@spinnerDotWeight * 2) * @spinnerDotNum / 2;
+    padding: 10px 0 10px 0;
+    left: 50%;
+    .opacity(1);
+    overflow: initial;
+
+    > span {
+      display: inline-block;
+      .opacity(0);
+      width: @spinnerDotWeight;
+      height: @spinnerDotWeight;
+      margin: 0 (@spinnerDotWeight / 2) 0 (@spinnerDotWeight / 2);
+      background-color: #000;
+      border-radius: @spinnerDotWeight - 2px;
+    }
+  }
 
 }

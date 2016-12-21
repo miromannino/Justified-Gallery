@@ -29,12 +29,15 @@
         function addSomeImages(limit) {
             for (var i = 0; i < limit; i++) {
                 $gallery.append('<a>' +
-                    '<img src="http://lorempixel.com/' +
-                    Math.ceil(Math.random() * 250 + 150) +
-                    '/' +
-                    Math.ceil(Math.random() * 250 + 150) +
-                    '" />' +
-                '</a>');
+//                    '<img src="http://lorempixel.com/' +
+                        '<img src="http://dummyimage.com/' +
+                        Math.ceil(Math.random() * 250 + 150) +
+//                    '/' +
+                        'x' +
+                        Math.ceil(Math.random() * 250 + 150) +
+//                    '" />' +
+                        '/000/ffffff.png" />' +
+                        '</a>');
             }
             $gallery.justifiedGallery('norewind');
         }

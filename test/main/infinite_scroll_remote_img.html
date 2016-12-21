@@ -15,6 +15,9 @@
     </p>
     <div id="gallery">
     </div>
+    <div style="background: red">
+        <div style="text-align: center;">GALLERY END</div>
+    </div>
     
     <!-- bower:js -->
     <script src="../../bower_components/jquery/dist/jquery.js"></script>
@@ -28,11 +31,14 @@
         function addSomeImages(limit) {
             for (var i = 0; i < limit; i++) {
                 $gallery.append('<a>' +
-                    '<img src="http://lorempixel.com/' +
+//                    '<img src="http://lorempixel.com/' +
+                    '<img src="http://dummyimage.com/' +
                     Math.ceil(Math.random() * 250 + 150) +
-                    '/' +
+//                    '/' +
+                      'x' +
                     Math.ceil(Math.random() * 250 + 150) +
-                    '" />' +
+//                    '" />' +
+                      '/000/ffffff.png" />' +
                 '</a>');
             }
             $gallery.justifiedGallery('norewind');
