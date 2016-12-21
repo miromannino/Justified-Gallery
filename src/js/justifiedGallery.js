@@ -638,7 +638,7 @@
       // Filter using the passed function
       var filteredArr = a.filter(settings.filter);
       for (var i = 0; i < a.length; i++) {
-        if (filteredArr.indexOf(a[i]) == -1) {
+        if (filteredArr.indexOf(a[i]) === -1) {
           $(a[i]).addClass('jg-filtered').removeClass('jg-visible');
         } else {
           $(a[i]).removeClass('jg-filtered');
@@ -934,7 +934,7 @@
       newMaxRowHeight.isPercentage = false;
     } else if (this.settings.maxRowHeight === false ||
         this.settings.maxRowHeight === null ||
-        typeof this.settings.maxRowHeight == 'undefined') {
+        typeof this.settings.maxRowHeight === 'undefined') {
       return null;
     } else {
       throw 'maxRowHeight must be a number or a percentage';
