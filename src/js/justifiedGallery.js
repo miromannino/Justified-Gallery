@@ -453,6 +453,9 @@
   var scrollBarOn = false;
   JustifiedGallery.prototype.checkWidth = function () {
     this.checkWidthIntervalId = setInterval($.proxy(function () {
+      // if the gallery is not currently visible, abort.
+      if (!this.$gallery.is(":visible"))
+        return;
       var galleryWidth = parseFloat(this.$gallery.width());
       if (hasScrollBar() === scrollBarOn) {
         if (Math.abs(galleryWidth - this.galleryWidth) > this.settings.refreshSensitivity) {
