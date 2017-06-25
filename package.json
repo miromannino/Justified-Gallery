@@ -1,6 +1,6 @@
 {
   "name": "justifiedGallery",
-  "version": "3.6.2",
+  "version": "3.6.3",
   "engines": {
     "node": ">= 0.8.0"
   },

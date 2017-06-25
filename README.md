@@ -17,10 +17,30 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 
 ## Release History
 
+### 3.6.3
+
+* Added in thumbnailPath an extra parameter which specify the current image. In this way properties of that image could
+  be read
+* Fixed bugs for filter when used specifying a function
+* Fixed bugs for filter when norewind is used
+* Performance improvements in case of norewind
+* Changed the selector behaviour. Only direct children of the gallery can be choose as gallery entry.
+* Fixed bug for maxRowHeight
+
 ### 3.6.2
 
+* cssAnimation = true as default. It’s time to move to the future and leave IE in the past.
 * fixed cssAnimation
 * scrollbar existence check to avoid image resizing flickering
+* The boxes could now be configured to have a background color to be visible with waitThumbnailsLoad = false.
+* removed the `fixedHeight` option since now this behaviour can be replicated using `maxRowHeight`.
+* The last row height will be calculated as the average row height of all the other rows. Before the last row height
+  was always following the `rowHeight` option, that could be smaller than the effective height of all the other rows.
+  For example: a gallery of images of 100x100px in a container of 950px, where rowHeight = 100. That gallery would
+  contain 9 pictures for each row, and the extra space used for justification. Each row will have approximately an
+  height of 105px after the justification. In this example the last row height would be 105px, where in the past
+  it would usually be 100px if not justified.
+* other bugfixes
 
 ### 3.6.1
 
