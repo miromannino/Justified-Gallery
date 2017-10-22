@@ -1,7 +1,7 @@
 /*!
  * Justified Gallery - v3.6.4
  * http://miromannino.github.io/Justified-Gallery/
- * Copyright (c) 2016 Miro Mannino
+ * Copyright (c) 2017 Miro Mannino
  * Licensed under the MIT license.
  */
 (function($) {
@@ -822,8 +822,8 @@
           /* If we have the height and the width, we don't wait that the image is loaded, but we start directly
            * with the justification */
           if (that.settings.waitThumbnailsLoad === false) {
-            var width = parseFloat($image.attr('width'));
-            var height = parseFloat($image.attr('height'));
+            var width = parseFloat($image.prop('width'));
+            var height = parseFloat($image.prop('height'));
             if (!isNaN(width) && !isNaN(height)) {
               $entry.data('jg.width', width);
               $entry.data('jg.height', height);
