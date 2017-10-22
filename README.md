@@ -251,7 +251,7 @@ Regarding code style like indentation and whitespace, **follow the conventions y
  - Steps:
 	- Fork and clone this repository.
 	- Open a terminal and change the current directory to the cloned folder.
-	- Run `npm install` to install all dependencies (including Grunt).
+	- Run `npm install` to install all dependencies (including bower and Grunt).
 	- Run `bower install` to install all the dependencies needed for the tests.
 	- Run `grunt debug` to build the library only for testing (debug mode).
 	- Run `grunt` to build this project in release mode.
