@@ -465,7 +465,7 @@
 
     //Gallery Height
     this.galleryHeightToSet = this.offY + this.buildingRow.height + this.border;
-    this.$gallery.height(this.galleryHeightToSet + this.getSpinnerHeight());
+    this.__setGalleryTempHeight(this.galleryHeightToSet + this.getSpinnerHeight());
 
     if (!isLastRow || (this.buildingRow.height <= settings.rowHeight && buildingRowRes)) {
       //Ready for a new row
@@ -475,6 +475,28 @@
       this.$gallery.trigger('jg.rowflush');
     }
   };
+
+
+  // Scroll position not restoring: https://github.com/miromannino/Justified-Gallery/issues/221 
+  var __galleryPrevStaticHeight = 0;
+
+  JustifiedGallery.prototype.__rememberGalleryHeight = function () {
+    __galleryPrevStaticHeight = this.$gallery.height();
+    this.$gallery.height( __galleryPrevStaticHeight );
+  };
+
+  // grow only
+  JustifiedGallery.prototype.__setGalleryTempHeight = function ( height ) {
+    __galleryPrevStaticHeight = Math.max( height, __galleryPrevStaticHeight );
+    this.$gallery.height( __galleryPrevStaticHeight );
+  };
+
+  JustifiedGallery.prototype.__setGalleryFinalHeight = function ( height ) {
+    __galleryPrevStaticHeight = height;
+    this.$gallery.height( height );
+  };
+
+
 
   /**
    * Checks the width of the gallery container, to know if a new justification is needed
@@ -487,6 +509,8 @@
         if (Math.abs(galleryWidth - this.galleryWidth) > this.settings.refreshSensitivity) {
           this.galleryWidth = galleryWidth;
           this.rewind();
+
+          this.__rememberGalleryHeight();
 
           // Restart to analyze
           this.startImgAnalyzer(true);
@@ -518,7 +542,7 @@
   JustifiedGallery.prototype.stopLoadingSpinnerAnimation = function () {
     clearInterval(this.spinner.intervalId);
     this.spinner.intervalId = null;
-    this.$gallery.height(this.$gallery.height() - this.getSpinnerHeight());
+    this.__setGalleryTempHeight(this.$gallery.height() - this.getSpinnerHeight());
     this.spinner.$el.detach();
   };
 
@@ -530,7 +554,7 @@
     var $spinnerPoints = spinnerContext.$el.find('span');
     clearInterval(spinnerContext.intervalId);
     this.$gallery.append(spinnerContext.$el);
-    this.$gallery.height(this.offY + this.buildingRow.height + this.getSpinnerHeight());
+    this.__setGalleryTempHeight(this.offY + this.buildingRow.height + this.getSpinnerHeight());
     spinnerContext.intervalId = setInterval(function () {
       if (spinnerContext.phase < $spinnerPoints.length) {
         $spinnerPoints.eq(spinnerContext.phase).fadeTo(spinnerContext.timeSlot, 1);
@@ -771,7 +795,7 @@
 
     //On complete callback
     this.$gallery.trigger(isForResize ? 'jg.resize' : 'jg.complete');
-    this.$gallery.height(this.galleryHeightToSet);
+    this.__setGalleryFinalHeight(this.galleryHeightToSet);
   };
 
   /**
