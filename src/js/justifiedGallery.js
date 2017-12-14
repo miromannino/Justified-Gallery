@@ -756,6 +756,7 @@
    * @param isForResize if the image analyzer is called for resizing or not, to call a different callback at the end
    */
   JustifiedGallery.prototype.analyzeImages = function (isForResize) {
+    var startTime = new Date().getTime();
     for (var i = this.lastAnalyzedIndex + 1; i < this.entries.length; i++) {
       var $entry = $(this.entries[i]);
       if ($entry.data('jg.loaded') === true || $entry.data('jg.loaded') === 'skipped') {
@@ -764,7 +765,10 @@
         var imgAspectRatio = $entry.data('jg.width') / $entry.data('jg.height');
         if (availableWidth / (this.buildingRow.aspectRatio + imgAspectRatio) < this.settings.rowHeight) {
           this.flushRow(false);
-          if(++this.yield.flushed >= this.yield.every) {
+
+          if (new Date().getTime() - startTime > this.settings.maxAnalyzeDuration &&
+            ++this.yield.flushed >= this.yield.every
+          ) {
             this.startImgAnalyzer(isForResize);
             return;
           }
@@ -1183,6 +1187,7 @@
     rel: null, // rewrite the rel of each analyzed links
     target: null, // rewrite the target of all links
     extension: /\.[^.\\/]+$/, // regexp to capture the extension of an image
+    maxAnalyzeDuration: 100, // max. interval (in ms) allowed for one go of layout (re)calculation
     refreshTime: 200, // time interval (in ms) to check if the page changes its width
     refreshSensitivity: 0, // change in width allowed (in px) without re-building the gallery
     randomize: false,
