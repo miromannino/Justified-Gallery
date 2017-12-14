@@ -414,7 +414,7 @@
     }
 
     //Align last (unjustified) row
-    if (settings.lastRow === 'center' || settings.lastRow === 'right') {
+    if (isLastRow && ( settings.lastRow === 'center' || settings.lastRow === 'right')) {
       var availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * settings.margins;
 
       for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
