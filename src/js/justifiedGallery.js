@@ -405,12 +405,8 @@
       return;
     }
 
-    if (this.maxRowHeight) {
-      if (this.maxRowHeight.isPercentage && this.maxRowHeight.value * settings.rowHeight < this.buildingRow.height) {
-        this.buildingRow.height = this.maxRowHeight.value * settings.rowHeight;
-      } else if (this.maxRowHeight.value >= settings.rowHeight && this.maxRowHeight.value < this.buildingRow.height) {
-        this.buildingRow.height = this.maxRowHeight.value;
-      }
+    if( this.maxRowHeight ){
+      if( this.maxRowHeight < this.buildingRow.height )  this.buildingRow.height = this.maxRowHeight;
     }
 
     //Align last (unjustified) row
@@ -916,36 +912,33 @@
 
   /**
    * check and convert the maxRowHeight setting
+   * requires rowHeight to be already set
+   * TODO: should be always called when only rowHeight is changed
+   * @return number or null
    */
   JustifiedGallery.prototype.retrieveMaxRowHeight = function () {
-    var newMaxRowHeight = { };
+    var newMaxRowHeight = null;
+    var rowHeight = this.settings.rowHeight;
 
     if ($.type(this.settings.maxRowHeight) === 'string') {
       if (this.settings.maxRowHeight.match(/^[0-9]+%$/)) {
-        newMaxRowHeight.value = parseFloat(this.settings.maxRowHeight.match(/^([0-9]+)%$/)[1]) / 100;
-        newMaxRowHeight.isPercentage = false;
+        newMaxRowHeight = rowHeight * parseFloat(this.settings.maxRowHeight.match(/^([0-9]+)%$/)[1]) / 100;
       } else {
-        newMaxRowHeight.value = parseFloat(this.settings.maxRowHeight);
-        newMaxRowHeight.isPercentage = true;
+        newMaxRowHeight = parseFloat(this.settings.maxRowHeight);
       }
     } else if ($.type(this.settings.maxRowHeight) === 'number') {
-      newMaxRowHeight.value = this.settings.maxRowHeight;
-      newMaxRowHeight.isPercentage = false;
-    } else if (this.settings.maxRowHeight === false ||
-        this.settings.maxRowHeight === null ||
-        typeof this.settings.maxRowHeight === 'undefined') {
+      newMaxRowHeight = this.settings.maxRowHeight;
+    } else if (this.settings.maxRowHeight === false || this.settings.maxRowHeight == null) {
       return null;
     } else {
       throw 'maxRowHeight must be a number or a percentage';
     }
 
     // check if the converted value is not a number
-    if (isNaN(newMaxRowHeight.value)) throw 'invalid number for maxRowHeight';
+    if (isNaN(newMaxRowHeight)) throw 'invalid number for maxRowHeight';
 
-    // check values
-    if (newMaxRowHeight.isPercentage) {
-      if (newMaxRowHeight.value < 100) newMaxRowHeight.value = 100;
-    }
+    // check values, maxRowHeight must be >= rowHeight
+    if (newMaxRowHeight < rowHeight) newMaxRowHeight = rowHeight;
 
     return newMaxRowHeight;
   };
@@ -1103,7 +1096,7 @@
     thumbnailPath: undefined, /* If defined, sizeRangeSuffixes is not used, and this function is used to determine the
     path relative to a specific thumbnail size. The function should accept respectively three arguments:
     current path, width and height */
-    rowHeight: 120,
+    rowHeight: 120, // required? required to be > 0?
     maxRowHeight: false, // false or negative value to deactivate. Positive number to express the value in pixels,
                          // A string '[0-9]+%' to express in percentage (e.g. 300% means that the row height
                          // can't exceed 3 * rowHeight)
