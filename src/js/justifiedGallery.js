@@ -803,7 +803,9 @@
    */
   JustifiedGallery.prototype.stopImgAnalyzerStarter = function () {
     this.yield.flushed = 0;
-    if (this.imgAnalyzerTimeout !== null) clearTimeout(this.imgAnalyzerTimeout);
+    if (this.imgAnalyzerTimeout === null)  return;
+    clearTimeout(this.imgAnalyzerTimeout);
+    this.imgAnalyzerTimeout = null;
   };
 
   /**
