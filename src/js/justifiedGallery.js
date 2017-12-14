@@ -321,6 +321,15 @@
   };
 
   /**
+   * Clear the building row data to be used for a new row
+   */
+  JustifiedGallery.prototype.clearBuildingRow = function () {
+    this.buildingRow.entriesBuff = [];
+    this.buildingRow.aspectRatio = 0;
+    this.buildingRow.width = 0;
+  };
+
+  /**
    * Justify the building row, preparing it to
    *
    * @param isLastRow
@@ -379,15 +388,6 @@
 
     this.buildingRow.height = minHeight;
     return justify;
-  };
-
-  /**
-   * Clear the building row data to be used for a new row
-   */
-  JustifiedGallery.prototype.clearBuildingRow = function () {
-    this.buildingRow.entriesBuff = [];
-    this.buildingRow.aspectRatio = 0;
-    this.buildingRow.width = 0;
   };
 
   /**
