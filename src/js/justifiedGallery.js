@@ -457,8 +457,9 @@
         offX += availableWidth;
     }
 
-    for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
-      $entry = this.buildingRow.entriesBuff[i];
+    var lastEntryIdx = this.buildingRow.entriesBuff.length - 1;
+    for (i = 0; i <= lastEntryIdx; i++) {
+      $entry = this.buildingRow.entriesBuff[ this.settings.rtl ? lastEntryIdx - i : i ];
       this.displayEntry($entry, offX, this.offY, $entry.data('jg.jwidth'), $entry.data('jg.jheight'), this.buildingRow.height);
       offX += $entry.data('jg.jwidth') + hardHorizontalMargin;
     }
@@ -1191,6 +1192,7 @@
     refreshTime: 200, // time interval (in ms) to check if the page changes its width
     refreshSensitivity: 0, // change in width allowed (in px) without re-building the gallery
     randomize: false,
+    rtl: false, // right-to-left mode
     sort: false, /*
       - false: to do not sort
       - function: to sort them using the function as comparator (see Array.prototype.sort())
