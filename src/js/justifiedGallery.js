@@ -373,20 +373,8 @@
       imgAspectRatio = $entry.data('jg.width') / $entry.data('jg.height');
 
       if (justify) {
-
-        if(
-            this.settings.justifyTooTallRowMargins &&
-          ( this.settings.justifyTooTallLastRowMarginsToo || ! isLastRow )
-          &&
-          this.maxRowHeight  &&  rowHeight >= this.maxRowHeight
-        ){
-          newImgW = this.maxRowHeight * imgAspectRatio;
-          newImgH = this.maxRowHeight;
-        }else{
-          newImgW = (i === this.buildingRow.entriesBuff.length - 1) ? availableWidth : rowHeight * imgAspectRatio;
-          newImgH = rowHeight;
-        }
-
+        newImgW = (i === this.buildingRow.entriesBuff.length - 1) ? availableWidth : rowHeight * imgAspectRatio;
+        newImgH = rowHeight;
       } else {
         newImgW = defaultRowHeight * imgAspectRatio;
         newImgH = defaultRowHeight;
@@ -421,30 +409,9 @@
       if( this.maxRowHeight < this.buildingRow.height )  this.buildingRow.height = this.maxRowHeight;
     }
 
-    var hardHorizontalMargin = settings.margins;
-    //var rowHeight = availableWidth / this.buildingRow.aspectRatio;
-    if(
-      //false &&
-        this.settings.justifyTooTallRowMargins &&
-      ( this.settings.justifyTooTallLastRowMarginsToo || ! isLastRow )
-      &&
-      this.maxRowHeight
-    ){
-      // copied from below
-      var availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * settings.margins;
-
-      for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
-        $entry = this.buildingRow.entriesBuff[i];
-        availableWidth -= $entry.data('jg.jwidth');
-      }
-      // end copy
-
-      hardHorizontalMargin = hardHorizontalMargin + availableWidth / ( this.buildingRow.entriesBuff.length - 1 );
-    }
-
     //Align last (unjustified) row
     if (isLastRow && ( settings.lastRow === 'center' || settings.lastRow === 'right')) {
-      var availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * hardHorizontalMargin;
+      var availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * settings.margins;
 
       for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
         $entry = this.buildingRow.entriesBuff[i];
@@ -461,7 +428,7 @@
     for (i = 0; i <= lastEntryIdx; i++) {
       $entry = this.buildingRow.entriesBuff[ this.settings.rtl ? lastEntryIdx - i : i ];
       this.displayEntry($entry, offX, this.offY, $entry.data('jg.jwidth'), $entry.data('jg.jheight'), this.buildingRow.height);
-      offX += $entry.data('jg.jwidth') + hardHorizontalMargin;
+      offX += $entry.data('jg.jwidth') + settings.margins;
     }
 
     //Gallery Height
@@ -1167,11 +1134,6 @@
     maxRowHeight: false, // false or negative value to deactivate. Positive number to express the value in pixels,
                          // A string '[0-9]+%' to express in percentage (e.g. 300% means that the row height
                          // can't exceed 3 * rowHeight)
-
-    // see https://github.com/miromannino/Justified-Gallery/issues/243#issuecomment-342604408
-    justifyTooTallRowMargins:        false,
-    justifyTooTallLastRowMarginsToo: false,
-
     margins: 1,
     border: -1, // negative value = same as margins, 0 = disabled, any other value to set the border
 
