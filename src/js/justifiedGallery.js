@@ -404,12 +404,12 @@
       return;
     }
 
-    if( this.maxRowHeight ){
-      if( this.maxRowHeight < this.buildingRow.height )  this.buildingRow.height = this.maxRowHeight;
+    if(this.maxRowHeight) {
+      if(this.maxRowHeight < this.buildingRow.height)  this.buildingRow.height = this.maxRowHeight;
     }
 
     //Align last (unjustified) row
-    if (isLastRow && ( settings.lastRow === 'center' || settings.lastRow === 'right')) {
+    if (isLastRow && (settings.lastRow === 'center' || settings.lastRow === 'right')) {
       var availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * settings.margins;
 
       for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
@@ -432,7 +432,7 @@
 
     //Gallery Height
     this.galleryHeightToSet = this.offY + this.buildingRow.height + this.border;
-    this.__setGalleryTempHeight(this.galleryHeightToSet + this.getSpinnerHeight());
+    this.setGalleryTempHeight(this.galleryHeightToSet + this.getSpinnerHeight());
 
     if (!isLastRow || (this.buildingRow.height <= settings.rowHeight && buildingRowRes)) {
       //Ready for a new row
@@ -445,24 +445,23 @@
 
 
   // Scroll position not restoring: https://github.com/miromannino/Justified-Gallery/issues/221 
-  var __galleryPrevStaticHeight = 0;
+  var galleryPrevStaticHeight = 0;
 
-  JustifiedGallery.prototype.__rememberGalleryHeight = function () {
-    __galleryPrevStaticHeight = this.$gallery.height();
-    this.$gallery.height( __galleryPrevStaticHeight );
+  JustifiedGallery.prototype.rememberGalleryHeight = function () {
+    galleryPrevStaticHeight = this.$gallery.height();
+    this.$gallery.height(galleryPrevStaticHeight);
   };
 
   // grow only
-  JustifiedGallery.prototype.__setGalleryTempHeight = function ( height ) {
-    __galleryPrevStaticHeight = Math.max( height, __galleryPrevStaticHeight );
-    this.$gallery.height( __galleryPrevStaticHeight );
+  JustifiedGallery.prototype.setGalleryTempHeight = function (height) {
+    galleryPrevStaticHeight = Math.max(height, galleryPrevStaticHeight);
+    this.$gallery.height(galleryPrevStaticHeight);
   };
 
-  JustifiedGallery.prototype.__setGalleryFinalHeight = function ( height ) {
-    __galleryPrevStaticHeight = height;
-    this.$gallery.height( height );
+  JustifiedGallery.prototype.setGalleryFinalHeight = function (height) {
+    galleryPrevStaticHeight = height;
+    this.$gallery.height(height);
   };
-
 
 
   /**
@@ -471,16 +470,17 @@
   var scrollBarOn = false;
   JustifiedGallery.prototype.checkWidth = function () {
     this.checkWidthIntervalId = setInterval($.proxy(function () {
+      
       // if the gallery is not currently visible, abort.
-      if (!this.$gallery.is(":visible"))
-        return;
+      if (!this.$gallery.is(":visible")) return;
+
       var galleryWidth = parseFloat(this.$gallery.width());
       if (hasScrollBar() === scrollBarOn) {
         if (Math.abs(galleryWidth - this.galleryWidth) > this.settings.refreshSensitivity) {
           this.galleryWidth = galleryWidth;
           this.rewind();
 
-          this.__rememberGalleryHeight();
+          this.rememberGalleryHeight();
 
           // Restart to analyze
           this.startImgAnalyzer(true);
@@ -512,7 +512,7 @@
   JustifiedGallery.prototype.stopLoadingSpinnerAnimation = function () {
     clearInterval(this.spinner.intervalId);
     this.spinner.intervalId = null;
-    this.__setGalleryTempHeight(this.$gallery.height() - this.getSpinnerHeight());
+    this.setGalleryTempHeight(this.$gallery.height() - this.getSpinnerHeight());
     this.spinner.$el.detach();
   };
 
@@ -524,7 +524,7 @@
     var $spinnerPoints = spinnerContext.$el.find('span');
     clearInterval(spinnerContext.intervalId);
     this.$gallery.append(spinnerContext.$el);
-    this.__setGalleryTempHeight(this.offY + this.buildingRow.height + this.getSpinnerHeight());
+    this.setGalleryTempHeight(this.offY + this.buildingRow.height + this.getSpinnerHeight());
     spinnerContext.intervalId = setInterval(function () {
       if (spinnerContext.phase < $spinnerPoints.length) {
         $spinnerPoints.eq(spinnerContext.phase).fadeTo(spinnerContext.timeSlot, 1);
@@ -726,7 +726,6 @@
    * @param isForResize if the image analyzer is called for resizing or not, to call a different callback at the end
    */
   JustifiedGallery.prototype.analyzeImages = function (isForResize) {
-    var startTime = new Date().getTime();
     for (var i = this.lastAnalyzedIndex + 1; i < this.entries.length; i++) {
       var $entry = $(this.entries[i]);
       if ($entry.data('jg.loaded') === true || $entry.data('jg.loaded') === 'skipped') {
@@ -736,9 +735,7 @@
         if (availableWidth / (this.buildingRow.aspectRatio + imgAspectRatio) < this.settings.rowHeight) {
           this.flushRow(false);
 
-          if (new Date().getTime() - startTime > this.settings.maxAnalyzeDuration &&
-            ++this.yield.flushed >= this.yield.every
-          ) {
+          if(++this.yield.flushed >= this.yield.every) {
             this.startImgAnalyzer(isForResize);
             return;
           }
@@ -769,7 +766,7 @@
 
     //On complete callback
     this.$gallery.trigger(isForResize ? 'jg.resize' : 'jg.complete');
-    this.__setGalleryFinalHeight(this.galleryHeightToSet);
+    this.setGalleryFinalHeight(this.galleryHeightToSet);
   };
 
   /**
@@ -777,9 +774,10 @@
    */
   JustifiedGallery.prototype.stopImgAnalyzerStarter = function () {
     this.yield.flushed = 0;
-    if (this.imgAnalyzerTimeout === null)  return;
-    clearTimeout(this.imgAnalyzerTimeout);
-    this.imgAnalyzerTimeout = null;
+    if (this.imgAnalyzerTimeout !== null) {
+      clearTimeout(this.imgAnalyzerTimeout);
+      this.imgAnalyzerTimeout = null;
+    }
   };
 
   /**
@@ -1152,7 +1150,6 @@
     rel: null, // rewrite the rel of each analyzed links
     target: null, // rewrite the target of all links
     extension: /\.[^.\\/]+$/, // regexp to capture the extension of an image
-    maxAnalyzeDuration: 100, // max. interval (in ms) allowed for one go of layout (re)calculation
     refreshTime: 200, // time interval (in ms) to check if the page changes its width
     refreshSensitivity: 0, // change in width allowed (in px) without re-building the gallery
     randomize: false,

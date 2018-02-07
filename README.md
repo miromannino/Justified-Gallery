@@ -22,7 +22,6 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 * For more flexibility, option imgSelector to select the image, given an image entry (e.g. a figure or a div)
 * $.attr() changed to $.prop() for better compatibility
 * Right to left option
-* Yield in case of slow analyzeImages() to avoid blocking the browser
 * Prevent gallery height collapse when the page is resized and keep the scroll position
 * Avoid width check in case the gallery is not visible
 
