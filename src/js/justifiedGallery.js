@@ -1,5 +1,5 @@
 /**
- * Justified Gallery - v3.6.+
+ * Justified Gallery - v3.6.5
  * http://miromannino.github.io/Justified-Gallery/
  *
  * Copyright (c) 2018 Miro Mannino
@@ -131,7 +131,7 @@
       if (callback) callback();
     } else {
       $entry.stop().fadeTo(this.settings.imagesAnimationDuration, 1.0, callback);
-      $entry.find('> img, > a > img').stop().fadeTo(this.settings.imagesAnimationDuration, 1.0, callback);
+      $entry.find(this.settings.imgSelector).stop().fadeTo(this.settings.imagesAnimationDuration, 1.0, callback);
     }
   };
 
@@ -150,8 +150,7 @@
 
   /** @returns {jQuery} the image in the given entry */
   JustifiedGallery.prototype.imgFromEntry = function ($entry) {
-    var $img = $entry.find('> img');
-    if ($img.length === 0) $img = $entry.find('> a > img');
+    var $img = $entry.find(this.settings.imgSelector);
     return $img.length === 0 ? null : $img;
   };
 
@@ -1169,7 +1168,8 @@
       - a function: invoked with arguments (entry, index, array). Return true to keep the entry, false otherwise.
                     It follows the specifications of the Array.prototype.filter() function of JavaScript.
     */
-    selector: 'a, div:not(.spinner)' // The selector that is used to know what are the entries of the gallery
+    selector: 'a, div:not(.spinner)', // The selector that is used to know what are the entries of the gallery
+    imgSelector: '> img, > a > img' // The selector that is used to know what are the images of each entry
   };
 
 }(jQuery));
