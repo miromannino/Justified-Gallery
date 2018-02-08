@@ -13,7 +13,9 @@
     <h1>Stateful test</h1>
     <p>
         <button id="addEntries">Add two entries</button>
+        <button id="add20Entries">Add twenty entries</button>
         <button id="removeEntries">Remove last two entries</button>
+        <button id="remove20Entries">Remove twenty entries</button>
         <button id="callJG">CallJG</button>
         <button id="callJGW200">CallJG with Width 200</button>
         <button id="callBorder20">CallJG with Border 20</button>
@@ -76,36 +78,36 @@
     <script src="../../dist/js/jquery.justifiedGallery.js"></script>
     <!-- endbower -->
     <script>
-    $("#statefulEx").justifiedGallery({
-        margin: 2
-    });
+    $("#statefulEx").justifiedGallery({ margin: 2 });
 
     $('#callJG').on('click', function() {
         $("#statefulEx").justifiedGallery();
     });
 
     $('#callJGW200').on('click', function() {
-        $("#statefulEx").justifiedGallery({
-            rowHeight: 200
-        });
+        $("#statefulEx").justifiedGallery({ rowHeight: 200 });
     });
 
     $('#callBorder20').on('click', function() {
-        $("#statefulEx").justifiedGallery({
-            border: 20
-        });
+        $("#statefulEx").justifiedGallery({ border: 20 });
     });
 
-    $('#addEntries').on('click', function() {
-        var $entries = $('#statefulEx a');
-        for (var i = 0; i < 2; i++) $($entries.get([Math.floor(Math.random() * $entries.length)]).outerHTML).appendTo($('#statefulEx'));
-    });
+    function addEntries(num) {
+       var $entries = $('#statefulEx a');
+        for (var i = 0; i < num; i++) $($entries.get([Math.floor(Math.random() * $entries.length)]).outerHTML).appendTo($('#statefulEx')); 
+    }
 
-    $('#removeEntries').on('click', function() {
+    $('#addEntries').on('click', function() { addEntries(2); });
+    $('#add20Entries').on('click', function() { addEntries(20); });
+
+    function removeEntries(num) {
         var $entries = $('#statefulEx a');
-        $entries.eq(-1).remove();
-        $entries.eq(-2).remove();
-    });
+        for (var i = 0; i < num; i++) $entries.eq(-1 - i).remove();
+    }
+
+    $('#removeEntries').on('click', function() { removeEntries(2); });
+    $('#remove20Entries').on('click', function() { removeEntries(20); });
+
     </script>
 </body>
 
