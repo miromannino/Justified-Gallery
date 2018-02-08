@@ -1,6 +1,6 @@
 {
   "name": "justified-gallery-gh-pages",
-  "version": "3.6.0",
+  "version": "3.6.5",
   "homepage": "https://github.com/miromannino/Justified-Gallery",
   "authors": [
     "Miro Mannino <miro.mannino@gmail.com>"
@@ -20,6 +20,7 @@
     "colorbox": "~1.6.0",
     "swipebox": "~1.4.4",
     "bootstrap": "~3.3.5",
-    "justified-gallery": "justified-gallery#~3.6.3"
+    "justified-gallery": "justified-gallery#~3.6.3",
+    "font-awesome": "^5.0.6"
   }
 }
