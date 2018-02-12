@@ -56,17 +56,22 @@ layout: default
 	});
 </script>
 
-<p style="margin-top: 20px;" class="text-center">
-This is a <strong>JQuery plugin</strong> that allows you to create an <strong>high quality justified gallery</strong> of images. 
 <br/>
-A common problem, for people who create sites, is to create an elegant image gallery that manages the various sizes of thumbnails. <strong>Flickr and Google+</strong> manage this situation in an excellent way, the purpose of this plugin is to give you the power of those solutions, with a new professional and open source plugin.
+<p>
+	Justified Gallery is a <strong>JavaScript library</strong> that allows you to create an <strong>high quality justified gallery</strong> of images.
+</p>
+<p>
+	This is a common problem for people who create websites: you have a series of images to display, but you are not sure how to arrange them in an elegant way. Important websites such as 500px, Flickr, or Google display images in an excellent way, justifying them similarly to <strong>brick wall</strong>. Justified Gallery will give you the power to do that too.
+</p>
+<p>
+	Justified Gallery is a <strong>professional and open source library</strong> that even 500px, one of the best photography social network, chose for displaying their images!
 </p>
 
 <hr/>
 
 <div class="row central">
 	<div class="feature-container col-xs-12 col-sm-6">
-		<h2 class="text-center"><span class="fa fa-download fa"></span> Download</h2>
+		<h2 class="text-center"><span class="fa fa-download"></span> Download</h2>
 		<div class="list-group">
 			<a class="list-group-item" href="https://raw.githubusercontent.com/miromannino/Justified-Gallery/{{ site.completeCurrJGVer }}/dist/justifiedGallery.min.zip">
 				<h4 class="list-group-item-heading">Justified Gallery <small>{{ site.currJGVer }}</small></h4>
@@ -79,7 +84,7 @@ A common problem, for people who create sites, is to create an elegant image gal
 		</div>
 	</div>
 	<div class="feature-container col-xs-12 col-sm-6">
-		<h2 class="text-center"><span class="fa fa-github-alt fa"></span> Contribute</h2>
+		<h2 class="text-center"><span class="fa fa-github-alt"></span> Contribute</h2>
 		<div class="list-group">
 			<a class="list-group-item" target="_blank" href="https://github.com/miromannino/Justified-Gallery/">
 				<h4 class="list-group-item-heading">GitHub repo</h4>
@@ -93,7 +98,7 @@ A common problem, for people who create sites, is to create an elegant image gal
 	</div>
 	<div class="clearfix"></div>
 	<div class="feature-container col-xs-12 col-sm-6">
-		<h2 class="text-center"><span class="fa fa-plug fa"></span> Install</h2>
+		<h2 class="text-center"><span class="fa fa-plug"></span> Install</h2>
 		{% highlight bash %}bower install justified-gallery{% endhighlight %}
 	</div>
 </div>
@@ -126,8 +131,7 @@ where each link leads to the original image.
 
 <h3>Files to include</h3>
 <p>
-The plugin only needs JQuery. Then you have only to include the Justified Gallery's files as the 
-following:
+This library only needs JQuery in order to work even with (not so older) browsers. Then you only have to include the Justified Gallery's files as the following:
 
 {% highlight html %}
 <link rel="stylesheet" href="css/justifiedGallery.css" />
@@ -138,7 +142,7 @@ following:
 
 <h3>Just a Call</h3>
 <p>
-Now, you only need to call the plugin that will justify all the images, with the default options.
+Now, you only need to call the plugin that will justify all the images. In this case we use the default options.
 
 {% highlight javascript %}
 $("#mygallery").justifiedGallery();
@@ -147,7 +151,7 @@ $("#mygallery").justifiedGallery();
 </p>
 
 <p>
-	Start to learn how to use the plugin better starting from the <a href="{{ '/getting-started' | prepend: site.baseurl }}">getting started tutorial</a>.
+	Start to learn how to use Justified Gallery starting from the <a href="{{ '/getting-started' | prepend: site.baseurl }}">getting started tutorial</a>.
 </p>
 
 <hr/>
@@ -170,8 +174,7 @@ $("#mygallery").justifiedGallery();
 	<div class="clearfix visible-sm-block"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">High Quality</div>
-		<p class="feature-body">Ready for any device and screen resolution. Up to six thumbnails to
-		always guarantee the best quality of your images.</p>
+		<p class="feature-body">Ready for any device and screen resolution. Justify Gallery is clever enough to load (or reload) the right thumbnail sizes.</p>
 		<div><a href="{{ '/getting-started' | prepend: site.baseurl }}">Getting started tutorial...</a></div>
 	</div>
 	<div class="clearfix visible-md-block visible-lg-block"></div>
@@ -196,7 +199,7 @@ $("#mygallery").justifiedGallery();
 	<div class="clearfix visible-md-block visible-lg-block"></div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
 		<div class="feature-title">Captions</div>
-		<p class="feature-body">Fully configurable awesome captions to your images.</p>
+		<p class="feature-body">Fully configurable awesome captions for your images.</p>
 		<div><a href="{{ '/captions' | prepend: site.baseurl }}">Captions tutorial...</a></div>
 	</div>
 	<div class="feature-container col-xs-12 col-sm-6 col-md-4">
