@@ -1,0 +1,86 @@
+.container-fluid > .row{
+  margin-top: 50px;
+}
+
+body {
+  font-size: 18px;
+}
+
+h1.jg-h1 {
+  text-align: center;
+  font-family: 'Lobster', cursive;
+  font-size: 55px;
+}
+h1.jg-h1-secondary {
+  text-align: center;
+  font-family: 'Lobster', cursive;
+  font-size: 40px;
+}
+h1.jg-h1 > small {
+  margin-top: 10px;
+  display: block;
+}
+h2 {
+  text-align: center;
+}
+h3 {
+  font-size: 20px;
+}
+h2, h3, h4 {
+  font-family: 'Lobster', cursive;
+}
+.author-name {
+  margin-top: 10px;
+  font-size: 20px;
+  font-family: 'Lobster', cursive;
+}
+.author-name a:hover, 
+.author-name a:active, 
+.author-name a:focus, 
+.author-name a:visited {
+  color: black;
+  text-decoration: none;
+}
+.author-name .dot {
+  color: red;
+}
+.navbar-inverse a.navbar-brand {
+  font-family: 'Lobster', cursive;
+  color: white;
+}
+.navbar-inverse a.navbar-brand:hover {
+  color: #aaa;
+}
+a.navbar-brand {
+  font-size: 22px;
+}
+.feature-title {
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 140%;
+  font-family: 'Lobster', cursive;
+}
+.feature-body {
+
+}
+.feature-container {
+  text-align: center;
+}
+.getting-started-section {
+  margin-top: 20px;
+}
+.list-group-item:hover {
+  background-color: #428bca !important;
+}
+.list-group-item:hover .list-group-item-text, .list-group-item:hover small {
+  color: black;
+}
+.navbar-inverse .navbar-nav>li>a {
+  color: #EEE !important;
+}
+.navbar-inverse .navbar-nav>li>a:hover {
+  color: #AAA !important;
+}
+figcaption {
+  font-size: 75%;
+}
