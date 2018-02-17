@@ -1,13 +1,13 @@
-**Justified Gallery is a JavaScript library that allows you to create an high quality justified gallery of images.**
-
-[![Bower version](https://badge.fury.io/bo/justifiedGallery.svg)](https://badge.fury.io/bo/justifiedGallery)
-[![npm version](https://badge.fury.io/js/justifiedGallery.svg)](https://badge.fury.io/js/justifiedGallery)
-
 <div align="center">
   <a href="http://miromannino.github.io/Justified-Gallery/" target="_blank">
     <img src="https://raw.github.com/miromannino/Justified-Gallery/gh-imgs/jgcover.png" />
   </a>
 </div>
+
+**Justified Gallery is a JavaScript library that allows you to create an high quality justified gallery of images.**
+
+[![Bower version](https://badge.fury.io/bo/justifiedGallery.svg)](https://badge.fury.io/bo/justifiedGallery)
+[![npm version](https://badge.fury.io/js/justifiedGallery.svg)](https://badge.fury.io/js/justifiedGallery)
 
 This is a common problem for people who create websites: you have a series of images to display, but you are not sure how to arrange them in an elegant way. Important websites such as 500px, Flickr, or Google display images in an excellent way, justifying them similarly to brick wall. Justified Gallery will give you the power to do that too.
 
