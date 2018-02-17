@@ -11,10 +11,10 @@ title: Options &amp; Events
 
 <div>
     <p>
-        This configurable demo is a fast way to explore the visual settings of Justified Gallery.
-        Moreover, ti is also a good example that uses Justified Gallery as a stateful entity.
+        This configurable demo is to quickly explore Justified Gallery settings.
+        Moreover, it is also a good example that uses Justified Gallery as a stateful entity.
         In fact, in this example, Justified Gallery is called when the page is loaded using some settings, and
-        then it is called again only to change a specific setting, leaving the old ones remains unchanged.
+        then it is called again only to change a specific setting, leaving the old ones unchanged.
     </p>
     <div style="margin-top: 20px;">
         <form id="jgs-form" class="form-horizontal" role="form">
@@ -205,15 +205,15 @@ title: Options &amp; Events
         <tr>
             <td><code>rowHeight</code></td>
             <td><code>120</code></td>
-            <td>The preferred height of rows in pixel.</td>
+            <td>The preferred rows height in pixel.</td>
         </tr>
         <tr>
             <td><code>maxRowHeight</code></td>
             <td><code>false</code></td>
             <td>This option could be a false or negative value to keep it disabled. Could be a number (e.g <code>200</code>)
                 which specifies the maximum row height in pixel. Alternatively, a string which specifies a percentage
-                (e.g. "200%" means that the row height can't exceed <code>2 * rowHeight</code>). Note that with this
-                option can crop the images if they need to be higher to be justified.
+                (e.g. "200%" means that the row height can't exceed <code>2 * rowHeight</code>). <strong>Note that with this
+                option can crop the images if they need to be higher to be justified.</strong>
             </td>
         </tr>
         <tr>
@@ -238,8 +238,8 @@ title: Options &amp; Events
                 <p>
                     The keys could be specified also as numbers (e.g. <code style="white-space: nowrap;">{512:'_small',
                     1024:'_big'}</code>
-                    to specify the '_small' suffix for images which are less than 512px on the longest side, and '_big'
-                    for the bigger ones).
+                    to specify the '_small' suffix for images that are less than 512px on the longest side, and '_big'
+                    for bigger ones).
                 </p>
             </td>
         </tr>
@@ -249,13 +249,13 @@ title: Options &amp; Events
             <td>
                 <p>
                     To configure a custom thumbnail selector rather than using <code>sizeRangeSuffixes</code>, to have
-                    more flexibility in some particular situations. The function will called giving the following arguments:
+                    more flexibility in some particular situations. The function will be called giving the following arguments:
                     the current path of the image, the width and the height of the image to show (after it has been resized),
                     and the image element which can be used to get further information.
                 </p>
                 <p>
-                    For example, to select the correct thumbnail changing only a suffix of the current filename (like we
-                    can done using <code>sizeRangeSuffixes</code>)
+                    For example, to select the correct thumbnail changing only a suffix of the current filename (similarly
+                    to <code>sizeRangeSuffixes</code>)
                 </p>
                 <p>
 					<pre><code>$("#myGallery").justifiedGallery({
@@ -286,7 +286,7 @@ title: Options &amp; Events
         <tr>
             <td><code>captions</code></td>
             <td><code>true</code></td>
-            <td>Decide if you want to show the caption or not, that appears when your mouse is over the image.</td>
+            <td>Decide if you want to show the captions that appears when your mouse is over the image.</td>
         </tr>
         <tr>
             <td><code>margins</code></td>
@@ -346,11 +346,25 @@ title: Options &amp; Events
             </td>
         </tr>
         <tr>
+            <td><code>rtl</code></td>
+            <td style="white-space: nowrap;"><code>false</code></td>
+            <td>
+                Right to left mode.
+            </td>
+        </tr>
+        <tr>
             <td><code>selector</code></td>
             <td style="white-space: nowrap;"><code>'a, div:not(.spinner)'</code></td>
             <td>
-                Used to determines which are the entries of the gallery. Note that the entries of the gallery are always
+                Used to determines which are the entries of the gallery. Note that, for performance reasons, the entries of the gallery are always
                 direct children of the gallery.
+            </td>
+        </tr>
+        <tr>
+            <td><code>imgSelector</code></td>
+            <td style="white-space: nowrap;"><code>'> img, > a > img'</code></td>
+            <td>
+                Used to determines, given a gallery entry, how to retrieve the thumbnail.
             </td>
         </tr>
         <tr>
@@ -398,15 +412,15 @@ title: Options &amp; Events
         </tr>
         <tr>
             <td><code>cssAnimation</code></td>
-            <td>false</td>
-            <td>Use or not css animations. Using css animations you can change the behavior
-                changing the justified gallery CSS file, or overriding that rules.
+            <td>true</td>
+            <td>Use or not css animations. With CSS animations it's easier to change them by
+                overriding the rules defined by Justified Gallery.
             </td>
         </tr>
         <tr>
             <td><code>imagesAnimationDuration</code></td>
-            <td>300</td>
-            <td>Image fadeIn duration (in milliseconds).</td>
+            <td>500</td>
+            <td>Image fadeIn duration (in milliseconds). This is ignored if CSS animations are used.</td>
         </tr>
         <tr>
             <td><code>captionSettings</code></td>
@@ -417,8 +431,7 @@ title: Options &amp; Events
             </td>
             <td>Caption settings. To configure the animation duration (in milliseconds), the caption opacity when the
                 mouse is over (i.e. it should be visible), and the caption opacity when the mouse is not over (i.e. it
-                should
-                be not visible).
+                should be not visible). This is ignored if CSS animations are used.
             </td>
         </tr>
     </table>
@@ -437,7 +450,7 @@ title: Options &amp; Events
             <td>Call again justified gallery, but only the newest images will be justified.
                 This command could be used for example with the <a
                         href="{{ '/endless-scroll' | prepend: site.baseurl }}">infinite scroll</a>.
-                Remember that with norewind only the last images will be analyzed, so this means that any filter, sort
+                Remember that with norewind only the last images will be analyzed, so this means that any pre-defined filter, sort,
                 or shuffle actions will only be done on the last entries. That is a great advantage in terms of performances,
                 but pay attention in case you want a different behaviour.
             </td>

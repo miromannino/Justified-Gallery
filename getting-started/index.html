@@ -12,8 +12,8 @@ title: Getting Started
 <div>
     <p>
         Here we have a <code>div</code>, with the id <code>basicExample</code>, that has a list of links that point to
-        some images (original size images), and where inside of each link there is a thumbnail. Calling Justified
-        Gallery, the disposition of all the thumbnails is changed to fill all the spaces (<i>justification</i>).
+        some images (original size images); inside of each link there is a thumbnail. Calling Justified
+        Gallery, the thumbnails are resized in order to fill all the spaces (i.e. <i>justification</i>).
     </p>
     {% highlight html %}
 <div id="basicExample">
@@ -143,15 +143,13 @@ sizeRangeSuffixes: {
     640 : '_z',
     1024 : '_b' // used which images that are more than 640px on the longest side
 }{% endhighlight %}
-        In this way the plugin derives the path of the other thumbnails for the same image only changing the filenames
-        suffix.
+        In this way the plugin derives other thumbnails' paths for the same image by only changing the filename suffix.
         For example, with an entry with the thumbnail <code>path/to/image1_t.jpg</code>, the plugin could load the
         thumbnail <code>path/to/image1_b.jpg</code>.
     </p>
     <p>
-        By default, the plugin is configured to only use the thumbnail that is provided in the HTML. To do that, it uses
-        the following
-        configuration:
+        By default, the plugin is configured to only use the thumbnail provided in the HTML. 
+        This means that, by default, Justified Gallery has:
 
         {% highlight javascript %}
 sizeRangeSuffixes: { }{% endhighlight %}
