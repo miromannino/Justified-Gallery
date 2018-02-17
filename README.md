@@ -93,13 +93,15 @@ Justified Gallery is a professional and open source library that even 500px, one
 * Configurable entry selector
 * Code refactoring
 
+<details>
+	<summary>Older versions</summary>
+	
 ### 3.5.4
 
 * Added the border option
 * Fixed some problems with waitThumbnailsLoad and infinite scroll
 
 ### 3.5
-
 * The default suffixes are all empty, to be simpler to understand. To have the previous suffixes,
 the following settings can be used:
 
@@ -239,6 +241,8 @@ too like a bug than a feature.
 * Setting name changed: 'sizeSuffixes' to 'sizeRangeSuffixes'.
 * Setting name changed: 'usedSuffix' to 'usedSizeRange'.
 * Added the CSS for the div that shows the Justified Gallery errors. Now can be changed, or hided.
+
+</details>
 
 ## Contributing
 
