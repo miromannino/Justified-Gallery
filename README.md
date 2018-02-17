@@ -4,12 +4,11 @@
   </a>
 </div>
 
-This is a JQuery plugin which allows you to create responsive, infinite, and high quality justified
-gallery of images.
+Justified Gallery is a JavaScript library that allows you to create an high quality justified gallery of images.
 
-A common problem, for people who create sites, is to create an elegant image gallery that manages
-the various sizes and aspect ratio of images. Flickr and Google+ manage this situation in an excellent
-way, the purpose of this plugin is to give you the power of these solutions, with a new fast algorithm.
+This is a common problem for people who create websites: you have a series of images to display, but you are not sure how to arrange them in an elegant way. Important websites such as 500px, Flickr, or Google display images in an excellent way, justifying them similarly to brick wall. Justified Gallery will give you the power to do that too.
+
+Justified Gallery is a professional and open source library that even 500px, one of the best photography social network, chose for displaying their images!
 
 <div style="text-align: center; font-size: 110%;">
 	<a href="http://miromannino.github.io/Justified-Gallery/" target="_blank">Official project page</a>
