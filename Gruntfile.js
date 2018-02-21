@@ -140,6 +140,18 @@ module.exports = function(grunt) {
 
         }
       }
+    },
+
+    publish: {
+      main: {
+        options: {
+            ignore: [
+              'node_modules', 
+              'bower_components'
+            ]
+        },
+        src: ['./']
+      }
     }
 
   });

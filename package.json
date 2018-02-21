@@ -1,6 +1,25 @@
 {
   "name": "justifiedGallery",
   "version": "3.6.5",
+  "description": "Justified Gallery is a JavaScript library that allows you to create an high quality justified gallery of images.",
+  "main": "dist/js/jquery.justifiedGallery.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/miromannino/Justified-Gallery.git"
+  },
+  "keywords": [
+    "gallery",
+    "justification",
+    "thumbnails",
+    "masonry",
+    "infinite-scroll",
+    "css-animations",
+    "bricklayer",
+    "mason",
+    "justified-layout"
+  ],
+  "author": "Miro Mannino <miro.mannino@gmail.com> (http://miromannino.com)",
+  "license": "MIT",
   "engines": {
     "node": ">= 0.8.0"
   },
@@ -18,6 +37,7 @@
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-less": "~0.9.0",
     "grunt-contrib-uglify": "~0.2.0",
+    "grunt-publish": "^1.0.0",
     "grunt-wiredep": "^2.0.0",
     "load-grunt-tasks": "~0.3.0"
   }
