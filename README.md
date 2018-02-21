@@ -4,12 +4,14 @@
   </a>
 </div>
 
-This is a JQuery plugin which allows you to create responsive, infinite, and high quality justified
-gallery of images.
+**Justified Gallery is a JavaScript library that allows you to create an high quality justified gallery of images.**
 
-A common problem, for people who create sites, is to create an elegant image gallery that manages
-the various sizes and aspect ratio of images. Flickr and Google+ manage this situation in an excellent
-way, the purpose of this plugin is to give you the power of these solutions, with a new fast algorithm.
+[![Bower version](https://badge.fury.io/bo/justifiedGallery.svg)](https://badge.fury.io/bo/justifiedGallery)
+[![npm version](https://badge.fury.io/js/justifiedGallery.svg)](https://badge.fury.io/js/justifiedGallery)
+
+This is a common problem for people who create websites: you have a series of images to display, but you are not sure how to arrange them in an elegant way. Important websites such as 500px, Flickr, or Google display images in an excellent way, justifying them similarly to brick wall. Justified Gallery will give you the power to do that too.
+
+Justified Gallery is a professional and open source library that even 500px, one of the best photography social network, chose for displaying their images!
 
 <div style="text-align: center; font-size: 110%;">
 	<a href="http://miromannino.github.io/Justified-Gallery/" target="_blank">Official project page</a>
@@ -94,13 +96,15 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 * Configurable entry selector
 * Code refactoring
 
+<details>
+	<summary>Older versions</summary>
+	
 ### 3.5.4
 
 * Added the border option
 * Fixed some problems with waitThumbnailsLoad and infinite scroll
 
 ### 3.5
-
 * The default suffixes are all empty, to be simpler to understand. To have the previous suffixes,
 the following settings can be used:
 
@@ -240,6 +244,8 @@ too like a bug than a feature.
 * Setting name changed: 'sizeSuffixes' to 'sizeRangeSuffixes'.
 * Setting name changed: 'usedSuffix' to 'usedSizeRange'.
 * Added the CSS for the div that shows the Justified Gallery errors. Now can be changed, or hided.
+
+</details>
 
 ## Contributing
 
