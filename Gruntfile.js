@@ -6,12 +6,12 @@ module.exports = function(grunt) {
   grunt.initConfig({
     
     // Metadata.
-    pkg: grunt.file.readJSON('justifiedGallery.jquery.json'),
+    pkg: grunt.file.readJSON('package.json'),
     banner: '/*!\n' +
       ' * <%= pkg.title || pkg.name %> - v<%= pkg.version %>\n' +
       '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
       ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>\n' +
-      ' * Licensed under the <%= _.pluck(pkg.licenses, "type").join(", ") %> license.\n' + 
+      ' * Licensed under the <%= pkg.license %> license.\n' +
       ' */\n',
 
     // Task configuration.

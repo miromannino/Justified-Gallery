@@ -18,7 +18,11 @@
     "mason",
     "justified-layout"
   ],
-  "author": "Miro Mannino <miro.mannino@gmail.com> (http://miromannino.com)",
+  "author": {
+    "name": "Miro Mannino",
+    "email": "miro.mannino@gmail.com",
+    "url": "http://miromannino.com/"
+  },
   "license": "MIT",
   "engines": {
     "node": ">= 0.8.0"

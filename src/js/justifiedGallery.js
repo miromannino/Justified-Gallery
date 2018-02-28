@@ -1,5 +1,5 @@
 /**
- * Justified Gallery - v3.6.5
+ * Justified Gallery - v3.6.5+
  * http://miromannino.github.io/Justified-Gallery/
  *
  * Copyright (c) 2018 Miro Mannino
@@ -7,14 +7,11 @@
  */
 (function($) {
 
-  function hasScrollBar() {
-    return $("body").height() > $(window).height();
-  }
   /**
    * Justified Gallery controller constructor
    *
    * @param $gallery the gallery to build
-   * @param settings the settings (the defaults are in $.fn.justifiedGallery.defaults)
+   * @param settings the settings (the defaults are in JustifiedGallery.defaults)
    * @constructor
    */
   var JustifiedGallery = function ($gallery, settings) {
@@ -47,8 +44,10 @@
       $el : $('<div class="spinner"><span></span><span></span><span></span></div>'),
       intervalId : null
     };
+    this.scrollBarOn = false;
     this.checkWidthIntervalId = null;
     this.galleryWidth = $gallery.width();
+    this.galleryPrevStaticHeight = 0;
     this.$gallery = $gallery;
 
   };
@@ -439,35 +438,45 @@
       this.offY += this.buildingRow.height + settings.margins;
       this.rows += 1;
       this.clearBuildingRow();
-      this.$gallery.trigger('jg.rowflush');
+      this.settings.triggerEvent.call(this, 'jg.rowflush');
     }
   };
 
+  /**
+   * @returns {boolean} a boolean saying if the scrollbar is active or not
+   */
+  JustifiedGallery.prototype.hasScrollBar = function () {
+    return $("body").height() > $(window).height();
+  };
 
-  // Scroll position not restoring: https://github.com/miromannino/Justified-Gallery/issues/221 
-  var galleryPrevStaticHeight = 0;
-
+  /**
+   * Set gallery height, saving the current gallery.
+   */
   JustifiedGallery.prototype.rememberGalleryHeight = function () {
-    galleryPrevStaticHeight = this.$gallery.height();
-    this.$gallery.height(galleryPrevStaticHeight);
+    this.galleryPrevStaticHeight = this.$gallery.height();
+    this.$gallery.height(this.galleryPrevStaticHeight);
   };
 
-  // grow only
+  /**
+   * Set gallery height, saving the current gallery.
+   * Grow only.
+   */
   JustifiedGallery.prototype.setGalleryTempHeight = function (height) {
-    galleryPrevStaticHeight = Math.max(height, galleryPrevStaticHeight);
-    this.$gallery.height(galleryPrevStaticHeight);
+    this.galleryPrevStaticHeight = Math.max(height, this.galleryPrevStaticHeight);
+    this.$gallery.height(this.galleryPrevStaticHeight);
   };
 
+  /**
+   * Set final gallery height
+   */
   JustifiedGallery.prototype.setGalleryFinalHeight = function (height) {
-    galleryPrevStaticHeight = height;
+    this.galleryPrevStaticHeight = height;
     this.$gallery.height(height);
   };
-
 
   /**
    * Checks the width of the gallery container, to know if a new justification is needed
    */
-  var scrollBarOn = false;
   JustifiedGallery.prototype.checkWidth = function () {
     this.checkWidthIntervalId = setInterval($.proxy(function () {
       
@@ -475,7 +484,7 @@
       if (!this.$gallery.is(":visible")) return;
 
       var galleryWidth = parseFloat(this.$gallery.width());
-      if (hasScrollBar() === scrollBarOn) {
+      if (this.hasScrollBar() === this.scrollBarOn) {
         if (Math.abs(galleryWidth - this.galleryWidth) > this.settings.refreshSensitivity) {
           this.galleryWidth = galleryWidth;
           this.rewind();
@@ -486,7 +495,7 @@
           this.startImgAnalyzer(true);
         }
       } else {
-        scrollBarOn = hasScrollBar();
+        this.scrollBarOn = this.hasScrollBar();
         this.galleryWidth = galleryWidth;
       }
     }, this), this.settings.refreshTime);
@@ -765,7 +774,7 @@
     this.stopImgAnalyzerStarter();
 
     //On complete callback
-    this.$gallery.trigger(isForResize ? 'jg.resize' : 'jg.complete');
+    this.settings.triggerEvent.call(this, isForResize ? 'jg.resize' : 'jg.complete');
     this.setGalleryFinalHeight(this.galleryHeightToSet);
   };
 
@@ -1065,55 +1074,7 @@
     this.suffixRanges = this.retrieveSuffixRanges();
   };
 
-  /**
-   * Justified Gallery plugin for jQuery
-   *
-   * Events
-   *  - jg.complete : called when all the gallery has been created
-   *  - jg.resize : called when the gallery has been resized
-   *  - jg.rowflush : when a new row appears
-   *
-   * @param arg the action (or the settings) passed when the plugin is called
-   * @returns {*} the object itself
-   */
-  $.fn.justifiedGallery = function (arg) {
-    return this.each(function (index, gallery) {
-
-      var $gallery = $(gallery);
-      $gallery.addClass('justified-gallery');
-
-      var controller = $gallery.data('jg.controller');
-      if (typeof controller === 'undefined') {
-        // Create controller and assign it to the object data
-        if (typeof arg !== 'undefined' && arg !== null && $.type(arg) !== 'object') {
-          if (arg === 'destroy') return; // Just a call to an unexisting object
-          throw 'The argument must be an object';
-        }
-        controller = new JustifiedGallery($gallery, $.extend({}, $.fn.justifiedGallery.defaults, arg));
-        $gallery.data('jg.controller', controller);
-      } else if (arg === 'norewind') {
-        // In this case we don't rewind: we analyze only the latest images (e.g. to complete the last unfinished row
-        // ... left to be more readable
-      } else if (arg === 'destroy') {
-        controller.destroy();
-        return;
-      } else {
-        // In this case Justified Gallery has been called again changing only some options
-        controller.updateSettings(arg);
-        controller.rewind();
-      }
-
-      // Update the entries list
-      if (!controller.updateEntries(arg === 'norewind')) return;
-
-      // Init justified gallery
-      controller.init();
-
-    });
-  };
-
-  // Default options
-  $.fn.justifiedGallery.defaults = {
+  JustifiedGallery.prototype.defaults = {
     sizeRangeSuffixes: { }, /* e.g. Flickr configuration
         {
           100: '_t',  // used when longest is less than 100px
@@ -1166,7 +1127,57 @@
                     It follows the specifications of the Array.prototype.filter() function of JavaScript.
     */
     selector: 'a, div:not(.spinner)', // The selector that is used to know what are the entries of the gallery
-    imgSelector: '> img, > a > img' // The selector that is used to know what are the images of each entry
+    imgSelector: '> img, > a > img', // The selector that is used to know what are the images of each entry
+    triggerEvent: function (event) { // This is called to trigger events, the default behavior is to call $.trigger
+      this.$gallery.trigger(event);  // Consider that 'this' is this set to the JustifiedGallery object, so it can
+    }                                // access to fields such as $gallery, useful to trigger events with jQuery.
+  };
+
+  /**
+   * Justified Gallery plugin for jQuery
+   *
+   * Events
+   *  - jg.complete : called when all the gallery has been created
+   *  - jg.resize : called when the gallery has been resized
+   *  - jg.rowflush : when a new row appears
+   *
+   * @param arg the action (or the settings) passed when the plugin is called
+   * @returns {*} the object itself
+   */
+  $.fn.justifiedGallery = function (arg) {
+    return this.each(function (index, gallery) {
+
+      var $gallery = $(gallery);
+      $gallery.addClass('justified-gallery');
+
+      var controller = $gallery.data('jg.controller');
+      if (typeof controller === 'undefined') {
+        // Create controller and assign it to the object data
+        if (typeof arg !== 'undefined' && arg !== null && $.type(arg) !== 'object') {
+          if (arg === 'destroy') return; // Just a call to an unexisting object
+          throw 'The argument must be an object';
+        }
+        controller = new JustifiedGallery($gallery, $.extend({}, JustifiedGallery.prototype.defaults, arg));
+        $gallery.data('jg.controller', controller);
+      } else if (arg === 'norewind') {
+        // In this case we don't rewind: we analyze only the latest images (e.g. to complete the last unfinished row
+        // ... left to be more readable
+      } else if (arg === 'destroy') {
+        controller.destroy();
+        return;
+      } else {
+        // In this case Justified Gallery has been called again changing only some options
+        controller.updateSettings(arg);
+        controller.rewind();
+      }
+
+      // Update the entries list
+      if (!controller.updateEntries(arg === 'norewind')) return;
+
+      // Init justified gallery
+      controller.init();
+
+    });
   };
 
 }(jQuery));
