@@ -19,6 +19,12 @@ Justified Gallery is a professional and open source library that even 500px, one
 
 ## Release History
 
+### 3.7
+
+* Compatible with AMD and CommonJS formats using Universal Module Definition pattern (examples provided for Webpack, Browserify, and AMD/RequireJS)
+* $.prop() changed to $.attr() because it was creating problems with Foundation
+* The library could now be used without necessarily defining it as jQuery plugin. But it still requires jQuery to provide a better browser compatibility.
+
 ### 3.6.5
 
 * For more flexibility, option imgSelector to select the image, given an image entry (e.g. a figure or a div)

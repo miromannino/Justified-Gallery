@@ -1,5 +1,5 @@
 /**
- * Justified Gallery - v3.6.6-SNAPSHOT
+ * Justified Gallery - v3.7.0
  * http://miromannino.github.io/Justified-Gallery/
  *
  * Copyright (c) 2018 Miro Mannino
