@@ -17,6 +17,18 @@ way, the purpose of this plugin is to give you the power of these solutions, wit
 
 ## Release History
 
+### 3.6.5
+
+* For more flexibility, option imgSelector to select the image, given an image entry (e.g. a figure or a div)
+* $.attr() changed to $.prop() for better compatibility
+* Right to left option
+* Prevent gallery height collapse when the page is resized and keep the scroll position
+* Avoid width check in case the gallery is not visible
+
+### 3.6.4
+
+* semplified the possibility to have a gallery of `<figure>`. 
+
 ### 3.6.3
 
 * Added in thumbnailPath an extra parameter which specify the current image. In this way properties of that image could
@@ -247,7 +259,7 @@ Regarding code style like indentation and whitespace, **follow the conventions y
  - Steps:
 	- Fork and clone this repository.
 	- Open a terminal and change the current directory to the cloned folder.
-	- Run `npm install` to install all dependencies (including Grunt).
+	- Run `npm install` to install all dependencies (including bower and Grunt).
 	- Run `bower install` to install all the dependencies needed for the tests.
 	- Run `grunt debug` to build the library only for testing (debug mode).
 	- Run `grunt` to build this project in release mode.

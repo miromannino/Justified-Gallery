@@ -1,6 +1,6 @@
 {
   "name": "justifiedGallery",
-  "version": "3.6.3",
+  "version": "3.6.5",
   "engines": {
     "node": ">= 0.8.0"
   },
@@ -8,7 +8,9 @@
     "test": "grunt qunit"
   },
   "devDependencies": {
+    "bower": "^1.8.2",
     "grunt": "~0.4.2",
+    "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": "~0.4.0",
     "grunt-contrib-compress": "~0.12.0",
     "grunt-contrib-concat": "~0.3.0",

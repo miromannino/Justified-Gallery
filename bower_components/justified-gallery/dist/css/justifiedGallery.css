@@ -1,7 +1,7 @@
 /*!
- * Justified Gallery - v3.6.3
+ * Justified Gallery - v3.6.5
  * http://miromannino.github.io/Justified-Gallery/
- * Copyright (c) 2016 Miro Mannino
+ * Copyright (c) 2018 Miro Mannino
  * Licensed under the MIT license.
  */
 .justified-gallery {
@@ -10,18 +10,23 @@
   overflow: hidden;
 }
 .justified-gallery > a,
-.justified-gallery > div {
+.justified-gallery > div,
+.justified-gallery > figure {
   position: absolute;
   display: inline-block;
   overflow: hidden;
   /* background: #888888; To have gray placeholders while the gallery is loading with waitThumbnailsLoad = false */
   filter: "alpha(opacity=10)";
   opacity: 0.1;
+  margin: 0;
+  padding: 0;
 }
 .justified-gallery > a > img,
 .justified-gallery > div > img,
+.justified-gallery > figure > img,
 .justified-gallery > a > a > img,
-.justified-gallery > div > a > img {
+.justified-gallery > div > a > img,
+.justified-gallery > figure > a > img {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -32,7 +37,8 @@
   opacity: 0;
 }
 .justified-gallery > a > .caption,
-.justified-gallery > div > .caption {
+.justified-gallery > div > .caption,
+.justified-gallery > figure > .caption {
   display: none;
   position: absolute;
   bottom: 0;
@@ -47,7 +53,8 @@
   font-family: sans-serif;
 }
 .justified-gallery > a > .caption.caption-visible,
-.justified-gallery > div > .caption.caption-visible {
+.justified-gallery > div > .caption.caption-visible,
+.justified-gallery > figure > .caption.caption-visible {
   display: initial;
   filter: "alpha(opacity=70)";
   opacity: 0.7;

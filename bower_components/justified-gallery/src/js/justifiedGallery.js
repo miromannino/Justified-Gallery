@@ -1,8 +1,8 @@
 /**
- * Justified Gallery - v3.6.3
+ * Justified Gallery - v3.6.5
  * http://miromannino.github.io/Justified-Gallery/
  *
- * Copyright (c) 2016 Miro Mannino
+ * Copyright (c) 2018 Miro Mannino
  * Licensed under the MIT license.
  */
 (function($) {
@@ -131,7 +131,7 @@
       if (callback) callback();
     } else {
       $entry.stop().fadeTo(this.settings.imagesAnimationDuration, 1.0, callback);
-      $entry.find('> img, > a > img').stop().fadeTo(this.settings.imagesAnimationDuration, 1.0, callback);
+      $entry.find(this.settings.imgSelector).stop().fadeTo(this.settings.imagesAnimationDuration, 1.0, callback);
     }
   };
 
@@ -150,8 +150,7 @@
 
   /** @returns {jQuery} the image in the given entry */
   JustifiedGallery.prototype.imgFromEntry = function ($entry) {
-    var $img = $entry.find('> img');
-    if ($img.length === 0) $img = $entry.find('> a > img');
+    var $img = $entry.find(this.settings.imgSelector);
     return $img.length === 0 ? null : $img;
   };
 
@@ -321,6 +320,15 @@
   };
 
   /**
+   * Clear the building row data to be used for a new row
+   */
+  JustifiedGallery.prototype.clearBuildingRow = function () {
+    this.buildingRow.entriesBuff = [];
+    this.buildingRow.aspectRatio = 0;
+    this.buildingRow.width = 0;
+  };
+
+  /**
    * Justify the building row, preparing it to
    *
    * @param isLastRow
@@ -382,15 +390,6 @@
   };
 
   /**
-   * Clear the building row data to be used for a new row
-   */
-  JustifiedGallery.prototype.clearBuildingRow = function () {
-    this.buildingRow.entriesBuff = [];
-    this.buildingRow.aspectRatio = 0;
-    this.buildingRow.width = 0;
-  };
-
-  /**
    * Flush a row: justify it, modify the gallery height accordingly to the row height
    *
    * @param isLastRow
@@ -405,16 +404,12 @@
       return;
     }
 
-    if (this.maxRowHeight) {
-      if (this.maxRowHeight.isPercentage && this.maxRowHeight.value * settings.rowHeight < this.buildingRow.height) {
-        this.buildingRow.height = this.maxRowHeight.value * settings.rowHeight;
-      } else if (this.maxRowHeight.value >= settings.rowHeight && this.maxRowHeight.value < this.buildingRow.height) {
-        this.buildingRow.height = this.maxRowHeight.value;
-      }
+    if(this.maxRowHeight) {
+      if(this.maxRowHeight < this.buildingRow.height)  this.buildingRow.height = this.maxRowHeight;
     }
 
     //Align last (unjustified) row
-    if (settings.lastRow === 'center' || settings.lastRow === 'right') {
+    if (isLastRow && (settings.lastRow === 'center' || settings.lastRow === 'right')) {
       var availableWidth = this.galleryWidth - 2 * this.border - (this.buildingRow.entriesBuff.length - 1) * settings.margins;
 
       for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
@@ -428,15 +423,16 @@
         offX += availableWidth;
     }
 
-    for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
-      $entry = this.buildingRow.entriesBuff[i];
+    var lastEntryIdx = this.buildingRow.entriesBuff.length - 1;
+    for (i = 0; i <= lastEntryIdx; i++) {
+      $entry = this.buildingRow.entriesBuff[ this.settings.rtl ? lastEntryIdx - i : i ];
       this.displayEntry($entry, offX, this.offY, $entry.data('jg.jwidth'), $entry.data('jg.jheight'), this.buildingRow.height);
       offX += $entry.data('jg.jwidth') + settings.margins;
     }
 
     //Gallery Height
     this.galleryHeightToSet = this.offY + this.buildingRow.height + this.border;
-    this.$gallery.height(this.galleryHeightToSet + this.getSpinnerHeight());
+    this.setGalleryTempHeight(this.galleryHeightToSet + this.getSpinnerHeight());
 
     if (!isLastRow || (this.buildingRow.height <= settings.rowHeight && buildingRowRes)) {
       //Ready for a new row
@@ -447,17 +443,44 @@
     }
   };
 
+
+  // Scroll position not restoring: https://github.com/miromannino/Justified-Gallery/issues/221 
+  var galleryPrevStaticHeight = 0;
+
+  JustifiedGallery.prototype.rememberGalleryHeight = function () {
+    galleryPrevStaticHeight = this.$gallery.height();
+    this.$gallery.height(galleryPrevStaticHeight);
+  };
+
+  // grow only
+  JustifiedGallery.prototype.setGalleryTempHeight = function (height) {
+    galleryPrevStaticHeight = Math.max(height, galleryPrevStaticHeight);
+    this.$gallery.height(galleryPrevStaticHeight);
+  };
+
+  JustifiedGallery.prototype.setGalleryFinalHeight = function (height) {
+    galleryPrevStaticHeight = height;
+    this.$gallery.height(height);
+  };
+
+
   /**
    * Checks the width of the gallery container, to know if a new justification is needed
    */
   var scrollBarOn = false;
   JustifiedGallery.prototype.checkWidth = function () {
     this.checkWidthIntervalId = setInterval($.proxy(function () {
+      
+      // if the gallery is not currently visible, abort.
+      if (!this.$gallery.is(":visible")) return;
+
       var galleryWidth = parseFloat(this.$gallery.width());
       if (hasScrollBar() === scrollBarOn) {
         if (Math.abs(galleryWidth - this.galleryWidth) > this.settings.refreshSensitivity) {
           this.galleryWidth = galleryWidth;
           this.rewind();
+
+          this.rememberGalleryHeight();
 
           // Restart to analyze
           this.startImgAnalyzer(true);
@@ -489,7 +512,7 @@
   JustifiedGallery.prototype.stopLoadingSpinnerAnimation = function () {
     clearInterval(this.spinner.intervalId);
     this.spinner.intervalId = null;
-    this.$gallery.height(this.$gallery.height() - this.getSpinnerHeight());
+    this.setGalleryTempHeight(this.$gallery.height() - this.getSpinnerHeight());
     this.spinner.$el.detach();
   };
 
@@ -501,7 +524,7 @@
     var $spinnerPoints = spinnerContext.$el.find('span');
     clearInterval(spinnerContext.intervalId);
     this.$gallery.append(spinnerContext.$el);
-    this.$gallery.height(this.offY + this.buildingRow.height + this.getSpinnerHeight());
+    this.setGalleryTempHeight(this.offY + this.buildingRow.height + this.getSpinnerHeight());
     spinnerContext.intervalId = setInterval(function () {
       if (spinnerContext.phase < $spinnerPoints.length) {
         $spinnerPoints.eq(spinnerContext.phase).fadeTo(spinnerContext.timeSlot, 1);
@@ -637,7 +660,7 @@
       // Filter using the passed function
       var filteredArr = a.filter(settings.filter);
       for (var i = 0; i < a.length; i++) {
-        if (filteredArr.indexOf(a[i]) == -1) {
+        if (filteredArr.indexOf(a[i]) === -1) {
           $(a[i]).addClass('jg-filtered').removeClass('jg-visible');
         } else {
           $(a[i]).removeClass('jg-filtered');
@@ -711,6 +734,7 @@
         var imgAspectRatio = $entry.data('jg.width') / $entry.data('jg.height');
         if (availableWidth / (this.buildingRow.aspectRatio + imgAspectRatio) < this.settings.rowHeight) {
           this.flushRow(false);
+
           if(++this.yield.flushed >= this.yield.every) {
             this.startImgAnalyzer(isForResize);
             return;
@@ -742,7 +766,7 @@
 
     //On complete callback
     this.$gallery.trigger(isForResize ? 'jg.resize' : 'jg.complete');
-    this.$gallery.height(this.galleryHeightToSet);
+    this.setGalleryFinalHeight(this.galleryHeightToSet);
   };
 
   /**
@@ -750,7 +774,10 @@
    */
   JustifiedGallery.prototype.stopImgAnalyzerStarter = function () {
     this.yield.flushed = 0;
-    if (this.imgAnalyzerTimeout !== null) clearTimeout(this.imgAnalyzerTimeout);
+    if (this.imgAnalyzerTimeout !== null) {
+      clearTimeout(this.imgAnalyzerTimeout);
+      this.imgAnalyzerTimeout = null;
+    }
   };
 
   /**
@@ -823,8 +850,8 @@
           /* If we have the height and the width, we don't wait that the image is loaded, but we start directly
            * with the justification */
           if (that.settings.waitThumbnailsLoad === false) {
-            var width = parseFloat($image.attr('width'));
-            var height = parseFloat($image.attr('height'));
+            var width = parseFloat($image.prop('width'));
+            var height = parseFloat($image.prop('height'));
             if (!isNaN(width) && !isNaN(height)) {
               $entry.data('jg.width', width);
               $entry.data('jg.height', height);
@@ -916,36 +943,33 @@
 
   /**
    * check and convert the maxRowHeight setting
+   * requires rowHeight to be already set
+   * TODO: should be always called when only rowHeight is changed
+   * @return number or null
    */
   JustifiedGallery.prototype.retrieveMaxRowHeight = function () {
-    var newMaxRowHeight = { };
+    var newMaxRowHeight = null;
+    var rowHeight = this.settings.rowHeight;
 
     if ($.type(this.settings.maxRowHeight) === 'string') {
       if (this.settings.maxRowHeight.match(/^[0-9]+%$/)) {
-        newMaxRowHeight.value = parseFloat(this.settings.maxRowHeight.match(/^([0-9]+)%$/)[1]) / 100;
-        newMaxRowHeight.isPercentage = false;
+        newMaxRowHeight = rowHeight * parseFloat(this.settings.maxRowHeight.match(/^([0-9]+)%$/)[1]) / 100;
       } else {
-        newMaxRowHeight.value = parseFloat(this.settings.maxRowHeight);
-        newMaxRowHeight.isPercentage = true;
+        newMaxRowHeight = parseFloat(this.settings.maxRowHeight);
       }
     } else if ($.type(this.settings.maxRowHeight) === 'number') {
-      newMaxRowHeight.value = this.settings.maxRowHeight;
-      newMaxRowHeight.isPercentage = false;
-    } else if (this.settings.maxRowHeight === false ||
-        this.settings.maxRowHeight === null ||
-        typeof this.settings.maxRowHeight == 'undefined') {
+      newMaxRowHeight = this.settings.maxRowHeight;
+    } else if (this.settings.maxRowHeight === false || this.settings.maxRowHeight == null) {
       return null;
     } else {
       throw 'maxRowHeight must be a number or a percentage';
     }
 
     // check if the converted value is not a number
-    if (isNaN(newMaxRowHeight.value)) throw 'invalid number for maxRowHeight';
+    if (isNaN(newMaxRowHeight)) throw 'invalid number for maxRowHeight';
 
-    // check values
-    if (newMaxRowHeight.isPercentage) {
-      if (newMaxRowHeight.value < 100) newMaxRowHeight.value = 100;
-    }
+    // check values, maxRowHeight must be >= rowHeight
+    if (newMaxRowHeight < rowHeight) newMaxRowHeight = rowHeight;
 
     return newMaxRowHeight;
   };
@@ -1103,7 +1127,7 @@
     thumbnailPath: undefined, /* If defined, sizeRangeSuffixes is not used, and this function is used to determine the
     path relative to a specific thumbnail size. The function should accept respectively three arguments:
     current path, width and height */
-    rowHeight: 120,
+    rowHeight: 120, // required? required to be > 0?
     maxRowHeight: false, // false or negative value to deactivate. Positive number to express the value in pixels,
                          // A string '[0-9]+%' to express in percentage (e.g. 300% means that the row height
                          // can't exceed 3 * rowHeight)
@@ -1129,6 +1153,7 @@
     refreshTime: 200, // time interval (in ms) to check if the page changes its width
     refreshSensitivity: 0, // change in width allowed (in px) without re-building the gallery
     randomize: false,
+    rtl: false, // right-to-left mode
     sort: false, /*
       - false: to do not sort
       - function: to sort them using the function as comparator (see Array.prototype.sort())
@@ -1140,7 +1165,8 @@
       - a function: invoked with arguments (entry, index, array). Return true to keep the entry, false otherwise.
                     It follows the specifications of the Array.prototype.filter() function of JavaScript.
     */
-    selector: 'a, div:not(.spinner)' // The selector that is used to know what are the entries of the gallery
+    selector: 'a, div:not(.spinner)', // The selector that is used to know what are the entries of the gallery
+    imgSelector: '> img, > a > img' // The selector that is used to know what are the images of each entry
   };
 
 }(jQuery));
