@@ -226,7 +226,10 @@ JustifiedGallery.prototype.displayEntryCaption = function ($entry) {
       var caption = $image.attr('alt');
       if (!this.isValidCaption(caption)) caption = $entry.attr('title');
       if (this.isValidCaption(caption)) { // Create only we found something
-        if (this.settings.escapeCaptionMarkup) {
+        if (this.settings.escapeCaptionMarkup === 'lenient') {
+          caption = caption.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        } else if (this.settings.escapeCaptionMarkup) {
+          // Intentionally using truthy check so that mispellings of lenient aren't using no XSS filtering.
           caption = $('<div />').text(caption).html();
         }
         $imgCaption = $('<div class="caption">' + caption + '</div>');
@@ -1099,7 +1102,7 @@ JustifiedGallery.prototype.defaults = {
   captions: true,
   cssAnimation: true,
   imagesAnimationDuration: 500, // ignored with css animations
-  escapeCaptionMarkup: false,
+  escapeCaptionMarkup: false, // can be false, true, or 'lenient' which will only escape tags and allow html entities like "&amp;"
   captionSettings: { // ignored with css animations
     animationDuration: 500,
     visibleOpacity: 0.7,
