@@ -252,6 +252,9 @@
         var caption = $image.attr('alt');
         if (!this.isValidCaption(caption)) caption = $entry.attr('title');
         if (this.isValidCaption(caption)) { // Create only we found something
+          if (this.settings.escapeCaptionMarkup) {
+            caption = $('<div />').text(caption).html();
+          }
           $imgCaption = $('<div class="caption">' + caption + '</div>');
           $entry.append($imgCaption);
           $entry.data('jg.createdCaption', true);
@@ -1122,6 +1125,7 @@
     captions: true,
     cssAnimation: true,
     imagesAnimationDuration: 500, // ignored with css animations
+    escapeCaptionMarkup: false,
     captionSettings: { // ignored with css animations
       animationDuration: 500,
       visibleOpacity: 0.7,
