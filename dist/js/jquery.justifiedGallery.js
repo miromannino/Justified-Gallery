@@ -208,7 +208,9 @@
   
       // Image reloading for an high quality of thumbnails
       var imageSrc = $image.attr('src');
-      var newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, $image[0]);
+      if (imageSrc) {
+          var newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, $image[0]);
+      }
   
       $image.one('error', function () {
         $image.attr('src', $image.data('jg.originalSrc')); //revert to the original thumbnail, we got it.
@@ -220,7 +222,7 @@
         }
       };
   
-      if ($entry.data('jg.loaded') === 'skipped') {
+      if ($entry.data('jg.loaded') === 'skipped' && imageSrc) {
         this.onImageEvent(imageSrc, $.proxy(function() {
           this.showImg($entry, loadNewImage);
           $entry.data('jg.loaded', true);
@@ -877,9 +879,13 @@
   
           /* If we have the height and the width, we don't wait that the image is loaded, but we start directly
            * with the justification */
-          if (that.settings.waitThumbnailsLoad === false) {
+          if (that.settings.waitThumbnailsLoad === false || !imageSrc) {
             var width = parseFloat($image.prop('width'));
             var height = parseFloat($image.prop('height'));
+            if ($image.prop('tagName') === 'svg') {
+              width = parseFloat($image[0].getBBox().width);
+              height = parseFloat($image[0].getBBox().height);
+            }
             if (!isNaN(width) && !isNaN(height)) {
               $entry.data('jg.width', width);
               $entry.data('jg.height', height);
@@ -1146,11 +1152,12 @@
                     It follows the specifications of the Array.prototype.filter() function of JavaScript.
     */
     selector: 'a, div:not(.spinner)', // The selector that is used to know what are the entries of the gallery
-    imgSelector: '> img, > a > img', // The selector that is used to know what are the images of each entry
+    imgSelector: '> img, > a > img, > svg, > a > svg', // The selector that is used to know what are the images of each entry
     triggerEvent: function (event) { // This is called to trigger events, the default behavior is to call $.trigger
       this.$gallery.trigger(event);  // Consider that 'this' is this set to the JustifiedGallery object, so it can
     }                                // access to fields such as $gallery, useful to trigger events with jQuery.
   };
+  
 
   /**
    * Justified Gallery plugin for jQuery
