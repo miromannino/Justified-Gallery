@@ -697,12 +697,14 @@ JustifiedGallery.prototype.destroy = function () {
 
     // Reset image style
     var $img = this.imgFromEntry($entry);
-    $img.css('width', '');
-    $img.css('height', '');
-    $img.css('margin-left', '');
-    $img.css('margin-top', '');
-    $img.attr('src', $img.data('jg.originalSrc'));
-    $img.data('jg.originalSrc', undefined);
+    if ($img) {
+      $img.css('width', '');
+      $img.css('height', '');
+      $img.css('margin-left', '');
+      $img.css('margin-top', '');
+      $img.attr('src', $img.data('jg.originalSrc'));
+      $img.data('jg.originalSrc', undefined);
+    }
 
     // Remove caption
     this.removeCaptionEventsHandlers($entry);
