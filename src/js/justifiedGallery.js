@@ -693,7 +693,7 @@ JustifiedGallery.prototype.destroy = function () {
     $entry.css('top', '');
     $entry.css('left', '');
     $entry.data('jg.loaded', undefined);
-    $entry.removeClass('jg-entry');
+    $entry.removeClass('jg-entry entry-visible');
 
     // Reset image style
     var $img = this.imgFromEntry($entry);
