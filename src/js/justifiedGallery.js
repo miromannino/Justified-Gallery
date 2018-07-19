@@ -684,7 +684,9 @@ JustifiedGallery.prototype.filterArray = function (a) {
 JustifiedGallery.prototype.destroy = function () {
   clearInterval(this.checkWidthIntervalId);
 
-  $.each(this.entries, $.proxy(function(_, entry) {
+  // Get fresh entries list since filtered entries are absent in `this.entries`
+  var $entries = this.$gallery.children(this.settings.selector).toArray();
+  $.each($entries, $.proxy(function(_, entry) {
     var $entry = $(entry);
 
     // Reset entry style
@@ -693,7 +695,7 @@ JustifiedGallery.prototype.destroy = function () {
     $entry.css('top', '');
     $entry.css('left', '');
     $entry.data('jg.loaded', undefined);
-    $entry.removeClass('jg-entry entry-visible');
+    $entry.removeClass('jg-entry jg-filtered entry-visible');
 
     // Reset image style
     var $img = this.imgFromEntry($entry);
