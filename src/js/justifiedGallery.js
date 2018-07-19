@@ -549,6 +549,13 @@ JustifiedGallery.prototype.rewind = function () {
 };
 
 /**
+ * @returns {Array} all entries matched by `settings.selector`
+ */
+JustifiedGallery.prototype.getAllEntries = function () {
+  return this.$gallery.children(this.settings.selector).toArray();
+};
+
+/**
  * Update the entries searching it from the justified gallery HTML element
  *
  * @param norewind if norewind only the new entries will be changed (i.e. randomized, sorted or filtered)
@@ -561,7 +568,7 @@ JustifiedGallery.prototype.updateEntries = function (norewind) {
     newEntries = $(this.lastFetchedEntry).nextAll(this.settings.selector).toArray();
   } else {
     this.entries = [];
-    newEntries = this.$gallery.children(this.settings.selector).toArray();
+    newEntries = this.getAllEntries();
   }
 
   if (newEntries.length > 0) {
@@ -685,8 +692,7 @@ JustifiedGallery.prototype.destroy = function () {
   clearInterval(this.checkWidthIntervalId);
 
   // Get fresh entries list since filtered entries are absent in `this.entries`
-  var $entries = this.$gallery.children(this.settings.selector).toArray();
-  $.each($entries, $.proxy(function(_, entry) {
+  $.each(this.getAllEntries(), $.proxy(function(_, entry) {
     var $entry = $(entry);
 
     // Reset entry style
