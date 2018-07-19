@@ -555,7 +555,8 @@ JustifiedGallery.prototype.rewind = function () {
  * @returns {Array} all entries matched by `settings.selector`
  */
 JustifiedGallery.prototype.getAllEntries = function () {
-  return this.$gallery.children(this.settings.selector).toArray();
+  var selector = this.settings.selector + ', div:not(.spinner)';
+  return this.$gallery.children(selector).toArray();
 };
 
 /**
@@ -568,7 +569,8 @@ JustifiedGallery.prototype.updateEntries = function (norewind) {
   var newEntries;
 
   if (norewind && this.lastFetchedEntry != null) {
-    newEntries = $(this.lastFetchedEntry).nextAll(this.settings.selector).toArray();
+    var selector = this.settings.selector + ', div:not(.spinner)';
+    newEntries = $(this.lastFetchedEntry).nextAll(selector).toArray();
   } else {
     this.entries = [];
     newEntries = this.getAllEntries();
@@ -1138,7 +1140,7 @@ JustifiedGallery.prototype.defaults = {
     - a function: invoked with arguments (entry, index, array). Return true to keep the entry, false otherwise.
                   It follows the specifications of the Array.prototype.filter() function of JavaScript.
   */
-  selector: 'a, div:not(.spinner)', // The selector that is used to know what are the entries of the gallery
+  selector: 'a', // The selector that is used to know what are the entries of the gallery
   imgSelector: '> img, > a > img, > svg, > a > svg', // The selector that is used to know what are the images of each entry
   triggerEvent: function (event) { // This is called to trigger events, the default behavior is to call $.trigger
     this.$gallery.trigger(event);  // Consider that 'this' is this set to the JustifiedGallery object, so it can
