@@ -124,7 +124,7 @@ JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight, ima
  */
 JustifiedGallery.prototype.showImg = function ($entry, callback) {
   if (this.settings.cssAnimation) {
-    $entry.addClass('entry-visible');
+    $entry.addClass('jg-entry-visible');
     if (callback) callback();
   } else {
     $entry.stop().fadeTo(this.settings.imagesAnimationDuration, 1.0, callback);
@@ -345,7 +345,7 @@ JustifiedGallery.prototype.prepareBuildingRow = function (isLastRow) {
     for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
       $entry = this.buildingRow.entriesBuff[i];
       if (this.settings.cssAnimation)
-        $entry.removeClass('entry-visible');
+        $entry.removeClass('jg-entry-visible');
       else {
         $entry.stop().fadeTo(0, 0.1);
         $entry.find('> img, > a > img').fadeTo(0, 0);
