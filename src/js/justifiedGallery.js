@@ -746,6 +746,12 @@ JustifiedGallery.prototype.analyzeImages = function (isForResize) {
       var availableWidth = this.galleryWidth - 2 * this.border - (
           (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
       var imgAspectRatio = $entry.data('jg.width') / $entry.data('jg.height');
+
+      this.buildingRow.entriesBuff.push($entry);
+      this.buildingRow.aspectRatio += imgAspectRatio;
+      this.buildingRow.width += imgAspectRatio * this.settings.rowHeight;
+      this.lastAnalyzedIndex = i;
+
       if (availableWidth / (this.buildingRow.aspectRatio + imgAspectRatio) < this.settings.rowHeight) {
         this.flushRow(false);
 
@@ -754,12 +760,6 @@ JustifiedGallery.prototype.analyzeImages = function (isForResize) {
           return;
         }
       }
-
-      this.buildingRow.entriesBuff.push($entry);
-      this.buildingRow.aspectRatio += imgAspectRatio;
-      this.buildingRow.width += imgAspectRatio * this.settings.rowHeight;
-      this.lastAnalyzedIndex = i;
-
     } else if ($entry.data('jg.loaded') !== 'error') {
       return;
     }
