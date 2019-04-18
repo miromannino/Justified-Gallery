@@ -549,6 +549,13 @@ JustifiedGallery.prototype.rewind = function () {
 };
 
 /**
+ * @returns {Array} all entries matched by `settings.selector`
+ */
+JustifiedGallery.prototype.getAllEntries = function () {
+  return this.$gallery.children(this.settings.selector).toArray();
+};
+
+/**
  * Update the entries searching it from the justified gallery HTML element
  *
  * @param norewind if norewind only the new entries will be changed (i.e. randomized, sorted or filtered)
@@ -561,7 +568,7 @@ JustifiedGallery.prototype.updateEntries = function (norewind) {
     newEntries = $(this.lastFetchedEntry).nextAll(this.settings.selector).toArray();
   } else {
     this.entries = [];
-    newEntries = this.$gallery.children(this.settings.selector).toArray();
+    newEntries = this.getAllEntries();
   }
 
   if (newEntries.length > 0) {
@@ -684,7 +691,8 @@ JustifiedGallery.prototype.filterArray = function (a) {
 JustifiedGallery.prototype.destroy = function () {
   clearInterval(this.checkWidthIntervalId);
 
-  $.each(this.entries, $.proxy(function(_, entry) {
+  // Get fresh entries list since filtered entries are absent in `this.entries`
+  $.each(this.getAllEntries(), $.proxy(function(_, entry) {
     var $entry = $(entry);
 
     // Reset entry style
@@ -693,16 +701,18 @@ JustifiedGallery.prototype.destroy = function () {
     $entry.css('top', '');
     $entry.css('left', '');
     $entry.data('jg.loaded', undefined);
-    $entry.removeClass('jg-entry');
+    $entry.removeClass('jg-entry jg-filtered entry-visible');
 
     // Reset image style
     var $img = this.imgFromEntry($entry);
-    $img.css('width', '');
-    $img.css('height', '');
-    $img.css('margin-left', '');
-    $img.css('margin-top', '');
-    $img.attr('src', $img.data('jg.originalSrc'));
-    $img.data('jg.originalSrc', undefined);
+    if ($img) {
+      $img.css('width', '');
+      $img.css('height', '');
+      $img.css('margin-left', '');
+      $img.css('margin-top', '');
+      $img.attr('src', $img.data('jg.originalSrc'));
+      $img.data('jg.originalSrc', undefined);
+    }
 
     // Remove caption
     this.removeCaptionEventsHandlers($entry);
