@@ -1,7 +1,7 @@
 /*!
  * justifiedGallery - v3.7.0
  * http://miromannino.github.io/Justified-Gallery/
- * Copyright (c) 2018 Miro Mannino
+ * Copyright (c) 2019 Miro Mannino
  * Licensed under the MIT license.
  */
 (function (factory) {
@@ -150,7 +150,7 @@
    */
   JustifiedGallery.prototype.showImg = function ($entry, callback) {
     if (this.settings.cssAnimation) {
-      $entry.addClass('entry-visible');
+      $entry.addClass('jg-entry-visible');
       if (callback) callback();
     } else {
       $entry.stop().fadeTo(this.settings.imagesAnimationDuration, 1.0, callback);
@@ -373,7 +373,7 @@
       for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
         $entry = this.buildingRow.entriesBuff[i];
         if (this.settings.cssAnimation)
-          $entry.removeClass('entry-visible');
+          $entry.removeClass('jg-entry-visible');
         else {
           $entry.stop().fadeTo(0, 0.1);
           $entry.find('> img, > a > img').fadeTo(0, 0);
@@ -577,6 +577,13 @@
   };
   
   /**
+   * @returns {Array} all entries matched by `settings.selector`
+   */
+  JustifiedGallery.prototype.getAllEntries = function () {
+    return this.$gallery.children(this.settings.selector).toArray();
+  };
+  
+  /**
    * Update the entries searching it from the justified gallery HTML element
    *
    * @param norewind if norewind only the new entries will be changed (i.e. randomized, sorted or filtered)
@@ -589,7 +596,7 @@
       newEntries = $(this.lastFetchedEntry).nextAll(this.settings.selector).toArray();
     } else {
       this.entries = [];
-      newEntries = this.$gallery.children(this.settings.selector).toArray();
+      newEntries = this.getAllEntries();
     }
   
     if (newEntries.length > 0) {
@@ -712,7 +719,8 @@
   JustifiedGallery.prototype.destroy = function () {
     clearInterval(this.checkWidthIntervalId);
   
-    $.each(this.entries, $.proxy(function(_, entry) {
+    // Get fresh entries list since filtered entries are absent in `this.entries`
+    $.each(this.getAllEntries(), $.proxy(function(_, entry) {
       var $entry = $(entry);
   
       // Reset entry style
@@ -721,16 +729,18 @@
       $entry.css('top', '');
       $entry.css('left', '');
       $entry.data('jg.loaded', undefined);
-      $entry.removeClass('jg-entry');
+      $entry.removeClass('jg-entry jg-filtered entry-visible');
   
       // Reset image style
       var $img = this.imgFromEntry($entry);
-      $img.css('width', '');
-      $img.css('height', '');
-      $img.css('margin-left', '');
-      $img.css('margin-top', '');
-      $img.attr('src', $img.data('jg.originalSrc'));
-      $img.data('jg.originalSrc', undefined);
+      if ($img) {
+        $img.css('width', '');
+        $img.css('height', '');
+        $img.css('margin-left', '');
+        $img.css('margin-top', '');
+        $img.attr('src', $img.data('jg.originalSrc'));
+        $img.data('jg.originalSrc', undefined);
+      }
   
       // Remove caption
       this.removeCaptionEventsHandlers($entry);
@@ -762,6 +772,12 @@
         var availableWidth = this.galleryWidth - 2 * this.border - (
             (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
         var imgAspectRatio = $entry.data('jg.width') / $entry.data('jg.height');
+  
+        this.buildingRow.entriesBuff.push($entry);
+        this.buildingRow.aspectRatio += imgAspectRatio;
+        this.buildingRow.width += imgAspectRatio * this.settings.rowHeight;
+        this.lastAnalyzedIndex = i;
+  
         if (availableWidth / (this.buildingRow.aspectRatio + imgAspectRatio) < this.settings.rowHeight) {
           this.flushRow(false);
   
@@ -770,12 +786,6 @@
             return;
           }
         }
-  
-        this.buildingRow.entriesBuff.push($entry);
-        this.buildingRow.aspectRatio += imgAspectRatio;
-        this.buildingRow.width += imgAspectRatio * this.settings.rowHeight;
-        this.lastAnalyzedIndex = i;
-  
       } else if ($entry.data('jg.loaded') !== 'error') {
         return;
       }
@@ -880,8 +890,8 @@
           /* If we have the height and the width, we don't wait that the image is loaded, but we start directly
            * with the justification */
           if (that.settings.waitThumbnailsLoad === false || !imageSrc) {
-            var width = parseFloat($image.prop('width'));
-            var height = parseFloat($image.prop('height'));
+            var width = parseFloat($image.attr('width'));
+            var height = parseFloat($image.attr('height'));
             if ($image.prop('tagName') === 'svg') {
               width = parseFloat($image[0].getBBox().width);
               height = parseFloat($image[0].getBBox().height);
