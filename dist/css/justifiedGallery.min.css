@@ -26,7 +26,13 @@
 .justified-gallery > figure > img,
 .justified-gallery > a > a > img,
 .justified-gallery > div > a > img,
-.justified-gallery > figure > a > img {
+.justified-gallery > figure > a > img,
+.justified-gallery > a > svg,
+.justified-gallery > div > svg,
+.justified-gallery > figure > svg,
+.justified-gallery > a > a > svg,
+.justified-gallery > div > a > svg,
+.justified-gallery > figure > a > svg {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -69,7 +75,9 @@
   background: none;
 }
 .justified-gallery > .entry-visible > img,
-.justified-gallery > .entry-visible > a > img {
+.justified-gallery > .entry-visible > a > img,
+.justified-gallery > .entry-visible > svg,
+.justified-gallery > .entry-visible > a > svg {
   filter: "alpha(opacity=100)";
   opacity: 1;
   -webkit-transition: opacity 500ms ease-in;
