@@ -864,8 +864,8 @@ JustifiedGallery.prototype.init = function () {
         /* If we have the height and the width, we don't wait that the image is loaded, but we start directly
          * with the justification */
         if (that.settings.waitThumbnailsLoad === false || !imageSrc) {
-          var width = parseFloat($image.prop('width'));
-          var height = parseFloat($image.prop('height'));
+          var width = parseFloat($image.attr('width'));
+          var height = parseFloat($image.attr('height'));
           if ($image.prop('tagName') === 'svg') {
             width = parseFloat($image[0].getBBox().width);
             height = parseFloat($image[0].getBBox().height);
