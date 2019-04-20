@@ -1,6 +1,6 @@
 {
   "name": "justifiedGallery",
-  "version": "3.7.0",
+  "version": "4.0.0-alpha",
   "description": "Justified Gallery is a JavaScript library that allows you to create an high quality justified gallery of images.",
   "main": "dist/js/jquery.justifiedGallery.js",
   "repository": {

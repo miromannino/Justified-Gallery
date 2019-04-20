@@ -1,5 +1,5 @@
 /*!
- * justifiedGallery - v3.7.0
+ * justifiedGallery - v4.0.0-alpha
  * http://miromannino.github.io/Justified-Gallery/
  * Copyright (c) 2019 Miro Mannino
  * Licensed under the MIT license.

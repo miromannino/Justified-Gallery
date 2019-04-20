@@ -19,6 +19,12 @@ Justified Gallery is a professional and open source library that even 500px, one
 
 ## Release History
 
+### 4.0.0-alpha
+
+* Added support for SVG images
+* .entry-visible renamed to .jg-entry-visible to avoid too generic css classes
+* Various fixes
+
 ### 3.7
 
 * Compatible with AMD and CommonJS formats using Universal Module Definition pattern (examples provided for Webpack, Browserify, and AMD/RequireJS)
