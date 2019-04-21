@@ -692,6 +692,7 @@ JustifiedGallery.prototype.filterArray = function (a) {
  */
 JustifiedGallery.prototype.destroy = function () {
   clearInterval(this.checkWidthIntervalId);
+  this.stopImgAnalyzerStarter();
 
   // Get fresh entries list since filtered entries are absent in `this.entries`
   $.each(this.getAllEntries(), $.proxy(function(_, entry) {
@@ -732,6 +733,7 @@ JustifiedGallery.prototype.destroy = function () {
   this.$gallery.css('height', '');
   this.$gallery.removeClass('justified-gallery');
   this.$gallery.data('jg.controller', undefined);
+  this.settings.triggerEvent.call(this, 'jg.destroy');
 };
 
 /**
