@@ -182,8 +182,9 @@ JustifiedGallery.prototype.displayEntry = function ($entry, x, y, imgWidth, imgH
 
     // Image reloading for an high quality of thumbnails
     var imageSrc = $image.attr('src');
+    var newImageSrc = undefined;
     if (imageSrc) {
-        var newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, $image[0]);
+        newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, $image[0]);
     }
 
     $image.one('error', function () {
@@ -692,6 +693,7 @@ JustifiedGallery.prototype.filterArray = function (a) {
  */
 JustifiedGallery.prototype.destroy = function () {
   clearInterval(this.checkWidthIntervalId);
+  this.stopImgAnalyzerStarter();
 
   // Get fresh entries list since filtered entries are absent in `this.entries`
   $.each(this.getAllEntries(), $.proxy(function(_, entry) {
@@ -732,6 +734,7 @@ JustifiedGallery.prototype.destroy = function () {
   this.$gallery.css('height', '');
   this.$gallery.removeClass('justified-gallery');
   this.$gallery.data('jg.controller', undefined);
+  this.settings.triggerEvent.call(this, 'jg.destroy');
 };
 
 /**
