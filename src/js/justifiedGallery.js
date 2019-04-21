@@ -182,8 +182,9 @@ JustifiedGallery.prototype.displayEntry = function ($entry, x, y, imgWidth, imgH
 
     // Image reloading for an high quality of thumbnails
     var imageSrc = $image.attr('src');
+    var newImageSrc = undefined;
     if (imageSrc) {
-        var newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, $image[0]);
+        newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, $image[0]);
     }
 
     $image.one('error', function () {
