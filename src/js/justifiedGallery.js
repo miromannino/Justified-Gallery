@@ -21,16 +21,16 @@ var JustifiedGallery = function ($gallery, settings) {
   this.imgAnalyzerTimeout = null;
   this.entries = null;
   this.buildingRow = {
-    entriesBuff : [],
-    width : 0,
-    height : 0,
-    aspectRatio : 0
+    entriesBuff: [],
+    width: 0,
+    height: 0,
+    aspectRatio: 0
   };
   this.lastFetchedEntry = null;
   this.lastAnalyzedIndex = -1;
   this.yield = {
-    every : 2, // do a flush every n flushes (must be greater than 1)
-    flushed : 0 // flushed rows without a yield
+    every: 2, // do a flush every n flushes (must be greater than 1)
+    flushed: 0 // flushed rows without a yield
   };
   this.border = settings.border >= 0 ? settings.border : settings.margins;
   this.maxRowHeight = this.retrieveMaxRowHeight();
@@ -38,10 +38,10 @@ var JustifiedGallery = function ($gallery, settings) {
   this.offY = this.border;
   this.rows = 0;
   this.spinner = {
-    phase : 0,
-    timeSlot : 150,
-    $el : $('<div class="spinner"><span></span><span></span><span></span></div>'),
-    intervalId : null
+    phase: 0,
+    timeSlot: 150,
+    $el: $('<div class="jg-spinner"><span></span><span></span><span></span></div>'),
+    intervalId: null
   };
   this.scrollBarOn = false;
   this.checkWidthIntervalId = null;
@@ -202,7 +202,7 @@ JustifiedGallery.prototype.displayEntry = function ($entry, x, y, imgWidth, imgH
         // }
       };
 
-      if ($entry.data('jg.loaded') === 'skipped') {
+      if ($entry.data('jg.loaded') === 'skipped' && imageSrc) {
         this.onImageEvent(imageSrc, (function() {
           this.showImg($entry, loadNewImage); //load the new image after the fadeIn
           $entry.data('jg.loaded', true);
@@ -274,7 +274,7 @@ JustifiedGallery.prototype.onEntryMouseEnterForCaption = function (eventObject) 
     $caption.addClass('caption-visible').removeClass('caption-hidden');
   } else {
     $caption.stop().fadeTo(this.settings.captionSettings.animationDuration,
-        this.settings.captionSettings.visibleOpacity);
+      this.settings.captionSettings.visibleOpacity);
   }
 };
 
@@ -290,7 +290,7 @@ JustifiedGallery.prototype.onEntryMouseLeaveForCaption = function (eventObject) 
     $caption.removeClass('caption-visible').removeClass('caption-hidden');
   } else {
     $caption.stop().fadeTo(this.settings.captionSettings.animationDuration,
-        this.settings.captionSettings.nonVisibleOpacity);
+      this.settings.captionSettings.nonVisibleOpacity);
   }
 };
 
@@ -345,7 +345,7 @@ JustifiedGallery.prototype.prepareBuildingRow = function (isLastRow) {
   var i, $entry, imgAspectRatio, newImgW, newImgH, justify = true;
   var minHeight = 0;
   var availableWidth = this.galleryWidth - 2 * this.border - (
-      (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
+    (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
   var rowHeight = availableWidth / this.buildingRow.aspectRatio;
   var defaultRowHeight = this.settings.rowHeight;
   var justifiable = this.buildingRow.width / availableWidth > this.settings.justifyThreshold;
@@ -411,8 +411,8 @@ JustifiedGallery.prototype.flushRow = function (isLastRow) {
     return;
   }
 
-  if(this.maxRowHeight) {
-    if(this.maxRowHeight < this.buildingRow.height)  this.buildingRow.height = this.maxRowHeight;
+  if (this.maxRowHeight) {
+    if (this.maxRowHeight < this.buildingRow.height) this.buildingRow.height = this.maxRowHeight;
   }
 
   //Align last (unjustified) row
@@ -432,7 +432,7 @@ JustifiedGallery.prototype.flushRow = function (isLastRow) {
 
   var lastEntryIdx = this.buildingRow.entriesBuff.length - 1;
   for (i = 0; i <= lastEntryIdx; i++) {
-    $entry = this.buildingRow.entriesBuff[ this.settings.rtl ? lastEntryIdx - i : i ];
+    $entry = this.buildingRow.entriesBuff[this.settings.rtl ? lastEntryIdx - i : i];
     this.displayEntry($entry, offX, this.offY, $entry.data('jg.jwidth'), $entry.data('jg.jheight'), this.buildingRow.height);
     offX += $entry.data('jg.jwidth') + settings.margins;
   }
@@ -547,10 +547,18 @@ JustifiedGallery.prototype.rewind = function () {
 };
 
 /**
+ * @returns {String} `settings.selector` rejecting spinner element
+ */
+JustifiedGallery.prototype.getSelectorWithoutSpinner = function () {
+  return this.settings.selector + ', div:not(.jg-spinner)';
+};
+
+/**
  * @returns {Array} all entries matched by `settings.selector`
  */
 JustifiedGallery.prototype.getAllEntries = function () {
-  return this.$gallery.children(this.settings.selector).toArray();
+  var selector = this.getSelectorWithoutSpinner();
+  return this.$gallery.children(selector).toArray();
 };
 
 /**
@@ -563,7 +571,8 @@ JustifiedGallery.prototype.updateEntries = function (norewind) {
   var newEntries;
 
   if (norewind && this.lastFetchedEntry != null) {
-    newEntries = $(this.lastFetchedEntry).nextAll(this.settings.selector).toArray();
+    var selector = this.getSelectorWithoutSpinner();
+    newEntries = $(this.lastFetchedEntry).nextAll(selector).toArray();
   } else {
     this.entries = [];
     newEntries = this.getAllEntries();
@@ -702,7 +711,7 @@ JustifiedGallery.prototype.destroy = function () {
   this.stopImgAnalyzerStarter();
 
   // Get fresh entries list since filtered entries are absent in `this.entries`
-  $.each(this.getAllEntries(), $.proxy(function(_, entry) {
+  $.each(this.getAllEntries(), $.proxy(function (_, entry) {
     var $entry = $(entry);
 
     // Reset entry style
@@ -755,7 +764,7 @@ JustifiedGallery.prototype.analyzeImages = function (isForResize) {
     var $entry = $(this.entries[i]);
     if ($entry.data('jg.loaded') === true || $entry.data('jg.loaded') === 'skipped') {
       var availableWidth = this.galleryWidth - 2 * this.border - (
-          (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
+        (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
       var imgAspectRatio = $entry.data('jg.width') / $entry.data('jg.height');
 
       this.buildingRow.entriesBuff.push($entry);
@@ -766,7 +775,7 @@ JustifiedGallery.prototype.analyzeImages = function (isForResize) {
       if (availableWidth / (this.buildingRow.aspectRatio + imgAspectRatio) < this.settings.rowHeight) {
         this.flushRow(false);
 
-        if(++this.yield.flushed >= this.yield.every) {
+        if (++this.yield.flushed >= this.yield.every) {
           this.startImgAnalyzer(isForResize);
           return;
         }
@@ -838,7 +847,7 @@ JustifiedGallery.prototype.onImageEvent = function (imageSrc, onLoad, onError) {
     });
   }
   if (onError) {
-    $memImage.one('error', function() {
+    $memImage.one('error', function () {
       $memImage.off('load error');
       onError(memImage);
     });
@@ -952,7 +961,7 @@ JustifiedGallery.prototype.checkSizeRangesSuffixes = function () {
     if (this.settings.sizeRangeSuffixes.hasOwnProperty(rangeIdx)) suffixRanges.push(rangeIdx);
   }
 
-  var newSizeRngSuffixes = {0: ''};
+  var newSizeRngSuffixes = { 0: '' };
   for (var i = 0; i < suffixRanges.length; i++) {
     if ($.type(suffixRanges[i]) === 'string') {
       try {
@@ -1037,13 +1046,13 @@ JustifiedGallery.prototype.checkSettings = function () {
 
   this.checkOrConvertNumber(this.settings.captionSettings, 'visibleOpacity');
   if (this.settings.captionSettings.visibleOpacity < 0 ||
-      this.settings.captionSettings.visibleOpacity > 1) {
+    this.settings.captionSettings.visibleOpacity > 1) {
     throw 'captionSettings.visibleOpacity must be in the interval [0, 1]';
   }
 
   this.checkOrConvertNumber(this.settings.captionSettings, 'nonVisibleOpacity');
   if (this.settings.captionSettings.nonVisibleOpacity < 0 ||
-      this.settings.captionSettings.nonVisibleOpacity > 1) {
+    this.settings.captionSettings.nonVisibleOpacity > 1) {
     throw 'captionSettings.nonVisibleOpacity must be in the interval [0, 1]';
   }
 
@@ -1058,7 +1067,7 @@ JustifiedGallery.prototype.checkSettings = function () {
   }
 
   if (this.settings.filter !== false && !$.isFunction(this.settings.filter) &&
-      $.type(this.settings.filter) !== 'string') {
+    $.type(this.settings.filter) !== 'string') {
     throw 'filter must be false, a string or a filter function';
   }
 };
@@ -1094,7 +1103,7 @@ JustifiedGallery.prototype.updateSettings = function (newSettings) {
 };
 
 JustifiedGallery.prototype.defaults = {
-  sizeRangeSuffixes: { }, /* e.g. Flickr configuration
+  sizeRangeSuffixes: {}, /* e.g. Flickr configuration
       {
         100: '_t',  // used when longest is less than 100px
         240: '_m',  // used when longest is between 101px and 240px
@@ -1109,8 +1118,8 @@ JustifiedGallery.prototype.defaults = {
   current path, width and height */
   rowHeight: 120, // required? required to be > 0?
   maxRowHeight: false, // false or negative value to deactivate. Positive number to express the value in pixels,
-                       // A string '[0-9]+%' to express in percentage (e.g. 300% means that the row height
-                       // can't exceed 3 * rowHeight)
+  // A string '[0-9]+%' to express in percentage (e.g. 300% means that the row height
+  // can't exceed 3 * rowHeight)
   margins: 1,
   border: -1, // negative value = same as margins, 0 = disabled, any other value to set the border
 
@@ -1145,7 +1154,7 @@ JustifiedGallery.prototype.defaults = {
     - a function: invoked with arguments (entry, index, array). Return true to keep the entry, false otherwise.
                   It follows the specifications of the Array.prototype.filter() function of JavaScript.
   */
-  selector: 'a, div:not(.spinner)', // The selector that is used to know what are the entries of the gallery
+  selector: 'a', // The selector that is used to know what are the entries of the gallery
   imgSelector: '> img, > a > img, > svg, > a > svg', // The selector that is used to know what are the images of each entry
   triggerEvent: function (event) { // This is called to trigger events, the default behavior is to call $.trigger
     this.$gallery.trigger(event);  // Consider that 'this' is this set to the JustifiedGallery object, so it can
