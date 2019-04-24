@@ -11,9 +11,16 @@
 
 <body>
     <h1>Big images test</h1>
+    <p>
+        With Chrome DevTools slow down connection. 
+        The images provided in the img srv are loaded first.
+        Only after they are loaded JG is able to build the layout because waitThumbnailsLoad is not used here.
+        Then much the images with more resolution should be loaded after.
+        The first image has width and height assigned, so it should look as the assigned size initially.
+    </p>
     <div id="bigimages">
         <a href="../photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
-            <img width="928px" height="619px" src="../photos/8083451788_552becfbc7_m.jpg" />
+            <img width="928" height="619" src="../photos/8083451788_552becfbc7_m.jpg" />
         </a>
         <a href="../photos/7948632554_01f6ae6b6f_b.jpg" title="Just in a dream Place">
             <img src="../photos/7948632554_01f6ae6b6f_m.jpg" />

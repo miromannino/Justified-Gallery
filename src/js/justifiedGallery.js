@@ -140,8 +140,15 @@ JustifiedGallery.prototype.showImg = function ($entry, callback) {
  * @returns {String} the extracted src
  */
 JustifiedGallery.prototype.extractImgSrcFromImage = function ($image) {
-  var imageSrc = (typeof $image.data('safe-src') !== 'undefined') ? $image.data('safe-src') : $image.attr('src');
-  $image.data('jg.originalSrc', imageSrc);
+  var imageSrc = $image.data('safe-src');
+  var imageSrcLoc = 'date-safe-src';
+  if (typeof imageSrc === 'undefined') {
+    imageSrc = $image.attr('src');
+    imageSrcLoc = 'src';
+  }
+  $image.data('jg.originalSrc', imageSrc); // this is saved for the destroy method
+  $image.data('jg.src', imageSrc); // this will change overtime
+  $image.data('jg.originalSrcLoc', imageSrcLoc); // this is saved for the destroy method
   return imageSrc;
 };
 
@@ -181,29 +188,29 @@ JustifiedGallery.prototype.displayEntry = function ($entry, x, y, imgWidth, imgH
     $image.css('margin-top', - imgHeight / 2);
 
     // Image reloading for an high quality of thumbnails
-    var imageSrc = $image.attr('src');
-    var newImageSrc = undefined;
+    var imageSrc = $image.data('jg.src');
     if (imageSrc) {
-        newImageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, $image[0]);
-    }
+      imageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, $image[0]);
 
-    $image.one('error', function () {
-      $image.attr('src', $image.data('jg.originalSrc')); //revert to the original thumbnail, we got it.
-    });
+      $image.one('error', function () {
+         this.resetImgSrc($image); //revert to the original thumbnail
+      });
 
-    var loadNewImage = function () {
-      if (imageSrc !== newImageSrc) { //load the new image after the fadeIn
-        $image.attr('src', newImageSrc);
+      var loadNewImage = function () {
+        // if (imageSrc !== newImageSrc) { 
+          $image.attr('src', imageSrc);
+        // }
+      };
+
+      if ($entry.data('jg.loaded') === 'skipped') {
+        this.onImageEvent(imageSrc, (function() {
+          this.showImg($entry, loadNewImage); //load the new image after the fadeIn
+          $entry.data('jg.loaded', true);
+        }).bind(this));
+      } else {
+        this.showImg($entry, loadNewImage); //load the new image after the fadeIn
       }
-    };
-
-    if ($entry.data('jg.loaded') === 'skipped' && imageSrc) {
-      this.onImageEvent(imageSrc, $.proxy(function() {
-        this.showImg($entry, loadNewImage);
-        $entry.data('jg.loaded', true);
-      }, this));
-    } else {
-      this.showImg($entry, loadNewImage);
+    
     }
 
   } else {
@@ -464,13 +471,6 @@ JustifiedGallery.prototype.setGalleryFinalHeight = function (height) {
 };
 
 /**
- * @returns {boolean} a boolean saying if the scrollbar is active or not
- */
-function hasScrollBar() {
-  return $("body").height() > $(window).height();
-}
-
-/**
  * Checks the width of the gallery container, to know if a new justification is needed
  */
 JustifiedGallery.prototype.checkWidth = function () {
@@ -480,19 +480,14 @@ JustifiedGallery.prototype.checkWidth = function () {
     if (!this.$gallery.is(":visible")) return;
 
     var galleryWidth = parseFloat(this.$gallery.width());
-    if (hasScrollBar() === this.scrollBarOn) {
-      if (Math.abs(galleryWidth - this.galleryWidth) > this.settings.refreshSensitivity) {
-        this.galleryWidth = galleryWidth;
-        this.rewind();
-
-        this.rememberGalleryHeight();
-
-        // Restart to analyze
-        this.startImgAnalyzer(true);
-      }
-    } else {
-      this.scrollBarOn = hasScrollBar();
+    if (Math.abs(galleryWidth - this.galleryWidth) > this.settings.refreshSensitivity) {
       this.galleryWidth = galleryWidth;
+      this.rewind();
+
+      this.rememberGalleryHeight();
+
+      // Restart to analyze
+      this.startImgAnalyzer(true);
     }
   }, this), this.settings.refreshTime);
 };
@@ -683,6 +678,17 @@ JustifiedGallery.prototype.filterArray = function (a) {
 };
 
 /**
+ * Revert the image src to the default value.
+ */
+JustifiedGallery.prototype.resetImgSrc = function ($img) {
+  if ($img.data('jg.originalSrcLoc') == 'src') {
+    $img.attr('src', $img.data('jg.originalSrc'));
+  } else {
+    $img.attr('src', '');
+  }
+}
+
+/**
  * Destroy the Justified Gallery instance.
  *
  * It clears all the css properties added in the style attributes. We doesn't backup the original
@@ -714,8 +720,10 @@ JustifiedGallery.prototype.destroy = function () {
       $img.css('height', '');
       $img.css('margin-left', '');
       $img.css('margin-top', '');
-      $img.attr('src', $img.data('jg.originalSrc'));
+      this.resetImgSrc($img);
       $img.data('jg.originalSrc', undefined);
+      $img.data('jg.originalSrcLoc', undefined);
+      $img.data('jg.src', undefined);
     }
 
     // Remove caption
@@ -862,10 +870,9 @@ JustifiedGallery.prototype.init = function () {
 
         // Image src
         var imageSrc = that.extractImgSrcFromImage($image);
-        $image.attr('src', imageSrc);
 
-        /* If we have the height and the width, we don't wait that the image is loaded, but we start directly
-         * with the justification */
+        /* If we have the height and the width, we don't wait that the image is loaded, 
+           but we start directly with the justification */
         if (that.settings.waitThumbnailsLoad === false || !imageSrc) {
           var width = parseFloat($image.attr('width'));
           var height = parseFloat($image.attr('height'));
