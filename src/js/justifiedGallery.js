@@ -141,7 +141,7 @@ JustifiedGallery.prototype.showImg = function ($entry, callback) {
  */
 JustifiedGallery.prototype.extractImgSrcFromImage = function ($image) {
   var imageSrc = $image.data('safe-src');
-  var imageSrcLoc = 'date-safe-src';
+  var imageSrcLoc = 'data-safe-src';
   if (typeof imageSrc === 'undefined') {
     imageSrc = $image.attr('src');
     imageSrcLoc = 'src';
