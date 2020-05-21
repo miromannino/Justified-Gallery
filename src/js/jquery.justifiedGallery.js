@@ -1,5 +1,5 @@
 /**
- * Justified Gallery - v4.0.0-alpha
+ * Justified Gallery - v3.8.0
  * http://miromannino.github.io/Justified-Gallery/
  *
  * Copyright (c) 2019 Miro Mannino

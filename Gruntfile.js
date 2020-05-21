@@ -141,7 +141,7 @@ module.exports = function(grunt) {
         devDependencies: true,
         includeSelf: true,
         src: ['test/main/*.html', 'test/related/*.html'],
-        exclude: [ 'bower_components/requirejs' ],
+        exclude: [ 'node_modules/requirejs' ],
         overrides: {
           "swipebox": {
             "main": ["src/js/jquery.swipebox.min.js", "src/css/swipebox.min.css"]
@@ -158,8 +158,7 @@ module.exports = function(grunt) {
       main: {
         options: {
             ignore: [
-              'node_modules', 
-              'bower_components'
+              'node_modules'
             ]
         },
         src: ['./']

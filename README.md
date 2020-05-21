@@ -19,7 +19,10 @@ Justified Gallery is a professional and open source library that even 500px, one
 
 ## Release History
 
-### 4.0.0-alpha
+<details>
+	<summary>3.x</summary>
+
+### 3.8
 
 * Added support for SVG images
 * .entry-visible renamed to .jg-entry-visible to avoid too generic css classes
@@ -30,6 +33,7 @@ Justified Gallery is a professional and open source library that even 500px, one
 * Compatible with AMD and CommonJS formats using Universal Module Definition pattern (examples provided for Webpack, Browserify, and AMD/RequireJS)
 * $.prop() changed to $.attr() because it was creating problems with Foundation
 * The library could now be used without necessarily defining it as jQuery plugin. But it still requires jQuery to provide a better browser compatibility.
+
 
 ### 3.6.5
 
@@ -107,9 +111,6 @@ Justified Gallery is a professional and open source library that even 500px, one
 	```
 * Configurable entry selector
 * Code refactoring
-
-<details>
-	<summary>Older versions</summary>
 	
 ### 3.5.4
 
@@ -241,6 +242,11 @@ too like a bug than a feature.
 * Improved the gallery size check to be less invasive
 * Fixed lightbox removal when the page is resized
 
+</details>
+
+<details>
+	<summary>Older versions</summary>
+
 ### 2.1
 
 * Setting removed: 'usedSizeRange', now the plugin do it automatically
@@ -270,17 +276,14 @@ Regarding code style like indentation and whitespace, **follow the conventions y
 ### Modifying the code
 
  - Prerequisites:
-	- Ensure that you have the latest [Node.js](http://nodejs.org/) and [npm](http://npmjs.org/) installed.
-	- Test that Grunt's CLI is installed by running `grunt --version`.  If the command isn't found, run `npm install -g grunt-cli`.  For more information about installing Grunt, see the [getting started guide](http://gruntjs.com/getting-started).
-	- Ensure that you have Bower installed. If not, install it using `npm install -g bower`.
+	- Node.js
+	- Install Grunt with `npm install -g grunt-cli`. 
+	- Install Yarn with `npm install -g yarn`
 
- - Steps:
-	- Fork and clone this repository.
-	- Open a terminal and change the current directory to the cloned folder.
-	- Run `npm install` to install all dependencies (including bower and Grunt).
-	- Run `bower install` to install all the dependencies needed for the tests.
-	- Run `grunt debug` to build the library only for testing (debug mode).
-	- Run `grunt` to build this project in release mode.
+ - Build:
+	- `yarn install` to install all dependencies.
+	- `grunt debug` to build the library only for testing (debug mode).
+	- `grunt` to build this project in release mode.
 
 ### Submitting pull requests
 
