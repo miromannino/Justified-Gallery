@@ -1,5 +1,5 @@
 /*!
- * justifiedGallery - v3.8.0
+ * justifiedGallery - v3.8.1
  * http://miromannino.github.io/Justified-Gallery/
  * Copyright (c) 2020 Miro Mannino
  * Licensed under the MIT license.
@@ -210,8 +210,8 @@
     if ($image !== null) {
       $image.css('width', imgWidth);
       $image.css('height', imgHeight);
-      $image.css('margin-left', - Math.round(imgWidth / 2));
-      $image.css('margin-top', - Math.round(imgHeight / 2));
+      $image.css('margin-left', - imgWidth / 2);
+      $image.css('margin-top', - imgHeight / 2);
   
       // Image reloading for an high quality of thumbnails
       var imageSrc = $image.data('jg.src');
