@@ -1,7 +1,7 @@
 /*!
- * justifiedGallery - v4.0.0-alpha
+ * justifiedGallery - v3.8.0
  * http://miromannino.github.io/Justified-Gallery/
- * Copyright (c) 2019 Miro Mannino
+ * Copyright (c) 2020 Miro Mannino
  * Licensed under the MIT license.
  */
 .justified-gallery {
@@ -42,9 +42,9 @@
   filter: "alpha(opacity=0)";
   opacity: 0;
 }
-.justified-gallery > a > .caption,
-.justified-gallery > div > .caption,
-.justified-gallery > figure > .caption {
+.justified-gallery > a > .jg-caption,
+.justified-gallery > div > .jg-caption,
+.justified-gallery > figure > .jg-caption {
   display: none;
   position: absolute;
   bottom: 0;
@@ -58,9 +58,9 @@
   font-weight: 300;
   font-family: sans-serif;
 }
-.justified-gallery > a > .caption.caption-visible,
-.justified-gallery > div > .caption.caption-visible,
-.justified-gallery > figure > .caption.caption-visible {
+.justified-gallery > a > .jg-caption.jg-caption-visible,
+.justified-gallery > div > .jg-caption.jg-caption-visible,
+.justified-gallery > figure > .jg-caption.jg-caption-visible {
   display: initial;
   filter: "alpha(opacity=70)";
   opacity: 0.7;
@@ -88,7 +88,7 @@
 .justified-gallery > .jg-filtered {
   display: none;
 }
-.justified-gallery > .spinner {
+.justified-gallery > .jg-spinner {
   position: absolute;
   bottom: 0;
   margin-left: -24px;
@@ -98,7 +98,7 @@
   opacity: 1;
   overflow: initial;
 }
-.justified-gallery > .spinner > span {
+.justified-gallery > .jg-spinner > span {
   display: inline-block;
   filter: "alpha(opacity=0)";
   opacity: 0;

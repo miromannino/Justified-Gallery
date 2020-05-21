@@ -1,7 +1,7 @@
 /*!
- * justifiedGallery - v4.0.0-alpha
+ * justifiedGallery - v3.8.0
  * http://miromannino.github.io/Justified-Gallery/
- * Copyright (c) 2019 Miro Mannino
+ * Copyright (c) 2020 Miro Mannino
  * Licensed under the MIT license.
  */
 (function (factory) {
@@ -10,13 +10,13 @@
     define(['jquery'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // Node/CommonJS
-    module.exports = function( root, jQuery ) {
-      if ( jQuery === undefined ) {
+    module.exports = function (root, jQuery) {
+      if (jQuery === undefined) {
         // require('jQuery') returns a factory that requires window to
         // build a jQuery instance, we normalize how we use modules
         // that require this pattern but the window provided is a noop
         // if it's defined (how jquery works)
-        if ( typeof window !== 'undefined' ) {
+        if (typeof window !== 'undefined') {
           jQuery = require('jquery');
         }
         else {
@@ -47,16 +47,16 @@
     this.imgAnalyzerTimeout = null;
     this.entries = null;
     this.buildingRow = {
-      entriesBuff : [],
-      width : 0,
-      height : 0,
-      aspectRatio : 0
+      entriesBuff: [],
+      width: 0,
+      height: 0,
+      aspectRatio: 0
     };
     this.lastFetchedEntry = null;
     this.lastAnalyzedIndex = -1;
     this.yield = {
-      every : 2, // do a flush every n flushes (must be greater than 1)
-      flushed : 0 // flushed rows without a yield
+      every: 2, // do a flush every n flushes (must be greater than 1)
+      flushed: 0 // flushed rows without a yield
     };
     this.border = settings.border >= 0 ? settings.border : settings.margins;
     this.maxRowHeight = this.retrieveMaxRowHeight();
@@ -64,10 +64,10 @@
     this.offY = this.border;
     this.rows = 0;
     this.spinner = {
-      phase : 0,
-      timeSlot : 150,
-      $el : $('<div class="spinner"><span></span><span></span><span></span></div>'),
-      intervalId : null
+      phase: 0,
+      timeSlot: 150,
+      $el: $('<div class="jg-spinner"><span></span><span></span><span></span></div>'),
+      intervalId: null
     };
     this.scrollBarOn = false;
     this.checkWidthIntervalId = null;
@@ -167,7 +167,7 @@
    */
   JustifiedGallery.prototype.extractImgSrcFromImage = function ($image) {
     var imageSrc = $image.data('safe-src');
-    var imageSrcLoc = 'date-safe-src';
+    var imageSrcLoc = 'data-safe-src';
     if (typeof imageSrc === 'undefined') {
       imageSrc = $image.attr('src');
       imageSrcLoc = 'src';
@@ -186,7 +186,7 @@
   
   /** @returns {jQuery} the caption in the given entry */
   JustifiedGallery.prototype.captionFromEntry = function ($entry) {
-    var $caption = $entry.find('> .caption');
+    var $caption = $entry.find('> .jg-caption');
     return $caption.length === 0 ? null : $caption;
   };
   
@@ -210,8 +210,8 @@
     if ($image !== null) {
       $image.css('width', imgWidth);
       $image.css('height', imgHeight);
-      $image.css('margin-left', - imgWidth / 2);
-      $image.css('margin-top', - imgHeight / 2);
+      $image.css('margin-left', - Math.round(imgWidth / 2));
+      $image.css('margin-top', - Math.round(imgHeight / 2));
   
       // Image reloading for an high quality of thumbnails
       var imageSrc = $image.data('jg.src');
@@ -228,7 +228,7 @@
           // }
         };
   
-        if ($entry.data('jg.loaded') === 'skipped') {
+        if ($entry.data('jg.loaded') === 'skipped' && imageSrc) {
           this.onImageEvent(imageSrc, (function() {
             this.showImg($entry, loadNewImage); //load the new image after the fadeIn
             $entry.data('jg.loaded', true);
@@ -262,7 +262,7 @@
         var caption = $image.attr('alt');
         if (!this.isValidCaption(caption)) caption = $entry.attr('title');
         if (this.isValidCaption(caption)) { // Create only we found something
-          $imgCaption = $('<div class="caption">' + caption + '</div>');
+          $imgCaption = $('<div class="jg-caption">' + caption + '</div>');
           $entry.append($imgCaption);
           $entry.data('jg.createdCaption', true);
         }
@@ -297,10 +297,10 @@
   JustifiedGallery.prototype.onEntryMouseEnterForCaption = function (eventObject) {
     var $caption = this.captionFromEntry($(eventObject.currentTarget));
     if (this.settings.cssAnimation) {
-      $caption.addClass('caption-visible').removeClass('caption-hidden');
+      $caption.addClass('jg-caption-visible').removeClass('jg-caption-hidden');
     } else {
       $caption.stop().fadeTo(this.settings.captionSettings.animationDuration,
-          this.settings.captionSettings.visibleOpacity);
+        this.settings.captionSettings.visibleOpacity);
     }
   };
   
@@ -313,10 +313,10 @@
   JustifiedGallery.prototype.onEntryMouseLeaveForCaption = function (eventObject) {
     var $caption = this.captionFromEntry($(eventObject.currentTarget));
     if (this.settings.cssAnimation) {
-      $caption.removeClass('caption-visible').removeClass('caption-hidden');
+      $caption.removeClass('jg-caption-visible').removeClass('jg-caption-hidden');
     } else {
       $caption.stop().fadeTo(this.settings.captionSettings.animationDuration,
-          this.settings.captionSettings.nonVisibleOpacity);
+        this.settings.captionSettings.nonVisibleOpacity);
     }
   };
   
@@ -365,19 +365,20 @@
    * Justify the building row, preparing it to
    *
    * @param isLastRow
+   * @param hiddenRow undefined or false for normal behavior. hiddenRow = true to hide the row.
    * @returns a boolean to know if the row has been justified or not
    */
-  JustifiedGallery.prototype.prepareBuildingRow = function (isLastRow) {
+  JustifiedGallery.prototype.prepareBuildingRow = function (isLastRow, hiddenRow) {
     var i, $entry, imgAspectRatio, newImgW, newImgH, justify = true;
     var minHeight = 0;
     var availableWidth = this.galleryWidth - 2 * this.border - (
-        (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
+      (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
     var rowHeight = availableWidth / this.buildingRow.aspectRatio;
     var defaultRowHeight = this.settings.rowHeight;
     var justifiable = this.buildingRow.width / availableWidth > this.settings.justifyThreshold;
   
     //Skip the last row if we can't justify it and the lastRow == 'hide'
-    if (isLastRow && this.settings.lastRow === 'hide' && !justifiable) {
+    if (hiddenRow || (isLastRow && this.settings.lastRow === 'hide' && !justifiable)) {
       for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
         $entry = this.buildingRow.entriesBuff[i];
         if (this.settings.cssAnimation)
@@ -426,19 +427,20 @@
    * Flush a row: justify it, modify the gallery height accordingly to the row height
    *
    * @param isLastRow
+   * @param hiddenRow undefined or false for normal behavior. hiddenRow = true to hide the row.
    */
-  JustifiedGallery.prototype.flushRow = function (isLastRow) {
+  JustifiedGallery.prototype.flushRow = function (isLastRow, hiddenRow) {
     var settings = this.settings;
     var $entry, buildingRowRes, offX = this.border, i;
   
-    buildingRowRes = this.prepareBuildingRow(isLastRow);
-    if (isLastRow && settings.lastRow === 'hide' && buildingRowRes === -1) {
+    buildingRowRes = this.prepareBuildingRow(isLastRow, hiddenRow);
+    if (hiddenRow || (isLastRow && settings.lastRow === 'hide' && buildingRowRes === -1)) {
       this.clearBuildingRow();
       return;
     }
   
-    if(this.maxRowHeight) {
-      if(this.maxRowHeight < this.buildingRow.height)  this.buildingRow.height = this.maxRowHeight;
+    if (this.maxRowHeight) {
+      if (this.maxRowHeight < this.buildingRow.height) this.buildingRow.height = this.maxRowHeight;
     }
   
     //Align last (unjustified) row
@@ -451,14 +453,14 @@
       }
   
       if (settings.lastRow === 'center')
-        offX += availableWidth / 2;
+        offX += Math.round(availableWidth / 2);
       else if (settings.lastRow === 'right')
         offX += availableWidth;
     }
   
     var lastEntryIdx = this.buildingRow.entriesBuff.length - 1;
     for (i = 0; i <= lastEntryIdx; i++) {
-      $entry = this.buildingRow.entriesBuff[ this.settings.rtl ? lastEntryIdx - i : i ];
+      $entry = this.buildingRow.entriesBuff[this.settings.rtl ? lastEntryIdx - i : i];
       this.displayEntry($entry, offX, this.offY, $entry.data('jg.jwidth'), $entry.data('jg.jheight'), this.buildingRow.height);
       offX += $entry.data('jg.jwidth') + settings.margins;
     }
@@ -573,10 +575,18 @@
   };
   
   /**
+   * @returns {String} `settings.selector` rejecting spinner element
+   */
+  JustifiedGallery.prototype.getSelectorWithoutSpinner = function () {
+    return this.settings.selector + ', div:not(.jg-spinner)';
+  };
+  
+  /**
    * @returns {Array} all entries matched by `settings.selector`
    */
   JustifiedGallery.prototype.getAllEntries = function () {
-    return this.$gallery.children(this.settings.selector).toArray();
+    var selector = this.getSelectorWithoutSpinner();
+    return this.$gallery.children(selector).toArray();
   };
   
   /**
@@ -589,7 +599,8 @@
     var newEntries;
   
     if (norewind && this.lastFetchedEntry != null) {
-      newEntries = $(this.lastFetchedEntry).nextAll(this.settings.selector).toArray();
+      var selector = this.getSelectorWithoutSpinner();
+      newEntries = $(this.lastFetchedEntry).nextAll(selector).toArray();
     } else {
       this.entries = [];
       newEntries = this.getAllEntries();
@@ -707,12 +718,12 @@
    * Revert the image src to the default value.
    */
   JustifiedGallery.prototype.resetImgSrc = function ($img) {
-    if ($img.data('jg.originalSrcLoc') == 'src') {
+    if ($img.data('jg.originalSrcLoc') === 'src') {
       $img.attr('src', $img.data('jg.originalSrc'));
     } else {
       $img.attr('src', '');
     }
-  }
+  };
   
   /**
    * Destroy the Justified Gallery instance.
@@ -728,7 +739,7 @@
     this.stopImgAnalyzerStarter();
   
     // Get fresh entries list since filtered entries are absent in `this.entries`
-    $.each(this.getAllEntries(), $.proxy(function(_, entry) {
+    $.each(this.getAllEntries(), $.proxy(function (_, entry) {
       var $entry = $(entry);
   
       // Reset entry style
@@ -781,7 +792,7 @@
       var $entry = $(this.entries[i]);
       if ($entry.data('jg.loaded') === true || $entry.data('jg.loaded') === 'skipped') {
         var availableWidth = this.galleryWidth - 2 * this.border - (
-            (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
+          (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
         var imgAspectRatio = $entry.data('jg.width') / $entry.data('jg.height');
   
         this.buildingRow.entriesBuff.push($entry);
@@ -790,9 +801,9 @@
         this.lastAnalyzedIndex = i;
   
         if (availableWidth / (this.buildingRow.aspectRatio + imgAspectRatio) < this.settings.rowHeight) {
-          this.flushRow(false);
+          this.flushRow(false, this.rows === this.settings.maxRowsCount);
   
-          if(++this.yield.flushed >= this.yield.every) {
+          if (++this.yield.flushed >= this.yield.every) {
             this.startImgAnalyzer(isForResize);
             return;
           }
@@ -803,7 +814,7 @@
     }
   
     // Last row flush (the row is not full)
-    if (this.buildingRow.entriesBuff.length > 0) this.flushRow(true);
+    if (this.buildingRow.entriesBuff.length > 0) this.flushRow(true, this.rows === this.settings.maxRowsCount);
   
     if (this.isSpinnerActive()) {
       this.stopLoadingSpinnerAnimation();
@@ -815,9 +826,10 @@
      */
     this.stopImgAnalyzerStarter();
   
+    this.setGalleryFinalHeight(this.galleryHeightToSet);
+    
     //On complete callback
     this.settings.triggerEvent.call(this, isForResize ? 'jg.resize' : 'jg.complete');
-    this.setGalleryFinalHeight(this.galleryHeightToSet);
   };
   
   /**
@@ -864,7 +876,7 @@
       });
     }
     if (onError) {
-      $memImage.one('error', function() {
+      $memImage.one('error', function () {
         $memImage.off('load error');
         onError(memImage);
       });
@@ -978,7 +990,7 @@
       if (this.settings.sizeRangeSuffixes.hasOwnProperty(rangeIdx)) suffixRanges.push(rangeIdx);
     }
   
-    var newSizeRngSuffixes = {0: ''};
+    var newSizeRngSuffixes = { 0: '' };
     for (var i = 0; i < suffixRanges.length; i++) {
       if ($.type(suffixRanges[i]) === 'string') {
         try {
@@ -1037,6 +1049,7 @@
     this.checkOrConvertNumber(this.settings, 'rowHeight');
     this.checkOrConvertNumber(this.settings, 'margins');
     this.checkOrConvertNumber(this.settings, 'border');
+    this.checkOrConvertNumber(this.settings, 'maxRowsCount');
   
     var lastRowModes = [
       'justify',
@@ -1063,13 +1076,13 @@
   
     this.checkOrConvertNumber(this.settings.captionSettings, 'visibleOpacity');
     if (this.settings.captionSettings.visibleOpacity < 0 ||
-        this.settings.captionSettings.visibleOpacity > 1) {
+      this.settings.captionSettings.visibleOpacity > 1) {
       throw 'captionSettings.visibleOpacity must be in the interval [0, 1]';
     }
   
     this.checkOrConvertNumber(this.settings.captionSettings, 'nonVisibleOpacity');
     if (this.settings.captionSettings.nonVisibleOpacity < 0 ||
-        this.settings.captionSettings.nonVisibleOpacity > 1) {
+      this.settings.captionSettings.nonVisibleOpacity > 1) {
       throw 'captionSettings.nonVisibleOpacity must be in the interval [0, 1]';
     }
   
@@ -1084,7 +1097,7 @@
     }
   
     if (this.settings.filter !== false && !$.isFunction(this.settings.filter) &&
-        $.type(this.settings.filter) !== 'string') {
+      $.type(this.settings.filter) !== 'string') {
       throw 'filter must be false, a string or a filter function';
     }
   };
@@ -1120,7 +1133,7 @@
   };
   
   JustifiedGallery.prototype.defaults = {
-    sizeRangeSuffixes: { }, /* e.g. Flickr configuration
+    sizeRangeSuffixes: {}, /* e.g. Flickr configuration
         {
           100: '_t',  // used when longest is less than 100px
           240: '_m',  // used when longest is between 101px and 240px
@@ -1135,8 +1148,9 @@
     current path, width and height */
     rowHeight: 120, // required? required to be > 0?
     maxRowHeight: false, // false or negative value to deactivate. Positive number to express the value in pixels,
-                         // A string '[0-9]+%' to express in percentage (e.g. 300% means that the row height
-                         // can't exceed 3 * rowHeight)
+    // A string '[0-9]+%' to express in percentage (e.g. 300% means that the row height
+    // can't exceed 3 * rowHeight)
+    maxRowsCount: 0, // maximum number of rows to be displayed (0 = disabled)
     margins: 1,
     border: -1, // negative value = same as margins, 0 = disabled, any other value to set the border
   
@@ -1171,7 +1185,7 @@
       - a function: invoked with arguments (entry, index, array). Return true to keep the entry, false otherwise.
                     It follows the specifications of the Array.prototype.filter() function of JavaScript.
     */
-    selector: 'a, div:not(.spinner)', // The selector that is used to know what are the entries of the gallery
+    selector: 'a', // The selector that is used to know what are the entries of the gallery
     imgSelector: '> img, > a > img, > svg, > a > svg', // The selector that is used to know what are the images of each entry
     triggerEvent: function (event) { // This is called to trigger events, the default behavior is to call $.trigger
       this.$gallery.trigger(event);  // Consider that 'this' is this set to the JustifiedGallery object, so it can
