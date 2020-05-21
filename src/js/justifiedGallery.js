@@ -1,5 +1,5 @@
 /**
- * Justified Gallery - v4.0.0-alpha
+ * Justified Gallery - v3.8.0
  * http://miromannino.github.io/Justified-Gallery/
  *
  * Copyright (c) 2019 Miro Mannino
@@ -798,9 +798,10 @@ JustifiedGallery.prototype.analyzeImages = function (isForResize) {
    */
   this.stopImgAnalyzerStarter();
 
+  this.setGalleryFinalHeight(this.galleryHeightToSet);
+  
   //On complete callback
   this.settings.triggerEvent.call(this, isForResize ? 'jg.resize' : 'jg.complete');
-  this.setGalleryFinalHeight(this.galleryHeightToSet);
 };
 
 /**
