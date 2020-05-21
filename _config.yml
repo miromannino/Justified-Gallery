@@ -15,6 +15,9 @@ completeCurrJGVer: 3.8.0
 # Build settings
 markdown: kramdown
 
+include:
+  - libs
+
 highlighter: rouge
 
 photosPath: /Justified-Gallery/photos
