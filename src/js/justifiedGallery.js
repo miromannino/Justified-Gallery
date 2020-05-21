@@ -184,8 +184,8 @@ JustifiedGallery.prototype.displayEntry = function ($entry, x, y, imgWidth, imgH
   if ($image !== null) {
     $image.css('width', imgWidth);
     $image.css('height', imgHeight);
-    $image.css('margin-left', - imgWidth / 2);
-    $image.css('margin-top', - imgHeight / 2);
+    $image.css('margin-left', - Math.round(imgWidth / 2));
+    $image.css('margin-top', - Math.round(imgHeight / 2));
 
     // Image reloading for an high quality of thumbnails
     var imageSrc = $image.data('jg.src');
@@ -425,7 +425,7 @@ JustifiedGallery.prototype.flushRow = function (isLastRow) {
     }
 
     if (settings.lastRow === 'center')
-      offX += availableWidth / 2;
+      offX += Math.round(availableWidth / 2);
     else if (settings.lastRow === 'right')
       offX += availableWidth;
   }
