@@ -801,7 +801,7 @@
         this.lastAnalyzedIndex = i;
   
         if (availableWidth / (this.buildingRow.aspectRatio + imgAspectRatio) < this.settings.rowHeight) {
-          this.flushRow(false, this.rows === this.settings.maxRowsCount);
+          this.flushRow(false, this.settings.maxRowsCount > 0 && this.rows === this.settings.maxRowsCount);
   
           if (++this.yield.flushed >= this.yield.every) {
             this.startImgAnalyzer(isForResize);
@@ -814,7 +814,9 @@
     }
   
     // Last row flush (the row is not full)
-    if (this.buildingRow.entriesBuff.length > 0) this.flushRow(true, this.rows === this.settings.maxRowsCount);
+    if (this.buildingRow.entriesBuff.length > 0) {
+      this.flushRow(true, this.settings.maxRowsCount > 0 && this.rows === this.settings.maxRowsCount);
+    }
   
     if (this.isSpinnerActive()) {
       this.stopLoadingSpinnerAnimation();
