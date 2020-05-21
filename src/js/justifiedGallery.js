@@ -141,7 +141,7 @@ JustifiedGallery.prototype.showImg = function ($entry, callback) {
  */
 JustifiedGallery.prototype.extractImgSrcFromImage = function ($image) {
   var imageSrc = $image.data('safe-src');
-  var imageSrcLoc = 'date-safe-src';
+  var imageSrcLoc = 'data-safe-src';
   if (typeof imageSrc === 'undefined') {
     imageSrc = $image.attr('src');
     imageSrcLoc = 'src';
@@ -160,7 +160,7 @@ JustifiedGallery.prototype.imgFromEntry = function ($entry) {
 
 /** @returns {jQuery} the caption in the given entry */
 JustifiedGallery.prototype.captionFromEntry = function ($entry) {
-  var $caption = $entry.find('> .caption');
+  var $caption = $entry.find('> .jg-caption');
   return $caption.length === 0 ? null : $caption;
 };
 
@@ -236,7 +236,7 @@ JustifiedGallery.prototype.displayEntryCaption = function ($entry) {
       var caption = $image.attr('alt');
       if (!this.isValidCaption(caption)) caption = $entry.attr('title');
       if (this.isValidCaption(caption)) { // Create only we found something
-        $imgCaption = $('<div class="caption">' + caption + '</div>');
+        $imgCaption = $('<div class="jg-caption">' + caption + '</div>');
         $entry.append($imgCaption);
         $entry.data('jg.createdCaption', true);
       }
@@ -271,7 +271,7 @@ JustifiedGallery.prototype.isValidCaption = function (caption) {
 JustifiedGallery.prototype.onEntryMouseEnterForCaption = function (eventObject) {
   var $caption = this.captionFromEntry($(eventObject.currentTarget));
   if (this.settings.cssAnimation) {
-    $caption.addClass('caption-visible').removeClass('caption-hidden');
+    $caption.addClass('jg-caption-visible').removeClass('jg-caption-hidden');
   } else {
     $caption.stop().fadeTo(this.settings.captionSettings.animationDuration,
       this.settings.captionSettings.visibleOpacity);
@@ -287,7 +287,7 @@ JustifiedGallery.prototype.onEntryMouseEnterForCaption = function (eventObject) 
 JustifiedGallery.prototype.onEntryMouseLeaveForCaption = function (eventObject) {
   var $caption = this.captionFromEntry($(eventObject.currentTarget));
   if (this.settings.cssAnimation) {
-    $caption.removeClass('caption-visible').removeClass('caption-hidden');
+    $caption.removeClass('jg-caption-visible').removeClass('jg-caption-hidden');
   } else {
     $caption.stop().fadeTo(this.settings.captionSettings.animationDuration,
       this.settings.captionSettings.nonVisibleOpacity);
