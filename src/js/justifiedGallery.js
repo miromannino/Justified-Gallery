@@ -339,9 +339,10 @@ JustifiedGallery.prototype.clearBuildingRow = function () {
  * Justify the building row, preparing it to
  *
  * @param isLastRow
+ * @param hiddenRow undefined or false for normal behavior. hiddenRow = true to hide the row.
  * @returns a boolean to know if the row has been justified or not
  */
-JustifiedGallery.prototype.prepareBuildingRow = function (isLastRow) {
+JustifiedGallery.prototype.prepareBuildingRow = function (isLastRow, hiddenRow) {
   var i, $entry, imgAspectRatio, newImgW, newImgH, justify = true;
   var minHeight = 0;
   var availableWidth = this.galleryWidth - 2 * this.border - (
@@ -351,7 +352,7 @@ JustifiedGallery.prototype.prepareBuildingRow = function (isLastRow) {
   var justifiable = this.buildingRow.width / availableWidth > this.settings.justifyThreshold;
 
   //Skip the last row if we can't justify it and the lastRow == 'hide'
-  if (isLastRow && this.settings.lastRow === 'hide' && !justifiable) {
+  if (hiddenRow || (isLastRow && this.settings.lastRow === 'hide' && !justifiable)) {
     for (i = 0; i < this.buildingRow.entriesBuff.length; i++) {
       $entry = this.buildingRow.entriesBuff[i];
       if (this.settings.cssAnimation)
@@ -400,13 +401,14 @@ JustifiedGallery.prototype.prepareBuildingRow = function (isLastRow) {
  * Flush a row: justify it, modify the gallery height accordingly to the row height
  *
  * @param isLastRow
+ * @param hiddenRow undefined or false for normal behavior. hiddenRow = true to hide the row.
  */
-JustifiedGallery.prototype.flushRow = function (isLastRow) {
+JustifiedGallery.prototype.flushRow = function (isLastRow, hiddenRow) {
   var settings = this.settings;
   var $entry, buildingRowRes, offX = this.border, i;
 
-  buildingRowRes = this.prepareBuildingRow(isLastRow);
-  if (isLastRow && settings.lastRow === 'hide' && buildingRowRes === -1) {
+  buildingRowRes = this.prepareBuildingRow(isLastRow, hiddenRow);
+  if (hiddenRow || (isLastRow && settings.lastRow === 'hide' && buildingRowRes === -1)) {
     this.clearBuildingRow();
     return;
   }
@@ -690,12 +692,12 @@ JustifiedGallery.prototype.filterArray = function (a) {
  * Revert the image src to the default value.
  */
 JustifiedGallery.prototype.resetImgSrc = function ($img) {
-  if ($img.data('jg.originalSrcLoc') == 'src') {
+  if ($img.data('jg.originalSrcLoc') === 'src') {
     $img.attr('src', $img.data('jg.originalSrc'));
   } else {
     $img.attr('src', '');
   }
-}
+};
 
 /**
  * Destroy the Justified Gallery instance.
@@ -773,7 +775,7 @@ JustifiedGallery.prototype.analyzeImages = function (isForResize) {
       this.lastAnalyzedIndex = i;
 
       if (availableWidth / (this.buildingRow.aspectRatio + imgAspectRatio) < this.settings.rowHeight) {
-        this.flushRow(false);
+        this.flushRow(false, this.rows === this.settings.maxRowsCount);
 
         if (++this.yield.flushed >= this.yield.every) {
           this.startImgAnalyzer(isForResize);
@@ -786,7 +788,7 @@ JustifiedGallery.prototype.analyzeImages = function (isForResize) {
   }
 
   // Last row flush (the row is not full)
-  if (this.buildingRow.entriesBuff.length > 0) this.flushRow(true);
+  if (this.buildingRow.entriesBuff.length > 0) this.flushRow(true, this.rows === this.settings.maxRowsCount);
 
   if (this.isSpinnerActive()) {
     this.stopLoadingSpinnerAnimation();
@@ -1021,6 +1023,7 @@ JustifiedGallery.prototype.checkSettings = function () {
   this.checkOrConvertNumber(this.settings, 'rowHeight');
   this.checkOrConvertNumber(this.settings, 'margins');
   this.checkOrConvertNumber(this.settings, 'border');
+  this.checkOrConvertNumber(this.settings, 'maxRowsCount');
 
   var lastRowModes = [
     'justify',
@@ -1121,6 +1124,7 @@ JustifiedGallery.prototype.defaults = {
   maxRowHeight: false, // false or negative value to deactivate. Positive number to express the value in pixels,
   // A string '[0-9]+%' to express in percentage (e.g. 300% means that the row height
   // can't exceed 3 * rowHeight)
+  maxRowsCount: 0, // maximum number of rows to be displayed (0 = disabled)
   margins: 1,
   border: -1, // negative value = same as margins, 0 = disabled, any other value to set the border
 
