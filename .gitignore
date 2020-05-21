@@ -3,3 +3,4 @@ node_modules
 _site
 .jekyll-cache/
 .bower.json
+vendor

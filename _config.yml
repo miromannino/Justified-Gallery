@@ -15,6 +15,7 @@ completeCurrJGVer: 3.8.0
 # Build settings
 markdown: kramdown
 
+exlude: []
 include:
   - libs
 
