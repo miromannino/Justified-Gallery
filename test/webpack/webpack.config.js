@@ -6,7 +6,7 @@ module.exports = {
   resolve: {
     alias: {
       justifiedGallery: '../../dist/js/jquery.justifiedGallery.js',
-      jquery: '../../bower_components/jquery/dist/jquery'
+      jquery: '../../node_modules/jquery/dist/jquery'
     }
   }
 };

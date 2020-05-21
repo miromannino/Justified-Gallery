@@ -2,16 +2,14 @@
 <html>
 
 <head>
-    <!-- bower:css -->
     <link rel="stylesheet" href="../../node_modules/jquery-colorbox/example1/colorbox.css" />
     <link rel="stylesheet" href="../../node_modules/swipebox/src/css/swipebox.min.css" />
     <link rel="stylesheet" href="../../dist/css/justifiedGallery.css" />
-    <!-- endbower -->
 </head>
 
 <body>
-    <h1>CSS Animations test</h1>
-    <div id="cssAnimations" style="background-color: red;">
+    <h1>Layout test</h1>
+    <div id="simpletest" style="background-color: red;">
         <a href="../photos/8083451788_552becfbc7_b.jpg" title="What's your destination?">
             <img src="../photos/8083451788_552becfbc7_m.jpg" />
         </a>
@@ -62,15 +60,13 @@
         </a>
     </div>
     
-    <!-- bower:js -->
     <script src="../../node_modules/jquery/dist/jquery.js"></script>
     <script src="../../node_modules/jquery-colorbox/jquery.colorbox.js"></script>
     <script src="../../node_modules/swipebox/src/js/jquery.swipebox.min.js"></script>
     <script src="../../dist/js/jquery.justifiedGallery.js"></script>
-    <!-- endbower -->
     <script>
-    $("#cssAnimations").justifiedGallery({
-        cssAnimation: true
+    $("#simpletest").justifiedGallery({
+        rowHeight: '100%'
     });
     </script>
 </body>
