@@ -174,7 +174,7 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['jshint', 'less', 'csslint', 'concat', 'replace', 'uglify', 'compress']);
 
   // Debug mode (when the library is needed to be compiled only for the tests)
-  grunt.registerTask('debug', ['less', 'concat']);
+  grunt.registerTask('debug', ['less', 'concat', 'replace']);
 
 
 };
