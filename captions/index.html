@@ -47,7 +47,7 @@ title: Captions
 		{% highlight html %}
 <a href="imageurl.jpg">
     <img src="thumbnailurl.jpg" />
-    <div class="caption">
+    <div class="jg-caption">
         I'm <span style="color:red">a</span> <strong>custom</strong> caption!
         <div>I'm a div</div>
     </div>
@@ -56,7 +56,7 @@ title: Captions
 	<div id="captionsExample" >
 		<a href="{{ site.images[0].url | prepend: site.baseurl }}_b.jpg">
 			<img src="{{ site.images[0].url | prepend: site.baseurl }}_m.jpg" />
-			<div class="caption">
+			<div class="jg-caption">
 				I'm <span style="color: red">a</span> <strong>custom</strong> caption!<div>I'm a div</div>
 			</div>
 		</a>

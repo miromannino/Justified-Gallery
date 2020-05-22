@@ -187,7 +187,7 @@ title: Options &amp; Events
             });
 
             $('#jgs-form #jgs-captions').on('change', function (e) {
-                if (!$(this).prop('checked')) $('#liveDemo .caption').remove();
+                if (!$(this).prop('checked')) $('#liveDemo .jg-caption').remove();
                 $('#liveDemo').justifiedGallery({captions: $(this).prop('checked')});
             });
 
