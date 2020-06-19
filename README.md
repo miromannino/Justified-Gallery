@@ -21,7 +21,7 @@ Justified Gallery is a professional and open source library that even 500px, one
 
 ### 3.8.1
 
-* Added maxRowCount parameter
+* Added maxRowsCount parameter
 * Added support for SVG images
 * .entry-visible renamed to .jg-entry-visible to avoid too generic css classes
 * .caption renamed to jg-caption
