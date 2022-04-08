@@ -101,16 +101,20 @@ JustifiedGallery.prototype.getUsedSuffix = function (str) {
  * @returns {String} the suffix to use
  */
 JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight, image) {
-  var newImageSrc;
+  var newImageSrc = null;
 
   if (this.settings.thumbnailPath) {
     newImageSrc = this.settings.thumbnailPath(imageSrc, imgWidth, imgHeight, image);
-  } else {
+  }
+  
+  if (newImageSrc == null) {
+  
     var matchRes = imageSrc.match(this.settings.extension);
     var ext = (matchRes !== null) ? matchRes[0] : '';
     newImageSrc = imageSrc.replace(this.settings.extension, '');
     newImageSrc = this.removeSuffix(newImageSrc, this.getUsedSuffix(newImageSrc));
     newImageSrc += this.getSuffix(imgWidth, imgHeight) + ext;
+
   }
 
   return newImageSrc;
