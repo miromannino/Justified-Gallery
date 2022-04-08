@@ -192,8 +192,9 @@ JustifiedGallery.prototype.displayEntry = function ($entry, x, y, imgWidth, imgH
     if (imageSrc) {
       imageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, $image[0]);
 
+      var self = this;
       $image.one('error', function () {
-         this.resetImgSrc($image); //revert to the original thumbnail
+        self.resetImgSrc($image); //revert to the original thumbnail
       });
 
       var loadNewImage = function () {
