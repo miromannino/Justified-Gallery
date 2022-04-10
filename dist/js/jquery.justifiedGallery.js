@@ -1,7 +1,7 @@
 /*!
- * justifiedGallery - v3.8.1
+ * justifiedGallery - v3.9.0-645d8e1
  * http://miromannino.github.io/Justified-Gallery/
- * Copyright (c) 2020 Miro Mannino
+ * Copyright (c) 2022 Miro Mannino
  * Licensed under the MIT license.
  */
 (function (factory) {
@@ -127,16 +127,20 @@
    * @returns {String} the suffix to use
    */
   JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight, image) {
-    var newImageSrc;
-  
+    var newImageSrc = null;
+
     if (this.settings.thumbnailPath) {
       newImageSrc = this.settings.thumbnailPath(imageSrc, imgWidth, imgHeight, image);
-    } else {
+    }
+    
+    if (newImageSrc == null) {
+    
       var matchRes = imageSrc.match(this.settings.extension);
       var ext = (matchRes !== null) ? matchRes[0] : '';
       newImageSrc = imageSrc.replace(this.settings.extension, '');
       newImageSrc = this.removeSuffix(newImageSrc, this.getUsedSuffix(newImageSrc));
       newImageSrc += this.getSuffix(imgWidth, imgHeight) + ext;
+
     }
   
     return newImageSrc;
@@ -217,11 +221,12 @@
       var imageSrc = $image.data('jg.src');
       if (imageSrc) {
         imageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, $image[0]);
-  
+
+        var self = this;
         $image.one('error', function () {
-           this.resetImgSrc($image); //revert to the original thumbnail
+          self.resetImgSrc($image); //revert to the original thumbnail
         });
-  
+
         var loadNewImage = function () {
           // if (imageSrc !== newImageSrc) { 
             $image.attr('src', imageSrc);
@@ -658,7 +663,7 @@
     this.insertToGallery(a);
     return a;
   };
-  
+
   /**
    * Sort the array using settings.comparator as comparator
    *
@@ -670,7 +675,7 @@
     this.insertToGallery(a);
     return a;
   };
-  
+
   /**
    * Reset the filters removing the 'jg-filtered' class from all the entries
    *

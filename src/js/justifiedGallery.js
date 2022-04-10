@@ -1,5 +1,5 @@
 /**
- * Justified Gallery - v3.8.1
+ * Justified Gallery - v3.9.0-645d8e1
  * http://miromannino.github.io/Justified-Gallery/
  *
  * Copyright (c) 2019 Miro Mannino
@@ -101,16 +101,20 @@ JustifiedGallery.prototype.getUsedSuffix = function (str) {
  * @returns {String} the suffix to use
  */
 JustifiedGallery.prototype.newSrc = function (imageSrc, imgWidth, imgHeight, image) {
-  var newImageSrc;
+  var newImageSrc = null;
 
   if (this.settings.thumbnailPath) {
     newImageSrc = this.settings.thumbnailPath(imageSrc, imgWidth, imgHeight, image);
-  } else {
+  }
+
+  if (newImageSrc == null) {
+  
     var matchRes = imageSrc.match(this.settings.extension);
     var ext = (matchRes !== null) ? matchRes[0] : '';
     newImageSrc = imageSrc.replace(this.settings.extension, '');
     newImageSrc = this.removeSuffix(newImageSrc, this.getUsedSuffix(newImageSrc));
     newImageSrc += this.getSuffix(imgWidth, imgHeight) + ext;
+
   }
 
   return newImageSrc;
@@ -192,8 +196,9 @@ JustifiedGallery.prototype.displayEntry = function ($entry, x, y, imgWidth, imgH
     if (imageSrc) {
       imageSrc = this.newSrc(imageSrc, imgWidth, imgHeight, $image[0]);
 
+      var self = this;
       $image.one('error', function () {
-         this.resetImgSrc($image); //revert to the original thumbnail
+        self.resetImgSrc($image); //revert to the original thumbnail
       });
 
       var loadNewImage = function () {
