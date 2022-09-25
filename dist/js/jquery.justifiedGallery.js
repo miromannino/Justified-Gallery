@@ -1,7 +1,7 @@
 /*!
  * justifiedGallery - v3.8.1
  * http://miromannino.github.io/Justified-Gallery/
- * Copyright (c) 2020 Miro Mannino
+ * Copyright (c) 2022 Miro Mannino
  * Licensed under the MIT license.
  */
 (function (factory) {
@@ -73,7 +73,7 @@
     this.checkWidthIntervalId = null;
     this.galleryWidth = $gallery.width();
     this.$gallery = $gallery;
-  
+    this.galleryHeightToSet = 0;
   };
   
   /** @returns {String} the best suffix given the width and the height */

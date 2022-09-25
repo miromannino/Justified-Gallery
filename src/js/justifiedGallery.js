@@ -47,7 +47,7 @@ var JustifiedGallery = function ($gallery, settings) {
   this.checkWidthIntervalId = null;
   this.galleryWidth = $gallery.width();
   this.$gallery = $gallery;
-
+  this.galleryHeightToSet = 0;
 };
 
 /** @returns {String} the best suffix given the width and the height */
