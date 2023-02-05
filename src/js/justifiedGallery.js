@@ -236,7 +236,7 @@ JustifiedGallery.prototype.displayEntryCaption = function ($entry) {
       var caption = $image.attr('alt');
       if (!this.isValidCaption(caption)) caption = $entry.attr('title');
       if (this.isValidCaption(caption)) { // Create only we found something
-        $imgCaption = $('<div class="jg-caption">' + caption + '</div>');
+        $imgCaption = $('<div class="jg-caption"></div>').text(caption);
         $entry.append($imgCaption);
         $entry.data('jg.createdCaption', true);
       }
