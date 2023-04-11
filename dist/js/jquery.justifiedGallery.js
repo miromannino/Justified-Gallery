@@ -1,7 +1,7 @@
 /*!
  * justifiedGallery - v3.8.1
  * http://miromannino.github.io/Justified-Gallery/
- * Copyright (c) 2020 Miro Mannino
+ * Copyright (c) 2023 Miro Mannino
  * Licensed under the MIT license.
  */
 (function (factory) {
@@ -223,7 +223,7 @@
         });
   
         var loadNewImage = function () {
-          // if (imageSrc !== newImageSrc) { 
+          // if (imageSrc !== newImageSrc) {
             $image.attr('src', imageSrc);
           // }
         };
@@ -236,7 +236,7 @@
         } else {
           this.showImg($entry, loadNewImage); //load the new image after the fadeIn
         }
-      
+  
       }
   
     } else {
@@ -795,12 +795,7 @@
           (this.buildingRow.entriesBuff.length - 1) * this.settings.margins);
         var imgAspectRatio = $entry.data('jg.width') / $entry.data('jg.height');
   
-        this.buildingRow.entriesBuff.push($entry);
-        this.buildingRow.aspectRatio += imgAspectRatio;
-        this.buildingRow.width += imgAspectRatio * this.settings.rowHeight;
-        this.lastAnalyzedIndex = i;
-  
-        if (availableWidth / (this.buildingRow.aspectRatio + imgAspectRatio) < this.settings.rowHeight) {
+        if (this.buildingRow.entriesBuff.length > 0 && availableWidth / (this.buildingRow.aspectRatio + imgAspectRatio) < this.settings.rowHeight) {
           this.flushRow(false, this.settings.maxRowsCount > 0 && this.rows === this.settings.maxRowsCount);
   
           if (++this.yield.flushed >= this.yield.every) {
@@ -808,6 +803,11 @@
             return;
           }
         }
+  
+        this.buildingRow.entriesBuff.push($entry);
+        this.buildingRow.aspectRatio += imgAspectRatio;
+        this.buildingRow.width += imgAspectRatio * this.settings.rowHeight;
+        this.lastAnalyzedIndex = i;
       } else if ($entry.data('jg.loaded') !== 'error') {
         return;
       }
@@ -829,7 +829,7 @@
     this.stopImgAnalyzerStarter();
   
     this.setGalleryFinalHeight(this.galleryHeightToSet);
-    
+  
     //On complete callback
     this.settings.triggerEvent.call(this, isForResize ? 'jg.resize' : 'jg.complete');
   };
@@ -911,7 +911,7 @@
           // Image src
           var imageSrc = that.extractImgSrcFromImage($image);
   
-          /* If we have the height and the width, we don't wait that the image is loaded, 
+          /* If we have the height and the width, we don't wait that the image is loaded,
              but we start directly with the justification */
           if (that.settings.waitThumbnailsLoad === false || !imageSrc) {
             var width = parseFloat($image.attr('width'));
