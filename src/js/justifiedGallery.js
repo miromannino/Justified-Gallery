@@ -194,7 +194,7 @@ JustifiedGallery.prototype.displayEntry = function ($entry, x, y, imgWidth, imgH
 
       $image.one('error', function () {
          this.resetImgSrc($image); //revert to the original thumbnail
-      });
+      }.bind(this));
 
       var loadNewImage = function () {
         // if (imageSrc !== newImageSrc) { 
