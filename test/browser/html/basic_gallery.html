@@ -1,0 +1,52 @@
+<!-- test/browser/test-page.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>Basic Test</h1>
+
+      <div id="gallery">
+        <a href="../imgs/19Jws_4_5_t.jpg" title="title 5:t">
+          <img src="../imgs/19Jws_4_5_t.jpg" alt="Image 5:t" />
+        </a>
+        <a href="../imgs/1KanS_9_16_m.jpg" title="title 16:m">
+          <img src="../imgs/1KanS_9_16_m.jpg" alt="Image 16:m" />
+        </a>
+        <a href="../imgs/3ZPOs_16_9_t.jpg" title="title 9:t">
+          <img src="../imgs/3ZPOs_16_9_t.jpg" alt="Image 9:t" />
+        </a>
+        <a href="../imgs/3xgJE_4_5_n.jpg" title="title 5:n">
+          <img src="../imgs/3xgJE_4_5_n.jpg" alt="Image 5:n" />
+        </a>
+        <a href="../imgs/4hImB_16_9.jpg" title="title Unknown">
+          <img src="../imgs/4hImB_16_9.jpg" alt="Image Unknown" />
+        </a>
+        <a href="../imgs/52vHv_2_3_n.jpg" title="title 3:n">
+          <img src="../imgs/52vHv_2_3_n.jpg" alt="Image 3:n" />
+        </a>
+        <a href="../imgs/5htZ3_9_16_b.jpg" title="title 16:b">
+          <img src="../imgs/5htZ3_9_16_b.jpg" alt="Image 16:b" />
+        </a>
+        <a href="../imgs/70T5M_4_5_t.jpg" title="title 5:t">
+          <img src="../imgs/70T5M_4_5_t.jpg" alt="Image 5:t" />
+        </a>
+        <a href="../imgs/8535D_9_16_t.jpg" title="title 16:t">
+          <img src="../imgs/8535D_9_16_t.jpg" alt="Image 16:t" />
+        </a>
+        <a href="../imgs/8OrWq_16_9_m.jpg" title="title 9:m">
+          <img src="../imgs/8OrWq_16_9_m.jpg" alt="Image 9:m" />
+        </a>
+      </div>
+    </div>
+
+    <script type="module">
+      import { JustifiedGallery } from "@/main";
+      const jg = new JustifiedGallery(document.getElementById("gallery"));
+      jg.init();
+    </script>
+  </body>
+</html>
