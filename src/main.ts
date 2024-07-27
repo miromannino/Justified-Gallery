@@ -51,11 +51,11 @@ export class JustifiedGallery {
 
   /**
    * Returns the best suffix given the width and the height.
-   * @param {number} width - The width of the image.
-   * @param {number} height - The height of the image.
-   * @returns {string} The best suffix.
+   * @param width - The width of the image.
+   * @param height - The height of the image.
+   * @returns The best suffix.
    */
-  getSuffix(width: number, height: number) {
+  getSuffix(width: number, height: number): string {
     const longestSide = Math.max(width, height);
 
     // Find the first suffix range where the longest side fits
@@ -78,7 +78,9 @@ export class JustifiedGallery {
    * @returns A new string without the suffix.
    */
   removeSuffix(str: string, suffix: string) {
-    return str.endsWith(suffix) ? str.slice(0, -suffix.length) : str;
+    return suffix.length > 0 && str.endsWith(suffix)
+      ? str.slice(0, -suffix.length)
+      : str;
   }
 
   /**
@@ -124,11 +126,20 @@ export class JustifiedGallery {
       const matchRes = imageSrc.match(this.settings.extension);
       const ext = matchRes ? matchRes[0] : '';
       newImageSrc = imageSrc.replace(this.settings.extension, '');
+      console.log(
+        'img src',
+        imageSrc,
+        'new img src',
+        newImageSrc,
+        'used suffix',
+        this.getUsedSuffix(newImageSrc)
+      );
       newImageSrc = this.removeSuffix(
         newImageSrc,
         this.getUsedSuffix(newImageSrc)
       );
       newImageSrc += this.getSuffix(imgWidth, imgHeight) + ext;
+      console.log('new new img src', newImageSrc);
     }
 
     return newImageSrc;
@@ -154,7 +165,7 @@ export class JustifiedGallery {
    * @param image - The image element to analyze
    * @returns string - The extracted src
    */
-  extractImgSrcFromImage(image: HTMLImageElement): string {
+  imgSrcFromImage(image: HTMLImageElement): string {
     const imageSrc = image.dataset.safeSrc ?? image.getAttribute('src') ?? '';
     const imageSrcLoc = image.dataset.safeSrc ? 'data-safe-src' : 'src';
 
@@ -942,7 +953,7 @@ export class JustifiedGallery {
 
     const suffixRanges = Object.keys(this.settings.sizeRangeSuffixes);
 
-    const newSizeRngSuffixes: Record<number, string> = { 0: '' };
+    const newSizeRngSuffixes: Record<number, string> = {};
     for (let i = 0; i < suffixRanges.length; i++) {
       const key = suffixRanges[i];
       if (typeof key === 'string') {
@@ -1087,7 +1098,6 @@ export class JustifiedGallery {
    * with loaded images).
    */
   init(): void {
-    console.log('INIT', this.gallery);
     let imagesToLoad = false;
     let skippedImages = false;
 
@@ -1112,7 +1122,8 @@ export class JustifiedGallery {
 
         if (image !== null) {
           // Image src
-          const imageSrc = this.extractImgSrcFromImage(image);
+          const imageSrc = this.imgSrcFromImage(image);
+          console.log('img src', imageSrc);
 
           /* If we have the height and the width, we don't wait for the image 
           to be loaded, but we start directly with the justification */

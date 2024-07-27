@@ -88,17 +88,14 @@ export type JustifiedGallerySettings = {
 
 export const JustifiedGallerySettingsDefaults: JustifiedGallerySettings = {
   // Mapping of size ranges to suffixes for image sizes (e.g., Flickr configuration)
-  sizeRangeSuffixes: {} /* Example:
-      {
-        100: '_t',  // used when longest is less than 100px
-        240: '_m',  // used when longest is between 101px and 240px
-        320: '_n',  // ...
-        500: '',
-        640: '_z',
-        1024: '_b'  // used as else case because it is the last
-      }
-  */,
-
+  sizeRangeSuffixes: {
+    100: '_t', // used when longest is less than 100px
+    240: '_m', // used when longest is between 101px and 240px
+    320: '_n', // ...
+    500: '',
+    640: '_z',
+    1024: '_b', // used as else case because it is the last
+  },
   // Optional function to generate the thumbnail path
   // (overrides sizeRangeSuffixes)
   thumbnailPath: undefined /* If defined, sizeRangeSuffixes is not used.
