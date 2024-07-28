@@ -97,6 +97,7 @@ def generate_random_prefix(length=5):
 
 
 def generate_placeholder_image(
+    prefix,
     width,
     height,
     aspect_ratio_str,
@@ -105,8 +106,8 @@ def generate_placeholder_image(
     text_color=(0, 0, 0),
     output_dir='./output',
     frame_color=(0, 0, 0),
-    frame_width=5
-  ):
+    frame_width=2
+):
   # Create gradient background
   gradient_image = create_gradient_image(width, height, base_color=bg_color)
 
@@ -114,20 +115,22 @@ def generate_placeholder_image(
 
   # Draw the frame
   draw.rectangle(
-      [(frame_width // 2, frame_width // 2),
-       (width - frame_width // 2 - 1, height - frame_width // 2 - 1)],
+      [(0, 0),
+       (width, height)],
       outline=frame_color,
       width=frame_width
   )
 
   # Text to include aspect ratio and resolution in two lines
   human_readable_aspect_ratio = aspect_ratio_str.replace('_', ':')
-  text_line1 = f"Aspect: {human_readable_aspect_ratio}"
-  text_line2 = f"Resolution: {width}x{height}"
+  text_line1 = f"{human_readable_aspect_ratio}"
+  text_line2 = f"{width}x{height}"
+
+  font_size = min(40, width  * 0.2)
 
   # Use a better font and increase the font size
   try:
-    font = ImageFont.truetype("DejaVuSans-Bold.ttf", 40)
+    font = ImageFont.truetype("Helvetica", font_size)
   except IOError:
     font = ImageFont.load_default()
 
@@ -154,8 +157,7 @@ def generate_placeholder_image(
   os.makedirs(output_dir, exist_ok=True)
 
   # Construct the filename with a random prefix to avoid repetition
-  random_prefix = generate_random_prefix()
-  filename = f"{random_prefix}_{aspect_ratio_str}"
+  filename = f"{prefix}_{aspect_ratio_str}"
   if size_suffix:
     filename += f"_{size_suffix}"
   filename += ".jpg"
@@ -178,13 +180,11 @@ def generate_images(num_images=2, output_dir='./images'):
 
   # Generate images
   for i in range(num_images):
-    # Cycle through the selected aspect ratios to create images
     aspect_ratio = selected_aspect_ratios[i % num_aspect_ratios]
     aspect_ratio_str = f"{aspect_ratio[0]}_{aspect_ratio[1]}"
-
-    # Get the assigned color for this aspect ratio
     bg_color = aspect_ratio_colors[aspect_ratio]
     frame_color = random.choice(FRAME_COLORS)
+    prefix = generate_random_prefix()
 
     # Generate images for each size
     for size, size_suffix in SIZES.items():
@@ -198,12 +198,13 @@ def generate_images(num_images=2, output_dir='./images'):
 
       # Generate the placeholder image with a frame
       generate_placeholder_image(
+          prefix,
           width,
           height,
           aspect_ratio_str,
           size_suffix,
           bg_color=bg_color,
-          text_color=(0, 0, 0),
+          text_color=(50, 50, 50),
           output_dir=output_dir,
           frame_color=frame_color,
           frame_width=5)

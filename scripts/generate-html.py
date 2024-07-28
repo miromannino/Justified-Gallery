@@ -25,7 +25,8 @@ def update_html_gallery(folder_path, html_files_path, relative_path="../imgs/"):
     parts = image_file.split('_')
     if len(parts) == 3:
       aspect_ratio = parts[1] + ":" + parts[2].split('.')[0]
-      thumbnail_img_file = parts[1] + parts[2].split('.')[0] + '_t.' + parts[2].split('.')[1]
+      thumbnail_img_file = parts[0] + '_' + parts[1] + '_' + \
+          parts[2].split('.')[0] + '_t.' + parts[2].split('.')[1]
     else:
       continue
 
