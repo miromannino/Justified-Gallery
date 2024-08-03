@@ -6,7 +6,7 @@ const config: PlaywrightTestConfig = {
   testDir: './test/browser',
   use: {
     headless: false, // Set to true if you want to hide the browser
-    viewport: { width: 1280, height: 720 }, // Browser viewport size
+    viewport: { width: 700, height: 700 },
   },
   webServer: {
     command: 'npm run dev',
