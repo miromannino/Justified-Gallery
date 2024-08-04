@@ -1,6 +1,6 @@
 import os
 import subprocess
-
+import re
 
 def update_html_gallery(folder_path, html_files_path, relative_path="../imgs/"):
   """
@@ -17,31 +17,6 @@ def update_html_gallery(folder_path, html_files_path, relative_path="../imgs/"):
           ('.png', '.jpg', '.jpeg', '.gif', '.bmp'))]
   image_files.sort()
 
-  # Generate HTML content for the images
-  html_content = []
-  for image_file in image_files:
-    # Extract aspect ratio from the filename (e.g., "random_16_9_suffix.jpg")
-    # Assume filename format is "{random_prefix}_img_{aspect_ratio}_{suffix}.jpg"
-    parts = image_file.split('_')
-    if len(parts) == 3:
-      aspect_ratio = parts[1] + ":" + parts[2].split('.')[0]
-      thumbnail_img_file = parts[0] + '_' + parts[1] + '_' + \
-          parts[2].split('.')[0] + '_t.' + parts[2].split('.')[1]
-    else:
-      continue
-
-    img_path = os.path.join(relative_path, image_file)
-    thumbnail_img_path = os.path.join(relative_path, thumbnail_img_file)
-    html_snippet = f"""
-        <a href="{img_path}" title="title {aspect_ratio}">
-            <img src="{thumbnail_img_path}" alt="Image {aspect_ratio}" />
-        </a>
-        """
-    html_content.append(html_snippet.strip())
-
-  # Join the HTML snippets into a single string
-  new_gallery_content = "\n".join(html_content)
-
   # Process each HTML file in the html_files_path
   for html_file in os.listdir(html_files_path):
     if html_file.endswith('.html'):
@@ -52,19 +27,48 @@ def update_html_gallery(folder_path, html_files_path, relative_path="../imgs/"):
         html_data = f.read()
 
       # Locate the gallery section
-      start_marker = "<!-- GALLERY START -->"
+      start_marker_pattern = r"<!-- GALLERY START(?::\s*(\w+))? -->"
       end_marker = "<!-- GALLERY END -->"
 
-      start_idx = html_data.find(start_marker)
+      start_marker_match = re.search(start_marker_pattern, html_data)
       end_idx = html_data.find(end_marker)
 
-      if start_idx == -1 or end_idx == -1:
+      if not start_marker_match or end_idx == -1:
         print(f"Gallery markers not found in {html_file_path}. Skipping.")
         continue
 
+      # Extract the suffix from the GALLERY START marker, default to 't' if not provided
+      suffix = start_marker_match.group(1) or 't'
+      start_idx = start_marker_match.start()
+
+      # Generate HTML content for the images
+      html_content = []
+      for image_file in image_files:
+        # Extract aspect ratio from the filename (e.g., "random_16_9_suffix.jpg")
+        # Assume filename format is "{random_prefix}_img_{aspect_ratio}_{suffix}.jpg"
+        parts = image_file.split('_')
+        if len(parts) == 3:
+          aspect_ratio = parts[1] + ":" + parts[2].split('.')[0]
+          thumbnail_img_file = parts[0] + '_' + parts[1] + '_' + \
+              parts[2].split('.')[0] + f'_{suffix}.' + parts[2].split('.')[1]
+        else:
+          continue
+
+        img_path = os.path.join(relative_path, image_file)
+        thumbnail_img_path = os.path.join(relative_path, thumbnail_img_file)
+        html_snippet = f"""
+            <a href="{img_path}" title="title {aspect_ratio}">
+                <img src="{thumbnail_img_path}" alt="Image {aspect_ratio}" />
+            </a>
+            """
+        html_content.append(html_snippet.strip())
+
+      # Join the HTML snippets into a single string
+      new_gallery_content = "\n".join(html_content)
+
       # Insert the new gallery content between the markers
       updated_html_data = (
-          html_data[:start_idx + len(start_marker)] +  # Up to the end of the start marker
+          html_data[:start_idx + len(start_marker_match.group(0))] +  # Up to the end of the start marker
           "\n<div id=\"gallery\">\n" +
           new_gallery_content +
           "\n</div>\n" +
