@@ -6,13 +6,10 @@
  * Licensed under the MIT license.
  */
 
+import { JustifiedGallerySettingsDefaults } from './defaults';
 import { checkOrConvertNumber, createSpinner, shuffleArray } from './helpers';
-import {
-  JustifiedGallerySettings,
-  JustifiedGallerySettingsDefaults,
-  LastRowModes,
-} from './settings';
 import './style/justified-gallery.scss';
+import { EventType, JustifiedGallerySettings, LastRowModes } from './types';
 
 export class JustifiedGallery {
   gallery: HTMLElement;
@@ -472,7 +469,7 @@ export class JustifiedGallery {
       this.offY += this.buildingRow.height + settings.margins;
       this.rows += 1;
       this.clearBuildingRow();
-      this.settings.triggerEvent.call(this, 'jg.rowflush');
+      this.settings.triggerEvent.call(this, EventType.RowFlush);
     }
   }
 
@@ -601,11 +598,22 @@ export class JustifiedGallery {
   }
 
   /**
-   * @returns An array of all entries matched by `settings.selector`.
+   * @returns An array of all direct children matched by `settings.selector`, excluding `.jg-spinner`.
    */
   getAllEntries(): HTMLElement[] {
-    const selector = this.getSelectorWithoutSpinner();
-    return Array.from(this.gallery.querySelectorAll<HTMLElement>(selector));
+    const children = Array.from(this.gallery.children) as HTMLElement[];
+
+    const filteredEntries = children.filter((child) => {
+      // Exclude elements with `.jg-spinner`
+      if (child.classList.contains('jg-spinner')) {
+        return false;
+      }
+
+      // Match elements based on `this.settings.selector` or just divs
+      return child.matches(this.settings.selector) || child.matches('div');
+    });
+
+    return filteredEntries;
   }
 
   /**
@@ -649,21 +657,23 @@ export class JustifiedGallery {
   }
 
   /**
-   * Helper function to get the next sibling entries
+   * Helper function to get the next sibling entries using manual filtering.
    */
-  private getNextEntries(
-    lastEntry: HTMLElement,
-    selector: string
-  ): HTMLElement[] {
+  private getNextEntries(lastEntry: HTMLElement): HTMLElement[] {
     const siblings: HTMLElement[] = [];
     let next = lastEntry.nextElementSibling as HTMLElement | null;
 
     while (next) {
-      if (next.matches(selector)) {
+      if (
+        !next.classList.contains('jg-spinner') &&
+        next.matches(this.settings.selector)
+      ) {
         siblings.push(next);
       }
+
       next = next.nextElementSibling as HTMLElement | null;
     }
+
     return siblings;
   }
 
@@ -793,7 +803,7 @@ export class JustifiedGallery {
     this.gallery.style.height = '';
     this.gallery.classList.remove('justified-gallery');
     this.gallery.removeAttribute('data-jg-controller');
-    this.settings.triggerEvent.call(this, 'jg.destroy');
+    this.settings.triggerEvent.call(this, EventType.Destroy);
   }
 
   /**
@@ -866,7 +876,7 @@ export class JustifiedGallery {
     // On complete callback
     this.settings.triggerEvent.call(
       this,
-      isForResize ? 'jg.resize' : 'jg.complete'
+      isForResize ? EventType.Resize : EventType.Complete
     );
   }
 
@@ -1098,6 +1108,8 @@ export class JustifiedGallery {
    * with loaded images).
    */
   init(): void {
+    this.gallery.classList.add('justified-gallery');
+
     let imagesToLoad = false;
     let skippedImages = false;
 
@@ -1196,7 +1208,6 @@ export class JustifiedGallery {
     settings?: Partial<JustifiedGallerySettings>
   ) {
     this.gallery = gallery;
-    this.gallery.classList.add('justified-gallery');
 
     this.settings = { ...JustifiedGallerySettingsDefaults, ...settings };
     this.checkSettings();
