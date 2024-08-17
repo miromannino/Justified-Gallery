@@ -2,7 +2,6 @@ import { expect, test } from '@playwright/test';
 import { getTestPageUrl } from './test-utils';
 
 test('should load the test page correctly', async ({ page }) => {
-  // Navigate to the test HTML page served by the Vite dev server
   await page.goto(getTestPageUrl(import.meta.url));
 });
 
