@@ -1,0 +1,41 @@
+<!-- test/browser/test-page.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>Destroy</h1>
+
+      <!-- GALLERY START: t -->
+      <div id="gallery">
+        <a href="../imgs/6fj4l_2_3.jpg" title="title 2:3">
+          <img src="../imgs/6fj4l_2_3_t.jpg" alt="Image 2:3" />
+          <div class="jg-caption">non created caption</div>
+        </a>
+        <a href="../imgs/snWVT_9_16.jpg" title="title 9:16">
+          <img src="../imgs/snWVT_9_16_t.jpg" alt="Image 9:16" />
+        </a>
+        <a href="../imgs/xuNBh_4_3.jpg" title="title 4:3">
+          <img src="../imgs/xuNBh_4_3_t.jpg" alt="Image 4:3" />
+        </a>
+        <a href="../imgs/xyf7Q_16_9.jpg">
+          <img src="../imgs/xyf7Q_16_9_t.jpg" alt="Image 16:9" />
+        </a>
+      </div>
+      <!-- GALLERY END -->
+    </div>
+
+    <script type="module">
+      import { JustifiedGallery } from "@/main";
+      window.jg = new JustifiedGallery(document.getElementById("gallery"), {
+        rowHeight: 200,
+        triggerEvent: (name) => {
+          window.trackEvent?.(name);
+        },
+      });
+    </script>
+  </body>
+</html>
