@@ -1,6 +1,9 @@
 import os
 import subprocess
+import random
 import re
+
+classes = ["", "a", "b", "c"]
 
 def update_html_gallery(folder_path, html_files_path, relative_path="../imgs/"):
   """
@@ -54,13 +57,18 @@ def update_html_gallery(folder_path, html_files_path, relative_path="../imgs/"):
         else:
           continue
 
+        # Randomly select a class
+        random_class = random.choice(classes)
+        class_attr = f' class="{random_class}"' if random_class else ""
+
         img_path = os.path.join(relative_path, image_file)
         thumbnail_img_path = os.path.join(relative_path, thumbnail_img_file)
+        
         html_snippet = f"""
             <a href="{img_path}" title="title {aspect_ratio}">
-                <img src="{thumbnail_img_path}" alt="Image {aspect_ratio}" />
+                <img src="{thumbnail_img_path}" alt="Image {aspect_ratio}"{class_attr} />
             </a>
-            """
+        """
         html_content.append(html_snippet.strip())
 
       # Join the HTML snippets into a single string
