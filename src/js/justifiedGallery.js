@@ -692,7 +692,7 @@ JustifiedGallery.prototype.filterArray = function (a) {
  * Revert the image src to the default value.
  */
 JustifiedGallery.prototype.resetImgSrc = function ($img) {
-  if ($img.data('jg.originalSrcLoc') === 'src') {
+  if ($img.data('jg.originalSrcLoc') === 'src' || $img.data('jg.originalSrcLoc') === 'data-safe-src' ) {
     $img.attr('src', $img.data('jg.originalSrc'));
   } else {
     $img.attr('src', '');
