@@ -18,7 +18,8 @@ export default defineConfig({
     : path.resolve(__dirname, 'src'),
   publicDir: 'public',
   build: {
-    outDir: 'dist',
+    outDir: path.resolve(__dirname, 'dist'),
+    emptyOutDir: true,
     lib: {
       entry: path.resolve(__dirname, 'src/main.ts'),
       formats: ['es'],
