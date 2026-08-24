@@ -1,0 +1,26 @@
+@use 'variables' as v;
+
+.justified-gallery {
+  >.jg-spinner {
+    $spinnerDotWeight: 8px;
+    $spinnerDotNum: 3;
+
+    position: absolute;
+    bottom: 0;
+    margin-left: -(($spinnerDotWeight * 2) * $spinnerDotNum * 0.5);
+    padding: 10px 0 10px 0;
+    left: 50%;
+    @include v.opacity(1);
+    overflow: initial;
+
+    >span {
+      display: inline-block;
+      @include v.opacity(0);
+      width: $spinnerDotWeight;
+      height: $spinnerDotWeight;
+      margin: 0 ($spinnerDotWeight * 0.5) 0 ($spinnerDotWeight * 0.5);
+      background-color: #000;
+      border-radius: $spinnerDotWeight - 2px;
+    }
+  }
+}

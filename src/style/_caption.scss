@@ -1,0 +1,36 @@
+@use 'variables' as v;
+
+.justified-gallery {
+  >a,
+  >div,
+  >figure {
+    >.jg-caption {
+      @if v.$caption-initial-opacity ==0 {
+        display: none;
+      }
+
+      @else {
+        display: initial;
+        @include v.opacity(v.$caption-initial-opacity);
+      }
+
+      position: absolute;
+      bottom: 0;
+      padding: 5px;
+      background-color: #000000;
+      left: 0;
+      right: 0;
+      margin: 0;
+      color: white;
+      font-size: 12px;
+      font-weight: 300;
+      font-family: sans-serif;
+    }
+
+    >.jg-caption.jg-caption-visible {
+      display: initial;
+      @include v.opacity(v.$caption-visible-opacity);
+      @include v.transition(opacity);
+    }
+  }
+}

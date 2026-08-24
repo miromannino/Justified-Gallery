@@ -331,7 +331,7 @@ you see used in the source already.**
 
 - Build:
 
-  - `npm run build` compiles the library for distribution: bundles `src/main.ts`
+  - `npm run build` compiles the library for distribution: bundles `src/justified-gallery.ts`
     with Vite into `dist/justified-gallery.js` and
     `dist/assets/justified-gallery.css`, and emits type declarations
     (`dist/*.d.ts`) with `tsc`.

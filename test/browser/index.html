@@ -6,38 +6,204 @@
       body {
         font-family: Arial, sans-serif;
         margin: 20px;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
       }
       h1 {
         text-align: center;
+      }
+      h2 {
+        margin-top: 40px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
       }
       ul {
         list-style-type: none;
         padding: 0;
       }
       ul li {
-        margin: 10px 0;
-        font-size: 18px;
+        margin: 0 0 18px 0;
+        font-size: 16px;
       }
       ul li a {
         text-decoration: none;
         color: #007bff;
-        padding: 10px 20px;
+        padding: 8px 16px;
         border: 1px solid #007bff;
         border-radius: 5px;
         display: inline-block;
+        font-size: 16px;
       }
       ul li a:hover {
         background-color: #007bff;
         color: white;
       }
+      ul li p {
+        margin: 6px 4px 0 4px;
+        color: #444;
+        font-size: 14px;
+      }
     </style>
   </head>
   <body>
     <h1>File Gallery</h1>
+    <p>
+      E2E playright test cases showcase. Open each page and check that the
+      described behavior.
+    </p>
+
+    <h2>Basic behavior</h2>
     <ul>
-      <li><a href="./html/basic_gallery.html">basic_gallery.html</a></li>
-      <li><a href="./html/callbacks.html">callbacks.html</a></li>
-      <li><a href="./html/small_thumbnails.html">small_thumbnails.html</a></li>
+      <li>
+        <a href="./html/basic_gallery.html">basic_gallery.html</a>
+        <p>
+          A gallery of mixed-aspect-ratio images should lay out into justified
+          rows that fill the full container width, with no gaps or overlaps
+          between images.
+        </p>
+      </li>
+      <li>
+        <a href="./html/figures_gallery.html">figures_gallery.html</a>
+        <p>
+          Same as basic_gallery, but each entry is a &lt;figure&gt; instead of
+          an &lt;a&gt;. Layout should look identical to a normal gallery.
+        </p>
+      </li>
+      <li>
+        <a href="./html/callbacks.html">callbacks.html</a>
+        <p>
+          Open the devtools console: rowflush, resize, and complete events
+          should be logged as the gallery builds and as the window is resized.
+        </p>
+      </li>
+      <li>
+        <a href="./html/captions_and_destroy.html">captions_and_destroy.html</a>
+        <p>
+          Images with a title should show a caption on top of them. After
+          destroy() runs, only the originally hand-authored caption (on the
+          first image) should remain; all JG-created captions and styling should
+          be gone.
+        </p>
+      </li>
+      <li>
+        <a href="./html/small_thumbnails.html">small_thumbnails.html</a>
+        <p>
+          Images should start as low-res thumbnails and be swapped for a
+          higher-res version once laid out, without a visible blank flash or
+          broken-image icon during the swap.
+        </p>
+      </li>
+      <li>
+        <a href="./html/image_errors.html">image_errors.html</a>
+        <p>
+          Some images intentionally fail to load. They should be silently
+          skipped (no broken-image icons, no gaps in the grid) while the
+          remaining images still fill the row and the gallery still finishes
+          loading.
+        </p>
+      </li>
+    </ul>
+
+    <h2>Layout options</h2>
+    <ul>
+      <li>
+        <a href="./html/margins.html">margins.html</a>
+        <p>
+          Seven galleries with different margins/border combinations
+          (0/1/10/20px margins, 0/5/20px borders). The visible gap between
+          images and the gap around the gallery edge should visibly grow from
+          top to bottom, matching each label.
+        </p>
+      </li>
+      <li>
+        <a href="./html/max_row_height.html">max_row_height.html</a>
+        <p>
+          Each gallery has just two portrait images, which naturally form a very
+          tall row when justified. In the first ("capped") gallery the row
+          should be capped at a modest height; in the second ("uncapped")
+          gallery the row should be allowed to grow very tall.
+        </p>
+      </li>
+      <li>
+        <a href="./html/last_row.html">last_row.html</a>
+        <p>
+          Six galleries, same images, one per lastRow mode. The last (partially
+          filled) row should: stretch to fill the row (justify), stay
+          left-aligned at natural size (nojustify/left), be centered (center),
+          be flush right (right), or not be shown at all (hide).
+        </p>
+      </li>
+      <li>
+        <a href="./html/max_rows_count.html">max_rows_count.html</a>
+        <p>
+          Only the first 2 rows of images should be visible; the rest of the
+          images should not be rendered at all.
+        </p>
+      </li>
+      <li>
+        <a href="./html/vertical_images.html">vertical_images.html</a>
+        <p>
+          A gallery of tall portrait images. Several images should fit side by
+          side per row, each remaining tall/narrow (not cropped or distorted
+          into a wide shape).
+        </p>
+      </li>
+      <li>
+        <a href="./html/square_images.html">square_images.html</a>
+        <p>
+          A gallery of square images. Every image should stay visually square
+          after layout, never stretched into a rectangle.
+        </p>
+      </li>
+      <li>
+        <a href="./html/same_size_images.html">same_size_images.html</a>
+        <p>
+          A gallery where every image is identical. The result should look like
+          a perfectly even grid, all tiles the same size.
+        </p>
+      </li>
+    </ul>
+
+    <h2>Content edge cases</h2>
+    <ul>
+      <li>
+        <a href="./html/text_entries.html">text_entries.html</a>
+        <p>
+          The gallery mixes photos with plain text entries and an image-less
+          link with text inside it. The text entries should sit in the grid
+          alongside the photos at a reasonable size, without breaking the row
+          layout, and should not show a caption.
+        </p>
+      </li>
+      <li>
+        <a href="./html/link_around_img.html">link_around_img.html</a>
+        <p>
+          Each entry is a &lt;div&gt; wrapping a &lt;a&gt;&lt;img&gt;&lt;/a&gt;
+          instead of a plain &lt;a&gt;&lt;img&gt;&lt;/a&gt;. The gallery should
+          still lay out normally, with a visible 15px gap between images.
+        </p>
+      </li>
+      <li>
+        <a href="./html/thumbnail_path.html">thumbnail_path.html</a>
+        <p>
+          A custom thumbnailPath function always resolves to the largest
+          thumbnail variant. Every image should end up showing its
+          largest/highest-quality version, regardless of its on-screen size.
+        </p>
+      </li>
+    </ul>
+
+    <h2>Ordering</h2>
+    <ul>
+      <li>
+        <a href="./html/randomize.html">randomize.html</a>
+        <p>
+          The images should appear in a different order than they're listed in
+          the page source. Reload the page a few times: the order should change
+          each time.
+        </p>
+      </li>
     </ul>
   </body>
 </html>

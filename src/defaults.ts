@@ -1,4 +1,4 @@
-import { JustifiedGallerySettings, LastRowModes } from './types';
+import { JustifiedGallerySettings, LastRowModes } from './settings';
 
 export const JustifiedGallerySettingsDefaults: JustifiedGallerySettings = {
   // Mapping of size ranges to suffixes for image sizes (e.g., Flickr configuration)

@@ -1,4 +1,4 @@
-import { EventType } from '@/types';
+import { EventType } from '@/events';
 import { expect, test } from '@playwright/test';
 import { getTestPageUrl } from './test-utils';
 

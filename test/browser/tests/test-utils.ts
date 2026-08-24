@@ -1,5 +1,6 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
+import type { Page } from '@playwright/test';
 import { SERVER_CONFIG } from '../../../vite.config';
 
 const BASE_URL = `http://${SERVER_CONFIG.host}:${SERVER_CONFIG.port}`;
@@ -17,4 +18,18 @@ export function getTestPageUrl(importMetaUrl: string): string {
   const testFileName = path.basename(__filename).split('.').shift() || '';
 
   return `${BASE_URL}/html/${testFileName}.html`;
+}
+
+/**
+ * Waits until at least `count` `jg.complete` events have been recorded by
+ * the page (via `window.jgCompletedCount`, incremented by a shared
+ * `window.jgTriggerEvent` handler set up in the test page's script).
+ * @param page The Playwright page.
+ * @param count The number of completed galleries to wait for.
+ */
+export async function waitForCompletes(page: Page, count: number): Promise<void> {
+  await page.waitForFunction(
+    (n) => window.jgCompletedCount >= n,
+    count
+  );
 }

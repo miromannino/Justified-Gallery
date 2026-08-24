@@ -29,13 +29,14 @@
     </div>
 
     <script type="module">
-      import { JustifiedGallery } from "@/main";
+      import { JustifiedGallery } from "@/justified-gallery";
       window.jg = new JustifiedGallery(document.getElementById("gallery"), {
         rowHeight: 200,
         triggerEvent: (name) => {
           window.trackEvent?.(name);
         },
       });
+      window.jg.init();
     </script>
   </body>
 </html>

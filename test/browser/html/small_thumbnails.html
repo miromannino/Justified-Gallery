@@ -76,10 +76,11 @@
     </div>
 
     <script type="module">
-      import { JustifiedGallery } from "@/main";
+      import { JustifiedGallery } from "@/justified-gallery";
       window.jg = new JustifiedGallery(document.getElementById("gallery"), {
         rowHeight: 200,
       });
+      window.jg.init();
     </script>
   </body>
 </html>
