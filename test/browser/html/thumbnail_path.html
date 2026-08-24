@@ -1,0 +1,52 @@
+<!-- test/browser/test-page.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>Custom thumbnailPath Test</h1>
+
+      <div id="gallery">
+        <div>
+          <img alt="6fj4l_2_3" src="../imgs/6fj4l_2_3_t.jpg" />
+        </div>
+        <div>
+          <img alt="88kdw_4_3" src="../imgs/88kdw_4_3_t.jpg" />
+        </div>
+        <div>
+          <img alt="BxsII_1_1" src="../imgs/BxsII_1_1_t.jpg" />
+        </div>
+        <div>
+          <img alt="Gk3da_2_3" src="../imgs/Gk3da_2_3_t.jpg" />
+        </div>
+        <div>
+          <img alt="K08Y5_2_3" src="../imgs/K08Y5_2_3_t.jpg" />
+        </div>
+        <div>
+          <img alt="Qe47i_4_5" src="../imgs/Qe47i_4_5_t.jpg" />
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { JustifiedGallery } from "@/justified-gallery";
+      import { EventType } from "@/events";
+
+      window.jgCompletedCount = 0;
+      window.jgTriggerEvent = (name) => {
+        if (name === EventType.Complete) window.jgCompletedCount++;
+      };
+
+      new JustifiedGallery(document.getElementById("gallery"), {
+        rowHeight: 300,
+        // Always resolves to the largest ("_b") thumbnail, regardless of
+        // the computed display size, ignoring sizeRangeSuffixes entirely.
+        thumbnailPath: (currentPath) => currentPath.replace(/_t\.jpg$/, "_b.jpg"),
+        triggerEvent: window.jgTriggerEvent,
+      }).init();
+    </script>
+  </body>
+</html>

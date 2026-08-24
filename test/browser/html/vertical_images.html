@@ -1,0 +1,59 @@
+<!-- test/browser/test-page.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>Vertical Images Test</h1>
+
+      <div id="gallery">
+        <a href="../imgs/Mzju9_9_16.jpg" title="title Mzju9_9_16">
+          <img src="../imgs/Mzju9_9_16_m.jpg" alt="Mzju9_9_16" />
+        </a>
+        <a href="../imgs/Mzju9_9_16.jpg" title="title Mzju9_9_16">
+          <img src="../imgs/Mzju9_9_16_m.jpg" alt="Mzju9_9_16" />
+        </a>
+        <a href="../imgs/Mzju9_9_16.jpg" title="title Mzju9_9_16">
+          <img src="../imgs/Mzju9_9_16_m.jpg" alt="Mzju9_9_16" />
+        </a>
+        <a href="../imgs/Mzju9_9_16.jpg" title="title Mzju9_9_16">
+          <img src="../imgs/Mzju9_9_16_m.jpg" alt="Mzju9_9_16" />
+        </a>
+        <a href="../imgs/Mzju9_9_16.jpg" title="title Mzju9_9_16">
+          <img src="../imgs/Mzju9_9_16_m.jpg" alt="Mzju9_9_16" />
+        </a>
+        <a href="../imgs/Mzju9_9_16.jpg" title="title Mzju9_9_16">
+          <img src="../imgs/Mzju9_9_16_m.jpg" alt="Mzju9_9_16" />
+        </a>
+        <a href="../imgs/Mzju9_9_16.jpg" title="title Mzju9_9_16">
+          <img src="../imgs/Mzju9_9_16_m.jpg" alt="Mzju9_9_16" />
+        </a>
+        <a href="../imgs/Mzju9_9_16.jpg" title="title Mzju9_9_16">
+          <img src="../imgs/Mzju9_9_16_m.jpg" alt="Mzju9_9_16" />
+        </a>
+        <a href="../imgs/Mzju9_9_16.jpg" title="title Mzju9_9_16">
+          <img src="../imgs/Mzju9_9_16_m.jpg" alt="Mzju9_9_16" />
+        </a>
+      </div>
+    </div>
+
+    <script type="module">
+      import { JustifiedGallery } from "@/justified-gallery";
+      import { EventType } from "@/events";
+
+      window.jgCompletedCount = 0;
+      window.jgTriggerEvent = (name) => {
+        if (name === EventType.Complete) window.jgCompletedCount++;
+      };
+
+      new JustifiedGallery(document.getElementById("gallery"), {
+        rowHeight: 400,
+        lastRow: "nojustify",
+        triggerEvent: window.jgTriggerEvent,
+      }).init();
+    </script>
+  </body>
+</html>

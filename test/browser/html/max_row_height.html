@@ -1,0 +1,57 @@
+<!-- test/browser/test-page.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>Max Row Height Test</h1>
+
+      <!-- A row made of just two portrait images naturally wants to be very
+           tall in order to be fully justified. -->
+      <div id="capped">
+        <a href="../imgs/Mzju9_9_16.jpg" title="title 9:16">
+          <img src="../imgs/Mzju9_9_16_m.jpg" alt="Image 9:16" />
+        </a>
+        <a href="../imgs/snWVT_9_16.jpg" title="title 9:16">
+          <img src="../imgs/snWVT_9_16_m.jpg" alt="Image 9:16" />
+        </a>
+      </div>
+
+      <div id="uncapped">
+        <a href="../imgs/Mzju9_9_16.jpg" title="title 9:16">
+          <img src="../imgs/Mzju9_9_16_m.jpg" alt="Image 9:16" />
+        </a>
+        <a href="../imgs/snWVT_9_16.jpg" title="title 9:16">
+          <img src="../imgs/snWVT_9_16_m.jpg" alt="Image 9:16" />
+        </a>
+      </div>
+    </div>
+
+    <script type="module">
+      import { JustifiedGallery } from "@/justified-gallery";
+      import { EventType } from "@/events";
+
+      window.jgCompletedCount = 0;
+      window.jgTriggerEvent = (name) => {
+        if (name === EventType.Complete) window.jgCompletedCount++;
+      };
+
+      new JustifiedGallery(document.getElementById("capped"), {
+        rowHeight: 100,
+        lastRow: "justify",
+        maxRowHeight: 120,
+        triggerEvent: window.jgTriggerEvent,
+      }).init();
+
+      new JustifiedGallery(document.getElementById("uncapped"), {
+        rowHeight: 100,
+        lastRow: "justify",
+        maxRowHeight: false,
+        triggerEvent: window.jgTriggerEvent,
+      }).init();
+    </script>
+  </body>
+</html>

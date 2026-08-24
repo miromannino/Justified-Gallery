@@ -1,0 +1,56 @@
+<!-- test/browser/test-page.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>Image Errors Test</h1>
+
+      <p id="status">Completed: 0 / 0</p>
+
+      <div id="gallery">
+        <a href="../imgs/does-not-exist-1.jpg" title="broken 1">
+          <img src="../imgs/does-not-exist-1.jpg" />
+        </a>
+        <a href="../imgs/6fj4l_2_3.jpg" title="title 2:3">
+          <img src="../imgs/6fj4l_2_3_m.jpg" alt="Image 2:3" />
+        </a>
+        <a href="../imgs/does-not-exist-2.jpg" title="broken 2">
+          <img src="../imgs/does-not-exist-2.jpg" />
+        </a>
+        <a href="../imgs/88kdw_4_3.jpg" title="title 4:3">
+          <img src="../imgs/88kdw_4_3_m.jpg" alt="Image 4:3" />
+        </a>
+        <a href="../imgs/does-not-exist-3.jpg" title="broken 3">
+          <img src="../imgs/does-not-exist-3.jpg" />
+        </a>
+      </div>
+    </div>
+
+    <script type="module">
+      import { JustifiedGallery } from "@/justified-gallery";
+      import { EventType } from "@/events";
+
+      const gallery = document.getElementById("gallery");
+      const status = document.getElementById("status");
+      const total = gallery.children.length;
+
+      window.jgCompletedCount = 0;
+      window.jgTriggerEvent = (name) => {
+        if (name === EventType.Complete) {
+          window.jgCompletedCount++;
+          const loaded = gallery.querySelectorAll(".jg-entry-visible").length;
+          status.textContent = `Completed: ${loaded} / ${total}`;
+        }
+      };
+
+      new JustifiedGallery(gallery, {
+        rowHeight: 200,
+        triggerEvent: window.jgTriggerEvent,
+      }).init();
+    </script>
+  </body>
+</html>
