@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/miromannino/Justified-Gallery/compare/4.0.0...4.0.1) (2026-08-28)
+
+
+### Bug Fixes
+
+* ship the v4 rewrite as 4.0.1 due to failing pipeline ([#405](https://github.com/miromannino/Justified-Gallery/issues/405)) ([7293e7e](https://github.com/miromannino/Justified-Gallery/commit/7293e7ecbb66571df2db0fe734a25db1e598d697))
+
 ## 4.0.1
 
 - Zero dependencies
