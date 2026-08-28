@@ -1,6 +1,8 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import vue from '@vitejs/plugin-vue';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,6 +15,7 @@ export const SERVER_CONFIG = {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  plugins: [react(), vue()],
   root: isDev
     ? path.resolve(__dirname, 'test/browser')
     : path.resolve(__dirname, 'src'),

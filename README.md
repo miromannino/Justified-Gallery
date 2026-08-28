@@ -23,6 +23,28 @@ of the best photography social network, chose for displaying their images!
 	<a href="http://miromannino.github.io/Justified-Gallery/" target="_blank">Official project page</a>
 </div>
 
+## Usage
+
+```ts
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+
+const jg = new JustifiedGallery(document.getElementById('gallery'), {
+  rowHeight: 120,
+});
+jg.init();
+
+// later, e.g. on unmount:
+jg.destroy();
+```
+
+`JustifiedGallery` is a plain class working against a real `HTMLElement`, so it
+integrates the same way in any framework: get a ref to the container, call
+`init()` once it's mounted, and call `destroy()` on cleanup. See
+[`test/browser/html/react_gallery.tsx`](test/browser/html/react_gallery.tsx)
+and [`test/browser/html/vue_gallery.vue`](test/browser/html/vue_gallery.vue)
+for working React and Vue examples.
+
 ## Release History
 
 ### 4.0.0
