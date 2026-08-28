@@ -1,16 +1,4 @@
-# [4.0.0](https://github.com/miromannino/Justified-Gallery/compare/3.8.1...4.0.0) (2026-08-28)
-
-
-* fix!: fix release tagFormat and seed CHANGELOG for 4.0.0 ([#404](https://github.com/miromannino/Justified-Gallery/issues/404)) ([cc9ff83](https://github.com/miromannino/Justified-Gallery/commit/cc9ff83f40db1ac3298b5031ca72ee9d3055af81))
-
-
-### BREAKING CHANGES
-
-* complete rewrite of the library's architecture, public
-API, and build output (dependency-free TypeScript, React/Vue support,
-new project structure). See PR #403.
-
-## 4.0.0
+## 4.0.1
 
 - Zero dependencies
 - TypeScript source code
