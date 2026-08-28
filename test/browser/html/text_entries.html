@@ -1,0 +1,56 @@
+<!-- test/browser/test-page.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>Text Entries Test</h1>
+
+      <div id="gallery">
+        <a href="../imgs/6fj4l_2_3.jpg" title="title 2:3">
+          <img src="../imgs/6fj4l_2_3_m.jpg" alt="Image 2:3" />
+        </a>
+        <a href="../imgs/88kdw_4_3.jpg" title="title 4:3">
+          <img src="../imgs/88kdw_4_3_m.jpg" alt="Image 4:3" />
+        </a>
+        <div id="textDiv" style="width: 200px; height: 50px;">TEXT IN DIV</div>
+        <a href="../imgs/BxsII_1_1.jpg" title="title 1:1">
+          <img src="../imgs/BxsII_1_1_m.jpg" alt="Image 1:1" />
+        </a>
+        <a id="textLink" href="../imgs/Gk3da_2_3.jpg" title="title in link" style="width: 200px; height: 50px;">
+          <div>TEXT IN LINK</div>
+        </a>
+        <a href="../imgs/K08Y5_2_3.jpg" title="title 2:3">
+          <img src="../imgs/K08Y5_2_3_m.jpg" alt="Image 2:3" />
+        </a>
+        <a href="../imgs/Qe47i_4_5.jpg" title="title 4:5">
+          <img src="../imgs/Qe47i_4_5_m.jpg" alt="Image 4:5" />
+        </a>
+        <a id="textLinkNoTitle" href="https://example.com" style="width: 200px; height: 50px;">
+          <div>TEXT IN LINK WITH NO TITLE</div>
+        </a>
+        <a href="../imgs/QjjaS_3_2.jpg" title="title 3:2">
+          <img src="../imgs/QjjaS_3_2_m.jpg" alt="Image 3:2" />
+        </a>
+      </div>
+    </div>
+
+    <script type="module">
+      import { JustifiedGallery } from "@/justified-gallery";
+      import { EventType } from "@/events";
+
+      window.jgCompletedCount = 0;
+      window.jgTriggerEvent = (name) => {
+        if (name === EventType.Complete) window.jgCompletedCount++;
+      };
+
+      new JustifiedGallery(document.getElementById("gallery"), {
+        captions: true,
+        triggerEvent: window.jgTriggerEvent,
+      }).init();
+    </script>
+  </body>
+</html>

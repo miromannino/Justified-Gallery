@@ -1,0 +1,19 @@
+/*
+ * Justified Gallery - 4.0.0
+ * http://miromannino.com/projects/justified-gallery/
+ * Copyright (c) 2024 Miro Mannino
+ * Licensed under the MIT license.
+ */
+
+@use 'entry-base';
+@use 'caption';
+@use 'spinner';
+
+.justified-gallery {
+  position: relative;
+  overflow: hidden;
+
+  >.jg-filtered {
+    display: none;
+  }
+}

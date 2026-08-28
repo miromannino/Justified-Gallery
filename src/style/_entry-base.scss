@@ -1,0 +1,40 @@
+@use 'variables' as v;
+
+.justified-gallery {
+  >a,
+  >div,
+  >figure {
+    position: absolute;
+    display: inline-block;
+    overflow: hidden;
+    @include v.opacity(0.1);
+    margin: 0;
+    padding: 0;
+
+    >img,
+    >a>img,
+    >svg,
+    >a>svg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: 0;
+      padding: 0;
+      border: none;
+      @include v.opacity(0);
+    }
+  }
+
+  >.jg-entry-visible {
+    @include v.opacity(1);
+    background: none;
+
+    >img,
+    >a>img,
+    >svg,
+    >a>svg {
+      @include v.opacity(1);
+      @include v.transition(opacity);
+    }
+  }
+}

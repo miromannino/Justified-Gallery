@@ -1,0 +1,14 @@
+$caption-initial-opacity: 0.0;
+$caption-visible-opacity: 0.7;
+
+@mixin transition($property: all, $duration: 500ms, $ease: ease-in) {
+  -webkit-transition: $property $duration $ease;
+  -moz-transition: $property $duration $ease;
+  -o-transition: $property $duration $ease;
+  transition: $property $duration $ease;
+}
+
+@mixin opacity($opacity: 1) {
+  filter: alpha(opacity=#{$opacity * 100});
+  opacity: $opacity;
+}

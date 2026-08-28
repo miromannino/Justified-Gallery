@@ -1,5 +1,28 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor and OS
+.vscode/*
+.idea
 .DS_Store
-bower_components
+*.njsproj
+
+# Others
 node_modules
-_site
-vendor
+dist
+dist-ssr
+*.local
+sandbox-consumer
+*.suo
+*.ntvs*
+*.sln
+*.sw?
+resources/*
+test-results/*
+!test-results/.last-run.json

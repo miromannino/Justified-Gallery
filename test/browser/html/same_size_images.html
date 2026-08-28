@@ -1,0 +1,66 @@
+<!-- test/browser/test-page.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>Same Size Images Test</h1>
+
+      <div id="gallery">
+        <a href="../imgs/NLMVO_1_1.jpg" title="title NLMVO_1_1">
+          <img src="../imgs/NLMVO_1_1_m.jpg" alt="NLMVO_1_1" />
+        </a>
+        <a href="../imgs/NLMVO_1_1.jpg" title="title NLMVO_1_1">
+          <img src="../imgs/NLMVO_1_1_m.jpg" alt="NLMVO_1_1" />
+        </a>
+        <a href="../imgs/NLMVO_1_1.jpg" title="title NLMVO_1_1">
+          <img src="../imgs/NLMVO_1_1_m.jpg" alt="NLMVO_1_1" />
+        </a>
+        <a href="../imgs/NLMVO_1_1.jpg" title="title NLMVO_1_1">
+          <img src="../imgs/NLMVO_1_1_m.jpg" alt="NLMVO_1_1" />
+        </a>
+        <a href="../imgs/NLMVO_1_1.jpg" title="title NLMVO_1_1">
+          <img src="../imgs/NLMVO_1_1_m.jpg" alt="NLMVO_1_1" />
+        </a>
+        <a href="../imgs/NLMVO_1_1.jpg" title="title NLMVO_1_1">
+          <img src="../imgs/NLMVO_1_1_m.jpg" alt="NLMVO_1_1" />
+        </a>
+        <a href="../imgs/NLMVO_1_1.jpg" title="title NLMVO_1_1">
+          <img src="../imgs/NLMVO_1_1_m.jpg" alt="NLMVO_1_1" />
+        </a>
+        <a href="../imgs/NLMVO_1_1.jpg" title="title NLMVO_1_1">
+          <img src="../imgs/NLMVO_1_1_m.jpg" alt="NLMVO_1_1" />
+        </a>
+        <a href="../imgs/NLMVO_1_1.jpg" title="title NLMVO_1_1">
+          <img src="../imgs/NLMVO_1_1_m.jpg" alt="NLMVO_1_1" />
+        </a>
+        <a href="../imgs/NLMVO_1_1.jpg" title="title NLMVO_1_1">
+          <img src="../imgs/NLMVO_1_1_m.jpg" alt="NLMVO_1_1" />
+        </a>
+        <a href="../imgs/NLMVO_1_1.jpg" title="title NLMVO_1_1">
+          <img src="../imgs/NLMVO_1_1_m.jpg" alt="NLMVO_1_1" />
+        </a>
+        <a href="../imgs/NLMVO_1_1.jpg" title="title NLMVO_1_1">
+          <img src="../imgs/NLMVO_1_1_m.jpg" alt="NLMVO_1_1" />
+        </a>
+      </div>
+    </div>
+
+    <script type="module">
+      import { JustifiedGallery } from "@/justified-gallery";
+      import { EventType } from "@/events";
+
+      window.jgCompletedCount = 0;
+      window.jgTriggerEvent = (name) => {
+        if (name === EventType.Complete) window.jgCompletedCount++;
+      };
+
+      new JustifiedGallery(document.getElementById("gallery"), {
+        triggerEvent: window.jgTriggerEvent,
+      }).init();
+    </script>
+  </body>
+</html>

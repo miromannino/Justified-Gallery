@@ -1,0 +1,77 @@
+<!-- test/browser/test-page.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>Randomize Test</h1>
+
+      <div id="gallery">
+        <a href="../imgs/6fj4l_2_3.jpg" title="title 6fj4l_2_3">
+          <img src="../imgs/6fj4l_2_3_m.jpg" alt="6fj4l_2_3" />
+        </a>
+        <a href="../imgs/88kdw_4_3.jpg" title="title 88kdw_4_3">
+          <img src="../imgs/88kdw_4_3_m.jpg" alt="88kdw_4_3" />
+        </a>
+        <a href="../imgs/BxsII_1_1.jpg" title="title BxsII_1_1">
+          <img src="../imgs/BxsII_1_1_m.jpg" alt="BxsII_1_1" />
+        </a>
+        <a href="../imgs/Gk3da_2_3.jpg" title="title Gk3da_2_3">
+          <img src="../imgs/Gk3da_2_3_m.jpg" alt="Gk3da_2_3" />
+        </a>
+        <a href="../imgs/K08Y5_2_3.jpg" title="title K08Y5_2_3">
+          <img src="../imgs/K08Y5_2_3_m.jpg" alt="K08Y5_2_3" />
+        </a>
+        <a href="../imgs/Mzju9_9_16.jpg" title="title Mzju9_9_16">
+          <img src="../imgs/Mzju9_9_16_m.jpg" alt="Mzju9_9_16" />
+        </a>
+        <a href="../imgs/NLMVO_1_1.jpg" title="title NLMVO_1_1">
+          <img src="../imgs/NLMVO_1_1_m.jpg" alt="NLMVO_1_1" />
+        </a>
+        <a href="../imgs/Qe47i_4_5.jpg" title="title Qe47i_4_5">
+          <img src="../imgs/Qe47i_4_5_m.jpg" alt="Qe47i_4_5" />
+        </a>
+        <a href="../imgs/QjjaS_3_2.jpg" title="title QjjaS_3_2">
+          <img src="../imgs/QjjaS_3_2_m.jpg" alt="QjjaS_3_2" />
+        </a>
+        <a href="../imgs/TJS59_3_2.jpg" title="title TJS59_3_2">
+          <img src="../imgs/TJS59_3_2_m.jpg" alt="TJS59_3_2" />
+        </a>
+        <a href="../imgs/ZVqsG_3_2.jpg" title="title ZVqsG_3_2">
+          <img src="../imgs/ZVqsG_3_2_m.jpg" alt="ZVqsG_3_2" />
+        </a>
+        <a href="../imgs/ZoTcD_5_4.jpg" title="title ZoTcD_5_4">
+          <img src="../imgs/ZoTcD_5_4_m.jpg" alt="ZoTcD_5_4" />
+        </a>
+        <a href="../imgs/egC97_5_4.jpg" title="title egC97_5_4">
+          <img src="../imgs/egC97_5_4_m.jpg" alt="egC97_5_4" />
+        </a>
+        <a href="../imgs/elR6o_5_4.jpg" title="title elR6o_5_4">
+          <img src="../imgs/elR6o_5_4_m.jpg" alt="elR6o_5_4" />
+        </a>
+        <a href="../imgs/fWAtG_16_9.jpg" title="title fWAtG_16_9">
+          <img src="../imgs/fWAtG_16_9_m.jpg" alt="fWAtG_16_9" />
+        </a>
+      </div>
+    </div>
+
+    <script type="module">
+      import { JustifiedGallery } from "@/justified-gallery";
+      import { EventType } from "@/events";
+
+      window.jgCompletedCount = 0;
+      window.jgTriggerEvent = (name) => {
+        if (name === EventType.Complete) window.jgCompletedCount++;
+      };
+
+      new JustifiedGallery(document.getElementById("gallery"), {
+        randomize: true,
+        rowHeight: 100,
+        triggerEvent: window.jgTriggerEvent,
+      }).init();
+    </script>
+  </body>
+</html>

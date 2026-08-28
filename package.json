@@ -1,13 +1,26 @@
 {
-  "name": "justifiedGallery",
-  "version": "3.8.1",
+  "name": "justified-gallery",
+  "version": "4.0.0",
   "description": "Justified Gallery is a JavaScript library that allows you to create an high quality justified gallery of images.",
-  "main": "dist/js/jquery.justifiedGallery.js",
+  "type": "module",
+  "main": "./dist/justified-gallery.js",
+  "module": "./dist/justified-gallery.js",
+  "types": "./dist/justified-gallery.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/justified-gallery.d.ts",
+      "import": "./dist/justified-gallery.js"
+    },
+    "./style.css": "./dist/assets/justified-gallery.css"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/miromannino/Justified-Gallery.git"
   },
-  "homepage": "http://miromannino.github.io/Justified-Gallery/",
+  "homepage": "https://miromannino.github.io/Justified-Gallery/",
   "keywords": [
     "justified",
     "gallery",
@@ -21,34 +34,49 @@
   "author": {
     "name": "Miro Mannino",
     "email": "miro.mannino@gmail.com",
-    "url": "http://miromannino.com/"
+    "url": "https://miromannino.com/"
   },
   "license": "MIT",
   "engines": {
-    "node": ">= 0.8.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
-    "test": "grunt qunit"
+    "dev": "vite",
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "preview": "vite preview",
+    "test": "npm run test:unit ; npm run test:e2e",
+    "test:unit": "npx vitest run",
+    "test:e2e": "npx playwright test",
+    "release": "semantic-release"
   },
   "devDependencies": {
-    "bower": "^1.8.2",
-    "grunt": "^1.0.2",
-    "grunt-cli": "^1.2.0",
-    "grunt-contrib-clean": "^1.1.0",
-    "grunt-contrib-compress": "^1.4.3",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-csslint": "^2.0.0",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-less": "^1.4.1",
-    "grunt-contrib-uglify": "^3.3.0",
-    "grunt-text-replace": "^0.4.0",
-    "grunt-wiredep": "^3.0.1",
-    "jquery-colorbox": "^1.6.4",
-    "load-grunt-tasks": "^3.5.2",
-    "requirejs": "^2.3.6",
-    "swipebox": "^1.4.6"
-  },
-  "dependencies": {
-    "jquery": "^3.5.1"
+    "@eslint/js": "9.9.1",
+    "@playwright/test": "1.62.1",
+    "@semantic-release/changelog": "7.0.0",
+    "@semantic-release/git": "11.0.1",
+    "@types/jsdom": "30.0.0",
+    "@types/node": "26.2.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
+    "@vitejs/plugin-react": "6.1.1",
+    "@vitejs/plugin-vue": "6.0.8",
+    "@vitest/browser": "4.1.11",
+    "@vitest/ui": "4.1.11",
+    "eslint": "9.9.1",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-prettier": "5.2.1",
+    "globals": "15.9.0",
+    "jsdom": "30.0.1",
+    "playwright": "1.62.1",
+    "prettier": "3.3.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "sass": "1.78.0",
+    "semantic-release": "25.0.9",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "8.3.0",
+    "vite": "8.2.2",
+    "vitest": "4.1.11",
+    "vue": "3.5.42"
   }
 }
