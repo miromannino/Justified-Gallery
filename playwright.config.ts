@@ -5,8 +5,7 @@ const config: PlaywrightTestConfig = {
   name: 'browser',
   testDir: './test/browser',
   use: {
-    headless: false, // Set to true if you want to hide the browser
-    launchOptions: { slowMo: 500 },
+    headless: !!process.env.CI,
     viewport: { width: 700, height: 700 },
   },
   webServer: {
