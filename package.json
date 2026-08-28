@@ -1,7 +1,7 @@
 {
   "name": "justified-gallery",
-  "private": true,
-  "version": "0.0.0",
+  "version": "4.0.0",
+  "description": "Justified Gallery is a JavaScript library that allows you to create an high quality justified gallery of images.",
   "type": "module",
   "main": "./dist/justified-gallery.js",
   "module": "./dist/justified-gallery.js",
@@ -16,17 +16,44 @@
     },
     "./style.css": "./dist/assets/justified-gallery.css"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/miromannino/Justified-Gallery.git"
+  },
+  "homepage": "https://miromannino.github.io/Justified-Gallery/",
+  "keywords": [
+    "justified",
+    "gallery",
+    "justified-gallery",
+    "thumbnails",
+    "masonry",
+    "infinite-scroll",
+    "bricklayer",
+    "mason"
+  ],
+  "author": {
+    "name": "Miro Mannino",
+    "email": "miro.mannino@gmail.com",
+    "url": "https://miromannino.com/"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc -p tsconfig.build.json",
     "preview": "vite preview",
     "test": "npm run test:unit ; npm run test:e2e",
     "test:unit": "npx vitest run",
-    "test:e2e": "npx playwright test"
+    "test:e2e": "npx playwright test",
+    "release": "semantic-release"
   },
   "devDependencies": {
     "@eslint/js": "9.9.1",
     "@playwright/test": "1.62.1",
+    "@semantic-release/changelog": "7.0.0",
+    "@semantic-release/git": "11.0.1",
     "@types/jsdom": "30.0.0",
     "@types/node": "26.2.0",
     "@types/react": "19.2.18",
@@ -45,6 +72,7 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "sass": "1.78.0",
+    "semantic-release": "25.0.9",
     "typescript": "^5.5.3",
     "typescript-eslint": "8.3.0",
     "vite": "8.2.2",
