@@ -7,8 +7,10 @@
 **Justified Gallery is a JavaScript library that allows you to create an high
 quality justified gallery of images.**
 
-[![Bower version](https://badge.fury.io/bo/justifiedGallery.svg)](https://badge.fury.io/bo/justifiedGallery)
-[![npm version](https://badge.fury.io/js/justifiedGallery.svg)](https://badge.fury.io/js/justifiedGallery)
+[![npm version](https://badge.fury.io/js/justified-gallery.svg)](https://www.npmjs.com/package/justified-gallery)
+[![total downloads](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/downloads.json)](#downloads)
+[![license](https://img.shields.io/npm/l/justified-gallery.svg)](https://github.com/miromannino/Justified-Gallery/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/miromannino/Justified-Gallery.svg)](https://github.com/miromannino/Justified-Gallery/stargazers)
 
 This is a common problem for people who create websites: you have a series of
 images to display, but you are not sure how to arrange them in an elegant way.
@@ -44,6 +46,16 @@ integrates the same way in any framework: get a ref to the container, call
 [`test/browser/html/react_gallery.tsx`](test/browser/html/react_gallery.tsx)
 and [`test/browser/html/vue_gallery.vue`](test/browser/html/vue_gallery.vue)
 for working React and Vue examples.
+
+## Downloads
+
+<a href="#downloads"><img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/downloads.json" alt="total downloads" style="vertical-align:middle"></a>
+<em style="vertical-align:middle">(combined across <code>justified-gallery</code> and legacy <code>justifiedGallery</code> npm packages)</em>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/downloads-chart-dark.svg">
+  <img src="https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/downloads-chart-light.svg" alt="Monthly npm downloads (last 24 months)" width="100%">
+</picture>
 
 ## Contributing
 
