@@ -26,3 +26,5 @@ sandbox-consumer
 resources/*
 test-results/*
 !test-results/.last-run.json
+unit-results.json
+e2e-results.json

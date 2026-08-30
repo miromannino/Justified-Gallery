@@ -11,26 +11,16 @@
 // until npm-stat comes back, since the ledger alone can't reconstruct
 // daily/monthly granularity.
 
+import { requireGistEnv, fetchJson, loadGistFile, saveGistFiles } from "./gist-utils.mjs";
+
 const PACKAGES = {
   justifiedGallery: "2015-01-10",
   "justified-gallery": "2016-07-14",
 };
 
-const GIST_ID = process.env.GIST_ID;
-const GIST_TOKEN = process.env.GIST_TOKEN;
-
-if (!GIST_ID || !GIST_TOKEN) {
-  console.error("GIST_ID and GIST_TOKEN env vars are required");
-  process.exit(1);
-}
+const gist = { ...requireGistEnv(), userAgent: "justified-gallery-downloads-badge" };
 
 const todayISO = () => new Date().toISOString().slice(0, 10);
-
-async function fetchJson(url, options) {
-  const res = await fetch(url, options);
-  if (!res.ok) throw new Error(`${url} -> HTTP ${res.status}`);
-  return res.json();
-}
 
 // Official npm download-counts API: total downloads over [start, end] for one package.
 async function officialWeekTotal(pkg, start, end) {
@@ -64,37 +54,6 @@ function mergeMonthly(a, b) {
   for (const [month, count] of Object.entries(b))
     merged[month] = (merged[month] || 0) + count;
   return merged;
-}
-
-async function loadGistFile(filename, fallback) {
-  const gist = await fetchJson(`https://api.github.com/gists/${GIST_ID}`, {
-    headers: {
-      Authorization: `token ${GIST_TOKEN}`,
-      "User-Agent": "justified-gallery-downloads-badge",
-    },
-  });
-  const file = gist.files[filename];
-  return file ? JSON.parse(file.content) : fallback;
-}
-
-async function saveGistFiles(files) {
-  const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-    method: "PATCH",
-    headers: {
-      Authorization: `token ${GIST_TOKEN}`,
-      "User-Agent": "justified-gallery-downloads-badge",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      files: Object.fromEntries(
-        Object.entries(files).map(([name, content]) => [name, { content }])
-      ),
-    }),
-  });
-  if (!res.ok)
-    throw new Error(
-      `Gist update failed: HTTP ${res.status} ${await res.text()}`
-    );
 }
 
 function formatMessage(total) {
@@ -169,8 +128,8 @@ function renderChartSvg(monthly, { textColor, lineColor, areaColor, gridColor })
 }
 
 async function main() {
-  const log = await loadGistFile("downloads-log.json");
-  let history = await loadGistFile("downloads-history.json", {});
+  const log = await loadGistFile(gist, "downloads-log.json");
+  let history = await loadGistFile(gist, "downloads-history.json", {});
 
   // Always record this week's official-API numbers into our own ledger,
   // independent of whether npm-stat is reachable.
@@ -233,7 +192,7 @@ async function main() {
     color: "brightgreen",
   };
 
-  await saveGistFiles({
+  await saveGistFiles(gist, {
     "downloads.json": JSON.stringify(badge),
     "downloads-log.json": JSON.stringify(log, null, 2),
     "downloads-history.json": JSON.stringify(history, null, 2),

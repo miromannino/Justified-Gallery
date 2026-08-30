@@ -27,12 +27,18 @@
 
 [![npm version](https://img.shields.io/npm/v/justified-gallery?style=for-the-badge)](https://www.npmjs.com/package/justified-gallery)
 [![license](https://img.shields.io/npm/l/justified-gallery?style=for-the-badge)](https://github.com/miromannino/Justified-Gallery/blob/master/LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/miromannino/Justified-Gallery?style=for-the-badge)](https://github.com/miromannino/Justified-Gallery/stargazers)
+
+[![open issues](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/open-issues.json&style=for-the-badge)](https://github.com/miromannino/Justified-Gallery/issues)
+[![closed issues](https://img.shields.io/github/issues-closed/miromannino/Justified-Gallery?style=for-the-badge&color=brightgreen)](https://github.com/miromannino/Justified-Gallery/issues?q=is%3Aissue+is%3Aclosed)
+[![unit tests](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/unit-tests.json&style=for-the-badge)](https://github.com/miromannino/Justified-Gallery/actions/workflows/ci.yml)
+[![e2e tests](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/e2e-tests.json&style=for-the-badge)](https://github.com/miromannino/Justified-Gallery/actions/workflows/ci.yml)
+
 
 </div>
 
 <div align="center">
 
+[![GitHub stars](https://img.shields.io/github/stars/miromannino/Justified-Gallery?style=for-the-badge)](https://github.com/miromannino/Justified-Gallery/stargazers)
 [![total downloads](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/downloads.json&style=for-the-badge)](#downloads)
 
 <picture>

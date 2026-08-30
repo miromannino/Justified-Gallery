@@ -45,7 +45,7 @@
     "build": "vite build && tsc -p tsconfig.build.json",
     "preview": "vite preview",
     "test": "npm run test:unit ; npm run test:e2e",
-    "test:unit": "npx vitest run",
+    "test:unit": "npx vitest run --reporter=default --reporter=json --outputFile=unit-results.json",
     "test:e2e": "npx playwright test",
     "release": "semantic-release"
   },

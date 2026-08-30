@@ -1,0 +1,22 @@
+name: Update issues badge
+
+on:
+  issues:
+    types: [opened, closed, reopened, deleted, transferred]
+  schedule:
+    - cron: '0 6 * * 1' # every Monday 06:00 UTC, as a fallback
+  workflow_dispatch: {}
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/update-issues-badge.mjs
+        env:
+          GIST_ID: 75ca0785d41059c9a61f37e477609f9c
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
