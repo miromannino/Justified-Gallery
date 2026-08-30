@@ -1,6 +1,6 @@
 <div align="center">
   <a href="http://miromannino.github.io/Justified-Gallery/" target="_blank">
-    <img src="https://raw.github.com/miromannino/Justified-Gallery/gh-imgs/jgcover.png" />
+    <img src="https://raw.github.com/miromannino/Justified-Gallery/gh-imgs/justified-gallery.webp" />
   </a>
 </div>
 
