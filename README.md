@@ -4,13 +4,18 @@
   </a>
 </div>
 
+<br/>
+
 **Justified Gallery is a JavaScript library that allows you to create an high
 quality justified gallery of images.**
 
-[![npm version](https://badge.fury.io/js/justified-gallery.svg)](https://www.npmjs.com/package/justified-gallery)
-[![total downloads](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/downloads.json)](#downloads)
-[![license](https://img.shields.io/npm/l/justified-gallery.svg)](https://github.com/miromannino/Justified-Gallery/blob/master/LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/miromannino/Justified-Gallery.svg)](https://github.com/miromannino/Justified-Gallery/stargazers)
+<div align="center">
+  <a href="http://miromannino.github.io/Justified-Gallery/" target="_blank">
+    <img src="https://img.shields.io/badge/official%20project%20page-visit-2ea44f?style=for-the-badge" alt="Official project page" />
+  </a>
+</div>
+
+<br/>
 
 This is a common problem for people who create websites: you have a series of
 images to display, but you are not sure how to arrange them in an elegant way.
@@ -21,8 +26,25 @@ give you the power to do that too.
 Justified Gallery is a professional and open source library that even 500px, one
 of the best photography social network, chose for displaying their images!
 
-<div style="text-align: center; font-size: 110%;">
-	<a href="http://miromannino.github.io/Justified-Gallery/" target="_blank">Official project page</a>
+<div align="center">
+
+[![npm version](https://img.shields.io/npm/v/justified-gallery?style=for-the-badge)](https://www.npmjs.com/package/justified-gallery)
+[![license](https://img.shields.io/npm/l/justified-gallery?style=for-the-badge)](https://github.com/miromannino/Justified-Gallery/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/miromannino/Justified-Gallery?style=for-the-badge)](https://github.com/miromannino/Justified-Gallery/stargazers)
+
+</div>
+
+<div align="center">
+
+[![total downloads](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/downloads.json&style=for-the-badge)](#downloads)
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/downloads-chart-dark.svg">
+  <img src="https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/downloads-chart-light.svg" alt="Monthly npm downloads (last 24 months)" width="100%">
+</picture>
+
+<em>(combined across <code>justified-gallery</code> and legacy <code>justifiedGallery</code> npm packages)</em>
+
 </div>
 
 ## Usage
@@ -31,12 +53,11 @@ of the best photography social network, chose for displaying their images!
 import { JustifiedGallery } from 'justified-gallery';
 import 'justified-gallery/style.css';
 
-const jg = new JustifiedGallery(document.getElementById('gallery'), {
-  rowHeight: 120,
-});
+const gallery = document.getElementById('gallery');
+const jg = new JustifiedGallery(gallery);
 jg.init();
 
-// later, e.g. on unmount:
+// later, on unmount:
 jg.destroy();
 ```
 
@@ -46,16 +67,6 @@ integrates the same way in any framework: get a ref to the container, call
 [`test/browser/html/react_gallery.tsx`](test/browser/html/react_gallery.tsx)
 and [`test/browser/html/vue_gallery.vue`](test/browser/html/vue_gallery.vue)
 for working React and Vue examples.
-
-## Downloads
-
-<a href="#downloads"><img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/downloads.json" alt="total downloads" style="vertical-align:middle"></a>
-<em style="vertical-align:middle">(combined across <code>justified-gallery</code> and legacy <code>justifiedGallery</code> npm packages)</em>
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/downloads-chart-dark.svg">
-  <img src="https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/downloads-chart-light.svg" alt="Monthly npm downloads (last 24 months)" width="100%">
-</picture>
 
 ## Contributing
 
