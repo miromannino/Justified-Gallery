@@ -1,0 +1,9 @@
+*/*
+!jgcover.png
+!justified-gallery.webp
+node_modules
+resources
+src
+test
+scripts
+.vscode
