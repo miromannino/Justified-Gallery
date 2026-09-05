@@ -1,0 +1,19 @@
+{
+  "name": "justified-gallery-gh-pages",
+  "version": "3.8.0",
+  "homepage": "https://github.com/miromannino/Justified-Gallery",
+  "authors": [
+    "Miro Mannino <miro.mannino@gmail.com>"
+  ],
+  "description": "Justified Gallery gh-pages",
+  "main": "index.html",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "3.3.5",
+    "font-awesome": "^4.7.0",
+    "jquery": "^2.1.0",
+    "jquery-colorbox": "^1.6.4",
+    "justifiedGallery": "3.8.0",
+    "swipebox": "^1.4.6"
+  }
+}
