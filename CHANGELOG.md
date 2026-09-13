@@ -1,3 +1,10 @@
+## [4.0.2](https://github.com/miromannino/Justified-Gallery/compare/4.0.1...4.0.2) (2026-09-13)
+
+
+### Bug Fixes
+
+* keep gallery entries hidden until layout is ready ([#410](https://github.com/miromannino/Justified-Gallery/issues/410)) ([62ce37b](https://github.com/miromannino/Justified-Gallery/commit/62ce37bedf5d8b4a3ebf57870d121b10c0af87bb))
+
 ## [4.0.1](https://github.com/miromannino/Justified-Gallery/compare/4.0.0...4.0.1) (2026-08-28)
 
 
