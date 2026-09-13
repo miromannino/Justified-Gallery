@@ -4,12 +4,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style/justified-gallery.css" />
   </head>
   <body>
     <div id="app">
       <h1>Margins and Border Test</h1>
 
-      <div id="margin0">
+      <div id="margin0" class="justified-gallery">
         <a href="../imgs/88kdw_4_3.jpg" title="title 88kdw_4_3">
           <img src="../imgs/88kdw_4_3_m.jpg" alt="88kdw_4_3" />
         </a>
@@ -30,7 +31,7 @@
         </a>
       </div>
 
-      <div id="margin1">
+      <div id="margin1" class="justified-gallery">
         <a href="../imgs/88kdw_4_3.jpg" title="title 88kdw_4_3">
           <img src="../imgs/88kdw_4_3_m.jpg" alt="88kdw_4_3" />
         </a>
@@ -51,7 +52,7 @@
         </a>
       </div>
 
-      <div id="margin10">
+      <div id="margin10" class="justified-gallery">
         <a href="../imgs/88kdw_4_3.jpg" title="title 88kdw_4_3">
           <img src="../imgs/88kdw_4_3_m.jpg" alt="88kdw_4_3" />
         </a>
@@ -72,7 +73,7 @@
         </a>
       </div>
 
-      <div id="margin20">
+      <div id="margin20" class="justified-gallery">
         <a href="../imgs/88kdw_4_3.jpg" title="title 88kdw_4_3">
           <img src="../imgs/88kdw_4_3_m.jpg" alt="88kdw_4_3" />
         </a>
@@ -93,7 +94,7 @@
         </a>
       </div>
 
-      <div id="margin20border0">
+      <div id="margin20border0" class="justified-gallery">
         <a href="../imgs/88kdw_4_3.jpg" title="title 88kdw_4_3">
           <img src="../imgs/88kdw_4_3_m.jpg" alt="88kdw_4_3" />
         </a>
@@ -114,7 +115,7 @@
         </a>
       </div>
 
-      <div id="margin20border5">
+      <div id="margin20border5" class="justified-gallery">
         <a href="../imgs/88kdw_4_3.jpg" title="title 88kdw_4_3">
           <img src="../imgs/88kdw_4_3_m.jpg" alt="88kdw_4_3" />
         </a>
@@ -135,7 +136,7 @@
         </a>
       </div>
 
-      <div id="margin0border20">
+      <div id="margin0border20" class="justified-gallery">
         <a href="../imgs/88kdw_4_3.jpg" title="title 88kdw_4_3">
           <img src="../imgs/88kdw_4_3_m.jpg" alt="88kdw_4_3" />
         </a>
@@ -155,7 +156,6 @@
           <img src="../imgs/ZoTcD_5_4_m.jpg" alt="ZoTcD_5_4" />
         </a>
       </div>
-
     </div>
 
     <script type="module">
@@ -183,15 +183,18 @@
         triggerEvent: window.jgTriggerEvent,
       }).init();
       new JustifiedGallery(document.getElementById("margin20border0"), {
-        margins: 20, border: 0,
+        margins: 20,
+        border: 0,
         triggerEvent: window.jgTriggerEvent,
       }).init();
       new JustifiedGallery(document.getElementById("margin20border5"), {
-        margins: 20, border: 5,
+        margins: 20,
+        border: 5,
         triggerEvent: window.jgTriggerEvent,
       }).init();
       new JustifiedGallery(document.getElementById("margin0border20"), {
-        margins: 0, border: 20,
+        margins: 0,
+        border: 20,
         triggerEvent: window.jgTriggerEvent,
       }).init();
     </script>

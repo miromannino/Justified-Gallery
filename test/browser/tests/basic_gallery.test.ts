@@ -17,6 +17,31 @@ test('gallery should be set correctly', async ({ page }) => {
   expect(links.length).toBeGreaterThan(0);
 });
 
+test('images hidden by CSS before justified gallery runs, revealed once complete', async ({
+  page,
+}) => {
+  await page.route('**/src/justified-gallery.ts*', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    await route.continue();
+  });
+
+  await page.goto(getTestPageUrl(import.meta.url), { waitUntil: 'commit' });
+  await page.waitForSelector('#gallery > a', { state: 'attached' });
+  await page.waitForFunction(() => document.styleSheets.length > 0);
+
+  const firstLink = page.locator('#gallery > a').first();
+  const hiddenOpacity = await firstLink.evaluate((el) =>
+    parseFloat(window.getComputedStyle(el).opacity)
+  );
+  expect(hiddenOpacity).toBeLessThan(1);
+
+  await expect(firstLink).toHaveClass(/jg-entry-visible/, { timeout: 5000 });
+  const visibleOpacity = await firstLink.evaluate((el) =>
+    parseFloat(window.getComputedStyle(el).opacity)
+  );
+  expect(visibleOpacity).toBe(1);
+});
+
 test('gallery should receive CSS correctly', async ({ page }) => {
   await page.goto(getTestPageUrl(import.meta.url));
 

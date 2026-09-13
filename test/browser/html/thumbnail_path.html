@@ -4,12 +4,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style/justified-gallery.css" />
   </head>
   <body>
     <div id="app">
       <h1>Custom thumbnailPath Test</h1>
 
-      <div id="gallery">
+      <div id="gallery" class="justified-gallery">
         <div>
           <img alt="6fj4l_2_3" src="../imgs/6fj4l_2_3_t.jpg" />
         </div>
@@ -44,7 +45,8 @@
         rowHeight: 300,
         // Always resolves to the largest ("_b") thumbnail, regardless of
         // the computed display size, ignoring sizeRangeSuffixes entirely.
-        thumbnailPath: (currentPath) => currentPath.replace(/_t\.jpg$/, "_b.jpg"),
+        thumbnailPath: (currentPath) =>
+          currentPath.replace(/_t\.jpg$/, "_b.jpg"),
         triggerEvent: window.jgTriggerEvent,
       }).init();
     </script>

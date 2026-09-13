@@ -33,7 +33,6 @@
 [![unit tests](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/unit-tests.json&style=for-the-badge)](https://github.com/miromannino/Justified-Gallery/actions/workflows/ci.yml)
 [![e2e tests](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw/e2e-tests.json&style=for-the-badge)](https://github.com/miromannino/Justified-Gallery/actions/workflows/ci.yml)
 
-
 </div>
 
 <div align="center">
@@ -71,6 +70,43 @@ integrates the same way in any framework: get a ref to the container, call
 [`test/browser/html/react_gallery.tsx`](test/browser/html/react_gallery.tsx) and
 [`test/browser/html/vue_gallery.vue`](test/browser/html/vue_gallery.vue) for
 working React and Vue examples.
+
+The stylesheet keeps entries hidden until they're positioned, so you don't see a
+flash of raw, unpositioned images. This only applies inside a container with the
+`justified-gallery` class, since that's what the CSS targets:
+
+```css
+.justified-gallery > a,
+.justified-gallery > div,
+.justified-gallery > figure {
+  opacity: 0;
+  /* ... */
+}
+```
+
+`init()` adds that class for you, but not until your script runs. So the hiding
+won't actually happen before then unless you also add the class yourself,
+directly in your markup:
+
+```html
+<div id="gallery" class="justified-gallery">...</div>
+```
+
+`init()` adding the class again is harmless; `destroy()` still removes it.
+
+This also depends on the CSS itself being loaded before your script runs. The
+`import "justified-gallery/style.css"` above takes care of that for bundler
+setups (bundlers usually put CSS imports into a `<link>` that loads ahead of
+your JS). If you're loading the library from a plain `<script>` tag or CDN with
+no build step, link the stylesheet the same way, directly in `<head>`, before
+your script tag:
+
+```html
+<link
+  rel="stylesheet"
+  href="https://.../justified-gallery/dist/assets/justified-gallery.css"
+/>
+```
 
 ## Contributing
 
