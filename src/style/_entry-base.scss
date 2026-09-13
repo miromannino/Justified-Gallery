@@ -7,7 +7,7 @@
     position: absolute;
     display: inline-block;
     overflow: hidden;
-    @include v.opacity(0.1);
+    @include v.opacity(0);
     margin: 0;
     padding: 0;
 

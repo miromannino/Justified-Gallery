@@ -1,8 +1,8 @@
+import react from '@vitejs/plugin-react';
+import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import vue from '@vitejs/plugin-vue';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,9 +13,37 @@ export const SERVER_CONFIG = {
   port: 3000,
 };
 
+// In dev, the server root is `test/browser` so that the test pages asset paths
+// (e.g. `../imgs/...`) resolve naturally. That means a plain
+// `<link href="...">` from a test page can't reach `src/style` with a
+// relative path. This plugin rewrites requests for a
+// stable `/style/justified-gallery.css` URL to Vite's `/@fs/` absolute-path
+// form, so the test pages can link the real stylesheet (compiled live
+// from `src/style/justified-gallery.scss`).
+function serveLibraryStyleForDevTests() {
+  const absoluteScssPath = path
+    .resolve(__dirname, 'src/style/justified-gallery.scss')
+    .replace(/\\/g, '/');
+  return {
+    name: 'serve-library-style-for-dev-tests',
+    apply: 'serve' as const,
+    configureServer(server: import('vite').ViteDevServer) {
+      server.middlewares.use((req, _res, next) => {
+        if (req.url?.startsWith('/style/justified-gallery.css')) {
+          req.url = req.url.replace(
+            '/style/justified-gallery.css',
+            `/@fs/${absoluteScssPath}`
+          );
+        }
+        next();
+      });
+    },
+  };
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), vue()],
+  plugins: [react(), vue(), serveLibraryStyleForDevTests()],
   root: isDev
     ? path.resolve(__dirname, 'test/browser')
     : path.resolve(__dirname, 'src'),
