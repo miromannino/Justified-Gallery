@@ -1,0 +1,84 @@
+---
+// Small illustration for the "Truly responsive" feature card.
+const blocks = 35;
+---
+
+<div class="jg-responsive-demo" aria-hidden="true">
+  <div class="jg-responsive-frame">
+    {
+      Array.from({ length: blocks }).map(() => (
+        <span class="jg-responsive-block" />
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  /* The frame animates its own width/height, so the wrapper reserves the
+     tallest state up front: without it the card (and the whole bento grid)
+     would grow and shrink on every cycle. */
+  .jg-responsive-demo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 4.45rem;
+  }
+
+  .jg-responsive-frame {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 0.18rem;
+    padding: 0.32rem;
+    border: 2px solid var(--sl-color-gray-4);
+    background: color-mix(in srgb, var(--sl-color-bg) 40%, transparent);
+    overflow: hidden;
+    animation: jg-responsive-resize 4.2s ease-in-out infinite;
+  }
+
+  .jg-responsive-block {
+    flex: none;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 0.12rem;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--sl-color-accent) 55%, transparent),
+      color-mix(in srgb, var(--sl-color-accent-high) 30%, transparent)
+    );
+  }
+
+  /* Two device shapes at the same height, so the card never resizes: a 4:3
+     desktop screen (7 blocks per row, five rows) and a portrait phone
+     (2 blocks per row, the rest clipped as if scrolled), with the blocks
+     reflowing between them. Widths are
+     exact fits: block 0.5rem + gap 0.18rem + padding 0.32rem + 2px border. */
+  @keyframes jg-responsive-resize {
+    0%,
+    14% {
+      width: 5.6rem;
+      height: 4.2rem;
+      border-radius: 0.4rem;
+    }
+    50%,
+    64% {
+      width: 2.15rem;
+      height: 4.2rem;
+      border-radius: 0.55rem;
+    }
+    100% {
+      width: 5.6rem;
+      height: 4.2rem;
+      border-radius: 0.4rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .jg-responsive-frame {
+      animation: none;
+      width: 5.6rem;
+      height: 4.2rem;
+      border-radius: 0.4rem;
+    }
+  }
+</style>

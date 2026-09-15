@@ -1,0 +1,69 @@
+---
+import { Icon } from '@astrojs/starlight/components';
+---
+
+<jg-theme-toggle>
+  <button type="button" aria-label="Toggle dark mode" aria-pressed="false">
+    <Icon name="sun" class="jg-theme-icon jg-theme-icon-light" />
+    <Icon name="moon" class="jg-theme-icon jg-theme-icon-dark" />
+  </button>
+</jg-theme-toggle>
+
+<style>
+  button {
+    display: flex;
+    align-items: center;
+    flex: none;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--sl-color-gray-2);
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      background 0.2s ease;
+  }
+
+  button:hover {
+    color: var(--sl-color-white);
+    background: color-mix(in srgb, var(--sl-color-gray-5) 30%, transparent);
+  }
+
+  .jg-theme-icon {
+    flex: none;
+    font-size: 1.125rem;
+  }
+
+  /* Show the icon of the theme the button switches *to*, so it reads as an
+     action rather than a status. */
+  :global(:root[data-theme="dark"]) .jg-theme-icon-dark,
+  :global(:root[data-theme="light"]) .jg-theme-icon-light {
+    display: none;
+  }
+</style>
+
+<script>
+  class JgThemeToggle extends HTMLElement {
+    constructor() {
+      super();
+      const button = this.querySelector('button');
+      const sync = () => {
+        const dark = document.documentElement.dataset.theme !== 'light';
+        button?.setAttribute('aria-pressed', String(dark));
+      };
+      sync();
+      button?.addEventListener('click', () => {
+        const next =
+          document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem('starlight-theme', next);
+        sync();
+      });
+    }
+  }
+  customElements.define('jg-theme-toggle', JgThemeToggle);
+</script>

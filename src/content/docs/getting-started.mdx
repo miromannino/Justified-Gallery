@@ -1,0 +1,109 @@
+---
+title: Getting Started
+description: Learn how to install Justified Gallery and build your first justified gallery of images.
+---
+
+import GalleryDemo from '../../components/GalleryDemo.astro';
+import ThemeImage from '../../components/ThemeImage.astro';
+import importantConfigurationsLight from '../../assets/important-configurations-light.webp';
+import importantConfigurationsDark from '../../assets/important-configurations-dark.webp';
+
+## Install
+
+```bash
+npm install justified-gallery
+```
+
+Then import the library and its stylesheet:
+
+```js
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+```
+
+Alternatively, you can load it from a CDN with a `<link>` and a `<script type="module">` tag.
+
+Make sure to add the `justified-gallery` class directly to the container in your HTML, as shown below. The stylesheet uses this class to keep the gallery hidden until the layout is ready, avoiding a flash of unstyled, unpositioned images — but only if the class is already there when the page loads, since `init()` doesn't add it until your script runs. See [Performance Tips](/Justified-Gallery/performance-tips/) for more details.
+
+## A basic gallery
+
+Here we have a `div`, with the id `basicExample`, that has a list of links that point to some images (original size images); inside of each link there is a thumbnail. Calling Justified Gallery, the thumbnails are resized in order to fill all the spaces (i.e. _justification_).
+
+```html
+<div id="basicExample" class="justified-gallery">
+  <a href="path/to/image1.jpg">
+    <img alt="caption for image 1" src="path/to/image1_thumbnail.jpg" />
+  </a>
+  <a href="path/to/image2.jpg">
+    <img alt="caption for image 2" src="path/to/image2_thumbnail.jpg" />
+  </a>
+  ...
+</div>
+```
+
+```js
+new JustifiedGallery(document.querySelector('#basicExample')).init();
+```
+
+<GalleryDemo id="basicExample_demo" />
+
+## Important configurations
+
+An important configuration of the library is the [`rowHeight`](/Justified-Gallery/options-and-events/). Consider that you have set a height of 160px; the algorithm tries to build rows with that height:
+
+<ThemeImage
+  light={importantConfigurationsLight}
+  dark={importantConfigurationsDark}
+  alt="Three justified rows of thumbnails, with the height of the middle row measured at 160px"
+/>
+
+However, the justification may resize the images, and, as a consequence, the row height may be a little bit different than 160px. This means that the row height is intended as your preferred height (i.e. a lower bound). You can always use the [`maxRowHeight`](/Justified-Gallery/options-and-events/) option to limit the height of the rows; but remember that this option will crop the images if they needed to be bigger to be justified.
+
+The algorithm builds each row until it reaches the last. But this last row may not have enough images to fill the entire width. In this case you can decide (with the [`lastRow`](/Justified-Gallery/options-and-events/) option) to leave a blank space, to justify the images, or to hide the last row if there is too much blank space.
+
+The following is an example where we use smaller images (`rowHeight: 70`). Furthermore, we don't justify the last row (`lastRow: 'nojustify'`), and we are using a margin of 3px (`margins: 3`).
+
+```html
+<div id="basicExample2" class="justified-gallery">
+  <a href="path/to/image1.jpg">
+    <img alt="caption for image 1" src="path/to/image1_thumbnail.jpg" />
+  </a>
+  <a href="path/to/image2.jpg" title="Just in a dream Place">
+    <img alt="caption for image 2" src="path/to/image2_thumbnail.jpg" />
+  </a>
+  ...
+</div>
+```
+
+```js
+new JustifiedGallery(document.querySelector('#basicExample2'), {
+  rowHeight: 70,
+  lastRow: 'nojustify',
+  margins: 3,
+}).init();
+```
+
+<GalleryDemo id="basicExample2_demo" options={{ rowHeight: 70, lastRow: 'nojustify', margins: 3 }} />
+
+## Multiple thumbnail sizes
+
+If on the server side you have different sizes of the same images (e.g. a thumbnail for small devices, a bigger thumbnail for retina displays, etc.), the library can be set to automatically load the best available thumbnails: bigger or smaller thumbnails are loaded to always have a high quality of the images.
+
+To do that you simply have to change the setting `sizeRangeSuffixes`. For example, to agree with the [Flickr's suffixes](https://www.flickr.com/services/api/misc.urls.html), you have to set this setting in the following way:
+
+```js
+sizeRangeSuffixes: {
+  100: '_t',  // up to 100px on the longest side
+  240: '_m',  // 100px to 240px
+  320: '_n',
+  500: '',
+  640: '_z',
+  1024: '_b', // more than 640px
+}
+```
+
+In this way the library derives other thumbnails' paths for the same image by only changing the filename suffix. For example, with an entry with the thumbnail `path/to/image1_t.jpg`, the library could load the thumbnail `path/to/image1_b.jpg`.
+
+The keys can also be written as `'lt100'`, `'lt240'`, and so on — the numeric part is what matters. The Flickr-style map above is also the default value of `sizeRangeSuffixes`, so if your files follow other conventions (or you only have one thumbnail per image) remember to override it, for example with an empty object `{}` to always use the thumbnail provided in the HTML.
+
+[Explore all the options](/Justified-Gallery/options-and-events/) available for Justified Gallery.

@@ -1,0 +1,31 @@
+---
+import { images, photoUrl, onlyTheThumbnailUrl } from '../data/images';
+
+// Gallery with 5 entries: one thumbnail intentionally doesn't exist (it gets
+// skipped), and one image only exists as a `_t` thumbnail (the original low
+// quality thumbnail is kept when no bigger variant can be loaded).
+---
+
+<div
+  id="notFoundExample"
+  class="justified-gallery jg-demo"
+  data-jg={JSON.stringify({ lastRow: 'justify', rowHeight: 160 })}
+>
+  <a href={photoUrl(images[0].name, '_b')}>
+    <img alt={images[0].desc} src={photoUrl(images[0].name, '_m')} />
+  </a>
+  <a href="INEXISTENT_IMAGE.jpg">
+    <img alt={images[1].desc} src="INEXISTENT_THUMBNAIL.jpg" />
+  </a>
+  <a href={photoUrl(images[5].name, '_b')}>
+    <img alt={images[5].desc} src={photoUrl(images[5].name, '_m')} />
+  </a>
+  <a href={onlyTheThumbnailUrl}>
+    <img alt="These are the colors I love" src={onlyTheThumbnailUrl} />
+  </a>
+  <a href={photoUrl(images[4].name, '_b')}>
+    <img alt={images[4].desc} src={photoUrl(images[4].name, '_m')} />
+  </a>
+</div>
+
+<script src="../scripts/jg-demos.ts"></script>

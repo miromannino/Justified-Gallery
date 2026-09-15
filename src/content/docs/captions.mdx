@@ -1,0 +1,50 @@
+---
+title: Captions
+description: How Justified Gallery creates captions from the alt and title attributes, and how to define custom captions.
+---
+
+import CaptionsDemo from '../../components/CaptionsDemo.astro';
+
+The captions are automatically created using the `alt` attribute of the images. If it doesn't exist, the caption is created using the `title` attribute of the entry (e.g. the link).
+
+For example, the following entry has _"I'm only in the alt"_ as caption:
+
+```html
+<a href="imageurl.jpg">
+  <img alt="I'm only in the alt" src="thumbnailurl.jpg" />
+</a>
+```
+
+The following entry hasn't an `alt`, but it has a `title`. In this case the library will set _"I'm only in the title"_ as caption:
+
+```html
+<a href="imageurl.jpg" title="I'm only in the title">
+  <img src="thumbnailurl.jpg" />
+</a>
+```
+
+In this last example, we have both the `title` and the `alt`. In this case the library takes the text from the `alt`, and the caption will be _"I'm in the alt"_:
+
+```html
+<a href="imageurl.jpg" title="I'm in the title">
+  <img alt="I'm in the alt" src="thumbnailurl.jpg" />
+</a>
+```
+
+The library creates the captions by inserting, for each entry, an extra `div` element with the class `jg-caption`, just after the `img` element. To have custom captions you only need to insert this element on your own, with the content that you want. The library will skip the creation of the captions for the entries that already have one:
+
+```html
+<a href="imageurl.jpg">
+  <img src="thumbnailurl.jpg" />
+  <div class="jg-caption">
+    I'm <span style="color:red">a</span> <strong>custom</strong> caption!
+    <div>I'm a div</div>
+  </div>
+</a>
+```
+
+The following demo shows all four cases — hover the images to see the captions:
+
+<CaptionsDemo />
+
+See how to use the captions with other [input formats](/Justified-Gallery/input-formats/).

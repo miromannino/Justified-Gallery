@@ -1,0 +1,150 @@
+---
+/**
+ * Small illustration for the "Dynamic galleries" feature card: a miniature
+ * justified gallery (same look as the "Don't miss a pixel" demo) whose
+ * images keep being reordered. Every block is absolutely positioned, and the
+ * three layouts below are pre-computed here so plain CSS keyframes can
+ * animate left/top/width between them — the blocks glide to their new spot
+ * and re-justify on the way, instead of snapping into a new order.
+ */
+
+/** Aspect ratios (width / height) of the fake images, and how light each one
+ * is painted, so a block stays recognisable while it travels. */
+const blocks = [
+  { ratio: 1.5, tone: 62 },
+  { ratio: 0.85, tone: 44 },
+  { ratio: 1.25, tone: 78 },
+  { ratio: 1.75, tone: 36 },
+  { ratio: 1.0, tone: 68 },
+  { ratio: 1.4, tone: 50 },
+  { ratio: 0.9, tone: 82 },
+  { ratio: 1.6, tone: 40 },
+  { ratio: 1.15, tone: 72 },
+];
+
+/** The orders cycled through, and how many blocks land on each row. */
+const layouts = [
+  { order: [0, 1, 2, 3, 4, 5, 6, 7, 8], rowSizes: [3, 3, 3] },
+  { order: [4, 7, 0, 8, 2, 6, 1, 5, 3], rowSizes: [2, 4, 3] },
+  { order: [6, 3, 5, 1, 8, 4, 7, 0, 2], rowSizes: [4, 2, 3] },
+];
+
+const gap = 0.3; // rem, between blocks and between rows
+const rowHeight = 1.3; // rem
+
+/**
+ * Justify one layout: every row is filled edge to edge, each block keeping
+ * its share of the row in proportion to its aspect ratio.
+ * Returns, per block id, the CSS left/top/width it must have in this layout.
+ */
+function justify({ order, rowSizes }: (typeof layouts)[number]) {
+  const placed: Record<number, { left: string; top: string; width: string }> =
+    {};
+  let cursor = 0;
+
+  rowSizes.forEach((size, rowIndex) => {
+    const row = order.slice(cursor, cursor + size);
+    cursor += size;
+
+    const total = row.reduce((sum, id) => sum + blocks[id].ratio, 0);
+    // The gaps are fixed, so the blocks share whatever width is left.
+    const gaps = `${((size - 1) * gap).toFixed(2)}rem`;
+    let offset = 0;
+
+    row.forEach((id, i) => {
+      const fraction = blocks[id].ratio / total;
+      placed[id] = {
+        left: `calc((100% - ${gaps}) * ${offset.toFixed(4)} + ${(i * gap).toFixed(2)}rem)`,
+        top: `${(rowIndex * (rowHeight + gap)).toFixed(2)}rem`,
+        width: `calc((100% - ${gaps}) * ${fraction.toFixed(4)})`,
+      };
+      offset += fraction;
+    });
+  });
+
+  return placed;
+}
+
+const frames = layouts.map(justify);
+const height = (
+  layouts[0].rowSizes.length * rowHeight +
+  (layouts[0].rowSizes.length - 1) * gap
+).toFixed(2);
+---
+
+<div class="jg-sort-demo" aria-hidden="true" style={`height: ${height}rem;`}>
+  {
+    blocks.map((block, id) => (
+      <span
+        class="jg-sort-block"
+        style={[
+          `--jg-tone: ${block.tone}%`,
+          ...frames.flatMap((frame, f) => [
+            `--jg-x${f}: ${frame[id].left}`,
+            `--jg-y${f}: ${frame[id].top}`,
+            `--jg-w${f}: ${frame[id].width}`,
+          ]),
+        ].join("; ")}
+      />
+    ))
+  }
+</div>
+
+<style>
+  .jg-sort-demo {
+    position: relative;
+  }
+
+  .jg-sort-block {
+    position: absolute;
+    height: 1.3rem;
+    border-radius: 0.2rem;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--sl-color-accent) var(--jg-tone), transparent),
+      color-mix(
+        in srgb,
+        var(--sl-color-accent-high) calc(var(--jg-tone) * 0.55),
+        transparent
+      )
+    );
+    left: var(--jg-x0);
+    top: var(--jg-y0);
+    width: var(--jg-w0);
+    animation: jg-sort-reorder 9s ease-in-out infinite;
+  }
+
+  /* Each layout is held still for a moment, then every block travels to its
+     new place at the same time. */
+  @keyframes jg-sort-reorder {
+    0%,
+    22% {
+      left: var(--jg-x0);
+      top: var(--jg-y0);
+      width: var(--jg-w0);
+    }
+    33%,
+    55% {
+      left: var(--jg-x1);
+      top: var(--jg-y1);
+      width: var(--jg-w1);
+    }
+    66%,
+    88% {
+      left: var(--jg-x2);
+      top: var(--jg-y2);
+      width: var(--jg-w2);
+    }
+    100% {
+      left: var(--jg-x0);
+      top: var(--jg-y0);
+      width: var(--jg-w0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .jg-sort-block {
+      animation: none;
+    }
+  }
+</style>

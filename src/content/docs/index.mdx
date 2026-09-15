@@ -1,0 +1,239 @@
+---
+title: Justified Gallery
+description: Justified Gallery is a JavaScript library that allows you to create a high quality justified gallery of images. Elegant, Professional, Endless.
+template: splash
+hero:
+  title: Justified Gallery
+  tagline: Elegant, Professional, Endless.<span class="hero-byline">Crafted by <a href="https://miromannino.com" target="_blank" rel="noopener">Miro Mannino</a></span>
+  actions:
+    - text: Read the docs
+      link: /Justified-Gallery/getting-started/
+      icon: right-arrow
+    - text: GitHub Repo
+      link: https://github.com/miromannino/Justified-Gallery
+      icon: external
+      variant: secondary
+---
+
+import BentoGrid from "../../components/BentoGrid.astro";
+import BentoCard from "../../components/BentoCard.astro";
+import CodeRotator from "../../components/CodeRotator.astro";
+import JgRowDemo from "../../components/JgRowDemo.astro";
+import JgThumbDemo from "../../components/JgThumbDemo.astro";
+import JgResponsiveDemo from "../../components/JgResponsiveDemo.astro";
+import JgEndlessDemo from "../../components/JgEndlessDemo.astro";
+import JgSortDemo from "../../components/JgSortDemo.astro";
+import GalleryDemo from "../../components/GalleryDemo.astro";
+import GitHubStats from "../../components/GitHubStats.astro";
+import GitHubContributors from "../../components/GitHubContributors.astro";
+import SignalNetworkBackground from "../../components/SignalNetworkBackground.astro";
+
+<SignalNetworkBackground />
+
+<GalleryDemo
+  id="liveDemo"
+  linked={false}
+  dimensions
+  options={{
+    rowHeight: 200,
+    captions: false,
+    lastRow: 'justify',
+    margins: 6,
+    waitThumbnailsLoad: false,
+  }}
+/>
+
+Justified Gallery is a **JavaScript library** that allows you to create a **high quality justified gallery** of images.
+
+This is a common problem for people who create websites: you have a series of images to display, but you are not sure how to arrange them in an elegant way. Important websites such as 500px, Flickr, or Google display images in an excellent way, justifying them similarly to a **brick wall**. Justified Gallery will give you the power to do that too.
+
+Justified Gallery is a **professional and open source library** that even 500px, one of the best photography social networks, chose for displaying their images!
+
+## Install
+
+```bash
+npm install justified-gallery
+```
+
+## How to use it
+
+Justified Gallery accepts a standard format for a gallery: a series of links with a thumbnail inside, where each link leads to the original image.
+
+```html
+<div id="mygallery" class="justified-gallery">
+  <a href="path/to/myimage1_original.jpg">
+    <img alt="Title 1" src="path/to/myimage1_thumbnail.jpg" />
+  </a>
+  <a href="path/to/myimage2_original.jpg">
+    <img alt="Title 2" src="path/to/myimage2_thumbnail.jpg" />
+  </a>
+  <!-- other images... -->
+</div>
+```
+
+Justified Gallery also accepts other [input formats](/Justified-Gallery/input-formats/), to better fit your needs.
+
+Import the library and its stylesheet, then create a gallery instance and initialize it — no jQuery or other dependencies needed:
+
+```js
+import { JustifiedGallery } from "justified-gallery";
+import "justified-gallery/style.css";
+
+new JustifiedGallery(document.querySelector("#mygallery")).init();
+```
+
+Note the `justified-gallery` class already on the container above — the stylesheet uses it to hide the gallery until it's properly laid out, avoiding a flash of unstyled images.
+
+Start learning how to use Justified Gallery from the [getting started tutorial](/Justified-Gallery/getting-started/).
+
+## Features
+
+<BentoGrid>
+  <CodeRotator />
+  <BentoCard
+    title="Lightbox friendly"
+    href="/Justified-Gallery/lightboxes/"
+    icon="seti:image"
+  >
+    Plays nicely with GLightbox, PhotoSwipe and friends, with link attributes
+    and lazy-loading-safe sources handled for you.
+  </BentoCard>
+  <BentoCard
+    title="Automatic captions"
+    href="/Justified-Gallery/captions/"
+    icon="comment"
+  >
+    Elegant captions generated from your images' alt or title attributes, fully
+    styleable and on by default.
+  </BentoCard>
+  <BentoCard
+    title="Don't miss a pixel"
+    href="/Justified-Gallery/getting-started/"
+    icon="puzzle"
+    wide
+  >
+    An advanced justification algorithm sizes every row to fill the available
+    width without ever cropping or distorting your images.
+    <JgRowDemo slot="visual" />
+  </BentoCard>
+  <BentoCard
+    title="The right thumbnail, automatically"
+    href="/Justified-Gallery/performance-tips/"
+    icon="magnifier"
+  >
+    Loads (and hot-swaps) the best thumbnail size for each image, so you never
+    download more pixels than needed and never see a blurry upscale.
+    <JgThumbDemo slot="visual" />
+  </BentoCard>
+  <BentoCard
+    title="Fast, progressive rendering"
+    href="/Justified-Gallery/performance-tips/"
+    icon="rocket"
+  >
+    Non-blocking, row-by-row fade-in as thumbnails load, with a built-in spinner
+    while the gallery grows.
+  </BentoCard>
+  <BentoCard
+    title="Truly responsive"
+    href="/Justified-Gallery/options-and-events/"
+    icon="laptop"
+  >
+    Watches the gallery's own container width — not just the window — so it
+    adapts to sidebars, flex layouts and anything else that resizes it.
+    <JgResponsiveDemo slot="visual" />
+  </BentoCard>
+  <BentoCard
+    title="Your rows, your rules"
+    href="/Justified-Gallery/options-and-events/"
+    icon="list-format"
+  >
+    Six last-row behaviors, row height and margin controls, RTL support and many
+    more options to build exactly the gallery you want.
+  </BentoCard>
+  <BentoCard
+    title="Endless scroll ready"
+    href="/Justified-Gallery/endless-scroll/"
+    icon="down-arrow"
+  >
+    Build an infinite wall of images: append new entries and notify the gallery
+    — new rows justify without rebuilding what's already placed.
+    <JgEndlessDemo slot="visual" />
+  </BentoCard>
+  <BentoCard
+    title="Events & clean teardown"
+    href="/Justified-Gallery/options-and-events/"
+    icon="setting"
+  >
+    Lifecycle events for every row and layout pass, plus a destroy method that
+    restores your markup — ideal for single-page apps.
+  </BentoCard>
+  <BentoCard
+    title="Dynamic galleries"
+    href="/Justified-Gallery/options-and-events/"
+    icon="random"
+  >
+    Sort, randomize, filter, add or remove images. Do what you want with the
+    gallery, even after it has been created.
+    <JgSortDemo slot="visual" />
+  </BentoCard>
+  <BentoCard
+    title="Flexible input, silent errors"
+    href="/Justified-Gallery/input-formats/"
+    icon="warning"
+  >
+    Links, divs or figures, images or inline SVG — and broken images are skipped
+    gracefully, reported only in the console.
+  </BentoCard>
+</BentoGrid>
+
+## Project stats
+
+<GitHubStats />
+
+## Contributors
+
+Justified Gallery is built with help from these contributors:
+
+<GitHubContributors />
+
+## Who uses it?
+
+Some examples of uses of this library:
+
+<BentoGrid>
+  <BentoCard title="500px" icon="star">
+    One of the biggest photography social networks chose Justified Gallery to
+    display millions of photos.
+  </BentoCard>
+  <BentoCard
+    title="Flickr Justified Gallery for WordPress"
+    href="https://wordpress.org/plugins/flickr-justified-gallery/"
+    external
+  >
+    Plugin that shows your Flickr photostream, photosets, galleries, group
+    pools, or tags in your blog with an elegant layout.
+  </BentoCard>
+  <BentoCard
+    title="FooGallery Plugin for WordPress"
+    href="https://wordpress.org/plugins/foogallery/"
+    external
+  >
+    An intuitive and extensible gallery creation and management tool for
+    WordPress.
+  </BentoCard>
+  <BentoCard
+    title="ACF Justified Image Grid Addon"
+    href="https://www.dreihochzwo.de/wordpress-plugins/advanced-custom-fields-addon-justified-image-grid/"
+    external
+  >
+    WordPress plugin to create justified galleries.
+  </BentoCard>
+</BentoGrid>
+
+## Help the project!
+
+This is an open source project, released under the [MIT license](https://github.com/miromannino/Justified-Gallery/blob/master/LICENSE). You can help it grow in various ways: talking about it in blogs and social networks, [starring the repository](https://github.com/miromannino/Justified-Gallery), or contributing your own features with a pull request.
+
+## Any issue?
+
+If you have any issue, please post your question on the [GitHub issues page](https://github.com/miromannino/Justified-Gallery/issues), where you may also find existing answers.

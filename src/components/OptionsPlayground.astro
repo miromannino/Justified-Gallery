@@ -1,0 +1,143 @@
+---
+import { images, photoUrl } from '../data/images';
+---
+
+<form id="jgs-form" class="jgs-form">
+  <div class="jgs-fields">
+    <label id="jgs-rowHeight-container">
+      <span>Row Height</span>
+      <input type="text" id="jgs-rowHeight" value="120" />
+    </label>
+    <label id="jgs-maxRowHeight-container">
+      <span>Max Row Height</span>
+      <input type="text" id="jgs-maxRowHeight" value="0" />
+    </label>
+    <label id="jgs-maxRowsCount-container">
+      <span>Max Rows Count</span>
+      <input type="text" id="jgs-maxRowsCount" value="0" />
+    </label>
+    <label id="jgs-margins-container">
+      <span>Margins</span>
+      <input type="text" id="jgs-margins" value="1" />
+    </label>
+    <label id="jgs-border-container">
+      <span>Border</span>
+      <input type="text" id="jgs-border" value="0" />
+    </label>
+    <label id="jgs-lastRow-container">
+      <span>Last row</span>
+      <select id="jgs-lastRowOptions">
+        <option value="justify">Justify</option>
+        <option value="nojustify" selected>No Justify</option>
+        <option value="left">Left</option>
+        <option value="center">Center</option>
+        <option value="right">Right</option>
+        <option value="hide">Hide</option>
+      </select>
+    </label>
+    <label class="jgs-check">
+      <input type="checkbox" id="jgs-captions" checked />
+      <span>Captions</span>
+    </label>
+    <label class="jgs-check">
+      <input type="checkbox" id="jgs-randomize" />
+      <span>Randomize</span>
+    </label>
+  </div>
+</form>
+
+<div id="playgroundDemo" class="justified-gallery jg-demo">
+  {
+    images.map((img) => (
+      <a href={photoUrl(img.name, '_b')}>
+        <img alt={img.desc} src={photoUrl(img.name, '_m')} />
+      </a>
+    ))
+  }
+</div>
+
+<p class="jgs-event-log-label">Events fired by the gallery:</p>
+<pre id="jgs-event-log" class="jgs-event-log"></pre>
+
+<script>
+  import { JustifiedGallery } from 'justified-gallery';
+  import 'justified-gallery/style.css';
+  import { sizeRangeSuffixes } from '../data/images';
+
+  function setup() {
+    const form = document.querySelector<HTMLFormElement>('#jgs-form');
+    const galleryEl = document.querySelector<HTMLElement>('#playgroundDemo');
+    const log = document.querySelector<HTMLElement>('#jgs-event-log');
+    if (!form || !galleryEl || form.dataset.bound) return;
+    form.dataset.bound = 'true';
+
+    form.addEventListener('submit', (e) => e.preventDefault());
+
+    const logEvent = (name: string) => {
+      if (!log) return;
+      log.textContent = `${name}\n${log.textContent}`.split('\n').slice(0, 6).join('\n');
+    };
+
+    const settings: Record<string, unknown> = {
+      rowHeight: 120,
+      maxRowHeight: false,
+      maxRowsCount: 0,
+      margins: 1,
+      border: 0,
+      lastRow: 'nojustify',
+      captions: true,
+      randomize: false,
+      sizeRangeSuffixes,
+      triggerEvent: logEvent,
+    };
+    let jg = new JustifiedGallery(galleryEl, settings);
+    jg.init();
+
+    // justified-gallery 4.x has no live settings update: recreate the
+    // gallery instance whenever a control changes
+    function applySettings(changes: Record<string, unknown>) {
+      Object.assign(settings, changes);
+      jg.destroy();
+      jg = new JustifiedGallery(galleryEl!, settings);
+      jg.init();
+    }
+
+    function bindNumericInput(inputId: string, settingName: string, validate: (n: number) => boolean) {
+      const input = form!.querySelector<HTMLInputElement>('#' + inputId)!;
+      const container = form!.querySelector<HTMLElement>('#' + inputId + '-container')!;
+      input.addEventListener('keyup', () => {
+        const m = parseInt(input.value, 10);
+        if (validate(m)) {
+          applySettings({ [settingName]: m });
+          container.classList.remove('has-error');
+        } else {
+          container.classList.add('has-error');
+        }
+      });
+    }
+
+    bindNumericInput('jgs-rowHeight', 'rowHeight', (m) => !isNaN(m) && m > 0);
+    bindNumericInput('jgs-maxRowHeight', 'maxRowHeight', (m) => !isNaN(m) && m >= 0);
+    bindNumericInput('jgs-maxRowsCount', 'maxRowsCount', (m) => !isNaN(m) && m >= 0);
+    bindNumericInput('jgs-margins', 'margins', (m) => !isNaN(m) && m >= 0);
+    bindNumericInput('jgs-border', 'border', (m) => !isNaN(m));
+
+    form.querySelector('#jgs-lastRowOptions')!.addEventListener('change', function (this: HTMLSelectElement) {
+      applySettings({ lastRow: this.value });
+    });
+
+    form.querySelector('#jgs-captions')!.addEventListener('change', function (this: HTMLInputElement) {
+      if (!this.checked) {
+        galleryEl.querySelectorAll('.jg-caption').forEach((c) => c.remove());
+      }
+      applySettings({ captions: this.checked });
+    });
+
+    form.querySelector('#jgs-randomize')!.addEventListener('change', function (this: HTMLInputElement) {
+      applySettings({ randomize: this.checked });
+    });
+  }
+
+  setup();
+  document.addEventListener('astro:page-load', setup);
+</script>

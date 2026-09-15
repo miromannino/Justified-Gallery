@@ -1,6 +1,22 @@
 .DS_Store
 node_modules
-_site
-.jekyll-cache/
-.bower.json
-vendor
+
+# Astro build output and generated types
+_site/
+.astro/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.production
+
+# separate library-development workspace living in this checkout (not part of the site)
+/resources/
+/dist/
+/test/
+Justified-Gallery-Source-Code-For-Reference/*

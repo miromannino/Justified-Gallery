@@ -1,0 +1,258 @@
+---
+import { Code, Icon } from "@astrojs/starlight/components";
+
+const snippets = [
+  {
+    id: "vanilla",
+    label: "Vanilla",
+    icon: "seti:javascript" as const,
+    lang: "js",
+    code: `import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+
+new JustifiedGallery(
+  document.querySelector('#gallery')
+).init();`,
+  },
+  {
+    id: "react",
+    label: "React",
+    icon: "seti:react" as const,
+    lang: "jsx",
+    code: `const ref = useRef(null);
+
+useEffect(() => {
+  const jg = new JustifiedGallery(ref.current);
+  jg.init();
+  return () => jg.destroy();
+}, []);
+
+return <div ref={ref}>{images}</div>;`,
+  },
+  {
+    id: "vue",
+    label: "Vue",
+    icon: "seti:vue" as const,
+    lang: "js",
+    code: `const el = ref(null);
+let jg;
+
+onMounted(() => {
+  jg = new JustifiedGallery(el.value);
+  jg.init();
+});
+
+onBeforeUnmount(() => jg.destroy());`,
+  },
+];
+---
+
+<div
+  class="jg-bento-card jg-bento-w2 jg-bento-h2 jg-code-rotator"
+  data-code-rotator
+>
+  <div class="jg-cr-head">
+    <Icon name="seti:typescript" class="jg-cr-ts-icon" size="1.4em" />
+    <span class="jg-cr-badge">TypeScript types included</span>
+  </div>
+  <h3 class="jg-cr-title">Works everywhere</h3>
+  <div class="jg-cr-desc">
+    Zero dependencies, no jQuery. A plain class working on a real DOM element,
+    so it drops into any stack with no wrapper needed.
+  </div>
+  <div class="jg-cr-tabs" role="tablist" aria-label="Framework examples">
+    {
+      snippets.map((s, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`jg-cr-tab-${s.id}`}
+          aria-controls={`jg-cr-pane-${s.id}`}
+          aria-selected={i === 0 ? "true" : "false"}
+          class="jg-cr-tab"
+        >
+          <Icon name={s.icon} size="1em" />
+          {s.label}
+        </button>
+      ))
+    }
+  </div>
+  <div class="jg-cr-panes">
+    {
+      snippets.map((s, i) => (
+        <div
+          class:list={["jg-cr-pane", { "is-active": i === 0 }]}
+          id={`jg-cr-pane-${s.id}`}
+          role="tabpanel"
+          aria-labelledby={`jg-cr-tab-${s.id}`}
+        >
+          <Code lang={s.lang} code={s.code} />
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .jg-code-rotator {
+    gap: 0.75rem;
+  }
+
+  .jg-cr-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 1.4em;
+  }
+
+  .jg-cr-ts-icon {
+    color: var(--sl-color-accent-high);
+  }
+
+  .jg-cr-badge {
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+  }
+
+  .jg-cr-title {
+    margin: 0;
+    font-size: var(--sl-text-lg);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--sl-color-white);
+  }
+
+  .jg-cr-desc {
+    font-size: var(--sl-text-sm);
+    line-height: 1.6;
+    color: var(--sl-color-gray-2);
+  }
+
+  .jg-cr-tabs {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .jg-cr-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.7rem;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-2);
+    background: transparent;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 999px;
+    cursor: pointer;
+    transition:
+      border-color 0.2s ease,
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .jg-cr-tab:hover {
+    border-color: var(--sl-color-gray-4);
+    color: var(--sl-color-white);
+  }
+
+  .jg-cr-tab[aria-selected="true"] {
+    color: var(--sl-color-white);
+    border-color: color-mix(
+      in srgb,
+      var(--sl-color-accent) 60%,
+      var(--sl-color-gray-5)
+    );
+    background: var(--sl-color-accent-low);
+  }
+
+  .jg-cr-tab:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: 2px;
+  }
+
+  /* Stack all panes in the same grid cell: the container sizes itself to the
+     tallest snippet, so rotating never causes layout shift. */
+  .jg-cr-panes {
+    display: grid;
+    min-width: 0;
+  }
+
+  .jg-cr-pane {
+    grid-area: 1 / 1;
+    min-width: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.35s ease,
+      visibility 0.35s ease;
+  }
+
+  .jg-cr-pane.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Long lines scroll inside the pane instead of widening the grid. */
+  .jg-cr-pane :global(pre) {
+    overflow-x: auto;
+  }
+
+  .jg-cr-pane :global(.expressive-code) {
+    min-width: 0;
+    font-size: var(--sl-text-xs);
+
+    pre {
+      overflow: hidden;
+    }
+  }
+</style>
+
+<script>
+  for (const root of document.querySelectorAll("[data-code-rotator]")) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panes = [...root.querySelectorAll<HTMLElement>(".jg-cr-pane")];
+    let index = 0;
+    let timer: ReturnType<typeof setInterval> | null = null;
+    let pinned = false;
+
+    const show = (i: number) => {
+      index = i;
+      tabs.forEach((tab, j) =>
+        tab.setAttribute("aria-selected", String(j === i)),
+      );
+      panes.forEach((pane, j) => pane.classList.toggle("is-active", j === i));
+    };
+
+    const stop = () => {
+      if (timer !== null) {
+        clearInterval(timer);
+        timer = null;
+      }
+    };
+
+    const start = () => {
+      if (pinned || timer !== null) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      timer = setInterval(() => show((index + 1) % panes.length), 4500);
+    };
+
+    tabs.forEach((tab, i) =>
+      tab.addEventListener("click", () => {
+        pinned = true;
+        stop();
+        show(i);
+      }),
+    );
+
+    root.addEventListener("mouseenter", stop);
+    root.addEventListener("mouseleave", start);
+    root.addEventListener("focusin", stop);
+    root.addEventListener("focusout", start);
+
+    start();
+  }
+</script>

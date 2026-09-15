@@ -1,0 +1,93 @@
+---
+title: Options & Events
+description: All the Justified Gallery options, methods, and events, with an interactive playground to explore the settings.
+---
+
+import OptionsPlayground from '../../components/OptionsPlayground.astro';
+
+This configurable demo is to quickly explore Justified Gallery settings. Justified Gallery 4.x has no live settings update: when a control changes, the demo destroys the gallery instance and creates a new one with the updated settings, leaving the other settings unchanged.
+
+<OptionsPlayground />
+
+## Options
+
+Pass options as the second argument of the constructor:
+
+```js
+new JustifiedGallery(document.querySelector('#mygallery'), {
+  rowHeight: 160,
+  margins: 4,
+}).init();
+```
+
+| Option | Default value | Description |
+| ------ | ------------- | ----------- |
+| `rowHeight` | `120` | The preferred row height in pixels. |
+| `maxRowHeight` | `false` | Set `false` (or a negative value) to keep it disabled. Can be a number (e.g. `200`) which specifies the maximum row height in pixels, or a string which specifies a percentage (e.g. `'200%'` means that the row height can't exceed `2 * rowHeight`). **Note that this option can crop the images if they need to be taller to be justified.** |
+| `maxRowsCount` | `0` | Limits the number of rows to show. Justified Gallery hides the unwanted rows, and if the page is resized more (or fewer) images are shown. **Note that this option doesn't limit the number of rows by making images smaller.** A value of `0` means disabled. |
+| `sizeRangeSuffixes` | Flickr suffixes (see below) | Describes the thumbnail suffix for each size range, so that the library can load the best thumbnail for the displayed size. The default agrees with the [Flickr's suffixes](https://www.flickr.com/services/api/misc.urls.html): `{100: '_t', 240: '_m', 320: '_n', 500: '', 640: '_z', 1024: '_b'}`. Keys can be numbers or strings like `'lt100'` (e.g. `{512: '_small', 1024: '_big'}` uses the `'_small'` suffix for images that are less than 512px on the longest side, and `'_big'` for bigger ones). Set `{}` to always use the thumbnail provided in the HTML. |
+| `thumbnailPath` | `undefined` | A function to select a custom thumbnail path, for more flexibility than `sizeRangeSuffixes`. It is called with the current path of the image, the width and the height of the image to show (after it has been resized), and the image element. If this option is defined, `sizeRangeSuffixes` is not considered. |
+| `lastRow` | `'nojustify'` | Decide to justify the last row (using `'justify'`) or not (using `'nojustify'`), or to hide the row if it can't be justified (using `'hide'`). With `'nojustify'` the last row images are aligned to the left, but they can also be aligned to the center (`'center'`) or to the right (`'right'`). |
+| `justifyThreshold` | `0.9` | If `'row width' / 'available space' > justifyThreshold` the last row is justified, even though the `lastRow` setting is `'nojustify'`. |
+| `captions` | `true` | Decide if you want to show the captions that appear when your mouse is over the image. |
+| `margins` | `1` | The margins between the images, in pixels. |
+| `border` | `-1` | The border size of the gallery, in pixels. With a negative value the border will be the same as the margins. |
+| `waitThumbnailsLoad` | `true` | If set to `false`, in presence of `width` and `height` attributes on the thumbnails, the layout is built immediately, and the thumbnails appear while they are loaded. See the [performance tips](/Justified-Gallery/performance-tips/). |
+| `randomize` | `false` | Automatically randomize the order of the photos. |
+| `filter` | `false` | Can be `false` (disabled), a CSS selector string (an entry is kept if it matches the selector), or a function invoked with `(entry, index, array)` that returns `true` to keep the entry (as in [`Array.prototype.filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)). |
+| `sort` | `false` | Can be `false` (don't sort), or a comparator function (as in [`Array.prototype.sort`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort)). |
+| `rtl` | `false` | Right-to-left mode. |
+| `selector` | `'a'` | Determines which children of the gallery element are the entries (plain `div` children are always accepted too, except the loading spinner). Note that, for performance reasons, the entries of the gallery are always direct children of the gallery. |
+| `imgSelector` | `'img, a > img, svg, a > svg'` | Determines, given a gallery entry, how to retrieve the thumbnail. |
+| `extension` | `/\.[^.\\/]+$/` | The regex used to detect the file extension, needed to reconstruct the thumbnail filenames. Change it if you need; for example `/\.jpg$/` detects only the `.jpg` extension. |
+| `refreshTime` | `200` | The time to wait (in milliseconds) before checking the page size. If the page width has changed the gallery layout is rebuilt. |
+| `refreshSensitivity` | `0` | Change in width allowed (in pixels) without rebuilding the gallery. |
+| `rel` | `null` | Rewrites the `rel` attribute of all the entry links with the specified value. For example it can be `'gallery1'`, and it is usually used to create gallery groups for a lightbox. |
+| `target` | `null` | Rewrites the `target` attribute of all the entry links with the specified value. For example, if you don't use a lightbox, specifying `'_blank'` opens all the images in another page. |
+| `triggerEvent` | `() => {}` | Callback invoked with the event name when the gallery emits an [event](#events). |
+
+## Methods
+
+The `JustifiedGallery` instance returned by the constructor exposes these methods:
+
+| Method | Description |
+| ------ | ----------- |
+| `init()` | Analyzes all the entries, starts loading the thumbnails, and builds the gallery layout. Call it again after appending new entries: already analyzed entries are skipped, so only the new images are processed — useful for the [infinite scroll](/Justified-Gallery/endless-scroll/). |
+| `updateEntries(norewind)` | Updates the entry list from the gallery HTML element. With `norewind = true` only the new entries are considered (filtered, sorted, or randomized). |
+| `rewind()` | Rewinds the image analysis to start from the first entry. |
+| `destroy()` | Destroys the Justified Gallery instance, clearing all the CSS properties added by the library. |
+
+There is no live settings update: to change the settings of an existing gallery, call `destroy()` and create a new instance with the merged settings (this is exactly what the playground above does):
+
+```js
+let jg = new JustifiedGallery(galleryEl, settings);
+jg.init();
+
+function applySettings(changes) {
+  Object.assign(settings, changes);
+  jg.destroy();
+  jg = new JustifiedGallery(galleryEl, settings);
+  jg.init();
+}
+```
+
+## Events
+
+Events are delivered through the `triggerEvent` callback option, which receives the event name:
+
+| Event | Description |
+| ----- | ----------- |
+| `jg.complete` | When the algorithm has finished creating the gallery layout. |
+| `jg.resize` | When the algorithm has finished resizing the gallery. |
+| `jg.rowflush` | When a new row is ready. |
+| `jg.destroy` | When the gallery instance has been destroyed. |
+
+```js
+new JustifiedGallery(document.querySelector('#mygallery'), {
+  triggerEvent: (name) => {
+    if (name === 'jg.complete') {
+      console.log('layout complete');
+    }
+  },
+}).init();
+```

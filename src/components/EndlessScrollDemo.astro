@@ -1,0 +1,38 @@
+<div class="jg-alert">Scroll down the page to see new images being appended.</div>
+
+<div id="endless-gallery" class="justified-gallery jg-demo"></div>
+
+<script>
+  import { JustifiedGallery } from 'justified-gallery';
+  import 'justified-gallery/style.css';
+
+  function setup() {
+    const gallery = document.querySelector<HTMLElement>('#endless-gallery');
+    if (!gallery || gallery.dataset.bound) return;
+    gallery.dataset.bound = 'true';
+
+    const jg = new JustifiedGallery(gallery, { rowHeight: 120 });
+
+    function addSomeImages(limit: number) {
+      for (let i = 0; i < limit; i++) {
+        const w = Math.ceil(Math.random() * 250 + 150);
+        const h = Math.ceil(Math.random() * 250 + 150);
+        gallery!.insertAdjacentHTML(
+          'beforeend',
+          `<a><img src="https://dummyimage.com/${w}x${h}/000/ffffff.png" width="${w}" height="${h}" alt="placeholder ${w}x${h}"/></a>`
+        );
+      }
+      jg.init();
+    }
+
+    addSomeImages(10);
+    window.addEventListener('scroll', () => {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+        addSomeImages(5);
+      }
+    });
+  }
+
+  setup();
+  document.addEventListener('astro:page-load', setup);
+</script>

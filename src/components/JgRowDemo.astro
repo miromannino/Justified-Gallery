@@ -1,0 +1,50 @@
+---
+/**
+ * Small illustration for the "Don't miss a pixel" feature card: a few rows
+ * of variable-aspect-ratio blocks that each fill the available width, with
+ * no leftover gap and no cropped block — the justification algorithm in
+ * miniature. Pure CSS flex, no JS.
+ */
+const rows = [
+  [1.9, 1.1, 1.5, 0.8, 1.3],
+  [1.2, 1.6, 0.9, 1.4],
+  [0.8, 1.5, 1.1, 1.7, 0.9],
+];
+---
+
+<div class="jg-row-demo" aria-hidden="true">
+  {
+    rows.map((row) => (
+      <div class="jg-row-demo-row">
+        {row.map((w) => (
+          <span class="jg-row-demo-block" style={`flex-grow: ${w};`} />
+        ))}
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .jg-row-demo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .jg-row-demo-row {
+    display: flex;
+    gap: 0.3rem;
+    height: 2.25rem;
+  }
+
+  .jg-row-demo-block {
+    flex-basis: 0;
+    min-width: 0;
+    border-radius: 0.25rem;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--sl-color-accent) 55%, transparent),
+      color-mix(in srgb, var(--sl-color-accent-high) 30%, transparent)
+    );
+  }
+</style>

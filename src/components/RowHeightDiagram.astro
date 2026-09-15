@@ -1,0 +1,214 @@
+---
+import { images, photoUrl } from "../data/images";
+
+interface Props {
+  rowHeight?: number;
+}
+
+const { rowHeight = 160 } = Astro.props;
+
+const gap = 6;
+const rowsWidth = 844;
+const measureWidth = 40;
+
+const byName = new Map(images.map((img) => [img.name, img]));
+const aspect = (name: string) => {
+  const img = byName.get(name)!;
+  return img.width / img.height;
+};
+
+function row(names: string[]) {
+  const aspects = names.map(aspect);
+  const total = aspects.reduce((sum, a) => sum + a, 0);
+  const height = (rowsWidth - gap * (names.length - 1)) / total;
+  return {
+    height: Math.round(height),
+    items: names.map((name, i) => ({
+      name,
+      desc: byName.get(name)!.desc,
+      width: Math.round(aspects[i] * height),
+      height: Math.round(height),
+    })),
+  };
+}
+
+const topRow = row(["vernazza", "corno-2", "zaanse", "mosque-2"]);
+const bottomRow = row([
+  "milkyway",
+  "corniche",
+  "milky-way-tree",
+  "braise-1",
+  "desert",
+]);
+
+const middleNames = ["southafrica", "audi-mea", "gate-towers", "rome"];
+const middleRow = {
+  height: rowHeight,
+  items: middleNames.map((name) => ({
+    name,
+    desc: byName.get(name)!.desc,
+    width: Math.round(aspect(name) * rowHeight),
+    height: rowHeight,
+  })),
+};
+
+const topVisible = 80;
+const bottomVisible = 92;
+---
+
+<figure
+  class="rh-diagram"
+  style={`--rh-gap:${gap}px; --rh-rows-width:${rowsWidth}px; --rh-measure-width:${measureWidth}px;`}
+>
+  <div class="rh-scroll">
+    <div class="rh-inner">
+      <div class="rh-clip rh-clip-top" style={`height:${topVisible}px`}>
+        <div
+          class="rh-row"
+          style={`margin-top:${topVisible - topRow.height}px`}
+        >
+          {
+            topRow.items.map((item) => (
+              <img
+                src={photoUrl(item.name, "_n")}
+                alt=""
+                width={item.width}
+                height={item.height}
+                loading="lazy"
+                decoding="async"
+              />
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="rh-measure" style={`height:${rowHeight}px`}>
+        <span class="rh-label">{rowHeight} px</span>
+        <span class="rh-bracket" aria-hidden="true"></span>
+      </div>
+
+      <div class="rh-row rh-row-main">
+        {
+          middleRow.items.map((item) => (
+            <img
+              src={photoUrl(item.name, "_n")}
+              alt={item.desc}
+              width={item.width}
+              height={item.height}
+              loading="lazy"
+              decoding="async"
+            />
+          ))
+        }
+      </div>
+
+      <div class="rh-clip rh-clip-bottom" style={`height:${bottomVisible}px`}>
+        <div class="rh-row">
+          {
+            bottomRow.items.map((item) => (
+              <img
+                src={photoUrl(item.name, "_n")}
+                alt=""
+                width={item.width}
+                height={item.height}
+                loading="lazy"
+                decoding="async"
+              />
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<style>
+  .rh-diagram {
+    margin: 1.5rem 0;
+    color: var(--sl-color-text);
+  }
+
+  .rh-scroll {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+
+  .rh-inner {
+    display: grid;
+    grid-template-columns: var(--rh-measure-width) var(--rh-rows-width);
+    grid-template-rows: auto auto auto;
+    row-gap: var(--rh-gap);
+    width: max-content;
+  }
+
+  .rh-row {
+    grid-column: 2;
+    display: flex;
+    gap: var(--rh-gap);
+  }
+
+  .rh-clip {
+    grid-column: 2;
+    overflow: hidden;
+    opacity: 0.55;
+  }
+
+  .rh-clip-top {
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 90%);
+    mask-image: linear-gradient(to bottom, transparent, #000 90%);
+  }
+
+  .rh-clip-bottom {
+    -webkit-mask-image: linear-gradient(to top, transparent, #000 90%);
+    mask-image: linear-gradient(to top, transparent, #000 90%);
+  }
+
+  .rh-row img {
+    display: block;
+    border-radius: 2px;
+  }
+
+  .rh-measure {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .rh-label {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 0.75rem;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--sl-color-gray-2);
+  }
+
+  .rh-bracket {
+    position: relative;
+    width: 1px;
+    height: 100%;
+    background: currentColor;
+  }
+
+  .rh-bracket::before,
+  .rh-bracket::after {
+    content: "";
+    position: absolute;
+    left: -5px;
+    width: 11px;
+    height: 1px;
+    background: currentColor;
+  }
+
+  .rh-bracket::before {
+    top: 0;
+  }
+
+  .rh-bracket::after {
+    bottom: 0;
+  }
+</style>

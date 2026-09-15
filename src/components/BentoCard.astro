@@ -1,0 +1,82 @@
+---
+import { Icon } from "@astrojs/starlight/components";
+import type { ComponentProps } from "astro/types";
+
+interface Props {
+  title: string;
+  href?: string;
+  icon?: ComponentProps<typeof Icon>["name"];
+  external?: boolean;
+  wide?: boolean;
+  tall?: boolean;
+}
+
+const {
+  title,
+  href,
+  icon,
+  external = false,
+  wide = false,
+  tall = false,
+} = Astro.props;
+const Tag = href ? "a" : "div";
+const linkAttrs = href
+  ? { href, ...(external ? { target: "_blank", rel: "noopener" } : {}) }
+  : {};
+---
+
+<Tag
+  class:list={["jg-bento-card", { "jg-bento-w2": wide, "jg-bento-h2": tall }]}
+  {...linkAttrs}
+>
+  {
+    icon && (
+      <div class="jg-bento-card-head">
+        <Icon name={icon} class="jg-bento-card-icon" size="1.4em" />
+      </div>
+    )
+  }
+  <h3 class="jg-bento-card-title">{title}</h3>
+  <div class="jg-bento-card-desc"><slot /></div>
+  <slot name="visual" />
+</Tag>
+
+<style>
+  .jg-bento-card-head {
+    display: flex;
+    align-items: center;
+    min-height: 1.4em;
+  }
+
+  .jg-bento-card-icon {
+    color: var(--sl-color-accent-high);
+    transition: transform 0.2s ease;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    a.jg-bento-card:hover .jg-bento-card-icon {
+      transform: scale(1.1);
+    }
+  }
+
+  .jg-bento-card-title {
+    margin: 0;
+    font-size: var(--sl-text-lg);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--sl-color-white);
+  }
+
+  .jg-bento-card-desc {
+    font-size: var(--sl-text-sm);
+    line-height: 1.6;
+    color: var(--sl-color-gray-2);
+  }
+
+  .jg-bento-card-desc :global(code) {
+    font-size: 0.85em;
+    background: var(--sl-color-gray-6);
+    border-radius: 0.25rem;
+    padding: 0.1em 0.3em;
+  }
+</style>

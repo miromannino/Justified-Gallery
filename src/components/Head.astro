@@ -1,0 +1,12 @@
+---
+// Preloads the Lobster display font (used by the nav title and hero
+// heading on every page) so it's fetched immediately alongside the CSS,
+// instead of only once the stylesheet is parsed. Without this the browser
+// renders the fallback font first and swaps to Lobster moments later,
+// causing a visible flicker on every page load/navigation.
+import Default from '@astrojs/starlight/components/Head.astro';
+import fontUrl from '../fonts/Lobster-Regular.subset.woff2?url';
+---
+
+<Default><slot /></Default>
+<link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin />

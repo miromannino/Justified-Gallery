@@ -1,0 +1,27 @@
+---
+import { images, photoUrl } from '../data/images';
+
+// Four entries demonstrating caption precedence: custom .jg-caption element,
+// alt + title, title only, alt only.
+const [img0, img1, img2, img3] = images;
+---
+
+<div id="captionsExample" class="justified-gallery jg-demo" data-jg="{}">
+  <a href={photoUrl(img0.name, '_b')}>
+    <img src={photoUrl(img0.name, '_m')} />
+    <div class="jg-caption">
+      I'm <span style="color: red">a</span> <strong>custom</strong> caption!<div>I'm a div</div>
+    </div>
+  </a>
+  <a href={photoUrl(img1.name, '_b')} title="I'm in the title">
+    <img alt="I'm in the alt" src={photoUrl(img1.name, '_m')} />
+  </a>
+  <a href={photoUrl(img2.name, '_b')} title="I'm only in the title">
+    <img src={photoUrl(img2.name, '_m')} />
+  </a>
+  <a href={photoUrl(img3.name, '_b')}>
+    <img alt="I'm only in the alt" src={photoUrl(img3.name, '_m')} />
+  </a>
+</div>
+
+<script src="../scripts/jg-demos.ts"></script>

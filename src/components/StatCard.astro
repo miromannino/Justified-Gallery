@@ -1,0 +1,39 @@
+---
+import { Icon } from "@astrojs/starlight/components";
+import type { ComponentProps } from "astro/types";
+
+interface Props {
+  value: string;
+  label: string;
+  href?: string;
+  icon?: ComponentProps<typeof Icon>["name"];
+  external?: boolean;
+}
+
+const { value, label, href, icon, external = false } = Astro.props;
+const Tag = href ? "a" : "div";
+const linkAttrs = href
+  ? { href, ...(external ? { target: "_blank", rel: "noopener" } : {}) }
+  : {};
+---
+
+<Tag class="jg-bento-card jg-stat-card" {...linkAttrs}>
+  {icon && <Icon name={icon} class="jg-bento-card-icon" size="1.4em" />}
+  <div class="jg-stat-value">{value}</div>
+  <div class="jg-bento-card-desc">{label}</div>
+</Tag>
+
+<style>
+  .jg-stat-card {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .jg-stat-value {
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--sl-color-white);
+  }
+</style>

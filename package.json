@@ -1,19 +1,22 @@
 {
   "name": "justified-gallery-gh-pages",
-  "version": "3.8.0",
-  "homepage": "https://github.com/miromannino/Justified-Gallery",
-  "authors": [
-    "Miro Mannino <miro.mannino@gmail.com>"
-  ],
-  "description": "Justified Gallery gh-pages",
-  "main": "index.html",
-  "license": "MIT",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
   "dependencies": {
-    "bootstrap": "3.3.5",
-    "font-awesome": "^4.7.0",
-    "jquery": "^2.1.0",
-    "jquery-colorbox": "^1.6.4",
-    "justifiedGallery": "3.8.0",
-    "swipebox": "^1.4.6"
+    "@astrojs/starlight": "^0.41.10",
+    "astro": "^7.1.6",
+    "glightbox": "^3.3.1",
+    "justified-gallery": "^4.0.1",
+    "sharp": "^0.35.3"
+  },
+  "allowScripts": {
+    "esbuild": true
   }
 }

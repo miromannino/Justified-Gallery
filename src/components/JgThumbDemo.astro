@@ -1,0 +1,196 @@
+---
+/**
+ * Small illustration for the "right thumbnail, automatically" feature card:
+ * a photo placeholder that grows through three container sizes. On every
+ * step the picture first goes soft (the old, smaller thumbnail stretched),
+ * a loading sweep crosses it, and it snaps back sharp — the bigger source
+ * has arrived. Pure CSS keyframes, no JS.
+ */
+---
+
+<div class="jg-thumb-demo" aria-hidden="true">
+  <div class="jg-thumb-demo-box">
+    <svg class="jg-thumb-demo-photo" viewBox="0 0 64 44" fill="none">
+      <circle cx="47" cy="13" r="5" fill="currentColor" opacity="0.55" />
+      <path
+        d="M2 38 L20 16 L33 31 L42 22 L62 38 Z"
+        fill="currentColor"
+        opacity="0.85"
+      />
+      <rect
+        x="1"
+        y="1"
+        width="62"
+        height="42"
+        rx="3"
+        stroke="currentColor"
+        stroke-width="2"
+        opacity="0.45"
+      />
+    </svg>
+    <span class="jg-thumb-demo-sweep"></span>
+    <span class="jg-thumb-demo-label jg-thumb-demo-label-s">160px</span>
+    <span class="jg-thumb-demo-label jg-thumb-demo-label-m">480px</span>
+    <span class="jg-thumb-demo-label jg-thumb-demo-label-l">960px</span>
+  </div>
+</div>
+
+<style>
+  .jg-thumb-demo {
+    display: flex;
+    align-items: center;
+    height: 4.45rem;
+  }
+
+  .jg-thumb-demo-box {
+    position: relative;
+    height: 3.6rem;
+    border-radius: 0.4rem;
+    overflow: hidden;
+    border: 1px solid var(--sl-color-gray-5);
+    background: color-mix(in srgb, var(--sl-color-bg) 40%, transparent);
+    animation: jg-thumb-box 6s steps(1, end) infinite;
+  }
+
+  .jg-thumb-demo-photo {
+    position: absolute;
+    top: 0.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 1.9rem;
+    width: auto;
+    color: var(--sl-color-accent-high);
+    /* The blur sells the swap: a stretched small thumbnail first, then the
+       freshly loaded bigger one, which also draws at a larger size. */
+    animation:
+      jg-thumb-sharpen 2s ease-out infinite,
+      jg-thumb-grow 6s steps(1, end) infinite;
+  }
+
+  /* Loading sweep: one pass right after each size change. */
+  .jg-thumb-demo-sweep {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      transparent 35%,
+      color-mix(in srgb, var(--sl-color-accent-high) 35%, transparent) 50%,
+      transparent 65%
+    );
+    transform: translateX(-100%);
+    animation: jg-thumb-sweep 2s ease-out infinite;
+  }
+
+  .jg-thumb-demo-label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.15rem;
+    text-align: center;
+    font-size: var(--sl-text-2xs);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--sl-color-accent-high);
+    opacity: 0;
+  }
+
+  .jg-thumb-demo-label-s {
+    animation: jg-thumb-fade 6s steps(1, end) infinite;
+  }
+  .jg-thumb-demo-label-m {
+    animation: jg-thumb-fade 6s steps(1, end) infinite;
+    animation-delay: -2s;
+  }
+  .jg-thumb-demo-label-l {
+    animation: jg-thumb-fade 6s steps(1, end) infinite;
+    animation-delay: -4s;
+  }
+
+  @keyframes jg-thumb-box {
+    0% {
+      width: 5rem;
+    }
+    33.34% {
+      width: 8.5rem;
+    }
+    66.67% {
+      width: 12rem;
+    }
+  }
+
+  @keyframes jg-thumb-grow {
+    0% {
+      height: 1.2rem;
+    }
+    33.34% {
+      height: 1.6rem;
+    }
+    66.67% {
+      height: 1.95rem;
+    }
+  }
+
+  @keyframes jg-thumb-sharpen {
+    0%,
+    10% {
+      filter: blur(3.5px);
+      opacity: 0.75;
+    }
+    45%,
+    100% {
+      filter: blur(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes jg-thumb-sweep {
+    0% {
+      transform: translateX(-100%);
+      opacity: 1;
+    }
+    45% {
+      transform: translateX(100%);
+      opacity: 1;
+    }
+    45.01%,
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes jg-thumb-fade {
+    0%,
+    33.33% {
+      opacity: 1;
+    }
+    33.34%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .jg-thumb-demo-box {
+      max-width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .jg-thumb-demo-box,
+    .jg-thumb-demo-photo,
+    .jg-thumb-demo-sweep,
+    .jg-thumb-demo-label {
+      animation: none;
+    }
+    .jg-thumb-demo-sweep {
+      opacity: 0;
+    }
+    .jg-thumb-demo-label-m {
+      opacity: 1;
+    }
+    .jg-thumb-demo-box {
+      width: 8.5rem;
+    }
+  }
+</style>

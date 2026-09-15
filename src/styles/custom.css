@@ -1,0 +1,461 @@
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+/* Starlight's default type scale is built on a 16px base, which reads small
+   here. Rescale the whole token set ~1.125x (16px -> 18px base) so the nav,
+   headings, body copy, cards and code all grow together — Starlight and every
+   component in src/components size themselves from these same tokens, so this
+   is the only place the page-wide font size needs to change. The derived
+   tokens (--sl-text-body, --sl-text-code, --sl-text-h1…h5) are aliases of
+   these, so they follow automatically. */
+:root {
+  --sl-text-2xs: 0.8125rem;
+  --sl-text-body: 1.2rem;
+  --sl-text-xs: 0.875rem;
+  --sl-text-sm: 0.9375rem;
+  --sl-text-base: 1.25rem;
+  --sl-text-lg: 1.25rem;
+  --sl-text-xl: 1.375rem;
+  --sl-text-2xl: 1.625rem;
+  --sl-text-3xl: 2rem;
+  --sl-text-4xl: 2.4375rem;
+  --sl-text-5xl: 2.9375rem;
+  --sl-text-6xl: 4.5rem;
+
+  --sl-line-height: 1.85;
+
+  /* Azure accent, replacing Starlight's default indigo. Dark mode gets the
+     light end of the ramp for text, light mode the dark end. */
+  --sl-color-accent-low: #0a2c45;
+  --sl-color-accent: #0c87cf;
+  --sl-color-accent-high: #8ad2f6;
+}
+
+:root[data-theme="light"] {
+  --sl-color-accent-low: #cfeafb;
+  --sl-color-accent: #0a6ba3;
+  --sl-color-accent-high: #05314c;
+}
+
+body {
+  font-size: var(--sl-text-body);
+}
+
+@font-face {
+  font-family: "Lobster";
+  /* Subset to the glyphs actually used ("Justified Gallery" in the nav
+     title and hero heading) and converted to woff2: ~5KB instead of the
+     original 420KB ttf, so it's ready before paint instead of swapping in
+     late. font-display: block briefly hides the text rather than flashing
+     the fallback font while this tiny file finishes loading. */
+  src: url("../fonts/Lobster-Regular.subset.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+
+.hero h1 {
+  font-family: "Lobster", cursive;
+  font-weight: normal;
+  color: var(--sl-color-text-accent);
+}
+
+/* --- Landing page hero ---------------------------------------------------- */
+
+[data-has-hero] body {
+  background: var(--sl-color-bg);
+}
+
+[data-has-hero] .hero {
+  position: relative;
+}
+
+[data-has-hero] .hero::before {
+  content: "";
+  position: absolute;
+  inset: -4rem 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    45% 60% at 50% 45%,
+    color-mix(in srgb, var(--sl-color-accent-low) 55%, transparent),
+    transparent 70%
+  );
+  filter: blur(24px);
+}
+
+.hero .tagline {
+  font-weight: 500;
+}
+
+.hero .hero-byline {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: var(--sl-text-sm);
+  font-weight: 500;
+  color: var(--sl-color-gray-2);
+  /* The byline sits over the animated network background, where mid-gray text
+     washes out against the moving filaments — a soft dark halo keeps it legible
+     without boxing it in. */
+  text-shadow: 0 1px 8px color-mix(in srgb, var(--sl-color-bg) 85%, transparent);
+}
+
+.hero .hero-byline a {
+  color: var(--sl-color-white);
+  text-decoration: none;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--sl-color-accent) 55%, transparent);
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.hero .hero-byline a:hover {
+  color: var(--sl-color-white);
+  border-color: var(--sl-color-accent);
+}
+
+/* Force both hero buttons to the same box model so icon/label differences
+   between variants can never throw their heights out of sync. */
+.hero .sl-link-button.primary,
+.hero .sl-link-button.secondary {
+  box-sizing: border-box;
+  padding: 0.4375rem 1.125rem;
+  line-height: 1.1875;
+}
+
+@media (min-width: 50rem) {
+  .hero .sl-link-button.primary,
+  .hero .sl-link-button.secondary {
+    padding: 0.9375rem 1.25rem;
+  }
+}
+
+.hero .sl-link-button.secondary {
+  border-color: var(--sl-color-gray-5);
+  background: color-mix(in srgb, var(--sl-color-bg) 55%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.hero .sl-link-button.secondary:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--sl-color-accent) 60%,
+    var(--sl-color-gray-5)
+  );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--sl-color-accent) 25%, transparent),
+    0 8px 24px -12px color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero .sl-link-button.secondary:hover {
+    transform: translateY(-2px);
+  }
+
+  [data-has-hero] .hero h1,
+  [data-has-hero] .hero .tagline,
+  [data-has-hero] .hero .actions {
+    opacity: 0;
+    animation: hero-in 0.5s ease forwards;
+  }
+
+  [data-has-hero] .hero h1 {
+    animation-delay: 0ms;
+  }
+
+  [data-has-hero] .hero .tagline {
+    animation-delay: 80ms;
+  }
+
+  [data-has-hero] .hero .actions {
+    animation-delay: 160ms;
+  }
+
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+.site-title {
+  font-family: "Lobster", cursive;
+  font-size: 1.4rem;
+}
+
+/* --- Live gallery demos ------------------------------------------------- */
+
+.jg-demo {
+  width: 100%;
+  min-height: 20rem;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.jg-demo > a,
+.jg-demo > div,
+.jg-demo > figure {
+  position: absolute;
+  opacity: 0.1;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.jg-demo img {
+  margin: 0;
+  max-width: none;
+  border-radius: 0;
+  /* Hidden until justified-gallery lays out the entry and reveals it via
+     the library's own `.jg-entry-visible img { opacity: 1 }` rule. */
+  opacity: 0;
+}
+
+.jg-demo a {
+  text-decoration: none;
+  box-shadow: none;
+}
+
+/* --- Options playground -------------------------------------------------- */
+
+.jgs-form {
+  margin-bottom: 1.5rem;
+}
+
+.jgs-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 0.6rem 1.2rem;
+}
+
+.jgs-fields label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--sl-text-sm);
+}
+
+.jgs-fields label > span {
+  flex: 0 0 8rem;
+}
+
+.jgs-fields input[type="text"],
+.jgs-fields select {
+  width: 100%;
+  min-width: 0;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 0.25rem;
+  background-color: var(--sl-color-black);
+  color: var(--sl-color-white);
+}
+
+.jgs-fields label.has-error input {
+  border-color: var(--sl-color-red);
+  outline: 1px solid var(--sl-color-red);
+}
+
+.jgs-check {
+  flex-direction: row;
+}
+
+.jgs-event-log-label {
+  margin-top: 1rem;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-2);
+}
+
+.jgs-event-log {
+  min-height: 2.5rem;
+  font-size: var(--sl-text-xs);
+}
+
+/* --- Bento cards ---------------------------------------------------------- */
+
+.jg-bento {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+  /* Backfill any gap a wide/tall card would otherwise leave behind, so the
+     grid stays justified even if a card is added or removed. */
+  grid-auto-flow: row dense;
+}
+
+.jg-bento-w2 {
+  grid-column: span 2;
+}
+
+.jg-bento-h2 {
+  grid-row: span 2;
+}
+
+.jg-bento-full {
+  grid-column: 1 / -1;
+}
+
+.jg-bento-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 1.25rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--sl-color-bg) 30%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: inherit;
+  text-decoration: none;
+}
+
+a.jg-bento-card {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+a.jg-bento-card:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--sl-color-accent) 60%,
+    var(--sl-color-gray-5)
+  );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--sl-color-accent) 25%, transparent),
+    0 8px 24px -12px color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a.jg-bento-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+a.jg-bento-card:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 72rem) {
+  .jg-bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 50rem) {
+  .jg-bento {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .jg-bento-w2 {
+    grid-column: auto;
+  }
+
+  .jg-bento-h2 {
+    grid-row: auto;
+  }
+}
+
+/* --- Misc ---------------------------------------------------------------- */
+
+.jg-alert {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--sl-color-accent);
+  border-radius: 0.5rem;
+  background-color: var(--sl-color-accent-low);
+}
+
+/* --- Docs prev/next pagination ------------------------------------------ */
+
+.pagination-links a {
+  box-shadow:
+    0 1px 2px hsla(0, 0%, 0%, 0.04),
+    0 8px 24px -12px hsla(0, 0%, 0%, 0.18);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.pagination-links a:hover {
+  box-shadow:
+    0 1px 2px hsla(0, 0%, 0%, 0.05),
+    0 14px 32px -14px hsla(0, 0%, 0%, 0.24);
+}
+
+/* --- Docs headings ------------------------------------------------------- */
+
+/* Starlight maps in-page headings onto the top of the type scale (h2 ->
+   --sl-text-4xl on wide screens), which is oversized next to the 1.2rem body
+   copy here. Redefine the h-tokens on a tighter ramp; anchor links and all
+   heading rules derive from them. */
+:root {
+  --sl-text-h2: 1.75rem;
+  --sl-text-h3: 1.4375rem;
+  --sl-text-h4: 1.25rem;
+  --sl-text-h5: 1.125rem;
+}
+
+@media (min-width: 50rem) {
+  :root {
+    --sl-text-h2: 1.9375rem;
+    --sl-text-h3: 1.5625rem;
+    --sl-text-h4: 1.3125rem;
+  }
+}
+
+/* --- Code blocks (light mode) -------------------------------------------- */
+
+/* Starlight's light theme paints code frames #f6f7f9, all but indistinguishable
+   from the white page. Swap in a translucent gray veil — the same treatment as
+   the bento cards — so a frame reads as a surface on the page rather than a
+   white hole in it. Expressive Code's stylesheet loads after this file, so
+   these override the resolved `--code-background` on the frame itself instead
+   of the theme tokens it would otherwise win against. */
+:root[data-theme="light"] .expressive-code .frame,
+:root:not([data-theme="dark"]) .expressive-code .frame {
+  --code-background: color-mix(
+    in srgb,
+    var(--sl-color-gray-5) 25%,
+    transparent
+  );
+}
+
+:root[data-theme="light"] .expressive-code .frame.is-terminal,
+:root:not([data-theme="dark"]) .expressive-code .frame.is-terminal {
+  --code-background: color-mix(
+    in srgb,
+    var(--sl-color-gray-5) 32%,
+    transparent
+  );
+}
+
+:root[data-theme="light"] .expressive-code .frame.has-title:not(.is-terminal),
+:root:not([data-theme="dark"])
+  .expressive-code
+  .frame.has-title:not(.is-terminal) {
+  --ec-frm-edActTabBg: color-mix(
+    in srgb,
+    var(--sl-color-gray-5) 25%,
+    transparent
+  );
+  --ec-frm-edTabBarBg: transparent;
+}

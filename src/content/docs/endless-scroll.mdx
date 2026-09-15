@@ -1,0 +1,36 @@
+---
+title: Infinite Scroll
+description: How to use Justified Gallery to build an infinite scrolling wall of images.
+---
+
+import EndlessScrollDemo from '../../components/EndlessScrollDemo.astro';
+
+In this example you can see how to use the library to obtain an infinite scroll.
+
+The first thing to do is to initialize the gallery as usual:
+
+```js
+const gallery = document.querySelector('#gallery');
+const jg = new JustifiedGallery(gallery, { rowHeight: 120 });
+jg.init();
+```
+
+Then you need to implement the infinite scroll as you want. You only have to call `init()` again after you have added some images. For example:
+
+```js
+window.addEventListener('scroll', () => {
+  if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+    for (let i = 0; i < 5; i++) {
+      gallery.insertAdjacentHTML(
+        'beforeend',
+        '<a href="path/to/image.jpg"><img src="path/to/thumbnail.jpg" /></a>'
+      );
+    }
+    jg.init();
+  }
+});
+```
+
+Calling `init()` again doesn't re-analyze all the images, but only the new ones: entries that have already been processed are skipped. This increases the performance, and also prevents the page from having strange behaviors with the scrollbars. If you need the new entries to also be filtered, sorted, or randomized on their own, see the [`updateEntries(norewind)` method](/Justified-Gallery/options-and-events/#methods).
+
+<EndlessScrollDemo />

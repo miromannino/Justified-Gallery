@@ -1,0 +1,576 @@
+---
+interface Props {
+  cellSize?: number;
+  glow?: number;
+}
+const { cellSize = 62, glow = 0.55 } = Astro.props;
+---
+
+<div
+  class="jg-signal-network"
+  aria-hidden="true"
+  data-cell-size={cellSize}
+  data-glow={glow}
+>
+  <div class="jg-signal-network-blob jg-signal-network-blob-a"></div>
+  <div class="jg-signal-network-blob jg-signal-network-blob-b"></div>
+  <canvas></canvas>
+  <div class="jg-signal-network-fade"></div>
+</div>
+
+<style>
+  .jg-signal-network {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    margin: 0 !important;
+    pointer-events: none;
+    overflow: hidden;
+    --sn-scroll: 0;
+    opacity: 0;
+    animation: jg-signal-network-in 0.6s ease 0.1s forwards;
+  }
+
+  @keyframes jg-signal-network-in {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .jg-signal-network {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  .jg-signal-network canvas {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .jg-signal-network-blob {
+    position: absolute;
+    width: 85vmax;
+    height: 85vmax;
+    border-radius: 50%;
+    filter: blur(90px);
+    will-change: transform;
+  }
+
+  .jg-signal-network-blob-a {
+    top: -24vmax;
+    left: -24vmax;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--sl-color-accent) 14%, transparent),
+      transparent 42%
+    );
+    transform: translate(
+      calc(var(--sn-scroll) * -10vw),
+      calc(var(--sn-scroll) * 40vh)
+    );
+  }
+
+  .jg-signal-network-blob-b {
+    bottom: -24vmax;
+    right: -24vmax;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--sl-color-purple) 24%, transparent),
+      transparent 50%
+    );
+    transform: translate(
+      calc(var(--sn-scroll) * 90vw),
+      calc(var(--sn-scroll) * -40vh)
+    );
+  }
+
+  .jg-signal-network-fade {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      120% 80% at 50% 0%,
+      transparent 25%,
+      color-mix(in srgb, var(--sl-color-bg) 85%, transparent) 100%
+    );
+  }
+</style>
+
+<script>
+  const EDGE_VS = `
+		attribute vec2 aStart; attribute vec2 aEnd;
+		attribute float aSide; attribute float aT; attribute float aOrder;
+		uniform vec2 uRes; uniform float uReveal; uniform float uHalf;
+		varying float vSide; varying float vAge; varying float vLocal; varying float vSeed;
+		void main() {
+			float local = clamp(uReveal - aOrder, 0.0, 1.0);
+			vec2 d = aEnd - aStart;
+			float len = max(length(d), 0.001);
+			vec2 nd = d / len;
+			vec2 nr = vec2(-nd.y, nd.x);
+			vec2 p = aStart + nd * (len * local * aT) + nr * (aSide * uHalf);
+			vSide = aSide; vLocal = local; vAge = uReveal - aOrder - 1.0;
+			vSeed = fract(aOrder * 0.618);
+			gl_Position = vec4(p.x / uRes.x * 2.0 - 1.0, 1.0 - p.y / uRes.y * 2.0, 0.0, 1.0);
+		}`;
+
+  const EDGE_FS = `
+		precision mediump float;
+		uniform vec3 uHot; uniform vec3 uCool; uniform float uGlow;
+		varying float vSide; varying float vAge; varying float vLocal; varying float vSeed;
+		void main() {
+			if (vLocal <= 0.0) discard;
+			float core = 1.0 - abs(vSide);
+			float glow = pow(max(core, 0.0), 3.0);
+			float filament = pow(max(core, 0.0), 14.0);
+			float age = max(vAge, 0.0);
+			float growing = 1.0 - clamp(age, 0.0, 1.0);
+			float settle = mix(1.0, 0.3, clamp(age / 5.0, 0.0, 1.0));
+			vec3 col = mix(uHot, uCool, clamp(age / 3.0, 0.0, 1.0));
+			float a = (glow * 0.5 + filament * 0.95) * settle + growing * glow * 0.55;
+			gl_FragColor = vec4(col * (0.85 + growing * 1.3), a * uGlow);
+		}`;
+
+  const DOT_VS = `
+		attribute vec2 aCenter; attribute vec2 aCorner; attribute float aOrder;
+		uniform vec2 uRes; uniform float uReveal;
+		varying vec2 vC; varying float vAge;
+		void main() {
+			vAge = uReveal - aOrder;
+			float on = step(0.0, vAge);
+			float pop = 1.0 + 2.2 * exp(-max(vAge, 0.0) * 3.0);
+			vec2 p = aCenter + aCorner * 3.6 * pop * on;
+			vC = aCorner;
+			gl_Position = vec4(p.x / uRes.x * 2.0 - 1.0, 1.0 - p.y / uRes.y * 2.0, 0.0, 1.0);
+		}`;
+
+  const DOT_FS = `
+		precision mediump float;
+		uniform vec3 uHot; uniform vec3 uCool; uniform float uGlow;
+		varying vec2 vC; varying float vAge;
+		void main() {
+			if (vAge < 0.0) discard;
+			float d = length(vC);
+			float a = smoothstep(0.1, 0.0, d);
+			float flash = exp(-vAge * 2.2);
+			vec3 col = mix(uCool, uHot, flash);
+			gl_FragColor = vec4(col, a * (0.16 + flash * 0.9) * uGlow);
+		}`;
+
+  const THEMES = {
+    dark: { hot: "#728a9a5b", cool: "#1b8ad6", additive: true },
+    light: { hot: "#585f7458", cool: "#3e45535b", additive: true },
+  };
+
+  function hexToRgb(hex: string): [number, number, number] {
+    const n = parseInt(hex.slice(1), 16);
+    return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
+  }
+
+  function compile(
+    gl: WebGLRenderingContext,
+    vsSrc: string,
+    fsSrc: string,
+  ): WebGLProgram | null {
+    const make = (type: number, src: string) => {
+      const sh = gl.createShader(type)!;
+      gl.shaderSource(sh, src);
+      gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+        console.warn("signal-network shader error:", gl.getShaderInfoLog(sh));
+        return null;
+      }
+      return sh;
+    };
+    const vs = make(gl.VERTEX_SHADER, vsSrc);
+    const fs = make(gl.FRAGMENT_SHADER, fsSrc);
+    if (!vs || !fs) return null;
+    const prog = gl.createProgram()!;
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      console.warn("signal-network link error:", gl.getProgramInfoLog(prog));
+      return null;
+    }
+    return prog;
+  }
+
+  interface Edge {
+    a: [number, number];
+    b: [number, number];
+    order: number;
+  }
+  interface Node {
+    i: number;
+    j: number;
+    time: number;
+  }
+
+  /**
+   * Grow the network over a cols x rows lattice with a deterministic PRNG.
+   * Returns every lattice edge with the time (order) at which it energizes,
+   * so the grid always closes completely by `total`.
+   */
+  function grow(
+    cols: number,
+    rows: number,
+  ): { edges: Edge[]; nodes: Node[]; total: number } {
+    let seed = 20260816 >>> 0;
+    const rnd = () => {
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+      return seed / 4294967296;
+    };
+    const key = (i: number, j: number) => j * cols + i;
+    const time = new Float32Array(cols * rows).fill(-1);
+    const edges: Edge[] = [];
+    const nodes: Node[] = [];
+    const heap: { i: number; j: number; t: number }[] = [];
+    const push = (item: { i: number; j: number; t: number }) => {
+      heap.push(item);
+      heap.sort((a, b) => a.t - b.t);
+    };
+    const seeds = Math.max(2, Math.round(cols / 5));
+    for (let s = 0; s < seeds; s++) {
+      const i = Math.floor(rnd() * cols);
+      if (time[key(i, 0)] >= 0) continue;
+      time[key(i, 0)] = rnd() * 1.2;
+      nodes.push({ i, j: 0, time: time[key(i, 0)] });
+      push({ i, j: 0, t: time[key(i, 0)] });
+    }
+    const dirs: [number, number, number][] = [
+      [0, 1, 1.0], // down, weighted heaviest so the field fills top to bottom
+      [-1, 0, 1.5],
+      [1, 0, 1.5],
+    ];
+    while (heap.length) {
+      const cur = heap.shift()!;
+      const order = [0, 1, 2].sort(() => rnd() - 0.5);
+      for (const di of order) {
+        const [dx, dy, cost] = dirs[di];
+        const ni = cur.i + dx;
+        const nj = cur.j + dy;
+        if (ni < 0 || ni >= cols || nj < 0 || nj >= rows) continue;
+        if (time[key(ni, nj)] >= 0) continue;
+        if (rnd() < 0.22) continue; // stall a branch; the cell gets reached later
+        const nt = cur.t + cost * (0.75 + rnd() * 0.9);
+        time[key(ni, nj)] = nt;
+        nodes.push({ i: ni, j: nj, time: nt });
+        edges.push({ a: [cur.i, cur.j], b: [ni, nj], order: cur.t });
+        push({ i: ni, j: nj, t: nt });
+      }
+    }
+    let maxT = 0;
+    for (let k = 0; k < time.length; k++) maxT = Math.max(maxT, time[k]);
+    // Unreached cells + all remaining lattice edges close the grid by the end.
+    for (let j = 0; j < rows; j++)
+      for (let i = 0; i < cols; i++) {
+        if (time[key(i, j)] < 0) {
+          const t = maxT * (0.55 + rnd() * 0.45);
+          time[key(i, j)] = t;
+          nodes.push({ i, j, time: t });
+        }
+      }
+    const has = new Set(
+      edges.map((e) => e.a[0] + "," + e.a[1] + ">" + e.b[0] + "," + e.b[1]),
+    );
+    const seen = (a: [number, number], b: [number, number]) =>
+      has.has(a[0] + "," + a[1] + ">" + b[0] + "," + b[1]) ||
+      has.has(b[0] + "," + b[1] + ">" + a[0] + "," + a[1]);
+    for (let j = 0; j < rows; j++)
+      for (let i = 0; i < cols; i++) {
+        const cands: [[number, number], [number, number]][] = [];
+        if (i + 1 < cols)
+          cands.push([
+            [i, j],
+            [i + 1, j],
+          ]);
+        if (j + 1 < rows)
+          cands.push([
+            [i, j],
+            [i, j + 1],
+          ]);
+        for (const [a, b] of cands) {
+          if (seen(a, b)) continue;
+          const base = Math.max(time[key(a[0], a[1])], time[key(b[0], b[1])]);
+          edges.push({ a, b, order: base + rnd() * Math.max(1, maxT - base) });
+        }
+      }
+    let total = 0;
+    for (const e of edges) total = Math.max(total, e.order);
+    return { edges, nodes, total };
+  }
+
+  class SignalNetwork {
+    root: HTMLElement;
+    canvas: HTMLCanvasElement;
+    gl: WebGLRenderingContext;
+    cell: number;
+    glow: number;
+    edgeProg: WebGLProgram;
+    dotProg: WebGLProgram;
+    edgeBuf: WebGLBuffer;
+    edgeIdx: WebGLBuffer;
+    dotBuf: WebGLBuffer;
+    dotIdx: WebGLBuffer;
+    uint32: boolean;
+    edgeCount = 0;
+    dotCount = 0;
+    total = 1;
+    reveal = 0;
+    target = 0;
+    last = 0;
+    lastActive = 0;
+    running = false;
+    reduced = false;
+    additive = true;
+    hot: [number, number, number] = [1, 1, 1];
+    cool: [number, number, number] = [0, 0, 1];
+
+    constructor(root: HTMLElement, gl: WebGLRenderingContext) {
+      this.root = root;
+      this.canvas = root.querySelector("canvas")!;
+      this.gl = gl;
+      this.cell = Math.max(28, parseFloat(root.dataset.cellSize || "") || 62);
+      this.glow = parseFloat(root.dataset.glow || "") || 1;
+      this.uint32 = !!gl.getExtension("OES_element_index_uint");
+      this.edgeProg = compile(gl, EDGE_VS, EDGE_FS)!;
+      this.dotProg = compile(gl, DOT_VS, DOT_FS)!;
+      this.edgeBuf = gl.createBuffer()!;
+      this.edgeIdx = gl.createBuffer()!;
+      this.dotBuf = gl.createBuffer()!;
+      this.dotIdx = gl.createBuffer()!;
+      this.reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      this.applyTheme();
+      this.rebuild();
+
+      addEventListener("scroll", () => this.wake(), { passive: true });
+      addEventListener("resize", () => {
+        this.rebuild();
+        this.wake();
+      });
+      // The page grows while galleries lay out images; keep the reveal in
+      // sync with the real scrollable height.
+      new ResizeObserver(() => this.wake()).observe(document.body);
+      new MutationObserver(() => {
+        this.applyTheme();
+        this.wake();
+      }).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"],
+      });
+      this.wake();
+    }
+
+    applyTheme() {
+      const light =
+        document.documentElement.getAttribute("data-theme") === "light";
+      const theme = light ? THEMES.light : THEMES.dark;
+      this.hot = hexToRgb(theme.hot);
+      this.cool = hexToRgb(theme.cool);
+      this.additive = theme.additive;
+    }
+
+    rebuild() {
+      const gl = this.gl;
+      const W = innerWidth;
+      const H = innerHeight;
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      this.canvas.width = Math.round(W * dpr);
+      this.canvas.height = Math.round(H * dpr);
+      gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+
+      const cell = this.cell;
+      const cols = Math.ceil(W / cell) + 1;
+      const rows = Math.ceil(H / cell) + 1;
+      const ox = (W - (cols - 1) * cell) / 2;
+      const oy = (H - (rows - 1) * cell) / 2;
+      const net = grow(cols, rows);
+      const px = (i: number) => ox + i * cell;
+      const py = (j: number) => oy + j * cell;
+
+      // Edges: one quad each, interleaved [startX, startY, endX, endY, side, t, order].
+      const n = net.edges.length;
+      const ev = new Float32Array(n * 4 * 7);
+      const makeIdx = (count: number) => {
+        const arr = this.uint32
+          ? new Uint32Array(count * 6)
+          : new Uint16Array(count * 6);
+        for (let k = 0; k < count; k++) {
+          const o = k * 4;
+          arr.set([o, o + 1, o + 2, o + 2, o + 1, o + 3], k * 6);
+        }
+        return arr;
+      };
+      const corners = [
+        [-1, 0],
+        [1, 0],
+        [-1, 1],
+        [1, 1],
+      ];
+      net.edges.forEach((e, k) => {
+        for (let c = 0; c < 4; c++) {
+          const o = (k * 4 + c) * 7;
+          ev[o] = px(e.a[0]);
+          ev[o + 1] = py(e.a[1]);
+          ev[o + 2] = px(e.b[0]);
+          ev[o + 3] = py(e.b[1]);
+          ev[o + 4] = corners[c][0];
+          ev[o + 5] = corners[c][1];
+          ev[o + 6] = e.order;
+        }
+      });
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.edgeBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, ev, gl.STATIC_DRAW);
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.edgeIdx);
+      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, makeIdx(n), gl.STATIC_DRAW);
+      this.edgeCount = n * 6;
+
+      // Junction sparks: one quad each, interleaved [x, y, cornerX, cornerY, order].
+      const m = net.nodes.length;
+      const dv = new Float32Array(m * 4 * 5);
+      const cs = [
+        [-1, -1],
+        [1, -1],
+        [-1, 1],
+        [1, 1],
+      ];
+      net.nodes.forEach((nd, k) => {
+        for (let c = 0; c < 4; c++) {
+          const o = (k * 4 + c) * 5;
+          dv[o] = px(nd.i);
+          dv[o + 1] = py(nd.j);
+          dv[o + 2] = cs[c][0];
+          dv[o + 3] = cs[c][1];
+          dv[o + 4] = nd.time;
+        }
+      });
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.dotBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, dv, gl.STATIC_DRAW);
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.dotIdx);
+      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, makeIdx(m), gl.STATIC_DRAW);
+      this.dotCount = m * 6;
+
+      this.res = [W, H];
+      this.total = net.total + 1.4;
+      this.syncScroll();
+      this.reveal = this.target;
+    }
+
+    res: [number, number] = [1, 1];
+
+    syncScroll() {
+      const max = Math.max(
+        1,
+        document.documentElement.scrollHeight - innerHeight,
+      );
+      const p = Math.min(1, Math.max(0, scrollY / max));
+      // Start already partially energized at the top of the page instead of
+      // a blank grid, then fill the rest as the user scrolls.
+      this.target = (0.25 + p * 0.75) * this.total;
+      this.root.style.setProperty("--sn-scroll", String(p));
+    }
+
+    wake() {
+      this.syncScroll();
+      if (this.running) return;
+      this.running = true;
+      this.last = this.lastActive = performance.now();
+      requestAnimationFrame(this.frame);
+    }
+
+    frame = (now: number) => {
+      const dt = Math.min((now - this.last) / 1000, 0.1);
+      this.last = now;
+      this.syncScroll();
+      if (this.reduced) this.reveal = this.target;
+      else this.reveal += (this.target - this.reveal) * (1 - Math.exp(-dt * 5));
+      this.render();
+      if (Math.abs(this.target - this.reveal) > 0.002) {
+        this.lastActive = now;
+      } else {
+        this.reveal = this.target;
+      }
+      // Let the reveal finish easing in briefly after scrolling stops, then
+      // idle to save battery until the next scroll/resize/theme change.
+      if (now - this.lastActive > 1500) {
+        this.running = false;
+        return;
+      }
+      requestAnimationFrame(this.frame);
+    };
+
+    render() {
+      const gl = this.gl;
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.disable(gl.DEPTH_TEST);
+      gl.enable(gl.BLEND);
+      if (this.additive) gl.blendFunc(gl.ONE, gl.ONE);
+      else gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+      const idxType = this.uint32 ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT;
+
+      // Traces
+      gl.useProgram(this.edgeProg);
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.edgeBuf);
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.edgeIdx);
+      const ep = this.edgeProg;
+      const eAttr = (name: string, size: number, offset: number) => {
+        const loc = gl.getAttribLocation(ep, name);
+        gl.enableVertexAttribArray(loc);
+        gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 28, offset);
+      };
+      eAttr("aStart", 2, 0);
+      eAttr("aEnd", 2, 8);
+      eAttr("aSide", 1, 16);
+      eAttr("aT", 1, 20);
+      eAttr("aOrder", 1, 24);
+      gl.uniform2f(gl.getUniformLocation(ep, "uRes"), this.res[0], this.res[1]);
+      gl.uniform1f(gl.getUniformLocation(ep, "uReveal"), this.reveal);
+      gl.uniform1f(gl.getUniformLocation(ep, "uHalf"), 3.2);
+      gl.uniform3f(gl.getUniformLocation(ep, "uHot"), ...this.hot);
+      gl.uniform3f(gl.getUniformLocation(ep, "uCool"), ...this.cool);
+      gl.uniform1f(gl.getUniformLocation(ep, "uGlow"), this.glow);
+      gl.drawElements(gl.TRIANGLES, this.edgeCount, idxType, 0);
+
+      // Junction sparks
+      // gl.useProgram(this.dotProg); // I don't like for now this
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.dotBuf);
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.dotIdx);
+      const dp = this.dotProg;
+      const dAttr = (name: string, size: number, offset: number) => {
+        const loc = gl.getAttribLocation(dp, name);
+        gl.enableVertexAttribArray(loc);
+        gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 20, offset);
+      };
+      dAttr("aCenter", 2, 0);
+      dAttr("aCorner", 2, 8);
+      dAttr("aOrder", 1, 16);
+      gl.uniform2f(gl.getUniformLocation(dp, "uRes"), this.res[0], this.res[1]);
+      gl.uniform1f(gl.getUniformLocation(dp, "uReveal"), this.reveal);
+      gl.uniform3f(gl.getUniformLocation(dp, "uHot"), ...this.hot);
+      gl.uniform3f(gl.getUniformLocation(dp, "uCool"), ...this.cool);
+      gl.uniform1f(gl.getUniformLocation(dp, "uGlow"), this.glow);
+      gl.drawElements(gl.TRIANGLES, this.dotCount, idxType, 0);
+    }
+  }
+
+  document
+    .querySelectorAll<HTMLElement>(".jg-signal-network")
+    .forEach((root) => {
+      const canvas = root.querySelector("canvas")!;
+      const gl = canvas.getContext("webgl", {
+        alpha: true,
+        premultipliedAlpha: false,
+        antialias: true,
+      });
+      if (!gl) {
+        root.remove();
+        return;
+      }
+      new SignalNetwork(root, gl as WebGLRenderingContext);
+    });
+</script>

@@ -1,0 +1,244 @@
+---
+const REPO = "miromannino/Justified-Gallery";
+
+interface Contributor {
+  login: string;
+  avatar_url: string;
+  html_url: string;
+  contributions: number;
+  type: string;
+}
+
+async function fetchContributors(): Promise<Contributor[] | null> {
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${REPO}/contributors?per_page=100&anon=false`,
+      { headers: { Accept: "application/vnd.github+json" } },
+    );
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+const contributors = (await fetchContributors())?.filter(
+  (c) => c.type !== "Bot",
+);
+
+const sorted = contributors
+  ? [...contributors].sort((a, b) => b.contributions - a.contributions)
+  : null;
+
+/* Scatter a few empty cells through the row so the wall reads as an open
+   grid instead of a solid block: every 5th cell is left blank, which keeps
+   the ratio at roughly one gap per four avatars. */
+const cells: (Contributor | null)[] = [];
+if (sorted) {
+  for (const c of sorted) {
+    if (cells.length % 5 === 3) cells.push(null);
+    cells.push(c);
+  }
+  cells.push(null);
+}
+---
+
+{
+  sorted && sorted.length > 0 ? (
+    <div class="jg-contributors" data-jg-contributors>
+      {cells.map((c, i) =>
+        c ? (
+          <a
+            href={c.html_url}
+            target="_blank"
+            rel="noopener"
+            class="jg-contributor"
+            style={`--jg-delay: ${i * 45}ms;`}
+          >
+            <img
+              src={c.avatar_url}
+              alt={c.login}
+              width="128"
+              height="128"
+              loading="lazy"
+              class="jg-contributor-avatar"
+            />
+            <span class="jg-contributor-tag">
+              {c.login} · {c.contributions}
+            </span>
+          </a>
+        ) : (
+          <span
+            class="jg-contributor-empty"
+            style={`--jg-delay: ${i * 45}ms;`}
+            aria-hidden="true"
+          />
+        ),
+      )}
+    </div>
+  ) : (
+    <p>
+      See the{" "}
+      <a
+        href={`https://github.com/${REPO}/graphs/contributors`}
+        target="_blank"
+        rel="noopener"
+      >
+        contributors page on GitHub
+      </a>
+      .
+    </p>
+  )
+}
+
+<script>
+  const wall = document.querySelector<HTMLElement>("[data-jg-contributors]");
+  if (wall) {
+    const items = wall.querySelectorAll<HTMLElement>(
+      ".jg-contributor, .jg-contributor-empty",
+    );
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("is-revealed");
+          observer.unobserve(entry.target);
+        }
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.1 },
+    );
+    for (const item of items) observer.observe(item);
+  }
+</script>
+
+<style>
+  /* One horizontal band of evenly sized cells. */
+  .jg-contributors {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 5.75rem);
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    gap: 0.75rem;
+    padding: 1.5rem 0;
+  }
+
+  .jg-contributor,
+  .jg-contributor-empty {
+    width: 5.75rem;
+    height: 5.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .jg-contributor {
+    position: relative;
+    line-height: 0;
+    border-radius: 50%;
+  }
+
+  .jg-contributor-empty::before {
+    content: "";
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--sl-color-gray-5);
+  }
+
+  .jg-contributor-avatar {
+    display: block;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--sl-color-gray-5);
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .jg-contributor-tag {
+    position: absolute;
+    bottom: calc(100% - 0.75rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--sl-color-gray-5);
+    background: var(--sl-color-bg-nav);
+    color: var(--sl-color-white);
+    font-size: var(--sl-text-2xs);
+    line-height: 1.4;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease,
+      visibility 0.15s ease;
+  }
+
+  .jg-contributor:hover,
+  .jg-contributor:focus-visible {
+    z-index: 1;
+  }
+
+  .jg-contributor:hover .jg-contributor-avatar,
+  .jg-contributor:focus-visible .jg-contributor-avatar {
+    border-color: var(--sl-color-accent);
+    transform: scale(1.12);
+  }
+
+  .jg-contributor:hover .jg-contributor-tag,
+  .jg-contributor:focus-visible .jg-contributor-tag {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .jg-contributor:focus-visible {
+    outline: none;
+  }
+
+  .jg-contributor:focus-visible .jg-contributor-avatar {
+    box-shadow: 0 0 0 2px var(--sl-color-accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .jg-contributor,
+    .jg-contributor-empty {
+      opacity: 0;
+      transform: translateY(1.25rem) scale(0.85);
+      transition:
+        opacity 0.5s ease,
+        transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      transition-delay: var(--jg-delay, 0ms);
+    }
+
+    .jg-contributor.is-revealed,
+    .jg-contributor-empty.is-revealed {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .jg-contributors {
+      grid-template-columns: repeat(auto-fit, 4.5rem);
+      gap: 0.5rem;
+    }
+
+    .jg-contributor,
+    .jg-contributor-empty {
+      width: 4.5rem;
+      height: 4.5rem;
+    }
+
+    .jg-contributor-avatar,
+    .jg-contributor-empty::before {
+      width: 3.5rem;
+      height: 3.5rem;
+    }
+  }
+</style>

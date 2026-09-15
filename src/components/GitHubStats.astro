@@ -1,0 +1,106 @@
+---
+/**
+ * Live GitHub/npm stats for the project, fetched at build time. Network
+ * calls are best-effort: if GitHub's API is unreachable or rate-limited
+ * during the build, cards fall back to an em dash instead of failing the
+ * build.
+ */
+import BentoGrid from "./BentoGrid.astro";
+import StatCard from "./StatCard.astro";
+
+const REPO = "miromannino/Justified-Gallery";
+const DOWNLOADS_GIST =
+  "https://gist.githubusercontent.com/miromannino/75ca0785d41059c9a61f37e477609f9c/raw";
+
+async function fetchJson(url: string): Promise<any | null> {
+  try {
+    const res = await fetch(url, {
+      headers: { Accept: "application/vnd.github+json" },
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+function formatCount(n: number | null | undefined): string {
+  if (n == null) return "—";
+  if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}k`;
+  return String(n);
+}
+
+const [repoData, openIssuesData, closedIssuesData] = await Promise.all([
+  fetchJson(`https://api.github.com/repos/${REPO}`),
+  fetchJson(
+    `https://api.github.com/search/issues?q=repo:${REPO}+type:issue+state:open&per_page=1`,
+  ),
+  fetchJson(
+    `https://api.github.com/search/issues?q=repo:${REPO}+type:issue+state:closed&per_page=1`,
+  ),
+]);
+
+const stars = formatCount(repoData?.stargazers_count);
+const forks = formatCount(repoData?.forks_count);
+const openIssues = formatCount(openIssuesData?.total_count);
+const closedIssues = formatCount(closedIssuesData?.total_count);
+---
+
+<BentoGrid>
+  <StatCard
+    value={stars}
+    label="GitHub stars"
+    icon="star"
+    href={`https://github.com/${REPO}/stargazers`}
+  />
+  <StatCard
+    value={forks}
+    label="Forks"
+    icon="code-branch"
+    href={`https://github.com/${REPO}/network/members`}
+  />
+  <StatCard
+    value={openIssues}
+    label="Open issues"
+    icon="warning"
+    href={`https://github.com/${REPO}/issues`}
+  />
+  <StatCard
+    value={closedIssues}
+    label="Closed issues"
+    icon="approve-check-circle"
+    href={`https://github.com/${REPO}/issues?q=is%3Aissue+is%3Aclosed`}
+  />
+  <div class="jg-bento-card jg-bento-full">
+    <div class="jg-bento-card-desc jg-downloads-caption">
+      Monthly npm downloads (last 24 months), combined across <code
+        >justified-gallery</code
+      > and legacy <code>justifiedGallery</code>
+    </div>
+    <picture>
+      <source
+        media="(prefers-color-scheme: dark)"
+        srcset={`${DOWNLOADS_GIST}/downloads-chart-dark.svg`}
+      />
+      <img
+        src={`${DOWNLOADS_GIST}/downloads-chart-light.svg`}
+        alt="Monthly npm downloads (last 24 months)"
+        class="jg-downloads-chart"
+      />
+    </picture>
+  </div>
+</BentoGrid>
+
+<style>
+  .jg-downloads-caption {
+    margin-bottom: 0.5rem;
+  }
+
+  .jg-downloads-chart {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    border-radius: 0;
+  }
+</style>

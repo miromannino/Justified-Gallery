@@ -1,0 +1,83 @@
+---
+title: Lightboxes
+description: How to integrate Justified Gallery with lightbox libraries such as GLightbox.
+---
+
+import GalleryDemo from '../../components/GalleryDemo.astro';
+import { images } from '../../data/images';
+
+You can use Justified Gallery with any lightbox, in the way you prefer. In this tutorial we use [GLightbox](https://github.com/biati-digital/glightbox), a modern lightbox with no dependencies, but the same principles can be applied to any other lightbox (for example [PhotoSwipe](https://photoswipe.com/), which additionally requires the image dimensions in `data-pswp-*` attributes on every link).
+
+## GLightbox
+
+GLightbox works directly with the standard Justified Gallery markup: a series of links to the original images, each containing a thumbnail. Install it, initialize the gallery, and attach the lightbox to the entry links:
+
+```bash
+npm install glightbox
+```
+
+```js
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+import GLightbox from 'glightbox';
+import 'glightbox/dist/css/glightbox.min.css';
+
+new JustifiedGallery(document.querySelector('#lightboxExample'), {
+  lastRow: 'nojustify',
+  rowHeight: 100,
+  margins: 1,
+}).init();
+
+GLightbox({ selector: '#lightboxExample a' });
+```
+
+Try it out — click any image:
+
+<GalleryDemo id="lightboxExample" lightbox options={{ lastRow: 'nojustify', rowHeight: 100, margins: 1 }} />
+
+## Grouping with `rel` and `target`
+
+Some lightboxes group images into a gallery through the `rel` attribute of the links. Justified Gallery can rewrite that attribute for you on every entry with the [`rel` option](/Justified-Gallery/options-and-events/), and similarly the `target` attribute with the `target` option:
+
+```js
+new JustifiedGallery(document.querySelector('#mygallery'), {
+  rel: 'gallery1',
+}).init();
+```
+
+## Multiple galleries in one page
+
+Each gallery needs its own `JustifiedGallery` instance, and its own lightbox group. Just loop over the containers:
+
+```html
+<div class="myExMul">
+  <a href="image1.jpg"><img alt="title 1" src="image1_thumbnail.jpg" /></a>
+  ...
+</div>
+<div class="myExMul">
+  <a href="image3.jpg"><img alt="title 3" src="image3_thumbnail.jpg" /></a>
+  ...
+</div>
+```
+
+```js
+document.querySelectorAll('.myExMul').forEach((el, i) => {
+  el.id = 'myExMul-' + i;
+  new JustifiedGallery(el, { rel: 'myExMul-' + i }).init();
+  GLightbox({ selector: '#myExMul-' + i + ' a' });
+});
+```
+
+Each of the following three galleries opens its own lightbox group:
+
+### Gallery 1
+
+<GalleryDemo id="myExMul-1" lightbox images={images.slice(0, 3)} options={{ rel: 'myExMul-1' }} />
+
+### Gallery 2
+
+<GalleryDemo id="myExMul-2" lightbox images={images.slice(3, 6)} options={{ rel: 'myExMul-2' }} />
+
+### Gallery 3
+
+<GalleryDemo id="myExMul-3" lightbox images={images.slice(6, 9)} options={{ rel: 'myExMul-3' }} />

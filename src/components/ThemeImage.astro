@@ -1,0 +1,40 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  light: ImageMetadata;
+  dark: ImageMetadata;
+  alt: string;
+  width?: number;
+}
+
+const { light, dark, alt, width } = Astro.props;
+---
+
+<figure class="theme-image">
+  <Image src={dark} alt={alt} width={width ?? dark.width} class="theme-image-dark" />
+  <Image src={light} alt={alt} width={width ?? light.width} class="theme-image-light" />
+</figure>
+
+<style>
+  .theme-image {
+    margin: 1.5rem 0;
+  }
+
+  .theme-image :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+  }
+
+  .theme-image :global(.theme-image-light),
+  :global(:root[data-theme='light']) .theme-image :global(.theme-image-dark) {
+    display: none;
+  }
+
+  :global(:root[data-theme='light']) .theme-image :global(.theme-image-light) {
+    display: block;
+  }
+</style>

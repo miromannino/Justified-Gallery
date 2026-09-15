@@ -1,0 +1,137 @@
+---
+import config from 'virtual:starlight/user-config';
+import { Icon } from '@astrojs/starlight/components';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const social = config.social ?? [];
+const github = social.find((link) => link.icon === 'github');
+const rest = social.filter((link) => link !== github);
+---
+
+<div class="jg-header-links sl-flex">
+  <a
+    class="jg-header-ghost"
+    href={`${base}/getting-started/`}
+    aria-label="Documentation"
+  >
+    <Icon name="open-book" />
+    <span>Documentation</span>
+  </a>
+  <a
+    class="jg-header-ghost"
+    href="https://miromannino.com"
+    aria-label="Author website"
+    target="_blank"
+    rel="noopener"
+  >
+    <Icon name="window" />
+    <span>Author Website</span>
+    <Icon name="external" class="jg-header-external" />
+  </a>
+  {
+    github && (
+      <a
+        class="jg-header-ghost"
+        href={github.href}
+        rel="me noopener"
+        target="_blank"
+        aria-label="GitHub repository"
+      >
+        <Icon name="github" />
+        <span>GitHub Repository</span>
+        <Icon name="external" class="jg-header-external" />
+      </a>
+    )
+  }
+  {
+    rest.map(({ label, href, icon }) => (
+      <a href={href} rel="me" class="jg-header-icon sl-flex">
+        <span class="sr-only">{label}</span>
+        <Icon name={icon} />
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  .jg-header-links {
+    gap: 0.5rem;
+    align-items: center;
+    flex: none;
+  }
+
+  .jg-header-ghost {
+    display: flex;
+    align-items: center;
+    flex: none;
+    gap: 0.4375rem;
+    padding: 0.4375rem 0.625rem;
+    border-radius: 0.5rem;
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      color 0.2s ease,
+      background 0.2s ease;
+  }
+
+  /* The icons are flex items sized in `em`, so the default `flex-shrink: 1`
+     lets a momentarily crowded header squeeze them: the site title is set in
+     Lobster with font-display: block, so its width changes when the webfont
+     swaps in, and the icons visibly snap back to full size with it. Pinning
+     them keeps the size constant through that reflow. */
+  .jg-header-ghost :global(svg) {
+    flex: none;
+    font-size: 1.0625em;
+    opacity: 0.85;
+  }
+
+  /* Trailing hint that the link leaves the site — smaller and dimmer than the
+     leading icon so it annotates rather than competes with it. */
+  .jg-header-ghost :global(svg.jg-header-external) {
+    font-size: 0.8125em;
+    opacity: 0.55;
+    margin-inline-start: -0.125rem;
+  }
+
+  .jg-header-ghost:hover :global(svg.jg-header-external) {
+    opacity: 0.8;
+  }
+
+  .jg-header-ghost:hover {
+    color: var(--sl-color-white);
+    background: color-mix(in srgb, var(--sl-color-gray-5) 30%, transparent);
+  }
+
+  .jg-header-icon {
+    flex: none;
+    color: var(--sl-color-text-accent);
+    padding: 0.5em;
+    margin: -0.5em;
+  }
+
+  .jg-header-icon:hover {
+    color: var(--sl-color-white);
+  }
+
+  /* The header runs out of room before the search box does, so shed labels in
+     order of redundancy: the author link first, then the docs link (which the
+     sidebar still carries), leaving the GitHub label — the one the icon-only
+     original failed to communicate — intact longest. */
+  @media (max-width: 85rem) {
+    .jg-header-ghost[href^="https://miromannino.com"] span,
+    .jg-header-ghost[href^="https://miromannino.com"]
+      :global(svg.jg-header-external) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 72rem) {
+    .jg-header-ghost span,
+    .jg-header-ghost :global(svg.jg-header-external) {
+      display: none;
+    }
+  }
+</style>

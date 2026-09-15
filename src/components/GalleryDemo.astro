@@ -1,0 +1,58 @@
+---
+import { images as allImages, photoUrl, type DemoImage } from '../data/images';
+
+interface Props {
+  id: string;
+  options?: Record<string, unknown>;
+  images?: DemoImage[];
+  count?: number;
+  lightbox?: boolean;
+  linked?: boolean;
+  dimensions?: boolean;
+}
+
+const {
+  id,
+  options = {},
+  images = allImages,
+  count,
+  lightbox = false,
+  linked = true,
+  dimensions = false,
+} = Astro.props;
+
+const shown = count ? images.slice(0, count) : images;
+---
+
+<div
+  id={id}
+  class="justified-gallery jg-demo"
+  data-jg={JSON.stringify(options)}
+  data-lightbox={lightbox ? '' : undefined}
+>
+  {
+    shown.map((img) =>
+      linked ? (
+        <a href={photoUrl(img.name, '_b')}>
+          <img
+            alt={img.desc}
+            src={photoUrl(img.name, '_m')}
+            width={dimensions ? img.width : undefined}
+            height={dimensions ? img.height : undefined}
+          />
+        </a>
+      ) : (
+        <div>
+          <img
+            alt={img.desc}
+            src={photoUrl(img.name, '_m')}
+            width={dimensions ? img.width : undefined}
+            height={dimensions ? img.height : undefined}
+          />
+        </div>
+      )
+    )
+  }
+</div>
+
+<script src="../scripts/jg-demos.ts"></script>
