@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://miromannino.github.io/Justified-Gallery/sitemap-index.xml
