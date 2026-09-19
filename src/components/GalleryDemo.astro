@@ -4,6 +4,8 @@ import { images as allImages, photoUrl, type DemoImage } from '../data/images';
 interface Props {
   id: string;
   options?: Record<string, unknown>;
+  /** Options merged over `options` on narrow (phone) viewports. */
+  mobileOptions?: Record<string, unknown>;
   images?: DemoImage[];
   count?: number;
   lightbox?: boolean;
@@ -14,6 +16,7 @@ interface Props {
 const {
   id,
   options = {},
+  mobileOptions,
   images = allImages,
   count,
   lightbox = false,
@@ -28,6 +31,7 @@ const shown = count ? images.slice(0, count) : images;
   id={id}
   class="justified-gallery jg-demo"
   data-jg={JSON.stringify(options)}
+  data-jg-mobile={mobileOptions ? JSON.stringify(mobileOptions) : undefined}
   data-lightbox={lightbox ? '' : undefined}
 >
   {

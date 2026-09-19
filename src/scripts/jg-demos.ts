@@ -10,12 +10,14 @@ import 'glightbox/dist/css/glightbox.min.css';
 import { sizeRangeSuffixes } from '../data/images';
 
 const initialized = new WeakSet<HTMLElement>();
+const isPhone = () => window.matchMedia('(max-width: 640px)').matches;
 
 function initAll() {
   document.querySelectorAll<HTMLElement>('[data-jg]').forEach((el) => {
     if (initialized.has(el)) return;
     initialized.add(el);
     const options = JSON.parse(el.dataset.jg || '{}');
+    if (isPhone() && el.dataset.jgMobile) Object.assign(options, JSON.parse(el.dataset.jgMobile));
     new JustifiedGallery(el, { sizeRangeSuffixes, ...options }).init();
     if (el.dataset.lightbox !== undefined && el.id) {
       GLightbox({ selector: `#${el.id} a` });
