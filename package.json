@@ -3,15 +3,15 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev --host",
+    "dev": "astro dev --host --port 5432",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.41.10",
-    "astro": "^7.1.6",
+    "@astrojs/starlight": "^0.42.6",
+    "astro": "^7.3.8",
     "glightbox": "^3.3.1",
     "justified-gallery": "^4.0.1",
     "sharp": "^0.35.3"

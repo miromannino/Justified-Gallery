@@ -1,0 +1,357 @@
+---
+title: React
+description: Use Justified Gallery in React and Next.js — a typed useJustifiedGallery hook, cleanup with destroy(), changing images, options, events, lightboxes, infinite scroll and SSR.
+---
+
+import GalleryDemo from '../../components/GalleryDemo.astro';
+
+Justified Gallery doesn't need a React wrapper. It works on plain DOM elements, so in React you render the markup as usual, hand the container to the library from an effect, and call `destroy()` in the cleanup. This page shows that pattern, a reusable hook built on it, and what to keep in mind because the library changes the DOM that React rendered.
+
+## Install
+
+```bash
+npm install justified-gallery
+```
+
+Import the library and its stylesheet. The stylesheet is plain global CSS, so you can import it next to the component or once in your app entry (or root layout):
+
+```ts
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+```
+
+Type declarations are included, so there's nothing else to install for TypeScript.
+
+## A minimal component
+
+Create the instance in `useEffect`, once the container is in the DOM, and destroy it in the cleanup:
+
+```tsx
+import { useEffect, useRef } from 'react';
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+
+type Photo = { id: string; thumb: string; full: string; alt: string };
+
+export function Gallery({ photos }: { photos: Photo[] }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const gallery = new JustifiedGallery(
+      containerRef.current, 
+      { rowHeight: 160 }
+    );
+
+    gallery.init();
+    
+    return () => gallery.destroy();
+  }, []);
+
+  return (
+    <div ref={containerRef} className="justified-gallery">
+      {photos.map((photo) => (
+        <a key={photo.id} href={photo.full}>
+          <img src={photo.thumb} alt={photo.alt} />
+        </a>
+      ))}
+    </div>
+  );
+}
+```
+
+The empty dependency array means this version lays out the photos it finds on mount and doesn't follow later changes to `photos`; the [hook below](#a-reusable-usejustifiedgallery-hook) handles that.
+
+Put `className="justified-gallery"` on the container yourself. `init()` adds the class too, but only when the effect runs, after React has already painted the images. With the class in the rendered markup the stylesheet keeps the entries hidden from the first paint until each row is laid out, so the browser never shows a stack of unpositioned thumbnails. This also covers server-rendered HTML (see [Next.js and SSR](#nextjs-and-ssr)).
+
+`destroy()` stops the resize watcher and undoes what the library did to the markup (inline styles, `jg-*` classes, the captions it created, the original thumbnail `src`). This makes the component safe in `<StrictMode>`: React mounts, cleans up and mounts the effect again in development, and the second `init()` starts from clean markup.
+
+The result is the same layout as in plain JavaScript:
+
+<GalleryDemo id="reactExample_demo" options={{ rowHeight: 160 }} />
+
+## A reusable `useJustifiedGallery` hook
+
+When you have more than one gallery, move the effect into a hook. The hook below creates the gallery when the component mounts, re-creates it when one of the `deps` changes, and returns a ref to the current instance for when you need it (for example to call `init()` after loading more images):
+
+```tsx
+import { useEffect, useRef, type DependencyList, type RefObject } from 'react';
+import { JustifiedGallery } from 'justified-gallery';
+
+export type GalleryOptions = NonNullable<ConstructorParameters<typeof JustifiedGallery>[1]>;
+
+export function useJustifiedGallery(
+  containerRef: RefObject<HTMLElement | null>,
+  options: GalleryOptions = {},
+  deps: DependencyList = [],
+) {
+  const galleryRef = useRef<JustifiedGallery | null>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    let active = true;
+    const gallery = new JustifiedGallery(container, {
+      ...options,
+      // Ignore events from an instance that has already been destroyed.
+      triggerEvent(name) {
+        if (active) options.triggerEvent?.call(this, name);
+      },
+    });
+    gallery.init();
+    galleryRef.current = gallery;
+
+    return () => {
+      gallery.destroy(); // still delivers 'jg.destroy'
+      active = false;
+      if (galleryRef.current === gallery) galleryRef.current = null;
+    };
+    // `options` is read when the effect runs; list what should re-create the gallery in `deps`.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+
+  return galleryRef;
+}
+```
+
+The settings type isn't exported from the package, so the hook derives it from the constructor, as shown in the [TypeScript section](/Justified-Gallery/getting-started/#typescript) of Getting Started.
+
+The `triggerEvent` wrapper is there because `destroy()` doesn't cancel thumbnails that are still loading. When one of them finishes, the destroyed instance can still lay out its entries and fire `jg.complete` (during a StrictMode remount, possibly after the new instance has fired its own). It may also leave its loading spinner in the container until those loads finish. The `active` flag drops the late events, so your state only reflects the live gallery.
+
+Using it:
+
+```tsx
+import { useMemo, useRef } from 'react';
+import 'justified-gallery/style.css';
+import { useJustifiedGallery, type GalleryOptions } from './useJustifiedGallery';
+
+export function Gallery({ photos, rowHeight = 160 }: { photos: Photo[]; rowHeight?: number }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const options = useMemo<GalleryOptions>(() => ({ rowHeight, margins: 4 }), [rowHeight]);
+
+  useJustifiedGallery(containerRef, options, [options, photos]);
+
+  return (
+    <div ref={containerRef} className="justified-gallery">
+      {photos.map((photo) => (
+        <a key={photo.id} href={photo.full}>
+          <img src={photo.thumb} alt={photo.alt} />
+        </a>
+      ))}
+    </div>
+  );
+}
+```
+
+### Options and `deps`
+
+The options are passed to the constructor, so changing them means destroying the gallery and creating a new one. That's why `deps` should contain the options, but never an object literal written inline: a new object on every render would re-create the gallery on every render. Either:
+
+- keep the options **stable**: define them outside the component, or wrap them in `useMemo` with the values they depend on (as above);
+- or, if they're plain data with no functions, **serialize** them: `[JSON.stringify(options)]`. `JSON.stringify` drops functions such as `sort`, `filter`, `thumbnailPath` or `triggerEvent`, and turns a `RegExp` (`extension`) into `{}`, so changes to those won't be noticed.
+
+Callbacks that call a state setter (`setState` from `useState` is stable) don't need to be in `deps`. If a callback reads values that change over time, read them through a ref instead of re-creating the gallery.
+
+### When the images change
+
+The instance collects the entries when `init()` runs and keeps them in its own list; it doesn't watch React's updates. Pick the strategy that matches how your list changes:
+
+- **Any change** (photos removed, reordered, filtered, or a whole new set): put the list in `deps`, as in the example above. React updates the DOM first, then the cleanup destroys the old instance and a new one lays out the current children from scratch. During that pass the entries are hidden again until their rows are ready, so expect a short re-layout.
+- **A completely different set** (another album, another search): you can also remount the component with a `key`, for example `<Gallery key={albumId} photos={photos} />`. React throws away the old DOM and the gallery starts on a fresh container.
+- **Only appended at the end** (infinite scroll, "load more"): don't re-create anything; call `init()` again on the existing instance, which only loads and lays out the new entries. See [Infinite scroll / "load more"](#infinite-scroll--load-more).
+
+## How the library touches React's DOM
+
+React assumes it owns the elements it renders. Justified Gallery works on those same elements, so it's worth knowing exactly what it changes. Checked against the library source:
+
+- **Container**: adds the `justified-gallery` class, sets an inline `height`, and appends a `<div class="jg-spinner">` while thumbnails are loading (removed when the layout is done). `destroy()` clears the height and removes the class.
+- **Entries** (the `<a>` children): inline `width`, `height`, `top`, `left`; the classes `jg-entry`, `jg-entry-visible` and `jg-filtered`; `data-jg-*` attributes; `rel` / `target` when those options are set. With `captions` on, a `<div class="jg-caption">` built from the image `alt` (or the entry `title`) is appended to the entry, unless one is already there.
+- **Images**: inline size and margins, `data-jg-*` attributes, and the `src` is swapped for a better-sized thumbnail (see [`sizeRangeSuffixes`](/Justified-Gallery/getting-started/#multiple-thumbnail-sizes) and `thumbnailPath`).
+- It **never moves, removes or re-creates** the elements you rendered. `sort`, `randomize` and `filter` only change where (or whether) entries are shown; the DOM order stays React's.
+
+React only writes to the DOM the props that changed between two renders, so most of this coexists peacefully. The rules that keep it that way:
+
+- **Use stable `key`s** taken from the data (`photo.id`), never the array index. With index keys, removing or reordering photos makes React reuse an `<a>` for a different photo and patch its `href`/`src` in place. The node still carries the old photo's library state, and when the cleanup's `destroy()` runs (after React's update), it restores the `src` it remembered, which is the *old* photo's thumbnail.
+- **Don't change entry `className`s or give entries a `style` prop.** React writes `className` as a whole, which would drop `jg-entry-visible` and make the entry invisible, and its `style` updates would fight the inline positions. Style entries through CSS, wrap the content, or put the varying class on an inner element.
+- **Don't put a `style` with `height` on the container**; the library manages the container height. Size it with a wrapper or CSS instead.
+- **Don't change an image's `src` prop while the gallery is alive.** If a photo's URL changes, treat it as a list change (it's in `deps`, or give it a new `key`).
+- **Render your own captions if they need to be React content.** If an entry already contains a `.jg-caption` element, the library uses it instead of creating one, and `destroy()` leaves it alone, so React keeps full ownership. Note that the stylesheet hides `.jg-caption` until you show it; see [Captions](/Justified-Gallery/captions/).
+
+The nodes the library adds (the spinner and generated captions) are never React children, so adding and removing entries with React works fine; the gallery just needs to be told, which is what the strategies above do.
+
+## Passing options
+
+Options are the same as in plain JavaScript; see [Options and Events](/Justified-Gallery/options-and-events/) for the full list. In TypeScript, `lastRow` is typed as a string enum that isn't exported, so a string literal needs a cast:
+
+```tsx
+const options = useMemo<GalleryOptions>(
+  () => ({
+    rowHeight: 120,
+    margins: 3,
+    lastRow: 'nojustify' as GalleryOptions['lastRow'],
+  }),
+  [],
+);
+```
+
+If you know the image sizes (for example from your API or CMS), render them as `width` and `height` on the `<img>` and set `waitThumbnailsLoad: false`: the layout is built right away instead of waiting for every thumbnail to load. See [Performance Tips](/Justified-Gallery/performance-tips/).
+
+## Events
+
+Events arrive through the `triggerEvent` option. Event names are a non-exported enum as well, so compare them as strings. For example, to show a placeholder until the first layout is complete:
+
+```tsx
+import { useMemo, useRef, useState } from 'react';
+import { useJustifiedGallery, type GalleryOptions } from './useJustifiedGallery';
+
+export function Gallery({ photos }: { photos: Photo[] }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [ready, setReady] = useState(false);
+
+  const options = useMemo<GalleryOptions>(
+    () => ({
+      rowHeight: 160,
+      triggerEvent(name) {
+        if (String(name) === 'jg.complete') setReady(true);
+      },
+    }),
+    [],
+  );
+
+  useJustifiedGallery(containerRef, options, [options, photos]);
+
+  return (
+    <>
+      {!ready && <p>Loading photos…</p>}
+      <div ref={containerRef} className="justified-gallery">
+        {photos.map((photo) => (
+          <a key={photo.id} href={photo.full}>
+            <img src={photo.thumb} alt={photo.alt} />
+          </a>
+        ))}
+      </div>
+    </>
+  );
+}
+```
+
+`triggerEvent` is called with `this` bound to the `JustifiedGallery` instance, so a regular function (rather than an arrow function) can access it. Also remember that `jg.complete` fires after every layout pass (including each `init()` call), not only the first one.
+
+## Lightbox
+
+Create the lightbox in the same effect, right after the gallery, and destroy both in the cleanup. This example uses [GLightbox](/Justified-Gallery/lightboxes/), as on the Lightboxes page; `useId` gives each gallery its own selector so several galleries on a page don't share one lightbox group:
+
+```tsx
+import { useEffect, useId, useRef } from 'react';
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+import GLightbox from 'glightbox';
+import 'glightbox/dist/css/glightbox.min.css';
+
+export function LightboxGallery({ photos }: { photos: Photo[] }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const id = useId();
+
+  useEffect(() => {
+    const gallery = new JustifiedGallery(containerRef.current!, {
+      rowHeight: 100,
+      margins: 1,
+    });
+    gallery.init();
+
+    // useId() returns characters that need escaping in a CSS selector
+    const lightbox = GLightbox({ selector: `#${CSS.escape(id)} a` });
+
+    return () => {
+      lightbox.destroy();
+      gallery.destroy();
+    };
+  }, [id, photos]);
+
+  return (
+    <div id={id} ref={containerRef} className="justified-gallery">
+      {photos.map((photo) => (
+        <a key={photo.id} href={photo.full}>
+          <img src={photo.thumb} alt={photo.alt} />
+        </a>
+      ))}
+    </div>
+  );
+}
+```
+
+Because `photos` is in the dependencies, the lightbox is rebuilt together with the gallery when the list changes, so it always knows about the current links.
+
+## Infinite scroll / "load more"
+
+For a list that only grows, keep the same instance and call `init()` again after React has rendered the new entries. Calling `init()` again only loads and lays out the new entries: the rows already on screen stay where they are, and the layout continues from the last row. An effect that depends on the list runs exactly at the right moment, after React has appended the new `<a>` elements:
+
+```tsx
+import { useEffect, useRef, useState } from 'react';
+import 'justified-gallery/style.css';
+import { useJustifiedGallery } from './useJustifiedGallery';
+
+const options = { rowHeight: 120 }; // stable: defined outside the component
+
+export function InfiniteGallery({ firstPage }: { firstPage: Photo[] }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [photos, setPhotos] = useState(firstPage);
+
+  // Created once; only re-created if the component remounts.
+  const galleryRef = useJustifiedGallery(containerRef, options, []);
+
+  const laidOut = useRef(photos.length);
+  useEffect(() => {
+    const gallery = galleryRef.current;
+    if (!gallery || photos.length <= laidOut.current) return;
+    laidOut.current = photos.length;
+    gallery.init(); // lays out only the new entries
+  }, [photos, galleryRef]);
+
+  async function loadMore() {
+    const next = await fetchPhotos(photos.length); // your API
+    setPhotos((current) => [...current, ...next]);
+  }
+
+  return (
+    <>
+      <div ref={containerRef} className="justified-gallery">
+        {photos.map((photo) => (
+          <a key={photo.id} href={photo.full}>
+            <img src={photo.thumb} alt={photo.alt} />
+          </a>
+        ))}
+      </div>
+      <button onClick={loadMore}>Load more</button>
+    </>
+  );
+}
+```
+
+A few details:
+
+- `laidOut` skips the first run, because the hook's effect has already called `init()` on mount, and it only reacts to the list growing. If the list can also shrink or be replaced, go back to a full re-create for those changes (for example by remounting with a `key`).
+- For automatic infinite scroll, call `loadMore()` from an `IntersectionObserver` watching an element placed after the gallery, instead of the button.
+- `init()` re-applies `filter`, `sort` and `randomize` to all the entries: avoid `randomize` here, and use `sort` only if new photos always sort after the existing ones. See [Infinite Scroll](/Justified-Gallery/endless-scroll/).
+
+## Next.js and SSR
+
+Importing `justified-gallery` doesn't touch `window` or `document`; the library only uses the DOM inside the constructor and its methods, which you call from effects. Effects never run on the server, so the component renders fine during SSR and the gallery starts when it hydrates in the browser.
+
+With the Next.js App Router, components are Server Components by default and can't use hooks, so mark the file that uses `useEffect` / `useJustifiedGallery` as a Client Component:
+
+```tsx
+'use client';
+
+import { useRef } from 'react';
+import 'justified-gallery/style.css';
+import { useJustifiedGallery } from './useJustifiedGallery';
+
+export function Gallery({ photos }: { photos: Photo[] }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  useJustifiedGallery(containerRef, undefined, [photos]);
+  // ...same markup as above
+}
+```
+
+The page that renders `<Gallery />` can stay a Server Component (for example to fetch the photos) and pass the data down as props. The links and thumbnails are still in the server-rendered HTML, and since the container already has the `justified-gallery` class, they stay hidden until the layout is ready instead of flashing unstyled before hydration. You can import the stylesheet in the component, as above, or once in your root layout. The same applies to other SSR frameworks (Remix / React Router, Astro islands, Gatsby): create the gallery in an effect and it only runs in the browser.

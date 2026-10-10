@@ -1,0 +1,131 @@
+---
+title: Sorting & Filtering
+description: Sort, filter or randomize the entries of a Justified Gallery, and change the order or the filter at runtime.
+---
+
+import GalleryDemo from '../../components/GalleryDemo.astro';
+
+Three options change which entries are shown, and in which order: `sort`, `filter` and `randomize`. They are applied by `init()`, before the layout is built.
+
+They only change the **layout**: the library never moves, removes or re-creates the elements in the DOM. A sorted gallery shows the entries in the new order, but the DOM keeps your original order, and a filtered-out entry stays in the DOM, hidden.
+
+## Sorting
+
+`sort` is a comparator function, as in [`Array.prototype.sort`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort). It receives two entries (the gallery children, e.g. the `<a>` elements), so a data attribute on the entries is the easiest thing to sort by:
+
+```html
+<div id="gallery" class="justified-gallery">
+  <a href="path/to/image1.jpg" data-date="2024-06-12" data-tags="sea city">
+    <img alt="Vernazza" src="path/to/image1_thumbnail.jpg" />
+  </a>
+  <a href="path/to/image2.jpg" data-date="2023-01-30" data-tags="mountain">
+    <img alt="Lake Braise" src="path/to/image2_thumbnail.jpg" />
+  </a>
+  ...
+</div>
+```
+
+```js
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+
+const container = document.getElementById('gallery');
+const gallery = new JustifiedGallery(container, {
+  // newest first
+  sort: (a, b) => b.dataset.date.localeCompare(a.dataset.date),
+});
+gallery.init();
+```
+
+## Randomizing
+
+With `randomize: true` the entries are shuffled every time `init()` runs (and so every time you create a new instance). Resizing the gallery rebuilds the rows but keeps the same order.
+
+```js
+const gallery = new JustifiedGallery(container, { randomize: true });
+gallery.init();
+```
+
+`sort` takes precedence: when a `sort` function is set, `randomize` is ignored.
+
+## Filtering
+
+`filter` decides which entries are shown. It can be a CSS selector string or a function.
+
+### With a selector
+
+An entry is kept if it matches the selector (tested with [`Element.matches()`](https://developer.mozilla.org/en-US/docs/Web/API/Element/matches) on the entry itself, so any standard CSS selector works):
+
+```js
+const gallery = new JustifiedGallery(container, {
+  filter: '[data-tags~="sea"]',
+});
+gallery.init();
+```
+
+The selector is matched against the entry, not the thumbnail. To filter by something inside the entry, use `:has()`. The demo below keeps only the photos whose `alt` mentions Abu Dhabi or Dubai:
+
+```js
+const gallery = new JustifiedGallery(container, {
+  filter: ':has(img[alt*="Abu Dhabi"], img[alt*="Dubai"])',
+});
+gallery.init();
+```
+
+<GalleryDemo
+  id="filterExample_demo"
+  options={{ filter: ':has(img[alt*="Abu Dhabi"], img[alt*="Dubai"])' }}
+/>
+
+### With a function
+
+For anything a selector can't express, pass a function. It's used as in [`Array.prototype.filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter): it's called with `(entry, index, array)` and returns `true` to keep the entry.
+
+```js
+const minYear = 2024;
+
+const gallery = new JustifiedGallery(container, {
+  filter: (entry) => Number(entry.dataset.date.slice(0, 4)) >= minYear,
+});
+gallery.init();
+```
+
+The filter runs after `sort` (or `randomize`), so `index` and `array` follow the sorted order. For example, `(entry, index) => index < 12` shows the first 12 entries of the sorted gallery.
+
+### What happens to filtered-out entries
+
+The entries that don't pass the filter get the `jg-filtered` class, and the library stylesheet hides them (`display: none`). They aren't measured or laid out, and they stay in the DOM in their original position. When the filter changes and they pass again, the class is removed. See [Styling & CSS classes](/Justified-Gallery/styling/) for all the classes the library adds.
+
+If you use a [lightbox](/Justified-Gallery/lightboxes/), exclude the hidden entries from its selector, e.g. `#gallery > a:not(.jg-filtered)`. Also keep in mind that the lightbox navigates the links in DOM order, which is not the layout order when you use `sort` or `randomize`.
+
+## Changing the sort or the filter at runtime
+
+Settings can't be changed on an existing instance. To apply a different sort or filter (for example when the user clicks a tag), destroy the gallery and create a new instance with the new settings. The entries are hidden while the new layout is built, so expect a short re-layout; the thumbnails are already in the browser cache, so it's quick.
+
+```js
+const baseOptions = { rowHeight: 160, margins: 4 };
+
+let gallery = new JustifiedGallery(container, baseOptions);
+gallery.init();
+
+function showTag(tag) {
+  gallery.destroy();
+  gallery = new JustifiedGallery(container, {
+    ...baseOptions,
+    filter: tag ? `[data-tags~="${tag}"]` : false,
+  });
+  gallery.init();
+}
+
+document.querySelectorAll('[data-filter-tag]').forEach((button) => {
+  button.addEventListener('click', () => showTag(button.dataset.filterTag));
+});
+```
+
+The same goes for `sort` and `randomize`: creating a new instance with `randomize: true` reshuffles the gallery.
+
+In React and Vue, put the filter in the gallery options and let the component re-create the gallery when it changes: see the [React hook](/Justified-Gallery/react/#options-and-deps) and the [Vue composable](/Justified-Gallery/vue/#options-and-source).
+
+## With infinite scroll
+
+When you append entries and call `init()` again, the `filter`, `sort` and `randomize` options are re-applied to all the entries. A `filter` works fine, but avoid `randomize`, and use `sort` only if the new entries always end up after the existing ones. See [Infinite Scroll](/Justified-Gallery/endless-scroll/).

@@ -232,6 +232,11 @@ body {
   box-shadow: none;
 }
 
+.justified-gallery.jg-demo > .jg-entry:hover > .jg-caption {
+  display: initial;
+  opacity: 0.7;
+}
+
 /* --- Options playground -------------------------------------------------- */
 
 .jgs-form {

@@ -51,18 +51,28 @@ export default defineConfig({
           label: "Documentation",
           items: [
             { label: "Getting Started", slug: "getting-started" },
-            { label: "Options and Events", slug: "options-and-events" },
+            { label: "Options & Events", slug: "options-and-events" },
+            { label: "Sorting & Filtering", slug: "sorting-and-filtering" },
             { label: "Infinite Scroll", slug: "endless-scroll" },
             { label: "Lightboxes", slug: "lightboxes" },
             { label: "Input Formats", slug: "input-formats" },
             { label: "Captions", slug: "captions" },
+            { label: "Styling & CSS Classes", slug: "styling" },
+          ],
+        },
+        {
+          label: "Frameworks",
+          items: [
+            { label: "React", slug: "react" },
+            { label: "Vue", slug: "vue" },
           ],
         },
         {
           label: "Advanced Topics",
           items: [
             { label: "Performance Tips", slug: "performance-tips" },
-            { label: "Errors Handling", slug: "errors-handling" },
+            { label: "Error Handling", slug: "errors-handling" },
+            { label: "Migrating from v3", slug: "migrating-from-v3" },
           ],
         },
       ],

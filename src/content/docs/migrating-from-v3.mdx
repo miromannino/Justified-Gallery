@@ -1,0 +1,107 @@
+---
+title: Migrating from v3
+description: How to move from the Justified Gallery 3.x jQuery plugin to the zero-dependency Justified Gallery 4.
+---
+
+Justified Gallery 4 is a rewrite of the 3.x jQuery plugin in TypeScript, with zero dependencies. The layout algorithm and almost all the options are the same, so migrating is mostly a matter of replacing the jQuery calls with a `JustifiedGallery` instance.
+
+## Install
+
+Remove jQuery if nothing else on your site needs it, and install the new package:
+
+```bash
+npm install justified-gallery
+```
+
+```js
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+```
+
+Version 4 is published as an ES module only. Without a bundler, import it from a `<script type="module">` (see [Without a build step](/Justified-Gallery/getting-started/#without-a-build-step)): there's no jQuery plugin and no global script anymore. The stylesheet is `justified-gallery/style.css` (from a CDN: `dist/assets/justified-gallery.css`) and replaces the old `justifiedGallery.css` / `justifiedGallery.min.css`.
+
+## API mapping
+
+| v3 (jQuery) | v4 |
+| ----------- | -- |
+| `$('#gallery').justifiedGallery(options)` | `const gallery = new JustifiedGallery(container, options);` then `gallery.init();` |
+| `$('.gallery').justifiedGallery()` (several galleries) | One instance per element: loop over `document.querySelectorAll('.gallery')` |
+| `.justifiedGallery('norewind')` after appending entries | `gallery.init()` again: the entries that are already laid out aren't processed again |
+| `.justifiedGallery('destroy')` | `gallery.destroy()` |
+| `.justifiedGallery({ ...newOptions })` on an existing gallery | `gallery.destroy()`, then a new instance with the merged options |
+| `.on('jg.complete', handler)` (also `jg.resize`, `jg.rowflush`) | The [`triggerEvent`](/Justified-Gallery/options-and-events/#events) option, called with the event name |
+| Captions shown on hover by the plugin, configured with `captionSettings` | Captions are hidden by default and shown with your own CSS, e.g. on hover: see [Captions](/Justified-Gallery/captions/#showing-the-captions) |
+| `cssAnimation`, `imagesAnimationDuration` | Removed: animations are CSS only, see [Styling](/Justified-Gallery/styling/#entries-and-transitions) |
+| `filter` string tested with jQuery's `.is()` | Tested with [`Element.matches()`](https://developer.mozilla.org/en-US/docs/Web/API/Element/matches): standard CSS selectors only |
+
+All the other options (`rowHeight`, `maxRowHeight`, `maxRowsCount`, `margins`, `border`, `lastRow`, `justifyThreshold`, `sizeRangeSuffixes`, `thumbnailPath`, `waitThumbnailsLoad`, `captions`, `randomize`, `filter`, `sort`, `rtl`, `selector`, `imgSelector`, `extension`, `refreshTime`, `refreshSensitivity`, `rel`, `target`) keep their names. Double-check the defaults in the [options table](/Justified-Gallery/options-and-events/#options), for example `selector` is now `'a'` (plain `div` children are accepted too).
+
+## Before and after
+
+Initialization, with an event handler:
+
+```js
+// v3
+$('#gallery')
+  .justifiedGallery({ rowHeight: 160, margins: 4 })
+  .on('jg.complete', function () {
+    // gallery ready
+  });
+```
+
+```js
+// v4
+const container = document.getElementById('gallery');
+let gallery = new JustifiedGallery(container, {
+  rowHeight: 160,
+  margins: 4,
+  triggerEvent(name) {
+    if (name === 'jg.complete') {
+      // gallery ready (`this` is the gallery instance)
+    }
+  },
+});
+gallery.init();
+```
+
+`init()` doesn't return anything, so keep the instance in a variable: you need it to call `init()` again or `destroy()`.
+
+Infinite scroll:
+
+```js
+// v3
+$('#gallery').append(newEntriesHtml);
+$('#gallery').justifiedGallery('norewind');
+```
+
+```js
+// v4
+container.insertAdjacentHTML('beforeend', newEntriesHtml);
+gallery.init();
+```
+
+Note that `init()` re-applies `filter`, `sort` and `randomize` to all the entries, see [Infinite Scroll](/Justified-Gallery/endless-scroll/).
+
+Changing the options:
+
+```js
+// v3
+$('#gallery').justifiedGallery({ rowHeight: 200 });
+```
+
+```js
+// v4
+gallery.destroy();
+gallery = new JustifiedGallery(container, { rowHeight: 200, margins: 4 });
+gallery.init();
+```
+
+## Markup and CSS
+
+The markup is the same: a container with links (or `div`s, or `figure`s) wrapping the thumbnails. Add the `justified-gallery` class to the container in the HTML, so the entries are hidden until they're laid out (see [Styling & CSS classes](/Justified-Gallery/styling/#the-justified-gallery-class)).
+
+If you customized the plugin CSS, compare your selectors with the [classes v4 uses](/Justified-Gallery/styling/#classes-added-by-the-library): `jg-entry`, `jg-entry-visible`, `jg-caption`, `jg-caption-visible`, `jg-filtered` and `jg-spinner`.
+
+## Using a framework
+
+v3 needed jQuery to be wired into React or Vue components. v4 is a plain class you create on mount and destroy on unmount: see the [React](/Justified-Gallery/react/) and [Vue](/Justified-Gallery/vue/) guides.

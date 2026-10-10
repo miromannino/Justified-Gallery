@@ -1,0 +1,112 @@
+---
+title: Styling & CSS Classes
+description: The CSS classes Justified Gallery adds to your markup, and how to customize captions, the loading spinner, transitions and colors.
+---
+
+Justified Gallery computes the layout in JavaScript, but everything else is plain CSS: the library stylesheet (`justified-gallery/style.css`) positions the entries, fades them in, and styles the captions and the loading spinner. You customize the look by overriding those rules with your own CSS.
+
+## The `justified-gallery` class
+
+All the rules of the stylesheet are scoped to the `.justified-gallery` container. `init()` adds the class if it's missing, but put it in your markup anyway:
+
+```html
+<div id="gallery" class="justified-gallery">
+  ...
+</div>
+```
+
+With the class already in the HTML, the stylesheet hides the entries from the first paint, so the visitors never see the raw, unpositioned thumbnails while the JavaScript loads. `destroy()` removes the class together with the other ones listed below, so after a `destroy()` the entries go back to their normal flow (a new instance adds it back on `init()`).
+
+## Classes added by the library
+
+| Class | Element | When |
+| ----- | ------- | ---- |
+| `justified-gallery` | The container | Added by `init()` if missing (but [put it in your HTML](#the-justified-gallery-class)), removed by `destroy()`. |
+| `jg-entry` | Each entry | Added by `init()` to every entry that is laid out (not to the filtered-out ones). |
+| `jg-entry-visible` | Each entry | Added when the entry has been placed in its row: the stylesheet fades it in. Removed again when the entry is hidden, i.e. its row is over the [`maxRowsCount`](/Justified-Gallery/options-and-events/#maxrowscount) limit, it's in a last row hidden by [`lastRow: 'hide'`](/Justified-Gallery/options-and-events/#lastrow), or it's filtered out. |
+| `jg-filtered` | Each entry | Added to the entries excluded by the [`filter`](/Justified-Gallery/sorting-and-filtering/) option. The stylesheet hides them with `display: none`. |
+| `jg-caption` | Caption element | The caption the library creates from the image `alt` (or the entry `title`) when [`captions`](/Justified-Gallery/captions/) is on. You can also write your own element with this class. |
+| `jg-caption-visible` | Caption element | Never added by the library. The stylesheet hides captions unless they have this class, so you can toggle it yourself, or show captions with CSS instead. |
+| `jg-spinner` | Loading spinner | A `div` with three `<span>` dots, appended to the container while thumbnails are loading and removed when the layout is complete. |
+
+The library also writes inline styles: `width`, `height`, `top` and `left` on the entries, and size and margins on the thumbnails, to place them in the justified rows. Don't set sizes, positions, margins, paddings or borders on entries and thumbnails in your CSS: use the [`margins`](/Justified-Gallery/options-and-events/) and [`border`](/Justified-Gallery/options-and-events/) options for spacing.
+
+## Overriding the default styles
+
+The default rules use selectors like `.justified-gallery > .jg-spinner > span`. To override one, either load your stylesheet **after** `justified-gallery/style.css` with a selector at least as specific, or make yours more specific (for example by adding the gallery id or one more class). The snippets below follow the first approach. The package ships the compiled `style.css` only, not the Sass sources, so CSS overrides are the way to customize it.
+
+## Captions
+
+The default caption is a black, semi-transparent bar at the bottom of the entry, with white text. It's hidden until it gets the `jg-caption-visible` class: see [Showing the captions](/Justified-Gallery/captions/#showing-the-captions) for the hover snippet.
+
+To change its look, style `.jg-caption`. For example, always-visible captions on a gradient:
+
+```css
+.justified-gallery > .jg-entry > .jg-caption {
+  display: block;
+  opacity: 1;
+  padding: 24px 8px 6px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+  font: 500 13px/1.3 system-ui, sans-serif;
+}
+```
+
+## Entries and transitions
+
+Each entry has `overflow: hidden`, so rounded corners and hover effects on the thumbnails stay inside the entry box:
+
+```css
+.justified-gallery > .jg-entry {
+  border-radius: 6px;
+}
+```
+
+When an entry gets `jg-entry-visible`, its thumbnail fades in with a 500ms opacity transition. To make it faster, or to remove it:
+
+```css
+.justified-gallery > .jg-entry-visible > img,
+.justified-gallery > .jg-entry-visible > a > img {
+  transition-duration: 150ms; /* or: transition: none; */
+}
+```
+
+## The loading spinner
+
+While thumbnails are loading, a `.jg-spinner` element with three dots is shown at the bottom of the gallery. The library animates the dots by changing their inline `opacity`, so you can freely change their color and shape:
+
+```css
+.justified-gallery > .jg-spinner > span {
+  background-color: #e8590c;
+  border-radius: 0; /* square dots */
+}
+```
+
+To hide it completely:
+
+```css
+.justified-gallery > .jg-spinner {
+  display: none;
+}
+```
+
+## Backgrounds and dark mode
+
+The container has no background of its own: the space between the images (the `margins`) and around them (the `border`) shows whatever is behind the gallery. Set a background on the container to color it:
+
+```css
+.justified-gallery {
+  background-color: #111;
+}
+```
+
+The default spinner dots are black, so they disappear on a dark page. Make them light in dark mode:
+
+```css
+@media (prefers-color-scheme: dark) {
+  .justified-gallery > .jg-spinner > span {
+    background-color: #fff;
+  }
+}
+```
+
+If your site switches theme with a class or an attribute (e.g. `[data-theme='dark']`) rather than the media query, use that as the selector prefix instead.

@@ -6,43 +6,43 @@ const snippets = [
     id: "vanilla",
     label: "Vanilla",
     icon: "seti:javascript" as const,
-    lang: "js",
+    lang: "ts",
     code: `import { JustifiedGallery } from 'justified-gallery';
 import 'justified-gallery/style.css';
 
-new JustifiedGallery(
-  document.querySelector('#gallery')
-).init();`,
+const container = document.getElementById('gallery')!;
+const gallery = new JustifiedGallery(container);
+gallery.init();`,
   },
   {
     id: "react",
     label: "React",
     icon: "seti:react" as const,
-    lang: "jsx",
-    code: `const ref = useRef(null);
+    lang: "tsx",
+    code: `const containerRef = useRef<HTMLDivElement>(null);
 
 useEffect(() => {
-  const jg = new JustifiedGallery(ref.current);
-  jg.init();
-  return () => jg.destroy();
+  const gallery = new JustifiedGallery(containerRef.current!);
+  gallery.init();
+  return () => gallery.destroy();
 }, []);
 
-return <div ref={ref}>{images}</div>;`,
+return <div ref={containerRef}>{images}</div>;`,
   },
   {
     id: "vue",
     label: "Vue",
     icon: "seti:vue" as const,
-    lang: "js",
-    code: `const el = ref(null);
-let jg;
+    lang: "ts",
+    code: `const container = ref<HTMLDivElement>();
+let gallery: JustifiedGallery | undefined;
 
 onMounted(() => {
-  jg = new JustifiedGallery(el.value);
-  jg.init();
+  gallery = new JustifiedGallery(container.value!);
+  gallery.init();
 });
 
-onBeforeUnmount(() => jg.destroy());`,
+onBeforeUnmount(() => gallery?.destroy());`,
   },
 ];
 ---
@@ -57,8 +57,8 @@ onBeforeUnmount(() => jg.destroy());`,
   </div>
   <h3 class="jg-cr-title">Works everywhere</h3>
   <div class="jg-cr-desc">
-    Zero dependencies, no jQuery. A plain class working on a real DOM element,
-    so it drops into any stack with no wrapper needed.
+    Zero dependencies and a tiny API: a plain class on a real DOM element.
+    Use it in vanilla JS, React, Vue or any other framework, no wrapper needed.
   </div>
   <div class="jg-cr-tabs" role="tablist" aria-label="Framework examples">
     {

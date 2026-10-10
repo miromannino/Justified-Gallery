@@ -1,0 +1,374 @@
+---
+title: Vue
+description: Use Justified Gallery in Vue 3 and Nuxt — a script setup component, a typed useJustifiedGallery composable, cleanup with destroy(), changing images, options, events, lightboxes, infinite scroll and SSR.
+---
+
+import GalleryDemo from '../../components/GalleryDemo.astro';
+
+Justified Gallery doesn't need a Vue wrapper. It works on plain DOM elements, so in Vue you render the markup with your template, hand the container to the library in `onMounted`, and call `destroy()` in `onBeforeUnmount`. This page shows that pattern, a reusable composable built on it, and what to keep in mind because the library changes the DOM that Vue rendered.
+
+## Install
+
+```bash
+npm install justified-gallery
+```
+
+Import the library and its stylesheet. The stylesheet is plain global CSS, so you can import it in the component or once in your `main.ts`:
+
+```ts
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+```
+
+Type declarations are included, so there's nothing else to install for TypeScript. The examples below use `<script setup lang="ts">` and need Vue 3.3 or later (`toValue` / `MaybeRefOrGetter`); the lightbox example uses `useId()`, added in Vue 3.5.
+
+## A minimal component
+
+Use a template ref for the container, create the instance in `onMounted` and destroy it in `onBeforeUnmount`:
+
+```vue
+<script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+
+type Photo = { id: string; thumb: string; full: string; alt: string };
+
+defineProps<{ photos: Photo[] }>();
+
+const container = ref<HTMLDivElement>();
+let gallery: JustifiedGallery | undefined;
+
+onMounted(() => {
+  gallery = new JustifiedGallery(container.value!, { rowHeight: 160 });
+  gallery.init();
+});
+
+onBeforeUnmount(() => gallery?.destroy());
+</script>
+
+<template>
+  <div ref="container" class="justified-gallery">
+    <a v-for="photo in photos" :key="photo.id" :href="photo.full">
+      <img :src="photo.thumb" :alt="photo.alt" />
+    </a>
+  </div>
+</template>
+```
+
+The instance is stored in a plain variable, not in a `ref`: Vue has no reason to make it reactive, and a reactive proxy around it would only add overhead. This version lays out the photos it finds on mount and doesn't follow later changes to `photos`; the [composable below](#a-reusable-usejustifiedgallery-composable) handles that.
+
+Put `class="justified-gallery"` on the container yourself. `init()` adds the class too, but only in `onMounted`, after the images are already in the DOM. With the class in the template, the stylesheet keeps the entries hidden from the first paint until each row is laid out, so the browser never shows a stack of unpositioned thumbnails. This also covers server-rendered HTML (see [Nuxt and SSR](#nuxt-and-ssr)).
+
+`destroy()` stops the resize watcher and undoes what the library did to the markup (inline styles, `jg-*` classes, the captions it created, the original thumbnail `src`), so the component can be unmounted and mounted again (a `v-if` toggle, a route change, hot module replacement during development) and each `init()` starts from clean markup.
+
+The result is the same layout as in plain JavaScript:
+
+<GalleryDemo id="vueExample_demo" options={{ rowHeight: 160 }} />
+
+## A reusable `useJustifiedGallery` composable
+
+When you have more than one gallery, or the photos can change, move the lifecycle into a composable. The one below creates the gallery on mount, re-creates it when the options or a watched `source` change, destroys it on unmount, and returns a shallow ref to the current instance:
+
+```ts
+// useJustifiedGallery.ts
+import {
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  shallowRef,
+  toValue,
+  watch,
+  type MaybeRefOrGetter,
+  type Ref,
+  type WatchSource,
+} from 'vue';
+import { JustifiedGallery } from 'justified-gallery';
+
+export type GalleryOptions = NonNullable<ConstructorParameters<typeof JustifiedGallery>[1]>;
+
+export function useJustifiedGallery(
+  container: Readonly<Ref<HTMLElement | null | undefined>>,
+  options: MaybeRefOrGetter<GalleryOptions> = {},
+  source?: WatchSource | WatchSource[],
+) {
+  const gallery = shallowRef<JustifiedGallery>();
+  let teardown: (() => void) | undefined;
+  let mounted = false;
+
+  function destroy() {
+    teardown?.();
+    teardown = undefined;
+    gallery.value = undefined;
+  }
+
+  function create() {
+    destroy();
+    const element = container.value;
+    if (!mounted || !element) return;
+
+    const settings = toValue(options);
+    let active = true;
+    const instance = new JustifiedGallery(element, {
+      ...settings,
+      // Ignore events from an instance that has already been destroyed.
+      triggerEvent(name) {
+        if (active) settings.triggerEvent?.call(this, name);
+      },
+    });
+    instance.init();
+    gallery.value = instance;
+
+    teardown = () => {
+      instance.destroy(); // still delivers 'jg.destroy'
+      active = false;
+    };
+  }
+
+  onMounted(() => {
+    mounted = true;
+    create();
+  });
+
+  const sources = source === undefined ? [] : Array.isArray(source) ? source : [source];
+  watch(
+    [() => toValue(options), ...sources],
+    () => {
+      destroy(); // before Vue patches the DOM (flush: 'pre')
+      nextTick(create); // after the patch
+    },
+    { deep: true, flush: 'pre' },
+  );
+
+  onBeforeUnmount(() => {
+    mounted = false;
+    destroy();
+  });
+
+  return gallery;
+}
+```
+
+The settings type isn't exported from the package, so the composable derives it from the constructor, as shown in the [TypeScript section](/Justified-Gallery/getting-started/#typescript) of Getting Started. `options` can be a plain object, a ref or a getter, so it can depend on props.
+
+Using it:
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+import 'justified-gallery/style.css';
+import { useJustifiedGallery } from './useJustifiedGallery';
+
+const props = withDefaults(defineProps<{ photos: Photo[]; rowHeight?: number }>(), {
+  rowHeight: 160,
+});
+
+const container = ref<HTMLDivElement>();
+
+useJustifiedGallery(
+  container,
+  () => ({ rowHeight: props.rowHeight, margins: 4 }),
+  () => props.photos,
+);
+</script>
+
+<template>
+  <div ref="container" class="justified-gallery">
+    <a v-for="photo in photos" :key="photo.id" :href="photo.full">
+      <img :src="photo.thumb" :alt="photo.alt" />
+    </a>
+  </div>
+</template>
+```
+
+The composable must be called synchronously in `setup` (or `<script setup>`), like any composable that registers lifecycle hooks. With Vue 3.5 you can also pass `useTemplateRef('container')` as the first argument.
+
+### Why destroy before the patch
+
+The watcher deliberately runs with `flush: 'pre'` (Vue's default): its callback runs **before** Vue updates the component's DOM, destroys the old instance while the DOM still matches what it laid out, and then `nextTick()` creates the new one **after** Vue has patched the DOM.
+
+The tempting alternative, a single `flush: 'post'` watcher that destroys and re-creates after the patch, gets one case wrong. When Vue reuses an `<img>` for a different photo (index keys, or a `v-for` without `:key`), it writes the new `src` during the patch; a `destroy()` that runs afterwards then restores the `src` it remembered, which is the *old* photo's thumbnail. Destroying first means `destroy()` puts back exactly what Vue rendered, and Vue's patch applies the changes on top of clean markup. The DOM is never painted between the two steps, since both happen in the same tick.
+
+### Options and `source`
+
+The options are passed to the constructor, so changing them means destroying the gallery and creating a new one. The composable watches them for you: a getter like `() => ({ rowHeight: props.rowHeight })` re-creates the gallery when `props.rowHeight` changes, and a plain object (or a static getter) never does.
+
+`source` is what should re-create the gallery when it changes, usually the photo list. It's watched with `deep: true`, so both replacing the array (`photos.value = newPhotos`) and mutating it (`push`, `splice`, sorting in place) are noticed. Pass several sources as an array: `[() => props.photos, () => props.albumId]`.
+
+### When the images change
+
+The instance collects the entries when `init()` runs and keeps them in its own list; it doesn't watch Vue's updates. Pick the strategy that matches how your list changes:
+
+- **Any change** (photos removed, reordered, filtered, or a whole new set): pass the list as `source`, as in the example above. The old instance is destroyed, Vue patches the DOM, and a new instance lays out the current children from scratch. During that pass the entries are hidden again until their rows are ready, so expect a short re-layout.
+- **A completely different set** (another album, another search): you can also remount the component with a `key`, for example `<Gallery :key="albumId" :photos="photos" />`. Vue throws away the old DOM and the gallery starts on a fresh container.
+- **Only appended at the end** (infinite scroll, "load more"): don't re-create anything; call `init()` again on the existing instance after `nextTick()`, which only loads and lays out the new entries. See [Infinite scroll / "load more"](#infinite-scroll--load-more).
+
+## How the library touches Vue's DOM
+
+Justified Gallery works on the elements Vue rendered: it sets inline sizes and positions, adds `jg-*` classes and `data-jg-*` attributes, swaps thumbnail `src`s for better-sized ones, and appends a spinner and (with `captions` on) caption elements. It **never moves, removes or re-creates** the elements you rendered. The exact list, checked against the library source, is on the React page: [How the library touches React's DOM](/Justified-Gallery/react/#how-the-library-touches-reacts-dom); it applies to Vue unchanged.
+
+Vue's patch only writes the bindings whose value changed between two renders, so this coexists peacefully as long as you follow a few rules:
+
+- **Use a stable `:key`** taken from the data (`photo.id`), never the index. With index keys Vue reuses an `<a>` and its `<img>` for a different photo and patches `href`/`src` in place, while the node still carries the old photo's library state.
+- **Don't bind `:class` or `:style` on the entries.** When a `:class` binding changes, Vue rewrites the whole `className`, which drops `jg-entry-visible` and makes the entry invisible, and a `:style` binding can fight the inline positions. Style entries through CSS, or put the varying class on an inner element.
+- **Don't bind a `height` style on the container**; the library manages the container height. Size it with a wrapper or CSS instead.
+- **Don't change an image's `:src` while the gallery is alive** without re-creating it. If a photo's URL changes, treat it as a list change (the list is a `source`, or give the entry a new `key`).
+- **Render your own captions if they need to be Vue content.** If an entry already contains a `.jg-caption` element, the library uses it instead of creating one, and `destroy()` leaves it alone, so Vue keeps full ownership. Note that the stylesheet hides `.jg-caption` until you show it; see [Captions](/Justified-Gallery/captions/).
+
+Vue's own `<Transition>` / `<TransitionGroup>` on the entries isn't needed: the stylesheet already fades the entries in, row by row.
+
+## Passing options
+
+Options are the same as in plain JavaScript; see [Options and Events](/Justified-Gallery/options-and-events/) for the full list. In TypeScript, `lastRow` is typed as a string enum that isn't exported, so a string literal needs a cast:
+
+```ts
+const options: GalleryOptions = {
+  rowHeight: 120,
+  margins: 3,
+  lastRow: 'nojustify' as GalleryOptions['lastRow'],
+};
+
+useJustifiedGallery(container, options, () => props.photos);
+```
+
+If you know the image sizes (for example from your API or CMS), bind them as `:width` and `:height` on the `<img>` and set `waitThumbnailsLoad: false`: the layout is built right away instead of waiting for every thumbnail to load. See [Performance Tips](/Justified-Gallery/performance-tips/).
+
+## Events
+
+Events arrive through the `triggerEvent` option. Event names are a non-exported enum as well, so compare them as strings. For example, to show a placeholder until the first layout is complete:
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+import 'justified-gallery/style.css';
+import { useJustifiedGallery } from './useJustifiedGallery';
+
+const props = defineProps<{ photos: Photo[] }>();
+
+const container = ref<HTMLDivElement>();
+const ready = ref(false);
+
+useJustifiedGallery(
+  container,
+  {
+    rowHeight: 160,
+    triggerEvent(name) {
+      if (String(name) === 'jg.complete') ready.value = true;
+    },
+  },
+  () => props.photos,
+);
+</script>
+
+<template>
+  <p v-if="!ready">Loading photos…</p>
+  <div ref="container" class="justified-gallery">
+    <a v-for="photo in photos" :key="photo.id" :href="photo.full">
+      <img :src="photo.thumb" :alt="photo.alt" />
+    </a>
+  </div>
+</template>
+```
+
+`triggerEvent` is called with `this` bound to the `JustifiedGallery` instance, so a regular function (rather than an arrow function) can access it. Also remember that `jg.complete` fires after every layout pass (including each `init()` call), not only the first one.
+
+The composable's `triggerEvent` wrapper matters here: `destroy()` doesn't cancel thumbnails that are still loading, so a destroyed instance can still lay out its entries and fire `jg.complete` when they finish (it may also leave its loading spinner in the container until then). The `active` flag drops those late events, so your refs only reflect the live gallery.
+
+## Lightbox
+
+Create the lightbox once the gallery is mounted, rebuild it after Vue has rendered a new list, and destroy it on unmount. This example uses [GLightbox](/Justified-Gallery/lightboxes/), as on the Lightboxes page; `useId()` gives each gallery its own selector so several galleries on a page don't share one lightbox group:
+
+```vue
+<script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref, useId, watch } from 'vue';
+import 'justified-gallery/style.css';
+import GLightbox from 'glightbox';
+import 'glightbox/dist/css/glightbox.min.css';
+import { useJustifiedGallery } from './useJustifiedGallery';
+
+const props = defineProps<{ photos: Photo[] }>();
+
+const container = ref<HTMLDivElement>();
+const id = useId();
+
+useJustifiedGallery(container, { rowHeight: 100, margins: 1 }, () => props.photos);
+
+let lightbox: ReturnType<typeof GLightbox> | undefined;
+
+function createLightbox() {
+  lightbox?.destroy();
+  lightbox = GLightbox({ selector: `#${CSS.escape(id)} a` }); // escaped for safety
+}
+
+onMounted(createLightbox);
+// 'post': runs after Vue has rendered the new links
+watch(() => props.photos, createLightbox, { deep: true, flush: 'post' });
+onBeforeUnmount(() => lightbox?.destroy());
+</script>
+
+<template>
+  <div :id="id" ref="container" class="justified-gallery">
+    <a v-for="photo in photos" :key="photo.id" :href="photo.full">
+      <img :src="photo.thumb" :alt="photo.alt" />
+    </a>
+  </div>
+</template>
+```
+
+The lightbox only reads the links, which the gallery never changes, so it doesn't need to wait for the layout; a post-flush watcher is enough for it to see the current list.
+
+## Infinite scroll / "load more"
+
+For a list that only grows, keep the same instance and call `init()` again after Vue has rendered the new entries. Calling `init()` again only loads and lays out the new entries: the rows already on screen stay where they are, and the layout continues from the last row. Don't pass the list as `source` here, or every page would re-create the whole gallery:
+
+```vue
+<script setup lang="ts">
+import { nextTick, ref } from 'vue';
+import 'justified-gallery/style.css';
+import { useJustifiedGallery } from './useJustifiedGallery';
+
+const props = defineProps<{ firstPage: Photo[] }>();
+
+const container = ref<HTMLDivElement>();
+const photos = ref<Photo[]>([...props.firstPage]);
+
+// Created once; only re-created if the component remounts.
+const gallery = useJustifiedGallery(container, { rowHeight: 120 });
+
+async function loadMore() {
+  const next = await fetchPhotos(photos.value.length); // your API
+  photos.value.push(...next);
+  await nextTick(); // wait for Vue to render the new <a> elements
+  gallery.value?.init();
+}
+</script>
+
+<template>
+  <div ref="container" class="justified-gallery">
+    <a v-for="photo in photos" :key="photo.id" :href="photo.full">
+      <img :src="photo.thumb" :alt="photo.alt" />
+    </a>
+  </div>
+  <button @click="loadMore">Load more</button>
+</template>
+```
+
+A few details:
+
+- If the list can also shrink or be replaced, go back to a full re-create for those changes, for example by remounting the component with a `key`.
+- For automatic infinite scroll, call `loadMore()` from an `IntersectionObserver` (or VueUse's `useIntersectionObserver`) watching an element placed after the gallery, instead of the button.
+- `init()` re-applies `filter`, `sort` and `randomize` to all the entries: avoid `randomize` here, and use `sort` only if new photos always sort after the existing ones. See [Infinite Scroll](/Justified-Gallery/endless-scroll/).
+
+## Nuxt and SSR
+
+Importing `justified-gallery` doesn't touch `window` or `document`; the library only uses the DOM inside the constructor and its methods. `onMounted` never runs on the server, so as long as the gallery is created there (directly or through the composable), the component renders fine during SSR and the gallery starts when it hydrates in the browser. You don't need `<ClientOnly>` or a `.client.vue` component for the library itself; wrapping the gallery in `<ClientOnly>` would only drop the links and thumbnails from the server-rendered HTML.
+
+Since the container already has the `justified-gallery` class in the server-rendered markup, the entries stay hidden until the layout is ready instead of flashing unstyled before hydration. Import the stylesheet in the component, as above, or register it globally in `nuxt.config.ts`:
+
+```ts
+export default defineNuxtConfig({
+  css: ['justified-gallery/style.css'],
+});
+```
+
+Other plugins used next to the gallery may not be SSR-safe: GLightbox, for example, should be imported only on the client (a `.client` plugin or a dynamic `import('glightbox')` inside `onMounted`) if its module touches the DOM when loaded.

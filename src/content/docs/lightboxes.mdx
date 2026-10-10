@@ -22,13 +22,19 @@ import 'justified-gallery/style.css';
 import GLightbox from 'glightbox';
 import 'glightbox/dist/css/glightbox.min.css';
 
-new JustifiedGallery(document.querySelector('#lightboxExample'), {
+const container = document.getElementById('gallery');
+const gallery = new JustifiedGallery(container, {
   lastRow: 'nojustify',
   rowHeight: 100,
   margins: 1,
-}).init();
+});
+gallery.init();
 
-GLightbox({ selector: '#lightboxExample a' });
+const lightbox = GLightbox({ selector: '#gallery a' });
+
+// on teardown (e.g. a route change):
+// gallery.destroy();
+// lightbox.destroy();
 ```
 
 Try it out — click any image:
@@ -40,9 +46,10 @@ Try it out — click any image:
 Some lightboxes group images into a gallery through the `rel` attribute of the links. Justified Gallery can rewrite that attribute for you on every entry with the [`rel` option](/Justified-Gallery/options-and-events/), and similarly the `target` attribute with the `target` option:
 
 ```js
-new JustifiedGallery(document.querySelector('#mygallery'), {
+const gallery = new JustifiedGallery(container, {
   rel: 'gallery1',
-}).init();
+});
+gallery.init();
 ```
 
 ## Multiple galleries in one page
@@ -50,21 +57,23 @@ new JustifiedGallery(document.querySelector('#mygallery'), {
 Each gallery needs its own `JustifiedGallery` instance, and its own lightbox group. Just loop over the containers:
 
 ```html
-<div class="myExMul">
+<div class="gallery justified-gallery">
   <a href="image1.jpg"><img alt="title 1" src="image1_thumbnail.jpg" /></a>
   ...
 </div>
-<div class="myExMul">
+<div class="gallery justified-gallery">
   <a href="image3.jpg"><img alt="title 3" src="image3_thumbnail.jpg" /></a>
   ...
 </div>
 ```
 
 ```js
-document.querySelectorAll('.myExMul').forEach((el, i) => {
-  el.id = 'myExMul-' + i;
-  new JustifiedGallery(el, { rel: 'myExMul-' + i }).init();
-  GLightbox({ selector: '#myExMul-' + i + ' a' });
+const galleries = [...document.querySelectorAll('.gallery')].map((container, i) => {
+  container.id = `gallery-${i}`;
+  const gallery = new JustifiedGallery(container, { rel: `gallery-${i}` });
+  gallery.init();
+  GLightbox({ selector: `#gallery-${i} a` });
+  return gallery;
 });
 ```
 

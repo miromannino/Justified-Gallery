@@ -3,12 +3,12 @@ title: Input Formats
 description: The gallery markup formats accepted by Justified Gallery, from linked thumbnails to text and video entries.
 ---
 
-The library accepts several formats for the gallery, and each of them is useful to solve your specific problem.
+The library accepts several markup formats for the gallery, so you can pick the one that best fits your needs.
 
 The most important format, which is also accepted by many lightboxes, is the following:
 
 ```html
-<div id="mygallery" class="justified-gallery">
+<div id="gallery" class="justified-gallery">
   <a href="path/to/myimage1_original.jpg">
     <img alt="Title 1" src="path/to/myimage1_thumbnail.jpg" />
   </a>
@@ -22,7 +22,7 @@ The most important format, which is also accepted by many lightboxes, is the fol
 If you don't need links on photos, or if you want the links only in your captions, you can also use `<div>` instead of `<a>`:
 
 ```html
-<div id="mygallery" class="justified-gallery">
+<div id="gallery" class="justified-gallery">
   <div>
     <img alt="Title 1" src="path/to/myimage1_thumbnail.jpg" />
   </div>
@@ -33,12 +33,12 @@ If you don't need links on photos, or if you want the links only in your caption
 </div>
 ```
 
-## No-image entry: text or video entry
+## Entries without an image: text or video
 
-You can also have entries without an image inside, for example to have a text or a video entry. In this case the height and the width needed to resize an entry, to maintain its correct aspect ratio, are taken from its CSS properties (rather than from an image). For example, this could be an example of a text entry:
+You can also have entries without an image inside, for example a text or a video entry. In this case the width and the height needed to resize the entry, keeping its aspect ratio, are taken from its rendered size, i.e. its CSS properties (rather than from an image). For example, this is a text entry:
 
 ```html
-<div class="mygallery justified-gallery">
+<div id="gallery" class="justified-gallery">
   <!-- other images... -->
   <div style="height: 50px; width: 200px;">
     <a href="..." style="position: absolute; bottom: 10px; right: 10px;">Next entries...</a>
@@ -48,10 +48,10 @@ You can also have entries without an image inside, for example to have a text or
 
 ## Arbitrary format changing the selector
 
-If you have a particular structure you can also change the default behavior of Justified Gallery changing the default [`selector` option](/Justified-Gallery/options-and-events/). For example, assume that you have the following structure:
+If you have a particular structure you can also change which children are considered entries with the [`selector` option](/Justified-Gallery/options-and-events/). For example, assume that you have the following structure:
 
 ```html
-<div class="mygallery justified-gallery">
+<div id="gallery" class="justified-gallery">
   <figure>
     <a href="path/to/myimage1_original.jpg">
       <img src="path/to/image1_thumbnail.jpg" />
@@ -62,14 +62,14 @@ If you have a particular structure you can also change the default behavior of J
 </div>
 ```
 
-You can change the `selector` option to `'figure'`. Note that, in this case, you also need to extend the Justified Gallery's CSS rules.
+You can change the `selector` option to `'figure'`. The default stylesheet already supports `a`, `div` and `figure` entries; if you use other elements (e.g. `li`), you also need to extend the Justified Gallery's CSS rules to cover them.
 
 ## Custom captions
 
-If you want custom captions you can also insert the caption tag inside the entries. If present, Justified Gallery doesn't generate the caption tags, but it uses the existing one.
+If you want custom captions you can also insert the caption element (with the `jg-caption` class) inside the entries. If present, Justified Gallery doesn't generate a caption, but uses the existing one. See [Captions](/Justified-Gallery/captions/) for how to make them visible.
 
 ```html
-<div id="mygallery" class="justified-gallery">
+<div id="gallery" class="justified-gallery">
   <a href="path/to/myimage1_original.jpg">
     <img alt="Title 1" src="path/to/myimage1_thumbnail.jpg" />
     <div class="jg-caption">my custom caption</div>
@@ -82,10 +82,10 @@ If you want custom captions you can also insert the caption tag inside the entri
 </div>
 ```
 
-If you want to put links inside the captions you have to use the `<div>` format, in the same way we have seen in the second format:
+If you want to put links inside the captions you have to use the `<div>` format (links can't be nested), as in the second format shown above:
 
 ```html
-<div id="mygallery" class="justified-gallery">
+<div id="gallery" class="justified-gallery">
   <div>
     <img alt="Title 1" src="path/to/myimage1_thumbnail.jpg" />
     <div class="jg-caption">my custom caption <a href="any path">link to somewhere</a></div>
@@ -101,7 +101,7 @@ If you want to put links inside the captions you have to use the `<div>` format,
 But if you still need a link on your image, and you also want to use links inside your captions, you can wrap the images with the anchor tag (i.e. `<a>`) in the following way:
 
 ```html
-<div id="mygallery" class="justified-gallery">
+<div id="gallery" class="justified-gallery">
   <div>
     <a href="path/to/myimage1_original.jpg">
       <img alt="Title 1" src="path/to/myimage1_thumbnail.jpg" />

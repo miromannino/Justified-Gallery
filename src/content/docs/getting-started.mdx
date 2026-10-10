@@ -7,6 +7,7 @@ import GalleryDemo from '../../components/GalleryDemo.astro';
 import ThemeImage from '../../components/ThemeImage.astro';
 import importantConfigurationsLight from '../../assets/important-configurations-light.webp';
 import importantConfigurationsDark from '../../assets/important-configurations-dark.webp';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Install
 
@@ -14,23 +15,42 @@ import importantConfigurationsDark from '../../assets/important-configurations-d
 npm install justified-gallery
 ```
 
-Then import the library and its stylesheet:
+Then import the library and its stylesheet. Justified Gallery is an ES module with zero dependencies, so any bundler (Vite, webpack, Next.js, Nuxt...) picks it up as is:
 
-```js
+```ts
 import { JustifiedGallery } from 'justified-gallery';
 import 'justified-gallery/style.css';
 ```
 
-Alternatively, you can load it from a CDN with a `<link>` and a `<script type="module">` tag.
+### Without a build step
+
+You can also load it straight from a CDN. Link the stylesheet in the `<head>`, so it's ready before the gallery is shown, and import the library from a module script:
+
+```html
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/justified-gallery@4/dist/assets/justified-gallery.css"
+/>
+
+<script type="module">
+  import { JustifiedGallery } from 'https://cdn.jsdelivr.net/npm/justified-gallery@4/+esm';
+
+  const container = document.getElementById('gallery');
+  const gallery = new JustifiedGallery(container);
+  gallery.init();
+</script>
+```
+
+### The `justified-gallery` class
 
 Make sure to add the `justified-gallery` class directly to the container in your HTML, as shown below. The stylesheet uses this class to keep the gallery hidden until the layout is ready, avoiding a flash of unstyled, unpositioned images — but only if the class is already there when the page loads, since `init()` doesn't add it until your script runs. See [Performance Tips](/Justified-Gallery/performance-tips/) for more details.
 
 ## A basic gallery
 
-Here we have a `div`, with the id `basicExample`, that has a list of links that point to some images (original size images); inside of each link there is a thumbnail. Calling Justified Gallery, the thumbnails are resized in order to fill all the spaces (i.e. _justification_).
+Here we have a container `div` that holds a list of links pointing to the original-size images; inside each link there is a thumbnail. When the gallery is initialized, the thumbnails are resized to fill all the available space (i.e. _justification_).
 
 ```html
-<div id="basicExample" class="justified-gallery">
+<div id="gallery" class="justified-gallery">
   <a href="path/to/image1.jpg">
     <img alt="caption for image 1" src="path/to/image1_thumbnail.jpg" />
   </a>
@@ -41,11 +61,103 @@ Here we have a `div`, with the id `basicExample`, that has a list of links that 
 </div>
 ```
 
-```js
-new JustifiedGallery(document.querySelector('#basicExample')).init();
+Create a `JustifiedGallery` instance on the container and call `init()`. Keep the instance around: when the gallery leaves the page (e.g. a route change in a single-page app), call `destroy()` to stop watching for resizes and restore the original markup.
+
+<Tabs syncKey="framework">
+  <TabItem label="Vanilla JS" icon="seti:javascript">
+
+```ts
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+
+const container = document.getElementById('gallery')!;
+const gallery = new JustifiedGallery(container);
+gallery.init();
+
+// later, when you no longer need it:
+gallery.destroy();
 ```
 
+  </TabItem>
+  <TabItem label="React" icon="seti:react">
+
+```tsx
+import { useEffect, useRef, type ReactNode } from 'react';
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+
+export function Gallery({ children }: { children: ReactNode }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const gallery = new JustifiedGallery(containerRef.current!);
+    gallery.init();
+    return () => gallery.destroy();
+  }, []);
+
+  return (
+    <div ref={containerRef} className="justified-gallery">
+      {children}
+    </div>
+  );
+}
+```
+
+See the [React guide](/Justified-Gallery/react/) for options, changing images and SSR.
+
+  </TabItem>
+  <TabItem label="Vue" icon="seti:vue">
+
+```vue
+<script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+
+const container = ref<HTMLDivElement>();
+let gallery: JustifiedGallery | undefined;
+
+onMounted(() => {
+  gallery = new JustifiedGallery(container.value!);
+  gallery.init();
+});
+
+onBeforeUnmount(() => gallery?.destroy());
+</script>
+
+<template>
+  <div ref="container" class="justified-gallery">
+    <slot />
+  </div>
+</template>
+```
+
+See the [Vue guide](/Justified-Gallery/vue/) for options, reacting to data changes and Nuxt.
+
+  </TabItem>
+</Tabs>
+
 <GalleryDemo id="basicExample_demo" />
+
+## TypeScript
+
+Type declarations ship with the package, so the constructor, the options and the methods are typed out of the box, with no extra `@types` package to install. The settings type isn't exported from the package entry; if you want to declare your options separately, derive it from the constructor:
+
+```ts
+import { JustifiedGallery } from 'justified-gallery';
+
+type GalleryOptions = NonNullable<ConstructorParameters<typeof JustifiedGallery>[1]>;
+
+const options: GalleryOptions = {
+  rowHeight: 160,
+  margins: 4,
+};
+
+const gallery = new JustifiedGallery(container, options);
+gallery.init();
+```
+
+The `lastRow` option and the event names received by `triggerEvent` are typed as string enums that aren't exported either, so in TypeScript a plain string needs a cast (`lastRow: 'nojustify' as GalleryOptions['lastRow']`), and event names are best compared as strings (`String(name) === 'jg.complete'`). The JavaScript snippets in these docs use the plain strings.
 
 ## Important configurations
 
@@ -57,14 +169,14 @@ An important configuration of the library is the [`rowHeight`](/Justified-Galler
   alt="Three justified rows of thumbnails, with the height of the middle row measured at 160px"
 />
 
-However, the justification may resize the images, and, as a consequence, the row height may be a little bit different than 160px. This means that the row height is intended as your preferred height (i.e. a lower bound). You can always use the [`maxRowHeight`](/Justified-Gallery/options-and-events/) option to limit the height of the rows; but remember that this option will crop the images if they needed to be bigger to be justified.
+However, the justification may resize the images, and, as a consequence, the row height may be a little different from 160px. This means that the row height is intended as your preferred height (i.e. a lower bound). You can always use the [`maxRowHeight`](/Justified-Gallery/options-and-events/) option to limit the height of the rows, but remember that this option crops the images if they need to be bigger to be justified.
 
-The algorithm builds each row until it reaches the last. But this last row may not have enough images to fill the entire width. In this case you can decide (with the [`lastRow`](/Justified-Gallery/options-and-events/) option) to leave a blank space, to justify the images, or to hide the last row if there is too much blank space.
+The algorithm builds the rows one after the other until it reaches the last one, which may not have enough images to fill the entire width. In this case you can decide (with the [`lastRow`](/Justified-Gallery/options-and-events/) option) to leave a blank space (aligning the images to the left, center, or right), to justify the images, or to hide the last row if there is too much blank space.
 
 The following is an example where we use smaller images (`rowHeight: 70`). Furthermore, we don't justify the last row (`lastRow: 'nojustify'`), and we are using a margin of 3px (`margins: 3`).
 
 ```html
-<div id="basicExample2" class="justified-gallery">
+<div id="gallery" class="justified-gallery">
   <a href="path/to/image1.jpg">
     <img alt="caption for image 1" src="path/to/image1_thumbnail.jpg" />
   </a>
@@ -76,34 +188,38 @@ The following is an example where we use smaller images (`rowHeight: 70`). Furth
 ```
 
 ```js
-new JustifiedGallery(document.querySelector('#basicExample2'), {
+const gallery = new JustifiedGallery(container, {
   rowHeight: 70,
   lastRow: 'nojustify',
   margins: 3,
-}).init();
+});
+gallery.init();
 ```
 
 <GalleryDemo id="basicExample2_demo" options={{ rowHeight: 70, lastRow: 'nojustify', margins: 3 }} />
 
 ## Multiple thumbnail sizes
 
-If on the server side you have different sizes of the same images (e.g. a thumbnail for small devices, a bigger thumbnail for retina displays, etc.), the library can be set to automatically load the best available thumbnails: bigger or smaller thumbnails are loaded to always have a high quality of the images.
+If on the server side you have different sizes of the same images (e.g. a thumbnail for small devices, a bigger thumbnail for retina displays, etc.), the library can automatically load the best available thumbnail for the displayed size, so the images always look sharp without downloading more pixels than needed.
 
-To do that you simply have to change the setting `sizeRangeSuffixes`. For example, to agree with the [Flickr's suffixes](https://www.flickr.com/services/api/misc.urls.html), you have to set this setting in the following way:
+To do that you simply have to set the `sizeRangeSuffixes` option. For example, to match [Flickr's suffixes](https://www.flickr.com/services/api/misc.urls.html), you would set it in the following way:
 
 ```js
-sizeRangeSuffixes: {
-  100: '_t',  // up to 100px on the longest side
-  240: '_m',  // 100px to 240px
-  320: '_n',
-  500: '',
-  640: '_z',
-  1024: '_b', // more than 640px
-}
+const gallery = new JustifiedGallery(container, {
+  sizeRangeSuffixes: {
+    100: '_t',  // up to 100px on the longest side
+    240: '_m',  // 100px to 240px
+    320: '_n',
+    500: '',
+    640: '_z',
+    1024: '_b', // more than 640px
+  },
+});
+gallery.init();
 ```
 
-In this way the library derives other thumbnails' paths for the same image by only changing the filename suffix. For example, with an entry with the thumbnail `path/to/image1_t.jpg`, the library could load the thumbnail `path/to/image1_b.jpg`.
+In this way the library derives the paths of the other thumbnails of the same image by only changing the filename suffix. For example, with an entry with the thumbnail `path/to/image1_t.jpg`, the library could load the thumbnail `path/to/image1_b.jpg`.
 
-The keys can also be written as `'lt100'`, `'lt240'`, and so on — the numeric part is what matters. The Flickr-style map above is also the default value of `sizeRangeSuffixes`, so if your files follow other conventions (or you only have one thumbnail per image) remember to override it, for example with an empty object `{}` to always use the thumbnail provided in the HTML.
+The keys can also be written as `'lt100'`, `'lt240'`, and so on — the numeric part is what matters. The Flickr-style map above is also the default value of `sizeRangeSuffixes`, so if your files follow other conventions (or you only have one thumbnail per image) remember to override it, for example with a single range with an empty suffix (`{0: ''}`) to always use the thumbnail provided in the HTML. For full control over the thumbnail URLs, use the [`thumbnailPath`](/Justified-Gallery/options-and-events/) option instead.
 
 [Explore all the options](/Justified-Gallery/options-and-events/) available for Justified Gallery.

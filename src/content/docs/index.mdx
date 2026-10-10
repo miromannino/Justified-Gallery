@@ -30,6 +30,7 @@ import GalleryDemo from "../../components/GalleryDemo.astro";
 import GitHubStats from "../../components/GitHubStats.astro";
 import GitHubContributors from "../../components/GitHubContributors.astro";
 import SignalNetworkBackground from "../../components/SignalNetworkBackground.astro";
+import { Tabs, TabItem } from "@astrojs/starlight/components";
 
 <SignalNetworkBackground />
 
@@ -47,11 +48,11 @@ import SignalNetworkBackground from "../../components/SignalNetworkBackground.as
   mobileOptions={{ rowHeight: 110 }}
 />
 
-Justified Gallery is a **JavaScript library** that allows you to create a **high quality justified gallery** of images.
+Justified Gallery is a **zero-dependency JavaScript library**, written in TypeScript, that lets you create a **high quality justified gallery** of images. It works with plain HTML, React, Vue, or any other framework.
 
-This is a common problem for people who create websites: you have a series of images to display, but you are not sure how to arrange them in an elegant way. Important websites such as 500px, Flickr, or Google display images in an excellent way, justifying them similarly to a **brick wall**. Justified Gallery will give you the power to do that too.
+It solves a common problem for people who build websites: you have a series of images to display, but you are not sure how to arrange them elegantly. Important websites such as 500px, Flickr, or Google display images in an excellent way, justifying them similarly to a **brick wall**. Justified Gallery gives you the power to do that too.
 
-Justified Gallery is a **professional and open source library** that even 500px, one of the best photography social networks, chose for displaying their images!
+Justified Gallery is a **professional and open source library** that even 500px, one of the best photography social networks, chose to display its images!
 
 ## Install
 
@@ -61,15 +62,15 @@ npm install justified-gallery
 
 ## How to use it
 
-Justified Gallery accepts a standard format for a gallery: a series of links with a thumbnail inside, where each link leads to the original image.
+Justified Gallery works on standard markup: a container with a series of links, each with a thumbnail inside and pointing to the original image.
 
 ```html
-<div id="mygallery" class="justified-gallery">
-  <a href="path/to/myimage1_original.jpg">
-    <img alt="Title 1" src="path/to/myimage1_thumbnail.jpg" />
+<div id="gallery" class="justified-gallery">
+  <a href="path/to/image1.jpg">
+    <img alt="Title 1" src="path/to/image1_thumbnail.jpg" />
   </a>
-  <a href="path/to/myimage2_original.jpg">
-    <img alt="Title 2" src="path/to/myimage2_thumbnail.jpg" />
+  <a href="path/to/image2.jpg">
+    <img alt="Title 2" src="path/to/image2_thumbnail.jpg" />
   </a>
   <!-- other images... -->
 </div>
@@ -77,18 +78,98 @@ Justified Gallery accepts a standard format for a gallery: a series of links wit
 
 Justified Gallery also accepts other [input formats](/Justified-Gallery/input-formats/), to better fit your needs.
 
-Import the library and its stylesheet, then create a gallery instance and initialize it — no jQuery or other dependencies needed:
+Import the library and its stylesheet, create a gallery on the container and initialize it. It's a plain class with zero dependencies and TypeScript types included, so it fits any stack:
 
-```js
-import { JustifiedGallery } from "justified-gallery";
-import "justified-gallery/style.css";
+<Tabs syncKey="framework">
+  <TabItem label="Vanilla JS" icon="seti:javascript">
 
-new JustifiedGallery(document.querySelector("#mygallery")).init();
+```ts
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+
+const container = document.getElementById('gallery')!;
+const settings = { rowHeight: 160 };
+
+const gallery = new JustifiedGallery(container, settings);
+
+gallery.init();
+```
+  </TabItem>
+  <TabItem label="React" icon="seti:react">
+
+```tsx
+import { useEffect, useRef } from 'react';
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+
+export function Gallery(images) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const gallery = new JustifiedGallery(
+      containerRef.current, 
+      { rowHeight: 160 }
+    );
+
+    gallery.init();
+    
+    return () => gallery.destroy();
+  }, []);
+
+  return (
+    <div ref={containerRef} className="justified-gallery">
+      {images.map((image) => (
+        <a key={image.src} href={image.src}>
+          <img src={image.thumb} alt={image.alt} />
+        </a>
+      ))}
+    </div>
+  );
+}
+
 ```
 
-Note the `justified-gallery` class already on the container above — the stylesheet uses it to hide the gallery until it's properly laid out, avoiding a flash of unstyled images.
+More in the [React guide](/Justified-Gallery/react/).
 
-Start learning how to use Justified Gallery from the [getting started tutorial](/Justified-Gallery/getting-started/).
+  </TabItem>
+  <TabItem label="Vue" icon="seti:vue">
+
+```vue
+<script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+
+defineProps<{ images: { src: string; thumb: string; alt: string }[] }>();
+
+const container = ref<HTMLDivElement>();
+let gallery: JustifiedGallery | undefined;
+
+onMounted(() => {
+  gallery = new JustifiedGallery(container.value!, { rowHeight: 160 });
+  gallery.init();
+});
+
+onBeforeUnmount(() => gallery?.destroy());
+</script>
+
+<template>
+  <div ref="container" class="justified-gallery">
+    <a v-for="image in images" :key="image.src" :href="image.src">
+      <img :src="image.thumb" :alt="image.alt" />
+    </a>
+  </div>
+</template>
+```
+
+More in the [Vue guide](/Justified-Gallery/vue/).
+
+  </TabItem>
+</Tabs>
+
+Note the `justified-gallery` class already on the container: the stylesheet uses it to hide the gallery until it's laid out, avoiding a flash of unstyled images.
+
+Continue with the [Getting Started guide](/Justified-Gallery/getting-started/), or jump straight to the [React](/Justified-Gallery/react/) or [Vue](/Justified-Gallery/vue/) guide.
 
 ## Features
 
@@ -107,8 +188,8 @@ Start learning how to use Justified Gallery from the [getting started tutorial](
     href="/Justified-Gallery/captions/"
     icon="comment"
   >
-    Elegant captions generated from your images' alt or title attributes, fully
-    styleable and on by default.
+    Captions generated from your images' alt or title attributes, or written
+    in your own markup, and fully styleable.
   </BentoCard>
   <BentoCard
     title="Don't miss a pixel"
@@ -148,7 +229,7 @@ Start learning how to use Justified Gallery from the [getting started tutorial](
   </BentoCard>
   <BentoCard
     title="Your rows, your rules"
-    href="/Justified-Gallery/options-and-events/"
+    href="/Justified-Gallery/options-and-events/#option-examples"
     icon="list-format"
   >
     Six last-row behaviors, row height and margin controls, RTL support and many
@@ -169,15 +250,15 @@ Start learning how to use Justified Gallery from the [getting started tutorial](
     icon="setting"
   >
     Lifecycle events for every row and layout pass, plus a destroy method that
-    restores your markup — ideal for single-page apps.
+    cleans up your markup — ideal for single-page apps.
   </BentoCard>
   <BentoCard
     title="Dynamic galleries"
-    href="/Justified-Gallery/options-and-events/"
+    href="/Justified-Gallery/sorting-and-filtering/"
     icon="random"
   >
-    Sort, randomize, filter, add or remove images. Do what you want with the
-    gallery, even after it has been created.
+    Sort, randomize or filter the entries, append new images, and rebuild the
+    gallery whenever your data changes.
     <JgSortDemo slot="visual" />
   </BentoCard>
   <BentoCard
@@ -186,7 +267,7 @@ Start learning how to use Justified Gallery from the [getting started tutorial](
     icon="warning"
   >
     Links, divs or figures, images or inline SVG — and broken images are skipped
-    gracefully, reported only in the console.
+    gracefully, without breaking the layout.
   </BentoCard>
 </BentoGrid>
 

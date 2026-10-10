@@ -7,30 +7,37 @@ import EndlessScrollDemo from '../../components/EndlessScrollDemo.astro';
 
 In this example you can see how to use the library to obtain an infinite scroll.
 
-The first thing to do is to initialize the gallery as usual:
+The first thing to do is to initialize the gallery as usual, keeping a reference to the instance:
 
 ```js
-const gallery = document.querySelector('#gallery');
-const jg = new JustifiedGallery(gallery, { rowHeight: 120 });
-jg.init();
+import { JustifiedGallery } from 'justified-gallery';
+import 'justified-gallery/style.css';
+
+const container = document.getElementById('gallery');
+const gallery = new JustifiedGallery(container, { rowHeight: 120 });
+gallery.init();
 ```
 
-Then you need to implement the infinite scroll as you want. You only have to call `init()` again after you have added some images. For example:
+Then you can implement the infinite scroll as you prefer. You only have to call `init()` again after you have appended some images to the end of the gallery. For example:
 
 ```js
 window.addEventListener('scroll', () => {
   if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
     for (let i = 0; i < 5; i++) {
-      gallery.insertAdjacentHTML(
+      container.insertAdjacentHTML(
         'beforeend',
         '<a href="path/to/image.jpg"><img src="path/to/thumbnail.jpg" /></a>'
       );
     }
-    jg.init();
+    gallery.init();
   }
 });
 ```
 
-Calling `init()` again doesn't re-analyze all the images, but only the new ones: entries that have already been processed are skipped. This increases the performance, and also prevents the page from having strange behaviors with the scrollbars. If you need the new entries to also be filtered, sorted, or randomized on their own, see the [`updateEntries(norewind)` method](/Justified-Gallery/options-and-events/#methods).
+Calling `init()` again doesn't reload and re-layout all the images, but only the new ones: the rows that have already been built stay in place, and the layout continues from the last (incomplete) row. This improves performance, and also prevents the page from jumping around while the user is scrolling.
+
+Note that `init()` collects the entries again and re-applies the [`filter`, `sort` and `randomize` options](/Justified-Gallery/sorting-and-filtering/#with-infinite-scroll) to all of them. A `filter` works fine, but avoid `randomize`, and use `sort` only if the new entries always end up after the existing ones: the entries that are already laid out must keep their order.
+
+In React and Vue, call `init()` after the framework has rendered the new entries: see the "load more" examples in the [React](/Justified-Gallery/react/#infinite-scroll--load-more) and [Vue](/Justified-Gallery/vue/#infinite-scroll--load-more) guides.
 
 <EndlessScrollDemo />

@@ -5,7 +5,7 @@ description: How Justified Gallery creates captions from the alt and title attri
 
 import CaptionsDemo from '../../components/CaptionsDemo.astro';
 
-The captions are automatically created using the `alt` attribute of the images. If it doesn't exist, the caption is created using the `title` attribute of the entry (e.g. the link).
+When the [`captions`](/Justified-Gallery/options-and-events/) option is enabled (the default), the captions are automatically created using the `alt` attribute of the images. If it doesn't exist (or is empty), the caption is created using the `title` attribute of the entry (e.g. the link). Entries without an image don't get a caption.
 
 For example, the following entry has _"I'm only in the alt"_ as caption:
 
@@ -15,7 +15,7 @@ For example, the following entry has _"I'm only in the alt"_ as caption:
 </a>
 ```
 
-The following entry hasn't an `alt`, but it has a `title`. In this case the library will set _"I'm only in the title"_ as caption:
+The following entry doesn't have an `alt`, but it has a `title`. In this case the library will set _"I'm only in the title"_ as caption:
 
 ```html
 <a href="imageurl.jpg" title="I'm only in the title">
@@ -31,7 +31,7 @@ In this last example, we have both the `title` and the `alt`. In this case the l
 </a>
 ```
 
-The library creates the captions by inserting, for each entry, an extra `div` element with the class `jg-caption`, just after the `img` element. To have custom captions you only need to insert this element on your own, with the content that you want. The library will skip the creation of the captions for the entries that already have one:
+The library creates the captions by appending, to each entry, an extra `div` element with the class `jg-caption`. To have custom captions you only need to insert this element on your own, with the content that you want. The library skips the creation of the caption for the entries that already have one:
 
 ```html
 <a href="imageurl.jpg">
@@ -43,8 +43,21 @@ The library creates the captions by inserting, for each entry, an extra `div` el
 </a>
 ```
 
+## Showing the captions
+
+The default stylesheet keeps the `.jg-caption` elements hidden, and shows them (semi-transparent, at the bottom of the entry) only when they also have the `jg-caption-visible` class. The library doesn't add that class for you, so decide how captions should appear with a few lines of CSS. For example, to show them when the mouse is over an image:
+
+```css
+.justified-gallery > .jg-entry:hover > .jg-caption {
+  display: initial;
+  opacity: 0.7;
+}
+```
+
 The following demo shows all four cases — hover the images to see the captions:
 
 <CaptionsDemo />
+
+To change how the captions look (colors, font, a gradient background...), see [Styling & CSS Classes](/Justified-Gallery/styling/#captions).
 
 See how to use the captions with other [input formats](/Justified-Gallery/input-formats/).
